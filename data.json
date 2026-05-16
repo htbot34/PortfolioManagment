@@ -1,0 +1,452 @@
+{
+  "generated_at": "2026-05-16 20:08 UTC",
+  "diagnostics": {
+    "stooq": "no data",
+    "yahoo_chart": "no data",
+    "yfinance": "no data"
+  },
+  "exposures": {
+    "positions": [
+      {
+        "ticker": "NBIS",
+        "shares": 2.0,
+        "cost_basis": 86.27,
+        "price": null,
+        "day_change_pct": null,
+        "market_value": null,
+        "unrealized_pl": null,
+        "unrealized_pl_pct": null,
+        "sector": "Unknown",
+        "weight_pct": 0
+      },
+      {
+        "ticker": "AMZN",
+        "shares": 2.0,
+        "cost_basis": 220.25,
+        "price": null,
+        "day_change_pct": null,
+        "market_value": null,
+        "unrealized_pl": null,
+        "unrealized_pl_pct": null,
+        "sector": "Unknown",
+        "weight_pct": 0
+      },
+      {
+        "ticker": "OKLO",
+        "shares": 1.0,
+        "cost_basis": 87.8,
+        "price": null,
+        "day_change_pct": null,
+        "market_value": null,
+        "unrealized_pl": null,
+        "unrealized_pl_pct": null,
+        "sector": "Unknown",
+        "weight_pct": 0
+      },
+      {
+        "ticker": "NFLX",
+        "shares": 9.0,
+        "cost_basis": 90.11,
+        "price": null,
+        "day_change_pct": null,
+        "market_value": null,
+        "unrealized_pl": null,
+        "unrealized_pl_pct": null,
+        "sector": "Unknown",
+        "weight_pct": 0
+      },
+      {
+        "ticker": "IREN",
+        "shares": 4.0,
+        "cost_basis": 60.2,
+        "price": null,
+        "day_change_pct": null,
+        "market_value": null,
+        "unrealized_pl": null,
+        "unrealized_pl_pct": null,
+        "sector": "Unknown",
+        "weight_pct": 0
+      },
+      {
+        "ticker": "FBL",
+        "shares": 8.0,
+        "cost_basis": 39.28,
+        "price": null,
+        "day_change_pct": null,
+        "market_value": null,
+        "unrealized_pl": null,
+        "unrealized_pl_pct": null,
+        "sector": "Unknown",
+        "weight_pct": 0
+      },
+      {
+        "ticker": "LEU",
+        "shares": 2.0,
+        "cost_basis": 303.9,
+        "price": null,
+        "day_change_pct": null,
+        "market_value": null,
+        "unrealized_pl": null,
+        "unrealized_pl_pct": null,
+        "sector": "Unknown",
+        "weight_pct": 0
+      },
+      {
+        "ticker": "META",
+        "shares": 11.0,
+        "cost_basis": 677.22,
+        "price": null,
+        "day_change_pct": null,
+        "market_value": null,
+        "unrealized_pl": null,
+        "unrealized_pl_pct": null,
+        "sector": "Unknown",
+        "weight_pct": 0
+      }
+    ],
+    "total_market_value": 0.0,
+    "cash": 1234.91,
+    "portfolio_value": 1234.91,
+    "sector_pct": {},
+    "cash_pct": 100.0
+  },
+  "review": {
+    "observations": [],
+    "suggested_changes": [],
+    "open_questions": []
+  },
+  "recommendations": [
+    {
+      "ticker": "NBIS",
+      "action": "hold",
+      "horizon": "long_term",
+      "conviction": 2,
+      "thesis": "No strong signal; default hold under aggressive profile.",
+      "key_catalysts": [],
+      "key_risks": [],
+      "suggested_action_detail": "Maintain current size; review on next earnings or 10%+ move",
+      "source": "rules",
+      "quote": {
+        "ticker": "NBIS",
+        "price": null,
+        "prev_close": null,
+        "day_change_pct": null,
+        "market_cap": null,
+        "pe_ratio": null,
+        "high_52w": null,
+        "low_52w": null,
+        "sector": null,
+        "industry": null,
+        "source": null,
+        "error": "No price source returned data (tried: stooq, yahoo_chart, yfinance)"
+      },
+      "technicals": {
+        "error": "no price history"
+      },
+      "news": [],
+      "position": {
+        "ticker": "NBIS",
+        "shares": 2.0,
+        "cost_basis": 86.27,
+        "price": null,
+        "day_change_pct": null,
+        "market_value": null,
+        "unrealized_pl": null,
+        "unrealized_pl_pct": null,
+        "sector": "Unknown",
+        "weight_pct": 0
+      }
+    },
+    {
+      "ticker": "AMZN",
+      "action": "hold",
+      "horizon": "long_term",
+      "conviction": 2,
+      "thesis": "No strong signal; default hold under aggressive profile.",
+      "key_catalysts": [],
+      "key_risks": [],
+      "suggested_action_detail": "Maintain current size; review on next earnings or 10%+ move",
+      "source": "rules",
+      "quote": {
+        "ticker": "AMZN",
+        "price": null,
+        "prev_close": null,
+        "day_change_pct": null,
+        "market_cap": null,
+        "pe_ratio": null,
+        "high_52w": null,
+        "low_52w": null,
+        "sector": null,
+        "industry": null,
+        "source": null,
+        "error": "No price source returned data (tried: stooq, yahoo_chart, yfinance)"
+      },
+      "technicals": {
+        "error": "no price history"
+      },
+      "news": [],
+      "position": {
+        "ticker": "AMZN",
+        "shares": 2.0,
+        "cost_basis": 220.25,
+        "price": null,
+        "day_change_pct": null,
+        "market_value": null,
+        "unrealized_pl": null,
+        "unrealized_pl_pct": null,
+        "sector": "Unknown",
+        "weight_pct": 0
+      }
+    },
+    {
+      "ticker": "OKLO",
+      "action": "hold",
+      "horizon": "long_term",
+      "conviction": 2,
+      "thesis": "No strong signal; default hold under aggressive profile.",
+      "key_catalysts": [],
+      "key_risks": [],
+      "suggested_action_detail": "Maintain current size; review on next earnings or 10%+ move",
+      "source": "rules",
+      "quote": {
+        "ticker": "OKLO",
+        "price": null,
+        "prev_close": null,
+        "day_change_pct": null,
+        "market_cap": null,
+        "pe_ratio": null,
+        "high_52w": null,
+        "low_52w": null,
+        "sector": null,
+        "industry": null,
+        "source": null,
+        "error": "No price source returned data (tried: stooq, yahoo_chart, yfinance)"
+      },
+      "technicals": {
+        "error": "no price history"
+      },
+      "news": [],
+      "position": {
+        "ticker": "OKLO",
+        "shares": 1.0,
+        "cost_basis": 87.8,
+        "price": null,
+        "day_change_pct": null,
+        "market_value": null,
+        "unrealized_pl": null,
+        "unrealized_pl_pct": null,
+        "sector": "Unknown",
+        "weight_pct": 0
+      }
+    },
+    {
+      "ticker": "NFLX",
+      "action": "hold",
+      "horizon": "long_term",
+      "conviction": 2,
+      "thesis": "No strong signal; default hold under aggressive profile.",
+      "key_catalysts": [],
+      "key_risks": [],
+      "suggested_action_detail": "Maintain current size; review on next earnings or 10%+ move",
+      "source": "rules",
+      "quote": {
+        "ticker": "NFLX",
+        "price": null,
+        "prev_close": null,
+        "day_change_pct": null,
+        "market_cap": null,
+        "pe_ratio": null,
+        "high_52w": null,
+        "low_52w": null,
+        "sector": null,
+        "industry": null,
+        "source": null,
+        "error": "No price source returned data (tried: stooq, yahoo_chart, yfinance)"
+      },
+      "technicals": {
+        "error": "no price history"
+      },
+      "news": [],
+      "position": {
+        "ticker": "NFLX",
+        "shares": 9.0,
+        "cost_basis": 90.11,
+        "price": null,
+        "day_change_pct": null,
+        "market_value": null,
+        "unrealized_pl": null,
+        "unrealized_pl_pct": null,
+        "sector": "Unknown",
+        "weight_pct": 0
+      }
+    },
+    {
+      "ticker": "IREN",
+      "action": "hold",
+      "horizon": "long_term",
+      "conviction": 2,
+      "thesis": "No strong signal; default hold under aggressive profile.",
+      "key_catalysts": [],
+      "key_risks": [],
+      "suggested_action_detail": "Maintain current size; review on next earnings or 10%+ move",
+      "source": "rules",
+      "quote": {
+        "ticker": "IREN",
+        "price": null,
+        "prev_close": null,
+        "day_change_pct": null,
+        "market_cap": null,
+        "pe_ratio": null,
+        "high_52w": null,
+        "low_52w": null,
+        "sector": null,
+        "industry": null,
+        "source": null,
+        "error": "No price source returned data (tried: stooq, yahoo_chart, yfinance)"
+      },
+      "technicals": {
+        "error": "no price history"
+      },
+      "news": [],
+      "position": {
+        "ticker": "IREN",
+        "shares": 4.0,
+        "cost_basis": 60.2,
+        "price": null,
+        "day_change_pct": null,
+        "market_value": null,
+        "unrealized_pl": null,
+        "unrealized_pl_pct": null,
+        "sector": "Unknown",
+        "weight_pct": 0
+      }
+    },
+    {
+      "ticker": "FBL",
+      "action": "hold",
+      "horizon": "long_term",
+      "conviction": 2,
+      "thesis": "No strong signal; default hold under aggressive profile.",
+      "key_catalysts": [],
+      "key_risks": [],
+      "suggested_action_detail": "Maintain current size; review on next earnings or 10%+ move",
+      "source": "rules",
+      "quote": {
+        "ticker": "FBL",
+        "price": null,
+        "prev_close": null,
+        "day_change_pct": null,
+        "market_cap": null,
+        "pe_ratio": null,
+        "high_52w": null,
+        "low_52w": null,
+        "sector": null,
+        "industry": null,
+        "source": null,
+        "error": "No price source returned data (tried: stooq, yahoo_chart, yfinance)"
+      },
+      "technicals": {
+        "error": "no price history"
+      },
+      "news": [],
+      "position": {
+        "ticker": "FBL",
+        "shares": 8.0,
+        "cost_basis": 39.28,
+        "price": null,
+        "day_change_pct": null,
+        "market_value": null,
+        "unrealized_pl": null,
+        "unrealized_pl_pct": null,
+        "sector": "Unknown",
+        "weight_pct": 0
+      }
+    },
+    {
+      "ticker": "LEU",
+      "action": "hold",
+      "horizon": "long_term",
+      "conviction": 2,
+      "thesis": "No strong signal; default hold under aggressive profile.",
+      "key_catalysts": [],
+      "key_risks": [],
+      "suggested_action_detail": "Maintain current size; review on next earnings or 10%+ move",
+      "source": "rules",
+      "quote": {
+        "ticker": "LEU",
+        "price": null,
+        "prev_close": null,
+        "day_change_pct": null,
+        "market_cap": null,
+        "pe_ratio": null,
+        "high_52w": null,
+        "low_52w": null,
+        "sector": null,
+        "industry": null,
+        "source": null,
+        "error": "No price source returned data (tried: stooq, yahoo_chart, yfinance)"
+      },
+      "technicals": {
+        "error": "no price history"
+      },
+      "news": [],
+      "position": {
+        "ticker": "LEU",
+        "shares": 2.0,
+        "cost_basis": 303.9,
+        "price": null,
+        "day_change_pct": null,
+        "market_value": null,
+        "unrealized_pl": null,
+        "unrealized_pl_pct": null,
+        "sector": "Unknown",
+        "weight_pct": 0
+      }
+    },
+    {
+      "ticker": "META",
+      "action": "hold",
+      "horizon": "long_term",
+      "conviction": 2,
+      "thesis": "No strong signal; default hold under aggressive profile.",
+      "key_catalysts": [],
+      "key_risks": [],
+      "suggested_action_detail": "Maintain current size; review on next earnings or 10%+ move",
+      "source": "rules",
+      "quote": {
+        "ticker": "META",
+        "price": null,
+        "prev_close": null,
+        "day_change_pct": null,
+        "market_cap": null,
+        "pe_ratio": null,
+        "high_52w": null,
+        "low_52w": null,
+        "sector": null,
+        "industry": null,
+        "source": null,
+        "error": "No price source returned data (tried: stooq, yahoo_chart, yfinance)"
+      },
+      "technicals": {
+        "error": "no price history"
+      },
+      "news": [],
+      "position": {
+        "ticker": "META",
+        "shares": 11.0,
+        "cost_basis": 677.22,
+        "price": null,
+        "day_change_pct": null,
+        "market_value": null,
+        "unrealized_pl": null,
+        "unrealized_pl_pct": null,
+        "sector": "Unknown",
+        "weight_pct": 0
+      }
+    }
+  ],
+  "candidates": {
+    "error": "Set GITHUB_TOKEN (or wait for the scheduled GitHub Action) to enable candidate generation.",
+    "candidates": []
+  }
+}

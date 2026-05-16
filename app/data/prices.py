@@ -1,18 +1,25 @@
-"""Price + fundamentals fetcher.
+"""Price + fundamentals fetcher with multi-source fallback.
 
-Provider chain:
-  1) Stooq (free, no key, reliable from cloud IPs) for daily OHLCV
-  2) yfinance (best effort) for fundamentals: sector, industry, P/E, market cap
+Provider chain (each wrapped, never raises):
+  1) Stooq daily CSV   - free, no key
+  2) Yahoo chart API   - direct HTTP, no yfinance overhead (often works when
+                         yfinance's full client doesn't)
+  3) yfinance          - last resort, also pulls fundamentals (sector, P/E)
 
-If Stooq fails, we try yfinance for prices too. All errors degrade gracefully -
-the dashboard simply shows '-' for any missing field.
+If everything fails, error fields carry the diagnosis so the failure is visible
+in the rendered site and in data.json.
 """
 import io
+import logging
 from dataclasses import dataclass, asdict
 from time import time
 
 import httpx
 import pandas as pd
+
+log = logging.getLogger("prices")
+
+_UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0 Safari/537.36"
 
 
 @dataclass
@@ -27,54 +34,101 @@ class Quote:
     low_52w: float | None
     sector: str | None
     industry: str | None
+    source: str | None = None
     error: str | None = None
 
     def to_dict(self) -> dict:
         return asdict(self)
 
 
-_HISTORY_CACHE: dict[str, tuple[float, pd.DataFrame | None]] = {}
-_QUOTE_CACHE: dict[str, tuple[float, Quote]] = {}
+_HISTORY_CACHE: dict[str, tuple[float, pd.DataFrame | None, str | None]] = {}
 _TTL_S = 300.0
 
 
-def _stooq_history(ticker: str) -> pd.DataFrame | None:
-    cached = _HISTORY_CACHE.get(ticker)
-    now = time()
-    if cached and now - cached[0] < _TTL_S:
-        return cached[1]
-    df: pd.DataFrame | None = None
+def _try_stooq(ticker: str) -> pd.DataFrame | None:
     try:
         r = httpx.get(
             f"https://stooq.com/q/d/l/?s={ticker.lower()}.us&i=d",
-            headers={"User-Agent": "Mozilla/5.0 (compatible; PortfolioAdvisor/1.0)"},
+            headers={"User-Agent": _UA},
             timeout=20,
+            follow_redirects=True,
         )
-        if r.status_code == 200 and r.text and "No data" not in r.text[:50]:
-            tmp = pd.read_csv(io.StringIO(r.text))
-            if not tmp.empty and "Close" in tmp.columns:
-                tmp["Date"] = pd.to_datetime(tmp["Date"])
-                df = tmp.set_index("Date").tail(252)
-    except Exception:
-        df = None
-    _HISTORY_CACHE[ticker] = (now, df)
-    return df
+        if r.status_code != 200 or not r.text or r.text[:50].lower().startswith("no data"):
+            return None
+        df = pd.read_csv(io.StringIO(r.text))
+        if df.empty or "Close" not in df.columns:
+            return None
+        df["Date"] = pd.to_datetime(df["Date"])
+        return df.set_index("Date").tail(252)
+    except Exception as e:
+        log.debug("stooq failed for %s: %s", ticker, e)
+        return None
 
 
-def _yfinance_history(ticker: str) -> pd.DataFrame | None:
+def _try_yahoo_chart(ticker: str) -> pd.DataFrame | None:
+    try:
+        r = httpx.get(
+            f"https://query1.finance.yahoo.com/v8/finance/chart/{ticker}",
+            params={"interval": "1d", "range": "1y"},
+            headers={"User-Agent": _UA, "Accept": "application/json"},
+            timeout=20,
+            follow_redirects=True,
+        )
+        if r.status_code != 200:
+            return None
+        data = r.json()
+        result = (data.get("chart") or {}).get("result") or []
+        if not result:
+            return None
+        item = result[0]
+        ts = item.get("timestamp") or []
+        ind = ((item.get("indicators") or {}).get("quote") or [{}])[0]
+        closes = ind.get("close")
+        if not ts or not closes:
+            return None
+        df = pd.DataFrame({
+            "Date": pd.to_datetime(ts, unit="s"),
+            "Open": ind.get("open"),
+            "High": ind.get("high"),
+            "Low": ind.get("low"),
+            "Close": closes,
+            "Volume": ind.get("volume"),
+        }).dropna(subset=["Close"]).set_index("Date")
+        return df if not df.empty else None
+    except Exception as e:
+        log.debug("yahoo chart failed for %s: %s", ticker, e)
+        return None
+
+
+def _try_yfinance(ticker: str) -> pd.DataFrame | None:
     try:
         import yfinance as yf
         df = yf.Ticker(ticker).history(period="1y", auto_adjust=True)
         return df if df is not None and not df.empty else None
-    except Exception:
+    except Exception as e:
+        log.debug("yfinance failed for %s: %s", ticker, e)
         return None
 
 
-def _history(ticker: str) -> pd.DataFrame | None:
-    df = _stooq_history(ticker)
-    if df is not None and not df.empty:
-        return df
-    return _yfinance_history(ticker)
+_SOURCES = [
+    ("stooq", _try_stooq),
+    ("yahoo_chart", _try_yahoo_chart),
+    ("yfinance", _try_yfinance),
+]
+
+
+def _history_with_source(ticker: str) -> tuple[pd.DataFrame | None, str | None]:
+    cached = _HISTORY_CACHE.get(ticker)
+    now = time()
+    if cached and now - cached[0] < _TTL_S:
+        return cached[1], cached[2]
+    for name, fn in _SOURCES:
+        df = fn(ticker)
+        if df is not None and not df.empty:
+            _HISTORY_CACHE[ticker] = (now, df, name)
+            return df, name
+    _HISTORY_CACHE[ticker] = (now, None, None)
+    return None, None
 
 
 def _yfinance_fundamentals(ticker: str) -> dict:
@@ -93,12 +147,7 @@ def _yfinance_fundamentals(ticker: str) -> dict:
 
 def quote(ticker: str) -> Quote:
     ticker = ticker.upper()
-    now = time()
-    cached = _QUOTE_CACHE.get(ticker)
-    if cached and now - cached[0] < _TTL_S:
-        return cached[1]
-
-    df = _history(ticker)
+    df, source = _history_with_source(ticker)
     price = prev_close = day_change_pct = high_52w = low_52w = None
     error = None
     if df is not None and not df.empty:
@@ -106,34 +155,34 @@ def quote(ticker: str) -> Quote:
         price = float(close.iloc[-1])
         if len(close) >= 2:
             prev_close = float(close.iloc[-2])
-            day_change_pct = (price - prev_close) / prev_close * 100 if prev_close else None
+            if prev_close:
+                day_change_pct = (price - prev_close) / prev_close * 100
         high_52w = float(close.max())
         low_52w = float(close.min())
     else:
-        error = "no price data (Stooq + yfinance both failed)"
+        error = f"No price source returned data (tried: {', '.join(s for s, _ in _SOURCES)})"
 
     fund = _yfinance_fundamentals(ticker)
-    q = Quote(
+    return Quote(
         ticker=ticker, price=price, prev_close=prev_close, day_change_pct=day_change_pct,
         market_cap=fund.get("market_cap"), pe_ratio=fund.get("pe_ratio"),
         high_52w=high_52w, low_52w=low_52w,
         sector=fund.get("sector"), industry=fund.get("industry"),
-        error=error,
+        source=source, error=error,
     )
-    _QUOTE_CACHE[ticker] = (now, q)
-    return q
 
 
 def quotes(tickers: list[str]) -> dict[str, Quote]:
     return {t.upper(): quote(t) for t in tickers}
 
 
-def history(ticker: str, period: str = "6mo"):
-    return _history(ticker)
+def history(ticker: str, period: str = "6mo") -> pd.DataFrame | None:
+    df, _ = _history_with_source(ticker)
+    return df
 
 
 def technicals(ticker: str) -> dict:
-    df = _history(ticker)
+    df, _ = _history_with_source(ticker)
     if df is None or df.empty:
         return {"error": "no price history"}
     close = df["Close"]
@@ -162,3 +211,15 @@ def technicals(ticker: str) -> dict:
         "pct_off_52w_high": pct_off_high,
         "rsi14": rsi_last,
     }
+
+
+def diagnose(ticker: str = "META") -> dict:
+    """Probe each source individually and report what worked. Used at workflow start."""
+    out: dict[str, str] = {}
+    for name, fn in _SOURCES:
+        try:
+            df = fn(ticker)
+            out[name] = f"ok ({len(df)} rows, last close ${float(df['Close'].iloc[-1]):.2f})" if df is not None and not df.empty else "no data"
+        except Exception as e:
+            out[name] = f"error: {e}"
+    return out

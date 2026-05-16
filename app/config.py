@@ -20,7 +20,7 @@ class Settings:
     portfolio_path: Path = ROOT / "portfolio.yaml"
     risk_profile_path: Path = ROOT / "risk_profile.yaml"
     cache_dir: Path = ROOT / ".cache"
-    site_dir: Path = ROOT / "docs"
+    site_dir: Path = ROOT
 
 
 settings = Settings()

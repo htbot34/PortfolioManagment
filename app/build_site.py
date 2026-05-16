@@ -1,15 +1,14 @@
-"""Render the portfolio advisor as a static site under docs/.
+"""Render the portfolio advisor as a static site at the repo root.
 
-Entrypoint for the scheduled GitHub Action. Pulls market data, runs the
-recommender, writes:
-  docs/index.html              dashboard
-  docs/recommendations.html    rec feed
-  docs/candidates.html         new ideas
-  docs/ticker/<SYMBOL>.html    per-ticker deep dive
-  docs/data.json               raw payload (for debugging)
+Outputs (relative to site_dir = repo root):
+  index.html              dashboard
+  recommendations.html    rec feed
+  candidates.html         new ideas
+  ticker/<SYMBOL>.html    per-ticker deep dive
+  data.json               raw payload (debugging + status)
+  .nojekyll               disables Jekyll processing on Pages
 """
 import json
-import shutil
 import sys
 import traceback
 from datetime import datetime, timezone
@@ -18,7 +17,6 @@ from pathlib import Path
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from app.config import risk_profile, settings
-from app.data import news as news_mod
 from app.data import prices
 from app.portfolio import store
 from app.research import analyst, candidates as cands, llm, portfolio_review
@@ -41,6 +39,11 @@ def main() -> int:
     site.mkdir(exist_ok=True)
     (site / "ticker").mkdir(exist_ok=True)
 
+    print("=== Price source diagnostics ===")
+    diag = prices.diagnose("META")
+    for name, status in diag.items():
+        print(f"  {name}: {status}")
+
     account = store.load()
     exposures = portfolio_review.compute_exposures(account)
     review_out = portfolio_review.review(exposures)
@@ -49,6 +52,7 @@ def main() -> int:
     recs: list[dict] = []
     ticker_payloads: dict[str, dict] = {}
     for p in account.positions:
+        print(f"Analyzing {p.ticker}...")
         try:
             rec = analyst.analyze_ticker(p.ticker, position_context=weight_by_ticker.get(p.ticker, {}))
         except Exception as e:
@@ -66,6 +70,7 @@ def main() -> int:
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
         "risk": risk_profile(),
         "flags": {"has_llm": llm.available()},
+        "diagnostics": diag,
     }
 
     env = _env()
@@ -86,6 +91,7 @@ def main() -> int:
 
     data_dump = {
         "generated_at": common["generated_at"],
+        "diagnostics": diag,
         "exposures": exposures,
         "review": review_out,
         "recommendations": recs,

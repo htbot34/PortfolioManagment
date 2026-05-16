@@ -11,6 +11,7 @@ on:
       - "portfolio.yaml"
       - "risk_profile.yaml"
       - "app/**"
+      - "requirements.txt"
       - ".github/workflows/refresh.yml"
 
 permissions:
@@ -49,7 +50,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs
+          git add index.html recommendations.html candidates.html data.json ticker .nojekyll 2>/dev/null || true
           if git diff --staged --quiet; then
             echo "No site changes."
           else

@@ -1,12 +1,18 @@
-"""Price + fundamentals fetcher backed by yfinance.
+"""Price + fundamentals fetcher.
 
-All calls are wrapped in try/except so a single failed ticker never crashes the
-dashboard. Results for the dashboard are cached in-process for 60s.
+Provider chain:
+  1) Stooq (free, no key, reliable from cloud IPs) for daily OHLCV
+  2) yfinance (best effort) for fundamentals: sector, industry, P/E, market cap
+
+If Stooq fails, we try yfinance for prices too. All errors degrade gracefully -
+the dashboard simply shows '-' for any missing field.
 """
+import io
 from dataclasses import dataclass, asdict
 from time import time
 
-import yfinance as yf
+import httpx
+import pandas as pd
 
 
 @dataclass
@@ -27,43 +33,94 @@ class Quote:
         return asdict(self)
 
 
-_CACHE: dict[str, tuple[float, Quote]] = {}
-_TTL_S = 60.0
+_HISTORY_CACHE: dict[str, tuple[float, pd.DataFrame | None]] = {}
+_QUOTE_CACHE: dict[str, tuple[float, Quote]] = {}
+_TTL_S = 300.0
+
+
+def _stooq_history(ticker: str) -> pd.DataFrame | None:
+    cached = _HISTORY_CACHE.get(ticker)
+    now = time()
+    if cached and now - cached[0] < _TTL_S:
+        return cached[1]
+    df: pd.DataFrame | None = None
+    try:
+        r = httpx.get(
+            f"https://stooq.com/q/d/l/?s={ticker.lower()}.us&i=d",
+            headers={"User-Agent": "Mozilla/5.0 (compatible; PortfolioAdvisor/1.0)"},
+            timeout=20,
+        )
+        if r.status_code == 200 and r.text and "No data" not in r.text[:50]:
+            tmp = pd.read_csv(io.StringIO(r.text))
+            if not tmp.empty and "Close" in tmp.columns:
+                tmp["Date"] = pd.to_datetime(tmp["Date"])
+                df = tmp.set_index("Date").tail(252)
+    except Exception:
+        df = None
+    _HISTORY_CACHE[ticker] = (now, df)
+    return df
+
+
+def _yfinance_history(ticker: str) -> pd.DataFrame | None:
+    try:
+        import yfinance as yf
+        df = yf.Ticker(ticker).history(period="1y", auto_adjust=True)
+        return df if df is not None and not df.empty else None
+    except Exception:
+        return None
+
+
+def _history(ticker: str) -> pd.DataFrame | None:
+    df = _stooq_history(ticker)
+    if df is not None and not df.empty:
+        return df
+    return _yfinance_history(ticker)
+
+
+def _yfinance_fundamentals(ticker: str) -> dict:
+    try:
+        import yfinance as yf
+        info = yf.Ticker(ticker).info or {}
+    except Exception:
+        return {}
+    return {
+        "market_cap": info.get("marketCap"),
+        "pe_ratio": info.get("trailingPE"),
+        "sector": info.get("sector"),
+        "industry": info.get("industry"),
+    }
 
 
 def quote(ticker: str) -> Quote:
     ticker = ticker.upper()
     now = time()
-    cached = _CACHE.get(ticker)
+    cached = _QUOTE_CACHE.get(ticker)
     if cached and now - cached[0] < _TTL_S:
         return cached[1]
-    try:
-        tk = yf.Ticker(ticker)
-        info = tk.info or {}
-        price = info.get("regularMarketPrice") or info.get("currentPrice")
-        prev = info.get("regularMarketPreviousClose") or info.get("previousClose")
-        day_change_pct = None
-        if price is not None and prev:
-            day_change_pct = (price - prev) / prev * 100
-        q = Quote(
-            ticker=ticker,
-            price=float(price) if price is not None else None,
-            prev_close=float(prev) if prev is not None else None,
-            day_change_pct=day_change_pct,
-            market_cap=info.get("marketCap"),
-            pe_ratio=info.get("trailingPE"),
-            high_52w=info.get("fiftyTwoWeekHigh"),
-            low_52w=info.get("fiftyTwoWeekLow"),
-            sector=info.get("sector"),
-            industry=info.get("industry"),
-        )
-    except Exception as e:
-        q = Quote(
-            ticker=ticker, price=None, prev_close=None, day_change_pct=None,
-            market_cap=None, pe_ratio=None, high_52w=None, low_52w=None,
-            sector=None, industry=None, error=str(e),
-        )
-    _CACHE[ticker] = (now, q)
+
+    df = _history(ticker)
+    price = prev_close = day_change_pct = high_52w = low_52w = None
+    error = None
+    if df is not None and not df.empty:
+        close = df["Close"]
+        price = float(close.iloc[-1])
+        if len(close) >= 2:
+            prev_close = float(close.iloc[-2])
+            day_change_pct = (price - prev_close) / prev_close * 100 if prev_close else None
+        high_52w = float(close.max())
+        low_52w = float(close.min())
+    else:
+        error = "no price data (Stooq + yfinance both failed)"
+
+    fund = _yfinance_fundamentals(ticker)
+    q = Quote(
+        ticker=ticker, price=price, prev_close=prev_close, day_change_pct=day_change_pct,
+        market_cap=fund.get("market_cap"), pe_ratio=fund.get("pe_ratio"),
+        high_52w=high_52w, low_52w=low_52w,
+        sector=fund.get("sector"), industry=fund.get("industry"),
+        error=error,
+    )
+    _QUOTE_CACHE[ticker] = (now, q)
     return q
 
 
@@ -72,16 +129,11 @@ def quotes(tickers: list[str]) -> dict[str, Quote]:
 
 
 def history(ticker: str, period: str = "6mo"):
-    """Return a pandas DataFrame of OHLCV history, or None on failure."""
-    try:
-        return yf.Ticker(ticker).history(period=period, auto_adjust=True)
-    except Exception:
-        return None
+    return _history(ticker)
 
 
 def technicals(ticker: str) -> dict:
-    """Compute a small bundle of swing/long-term technicals from 1y of prices."""
-    df = history(ticker, period="1y")
+    df = _history(ticker)
     if df is None or df.empty:
         return {"error": "no price history"}
     close = df["Close"]
@@ -92,7 +144,6 @@ def technicals(ticker: str) -> dict:
     low_52w = float(close.min())
     pct_off_high = (last - high_52w) / high_52w * 100 if high_52w else None
 
-    # Simple 14-day RSI
     delta = close.diff()
     up = delta.clip(lower=0).rolling(14).mean()
     down = (-delta.clip(upper=0)).rolling(14).mean()

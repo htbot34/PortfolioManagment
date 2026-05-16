@@ -1,0 +1,30 @@
+account:
+  cash: 0.00          # set to the cash portion of your account after subtracting market value of positions
+  total_value: 10531.56
+  currency: USD
+
+positions:
+  - ticker: NBIS
+    shares: 2
+    cost_basis: 86.27
+  - ticker: AMZN
+    shares: 2
+    cost_basis: 220.25
+  - ticker: OKLO
+    shares: 1
+    cost_basis: 87.80
+  - ticker: NFLX
+    shares: 9
+    cost_basis: 90.11
+  - ticker: IREN
+    shares: 4
+    cost_basis: 60.20
+  - ticker: FBL
+    shares: 8
+    cost_basis: 39.28
+  - ticker: LEU
+    shares: 2
+    cost_basis: 303.90
+  - ticker: META
+    shares: 11
+    cost_basis: 677.22

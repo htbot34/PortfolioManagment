@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - Portfolio Advisor{% endblock %}
+{% block content %}
+{% set total = exposures.portfolio_value %}
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+  <div class="card rounded-lg p-4">
+    <div class="text-xs text-slate-400">Portfolio Value</div>
+    <div class="text-2xl font-semibold">${{ '%.2f'|format(total) }}</div>
+  </div>
+  <div class="card rounded-lg p-4">
+    <div class="text-xs text-slate-400">Market Value (positions)</div>
+    <div class="text-2xl font-semibold">${{ '%.2f'|format(exposures.total_market_value) }}</div>
+  </div>
+  <div class="card rounded-lg p-4">
+    <div class="text-xs text-slate-400">Cash</div>
+    <div class="text-2xl font-semibold">${{ '%.2f'|format(exposures.cash) }}</div>
+    <div class="text-xs text-slate-400">{{ '%.1f'|format(exposures.cash_pct) }}% of portfolio</div>
+  </div>
+  <div class="card rounded-lg p-4">
+    <div class="text-xs text-slate-400">Risk profile</div>
+    <div class="text-lg font-semibold">{{ risk.investor.risk_tolerance | capitalize }}</div>
+    <div class="text-xs text-slate-400">Horizon: {{ risk.investor.horizon_years }}y, {{ risk.style.allowed | join(' / ') }}</div>
+  </div>
+</div>
+
+<div class="card rounded-lg overflow-hidden mb-6">
+  <div class="flex items-center justify-between px-4 py-3 border-b border-[#1f2a44]">
+    <h2 class="text-lg font-semibold">Positions</h2>
+    <form hx-post="/recommendations/run" hx-target="#run-status" hx-swap="innerHTML">
+      <button class="px-3 py-1.5 rounded bg-emerald-700 hover:bg-emerald-600 text-sm">Run research</button>
+    </form>
+  </div>
+  <div id="run-status" class="px-4 text-xs text-slate-400"></div>
+  <table class="w-full text-sm">
+    <thead>
+      <tr class="text-left">
+        <th>Ticker</th><th>Shares</th><th>Cost</th><th>Price</th>
+        <th>Mkt Value</th><th>Day %</th><th>Unrealized P/L</th><th>Weight</th><th>Sector</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in exposures.positions %}
+      <tr>
+        <td><a href="/ticker/{{ row.ticker }}" class="text-sky-400 hover:underline">{{ row.ticker }}</a></td>
+        <td>{{ row.shares }}</td>
+        <td>${{ '%.2f'|format(row.cost_basis) }}</td>
+        <td>{% if row.price %}${{ '%.2f'|format(row.price) }}{% else %}-{% endif %}</td>
+        <td>{% if row.price %}${{ '%.2f'|format(row.market_value) }}{% else %}-{% endif %}</td>
+        <td class="{% if row.price and row.price > row.cost_basis %}pos{% elif row.price %}neg{% endif %}">
+          {% if row.unrealized_pl_pct is not none %}{{ '%.2f'|format(row.unrealized_pl_pct) }}%{% else %}-{% endif %}
+        </td>
+        <td class="{% if row.unrealized_pl and row.unrealized_pl > 0 %}pos{% elif row.unrealized_pl %}neg{% endif %}">
+          {% if row.unrealized_pl is not none %}${{ '%.2f'|format(row.unrealized_pl) }}{% else %}-{% endif %}
+        </td>
+        <td>{{ '%.1f'|format(row.weight_pct) }}%</td>
+        <td class="text-slate-400">{{ row.sector or '-' }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<div class="card rounded-lg p-4">
+  <h2 class="text-lg font-semibold mb-3">Sector exposure</h2>
+  <div class="space-y-2">
+    {% for sector, pct in exposures.sector_pct.items() %}
+    <div>
+      <div class="flex justify-between text-xs text-slate-400">
+        <span>{{ sector }}</span><span>{{ '%.1f'|format(pct) }}%</span>
+      </div>
+      <div class="h-2 bg-[#0f1424] rounded">
+        <div class="h-2 bg-sky-600 rounded" style="width: {{ pct }}%"></div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

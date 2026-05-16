@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>{% block title %}Portfolio Advisor{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/htmx.org@2.0.3"></script>
+  <style>
+    body { background: #0b0f1a; color: #e6edf3; }
+    .card { background: #11182a; border: 1px solid #1f2a44; }
+    .pos { color: #22c55e; } .neg { color: #ef4444; }
+    th { font-weight: 600; color: #9aa6b2; }
+    td, th { padding: 0.5rem 0.75rem; }
+    tr:nth-child(odd) td { background: #0f1424; }
+  </style>
+</head>
+<body class="min-h-screen">
+  <nav class="px-6 py-4 border-b border-[#1f2a44] flex items-center gap-6">
+    <a href="/" class="text-lg font-semibold">Portfolio Advisor</a>
+    <a href="/" class="text-sm text-slate-300 hover:text-white">Dashboard</a>
+    <a href="/recommendations" class="text-sm text-slate-300 hover:text-white">Recommendations</a>
+    <div class="ml-auto text-xs text-slate-400">
+      {% if not flags.has_anthropic %}<span class="px-2 py-1 rounded bg-amber-900 text-amber-200 mr-2">ANTHROPIC_API_KEY not set</span>{% endif %}
+      {% if not flags.has_finnhub %}<span class="px-2 py-1 rounded bg-amber-900 text-amber-200">FINNHUB_API_KEY not set</span>{% endif %}
+    </div>
+  </nav>
+  <main class="p-6 max-w-7xl mx-auto">
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

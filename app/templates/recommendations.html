@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Recommendations - Portfolio Advisor{% endblock %}
+{% block content %}
+<div class="flex items-center justify-between mb-4">
+  <h1 class="text-2xl font-semibold">Recommendations</h1>
+  <form hx-post="/recommendations/run" hx-target="#run-status" hx-swap="innerHTML">
+    <button class="px-3 py-1.5 rounded bg-emerald-700 hover:bg-emerald-600 text-sm">Run research</button>
+  </form>
+</div>
+<div id="run-status" class="text-xs text-slate-400 mb-4"></div>
+
+{% if not recs %}
+<div class="card rounded-lg p-6 text-slate-400">
+  No recommendations yet. Click <b>Run research</b> (requires <code>ANTHROPIC_API_KEY</code>) to generate one for each holding.
+</div>
+{% endif %}
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+{% for r in recs %}
+  {% set p = r.payload %}
+  <div class="card rounded-lg p-4">
+    <div class="flex items-center justify-between mb-2">
+      <a href="/ticker/{{ r.ticker }}" class="text-lg font-semibold text-sky-400 hover:underline">{{ r.ticker }}</a>
+      <div class="text-xs text-slate-400">{{ r.created_at[:19].replace('T', ' ') }}</div>
+    </div>
+    <div class="flex gap-2 text-xs mb-2">
+      <span class="px-2 py-0.5 rounded
+        {% if r.action in ['add', 'new_buy'] %}bg-emerald-900 text-emerald-200
+        {% elif r.action in ['trim', 'sell'] %}bg-rose-900 text-rose-200
+        {% else %}bg-slate-700 text-slate-200{% endif %}">
+        {{ (r.action or 'n/a') | upper }}
+      </span>
+      <span class="px-2 py-0.5 rounded bg-slate-700 text-slate-200">{{ r.horizon or 'n/a' }}</span>
+      <span class="px-2 py-0.5 rounded bg-slate-700 text-slate-200">conviction {{ r.conviction or '-' }}/5</span>
+    </div>
+    {% if p.thesis %}<p class="text-sm text-slate-200 mb-2">{{ p.thesis }}</p>{% endif %}
+    {% if p.suggested_action_detail %}
+      <div class="text-xs text-slate-400 mb-2"><b>Action:</b> {{ p.suggested_action_detail }}</div>
+    {% endif %}
+    {% if p.key_catalysts %}
+      <div class="text-xs text-slate-300 mb-1"><b>Catalysts:</b>
+        <ul class="list-disc list-inside text-slate-400">
+        {% for c in p.key_catalysts %}<li>{{ c }}</li>{% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+    {% if p.key_risks %}
+      <div class="text-xs text-slate-300"><b>Risks:</b>
+        <ul class="list-disc list-inside text-slate-400">
+        {% for risk in p.key_risks %}<li>{{ risk }}</li>{% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+    {% if p.error %}<div class="text-xs text-amber-300 mt-2">{{ p.error }}</div>{% endif %}
+  </div>
+{% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,28 @@
+# Codifies the investor's risk tolerance so Claude prompts stay consistent.
+investor:
+  age_band: young              # young | mid | near_retirement
+  risk_tolerance: aggressive   # conservative | moderate | aggressive | very_aggressive
+  horizon_years: 20
+
+style:
+  allowed:
+    - swing      # weeks to months
+    - long_term  # 1+ year
+  disallowed:
+    - day_trade
+    - scalp
+
+constraints:
+  max_single_position_pct: 25      # flag for trim if a position exceeds this
+  min_cash_buffer_pct: 5           # keep at least this in cash
+  max_sector_pct: 45               # concentration cap per sector
+
+preferences:
+  themes:
+    - AI / compute infrastructure
+    - small modular reactors / clean energy
+    - cybersecurity
+    - secular growth tech
+  avoid:
+    - tobacco
+    - private prisons

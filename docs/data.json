@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-16 19:54 UTC",
+  "generated_at": "2026-05-16 19:59 UTC",
   "exposures": {
     "positions": [
       {
@@ -107,41 +107,41 @@
   },
   "review": {
     "observations": [
-      "The portfolio currently has 100% cash allocation, which does not align with the aggressive risk profile and long-term investment horizon.",
-      "All positions are currently unweighted (0%), indicating no active market exposure.",
-      "The portfolio does not contain any positions in the preferred themes of AI / compute infrastructure, small modular reactors / clean energy, cybersecurity, or secular growth tech.",
-      "There are no positions in sectors that are flagged as disallowed, such as tobacco or private prisons.",
-      "The portfolio is at risk of concentration issues once positions are established, as the maximum single position percentage is 25%."
+      "The portfolio is currently 100% in cash, which does not align with the aggressive risk tolerance and long investment horizon.",
+      "All positions have a weight percentage of 0, indicating no current market value is assigned to them, which may imply they are not actively traded or valued.",
+      "There is no exposure to the preferred themes of AI / compute infrastructure, small modular reactors / clean energy, cybersecurity, or secular growth tech.",
+      "There are no positions in sectors that are defined, leading to a lack of diversification.",
+      "The investor has not allocated any funds towards the allowed investment styles of swing or long-term, as the portfolio is entirely in cash."
     ],
     "suggested_changes": [
-      "Deploy cash into positions that align with the investor's preferred themes to achieve a more balanced and diversified portfolio.",
-      "Consider allocating funds to sectors that are currently underrepresented or to positions that meet the maximum single position percentage of 25%.",
-      "Reassess the portfolio once positions are established to ensure compliance with sector limits and concentration rules."
+      "Deploy a portion of the cash into positions that align with the investor's preferred themes and sectors.",
+      "Ensure that no single position exceeds 25% of the total portfolio value once investments are made.",
+      "Consider establishing a diversified sector allocation to avoid concentration risk and adhere to the maximum sector percentage of 45%.",
+      "Review and potentially invest in positions that are correlated with the investor's risk profile and preferences."
     ],
     "open_questions": [
-      "What specific tickers or funds does the investor prefer to invest in that align with their themes?",
-      "Is there a target allocation for each theme or sector that the investor would like to achieve?",
-      "What is the investor's strategy for managing positions once they are established?"
+      "What is the investor's target allocation for each preferred theme?",
+      "Are there specific stocks or ETFs the investor is considering for deployment of cash?",
+      "What is the investor's strategy for managing cash reserves in the context of their aggressive risk tolerance?"
     ]
   },
   "recommendations": [
     {
       "ticker": "NBIS",
-      "action": "hold",
+      "action": "add",
       "horizon": "long_term",
-      "conviction": 3,
-      "thesis": "Nebius (NBIS) is gaining traction in the AI infrastructure space, evidenced by recent revenue growth and strategic site acquisitions. While the stock shows potential due to increasing demand for AI compute resources, the lack of concrete price data and market cap information limits our confidence in making a more aggressive move.",
+      "conviction": 4,
+      "thesis": "Nebius (NBIS) is positioned to capitalize on the growing demand for AI infrastructure, evidenced by a recent 684% revenue surge and significant partnerships with industry leaders like NVIDIA and Meta. The company's strategic moves, including securing a 1.2 GW site in Pennsylvania, further strengthen its growth narrative.",
       "key_catalysts": [
-        "Recent revenue boom attributed to AI infrastructure spending",
-        "Strategic site acquisition for 1.2 GW in Pennsylvania",
-        "Positive market sentiment and buzz around AI adoption"
+        "Recent 684% revenue surge and strong Q1 profit",
+        "Strategic partnerships with NVIDIA and Meta",
+        "Secured 1.2 GW site for expansion"
       ],
       "key_risks": [
-        "Lack of price history and concrete financial metrics",
-        "Potential competition from established players like CoreWeave",
-        "Market volatility affecting small-cap stocks"
+        "Market volatility affecting small-cap stocks",
+        "Dependence on continued demand for AI infrastructure"
       ],
-      "suggested_action_detail": "Maintain current position size and monitor for further developments, especially around the next earnings report or significant price movement.",
+      "suggested_action_detail": "Consider increasing your position in NBIS to leverage its growth potential, while monitoring for any market volatility or changes in demand dynamics.",
       "source": "llm",
       "quote": {
         "ticker": "NBIS",
@@ -209,16 +209,16 @@
           "published": "Wed, 13 May 2026 11:03:00 GMT"
         },
         {
+          "headline": "Nebius Soars 20% on Blowout Quarter: 684% Revenue Surge, NVIDIA Backing, Meta Megadeal - 24/7 Wall St.",
+          "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxPbGJpdnJiNVBjRHZDaC1US0VTcWJhLXFLRjVFTzhFVjlUb01mSXRPSHNuOVRJY2QweU5RbGJPTDFOUmQyUHNzcGZrN2V4QlVrdF83NGlrV1BzTGdjSHF3R05jN2wxUWc0QlllVUhVWG9rbFl0dFRqSWhlTmhWdEgtNC1OaEh3ZFh5TFJPM3gzb0l3U2dJSXJhVnVzLUgyZm1TTER1dWFmdmpzbU9ITEhVWFF1OUxuWlBmajJEQkMxNlFVaTg?oc=5",
+          "source": "24/7 Wall St.",
+          "published": "Wed, 13 May 2026 18:40:21 GMT"
+        },
+        {
           "headline": "Nebius: 4GW Power Upgrade Strengthens The Bull Case (NASDAQ:NBIS) - Seeking Alpha",
           "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxPUjc5eEhQNHctZVN1YjE3OFprMmUzV3lhYlBQTEpvZmczTnYzVTNxaTZEMEpxbWhHOWpSU05QenNwZF94RkRVSEVsWV9hSkZxZEwtQ2pWdzZvTHVYNzJpRk52VDJ2QmVOTGkzNWNZOXFUcmU1QjVKSm1fYmtfS1gtUHdxRXI1Mk5oYUJyNS1tUlVrQUgzZ1puc084ZVNDUEZSWEE?oc=5",
           "source": "Seeking Alpha",
           "published": "Fri, 15 May 2026 09:10:52 GMT"
-        },
-        {
-          "headline": "AI adoption is reshaping margins across industries (NBIS:NASDAQ) - Seeking Alpha",
-          "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxOV0h2c3NfRmp5NDhrd0RjZ2c4ZkFiVmlESk9GWmhoWnVKdjY3eEo2R3NabUdIN3FQSkkwLWhOcENlbzVNcEFnVDFJTEFGS2stZGMzVW5mazhMVTB6Q1VwQVdfY0VKLUVEekd2RXhmQmdXbVdnZ2dVdjQwTzJoMDRWM01DbmZVd2FFbi1GVzBQMzVOQQ?oc=5",
-          "source": "Seeking Alpha",
-          "published": "Fri, 15 May 2026 16:41:47 GMT"
         },
         {
           "headline": "NBIS Stock Quote Price and Forecast - CNN",
@@ -251,18 +251,18 @@
       "action": "hold",
       "horizon": "long_term",
       "conviction": 3,
-      "thesis": "Amazon continues to be positioned as a leader in AI and cloud infrastructure, with AWS driving significant growth. Recent headlines indicate strong momentum and positive sentiment around its AI initiatives, though some mixed signals suggest caution. Overall, the stock remains a solid long-term hold given its strategic advantages in the evolving tech landscape.",
+      "thesis": "Amazon continues to position itself as a leader in AI and cloud infrastructure, with AWS driving significant growth. Recent headlines suggest strong market sentiment, but the lack of concrete price data limits confidence in a more aggressive stance.",
       "key_catalysts": [
-        "Continued growth in AWS and AI initiatives",
-        "Positive market sentiment from recent earnings reports",
-        "Potential for stock price appreciation as AI adoption increases"
+        "Strong performance from AWS expected to continue",
+        "Positive market sentiment around AI initiatives",
+        "Potential for stock to reach $3 trillion market cap"
       ],
       "key_risks": [
-        "Market volatility affecting tech stocks",
-        "Potential regulatory scrutiny on big tech",
-        "Competition in the cloud and AI sectors"
+        "Volatility in tech sector could impact stock price",
+        "Competition in AI and cloud services remains fierce",
+        "Market reactions to earnings reports can be unpredictable"
       ],
-      "suggested_action_detail": "Maintain current position; monitor for significant price movements or upcoming earnings for reassessment.",
+      "suggested_action_detail": "Maintain current position; monitor for upcoming earnings report and significant market movements.",
       "source": "llm",
       "quote": {
         "ticker": "AMZN",
@@ -372,18 +372,16 @@
       "action": "hold",
       "horizon": "long_term",
       "conviction": 2,
-      "thesis": "Oklo continues to face significant challenges, including deepening losses and a volatile stock price. While there is potential for recovery, particularly with upcoming earnings and narrative shifts, the lack of concrete positive developments tempers confidence.",
+      "thesis": "Oklo is facing significant challenges with deepening losses and a volatile stock price, which raises concerns about its near-term viability. However, the ongoing interest in small modular reactors and potential narrative shifts in the market could provide future upside, warranting a cautious hold.",
       "key_catalysts": [
-        "Upcoming earnings report that may provide insights into financial health",
-        "Market reactions to the $1.0B equity offering",
-        "Potential narrative shifts from recent news coverage"
+        "Recent news items suggest potential narrative shifts that could impact investor sentiment.",
+        "Upcoming earnings report could provide clarity on financial health and operational progress."
       ],
       "key_risks": [
-        "Continued financial losses impacting investor sentiment",
-        "Market volatility and speculative trading behavior",
-        "Dependence on favorable regulatory developments in the nuclear sector"
+        "Continued losses may deter investors and lead to further stock price declines.",
+        "Market volatility and uncertainty surrounding the nuclear sector could impact performance."
       ],
-      "suggested_action_detail": "Maintain current position; reassess after the upcoming earnings report or if the stock moves 10%+ in either direction.",
+      "suggested_action_detail": "Maintain current position size; review after the next earnings report or if there is a significant price movement of 10% or more.",
       "source": "llm",
       "quote": {
         "ticker": "OKLO",
@@ -493,18 +491,18 @@
       "action": "hold",
       "horizon": "long_term",
       "conviction": 2,
-      "thesis": "Netflix is facing mixed signals with recent guidance raises overshadowed by market skepticism about engagement and subscriber growth. The stock's volatility reflects uncertainty in its path to global TV dominance, warranting a cautious approach.",
+      "thesis": "While Netflix has shown potential for growth with recent guidance raises and strategic positioning in global TV, the mixed market reactions and ongoing debates about engagement metrics suggest caution. The stock's volatility and lack of clear momentum make it prudent to maintain current holdings without increasing exposure at this time.",
       "key_catalysts": [
-        "Recent guidance raise indicating potential for growth",
-        "Analyst upgrades suggesting significant upside potential",
-        "Upcoming earnings report which may clarify subscriber trends"
+        "Recent guidance raise indicating potential for future growth",
+        "Analyst price targets suggesting significant upside",
+        "Strategic moves to enhance global TV dominance"
       ],
       "key_risks": [
-        "Continued debate over subscriber engagement impacting market sentiment",
-        "Potential leadership changes with Reed Hastings exiting the board",
-        "Market volatility affecting stock price movements"
+        "Market volatility and mixed reactions to guidance",
+        "Concerns over subscriber engagement and retention",
+        "Potential leadership changes impacting strategic direction"
       ],
-      "suggested_action_detail": "Maintain current position size; reassess after the next earnings report or if the stock moves 10% or more.",
+      "suggested_action_detail": "Maintain current position size; reassess after next earnings report or significant price movement.",
       "source": "llm",
       "quote": {
         "ticker": "NFLX",
@@ -584,16 +582,16 @@
           "published": "Thu, 16 Apr 2026 07:00:00 GMT"
         },
         {
+          "headline": "Netflix, Inc. (NFLX) Stock Price, Quote, News & Analysis - Seeking Alpha",
+          "url": "https://news.google.com/rss/articles/CBMiTEFVX3lxTE5RMy16YUYtNUc0OG9mS1UyQ2l2Smp2eVlENmszekRMZ1J2WDA1MGlsUUx1OW5xemNaRzdkd3l5ZnZFaWI4dWZESF81N0Q?oc=5",
+          "source": "Seeking Alpha",
+          "published": "Thu, 14 May 2026 07:00:00 GMT"
+        },
+        {
           "headline": "NFLX Stock: The Math Behind The Upside - Trefis",
           "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxNNHlxSXJNd2YzTHBsVUdoQTJlbnVNR3FhcUNFaUl4R1c3LTQyZTRnSjhNcGxZN0JGc2Qtek9XY2JNRS14ZktiSjlEVk5ONjZLWDRneXE3S2ZrUE82bGZGLU5DVU9KX2syTlczYWVFeXQ0dTNuWXJQQU1yay1XNi15bFlYU3ZxS2JkMmVtRDlfZGk2YTkyUktHWW44aFlMNjQ?oc=5",
           "source": "Trefis",
           "published": "Thu, 14 May 2026 12:59:33 GMT"
-        },
-        {
-          "headline": "Netflix (NASDAQ:NFLX) Stock Price Down 2.3% - Here's Why - MarketBeat",
-          "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxQY2JUcHpDd2x5bXhrRzlaeWVmQ3I5UnBGb24yZnZCZHVNbU81M3VPcEUtM0RYdGstV1Vtb2RuQlFJZkdoY2R3R2NpUEpyYUtJUjhkZ3h0Q1dsYm5lVHhCX1VCelBfcnpvdEJLMEtRbUZHZlRtTHZoS2tPbzA0NFNFYmRud2x5WTN5ZWg2bUVkaFIza3FVb2lCS280MHNYTTNDOUlTMQ?oc=5",
-          "source": "MarketBeat",
-          "published": "Mon, 11 May 2026 23:30:07 GMT"
         }
       ],
       "position": {
@@ -614,16 +612,18 @@
       "action": "hold",
       "horizon": "long_term",
       "conviction": 2,
-      "thesis": "IREN is currently facing volatility due to its recent $3 billion capital raise, which has raised concerns about dilution despite its strategic partnerships with Nvidia. The long-term potential remains tied to its AI cloud expansion, but the immediate outlook is uncertain as investors assess the implications of the recent deals.",
+      "thesis": "IREN is currently facing significant volatility following a $3 billion capital raise, which has raised concerns about dilution despite its strategic partnership with NVIDIA. While the long-term potential in AI infrastructure is promising, the immediate market reaction suggests caution is warranted.",
       "key_catalysts": [
-        "Strategic partnership with Nvidia for AI infrastructure deployment",
-        "Recent capital raise aimed at funding AI cloud expansion"
+        "Strategic partnership with NVIDIA for AI infrastructure deployment",
+        "Recent capital raise to fund expansion efforts",
+        "Potential narrative shifts from upcoming earnings reports"
       ],
       "key_risks": [
-        "Potential dilution from the $3 billion convertible note deal",
-        "Market reaction to the financial implications of the recent capital raise"
+        "Market reaction to dilution from convertible note deal",
+        "Uncertainty surrounding execution of AI cloud expansion",
+        "Overall market sentiment towards tech stocks"
       ],
-      "suggested_action_detail": "Maintain current position; monitor for updates on earnings and market reactions to strategic partnerships.",
+      "suggested_action_detail": "Maintain current position size and monitor for further developments, particularly after the next earnings report or if the stock moves 10% or more.",
       "source": "llm",
       "quote": {
         "ticker": "IREN",
@@ -733,16 +733,16 @@
       "action": "hold",
       "horizon": "long_term",
       "conviction": 2,
-      "thesis": "FBL currently lacks strong price signals and concrete data, making it a default hold under an aggressive profile. The recent headlines suggest some interest but do not provide clear catalysts for significant movement in the near term.",
+      "thesis": "Current news around FBL is thin and lacks strong catalysts for immediate action. The recent approval of a stock purchase by Farm Bureau P&C Insurance may provide some stability, but overall market sentiment remains uncertain.",
       "key_catalysts": [
-        "12 recent news items - watch for narrative shifts",
-        "Shareholder approval for stock purchase by Farm Bureau P&C Insurance"
+        "Recent approval of stock purchase by Farm Bureau P&C Insurance",
+        "12 recent news items indicating potential narrative shifts"
       ],
       "key_risks": [
-        "Lack of concrete price history and market data",
-        "Potential volatility in related sectors"
+        "Lack of concrete financial data and price history",
+        "Market volatility impacting investor sentiment"
       ],
-      "suggested_action_detail": "Maintain current size; review on next earnings report or a significant price movement of 10% or more.",
+      "suggested_action_detail": "Maintain current position size and review on next earnings report or if there is a significant price movement of 10% or more.",
       "source": "llm",
       "quote": {
         "ticker": "FBL",
@@ -852,16 +852,18 @@
       "action": "hold",
       "horizon": "long_term",
       "conviction": 2,
-      "thesis": "Centrus Energy (LEU) is currently facing mixed signals with no strong momentum or clear catalysts to drive significant price movement in the near term. While recent news indicates ongoing interest and potential for growth in the nuclear energy sector, the lack of concrete data and price history limits our confidence.",
+      "thesis": "Centrus Energy (LEU) has shown some recent volatility and mixed signals in the market, leading to a cautious outlook. While there are multiple recent news items indicating potential interest and shifts in narrative, the lack of concrete price data and earnings results makes it challenging to form a stronger conviction at this time.",
       "key_catalysts": [
-        "Upcoming Q1 earnings report may provide insights into performance and future guidance",
-        "Recent interest in nuclear energy as a clean energy alternative could bolster sentiment"
+        "Upcoming Q1 earnings report",
+        "Recent interest from institutional investors",
+        "Potential narrative shifts from recent news coverage"
       ],
       "key_risks": [
-        "Volatility due to market sentiment and sector performance",
-        "Potential regulatory changes impacting the nuclear energy industry"
+        "Continued volatility in share price",
+        "Uncertain market conditions for clean energy",
+        "Dependence on upcoming earnings performance"
       ],
-      "suggested_action_detail": "Maintain current position size and monitor closely for developments, particularly around the next earnings report or significant price movements.",
+      "suggested_action_detail": "Maintain current position size; plan to reassess after the upcoming earnings report or if there is a significant price movement (10%+).",
       "source": "llm",
       "quote": {
         "ticker": "LEU",
@@ -935,22 +937,22 @@
           "published": "Thu, 07 May 2026 18:28:07 GMT"
         },
         {
-          "headline": "Discipline and Rules-Based Execution in LEU Response - Stock Traders Daily",
-          "url": "https://news.google.com/rss/articles/CBMizAFBVV95cUxNTk1NSE4xcjVWYXp3djhpWFVERGNyWU5hSXVQTWVaWk5pcnk3TzFFTE50SmYtcm5kRTBCN1ZmWlNRRWhnc2tsZU5sZWI4THQ5bE1yRmpLbDNmek5MTXRUVW9WR2FMT3hZd0JlckhaTDZyTy1SbWFGa1pKRm9EQURnZTRDbk84aGVpWWJrMldqVm1VcVV1OU9hVTQyeTRrRldCZW5iWEhQU1U0RlU4ME9lNUg2Sm1LVVE0ZXhpQ3Jia0JaTWZXX003Skx3bWg?oc=5",
-          "source": "Stock Traders Daily",
-          "published": "Thu, 14 May 2026 08:30:02 GMT"
-        },
-        {
-          "headline": "D. E. Shaw affiliate holds 371,196 shares in Centrus Energy (NYSE: LEU) - Stock Titan",
-          "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxNMjlnYTdaV2E4d3hzLVppX2czOXE5VFF6OXBWSDJzdl96Tm9WRUMxS2o4VGtmSHhrcUE1Wm5NVHhDZnFUamQ4OHpYN0VGWUZ5MWRmaDBfOW5GS1VXaHFCT054X3o2ZC13RE1aMXJLUTZDOHpBbzFuUG5qcUs1eUt0OHFYMTNUMkIwMzAyX1lVTkppanNoR216bExXdzB3R3Y5ekJIUFlvNnVqYlMyMl9rSVozT0QxeWFVdFdhakxaZy11VmpEOTRQcnB3?oc=5",
+          "headline": "Van Eck Reports 6.4% Stake in Centrus Energy (NYSE: LEU) - Stock Titan",
+          "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxOSWstejhKS1UxSlFYXzdWR3ZNWGVQcjNUUldyVi1adzB3NjhCYzREbmhIb2U1THBrX29EVS1aR04yX2RlYzhaLWgxUjl2eGdQSlJVMEpzMkhzMF9pdFQtR004TE5tY21naDZ3OFhFdnlMMHRhWmZ6WlJ1d1JlMVRURXFjSUhKVUtfWU5Gbi1FbzlqekI4dUx3M3Y4cnF1RVNiY0tNbUV2YWNZRlVnYWxvbnpLdEx1bjRZcTFNbUFLOWFpNzNMZEI0Qld3?oc=5",
           "source": "Stock Titan",
-          "published": "Fri, 15 May 2026 20:03:04 GMT"
+          "published": "Fri, 15 May 2026 13:38:02 GMT"
         },
         {
           "headline": "LEU To Report Q1 Earnings: What's in Store for the Stock? - Yahoo Finance",
           "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxNdWpybm1rVFBSMlM4OWZSWEg4bE5JcUhFMGZQRVpRTU9jdm13NVV0RW1PMkl4WFQ5WUN3TzJ6OWt3T2xFb2dJOVYzMm8yMWczVEFlNlgyT2Y4NWVicTcyTExfU3d1UjBwWDBYeGNjanBUQ2VXYk94Tk9WWk1mdmVJdnRDUjRkaC1XcUt4dXpxM1djVWVYaVF3RA?oc=5",
           "source": "Yahoo Finance",
           "published": "Tue, 28 Apr 2026 07:00:00 GMT"
+        },
+        {
+          "headline": "D. E. Shaw affiliate holds 371,196 shares in Centrus Energy (NYSE: LEU) - Stock Titan",
+          "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxNMjlnYTdaV2E4d3hzLVppX2czOXE5VFF6OXBWSDJzdl96Tm9WRUMxS2o4VGtmSHhrcUE1Wm5NVHhDZnFUamQ4OHpYN0VGWUZ5MWRmaDBfOW5GS1VXaHFCT054X3o2ZC13RE1aMXJLUTZDOHpBbzFuUG5qcUs1eUt0OHFYMTNUMkIwMzAyX1lVTkppanNoR216bExXdzB3R3Y5ekJIUFlvNnVqYlMyMl9rSVozT0QxeWFVdFdhakxaZy11VmpEOTRQcnB3?oc=5",
+          "source": "Stock Titan",
+          "published": "Fri, 15 May 2026 20:03:04 GMT"
         }
       ],
       "position": {
@@ -971,16 +973,16 @@
       "action": "hold",
       "horizon": "long_term",
       "conviction": 2,
-      "thesis": "While Meta has potential for long-term growth, recent headlines indicate mixed sentiment with concerns over cash burn and heavy investment in AI and the Metaverse. The stock remains a topic of debate among analysts, suggesting a cautious approach is warranted at this time.",
+      "thesis": "Meta Platforms is currently facing mixed sentiment in the market, with some analysts highlighting its potential for long-term growth while others caution against its heavy spending on the Metaverse. Recent headlines indicate a lack of consensus on its valuation and strategy, suggesting that investors should adopt a wait-and-see approach.",
       "key_catalysts": [
-        "Continued investment in AI and compute infrastructure",
-        "Potential narrative shifts from upcoming earnings reports"
+        "Potential narrative shifts from upcoming earnings",
+        "Increased focus on AI spending and its impact on future growth"
       ],
       "key_risks": [
-        "High cash burn with uncertain returns from Metaverse investments",
-        "Increased competition in the digital advertising space"
+        "Continued cash burn without clear returns",
+        "Market sentiment shifting negatively due to competition and spending concerns"
       ],
-      "suggested_action_detail": "Maintain current position and reassess after the next earnings report or if the stock moves 10% or more.",
+      "suggested_action_detail": "Maintain current position size; reassess after next earnings report or if there is a significant price movement.",
       "source": "llm",
       "quote": {
         "ticker": "META",
@@ -1030,12 +1032,6 @@
           "published": "Wed, 13 May 2026 15:30:00 GMT"
         },
         {
-          "headline": "3 Stocks You'll Regret Not Buying Right Now - The Motley Fool",
-          "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxPdlNBanFybGFoWWFSODh2Mi1peGRDMHk2V3VkVXM2N2Y1WFBfc3dWRXFBUXNqNFh2SlYyNHNMTy14aDgzT3V4cy1RdkZLbW8yN0hJNUhRM294cnJ3S1hGOHZvaXFrMnVMYzk4cTJhRWRqejUzanZQQ2F3ZzFoMUc3YnVReXByb29yZE54YS1B?oc=5",
-          "source": "The Motley Fool",
-          "published": "Wed, 13 May 2026 16:11:00 GMT"
-        },
-        {
           "headline": "Meta Is Burning Cash With Nothing to Show for It. Buy This Stock Instead - 24/7 Wall St.",
           "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNdWk2MEx1a2lqRG54amt1T003cl9LR2psU3dKLWZ6cVBEQi12Q09Icmx3MlJhQ1p0c1d1WWpXeVRPWjhNTkxnN1E3Y3YtTjIwR1pnRnl0U1kySnlkTUs0LUh1dmhENUdwS3Q4blJzcGFJaG5yU0RVX0g1MEhQbk1MaEtPTE5HdmNDY1pyZFZZdWtxeG0xbUhyRmtXQThpbGFGNkQ3QWxwQlR2WmZCb3ZfeVoyRlEtZw?oc=5",
           "source": "24/7 Wall St.",
@@ -1057,6 +1053,12 @@
           "headline": "Meta stock sinks after Q1 earnings as company raises 2026 AI spending forecast to $125 billion-$145 billion - Yahoo Finance",
           "url": "https://news.google.com/rss/articles/CBMigwJBVV95cUxOa0RCZ1pOME5RMXRjMzgzYWFSR0lpR1RiWnlPa0Q1ZWF1XzJ5VW04bU92bzRlQjRDVm9aM1RCX3JNOUZhYVBMb01GSzJqSGpfV2ZLcEd4MVo0VVZtRjhCUzR1V2g3amYxYXVkalRlb2paTlFQaDdVQTVabHIzRHhOMlB4ZXZtTTdpbUNmLVA3U2ZheDJ4SEdfRjE2c0RCT0s5V1UxQlhOaHJLS181NlNBR2pCdHY2eDhxR0s2WVo2WklWaWlHUzdxdXNRclUteFZxYllYLVgxWkE5c1YtaHNUUFZpdUgtWThJZDVTVmFLMEFiNUJGU1NjX3RGLXNfMy1OeFJJ?oc=5",
           "source": "Yahoo Finance",
+          "published": "Thu, 30 Apr 2026 07:00:00 GMT"
+        },
+        {
+          "headline": "Google wraps up best month since 2004 as earnings push Alphabet stock up 34% in April - CNBC",
+          "url": "https://news.google.com/rss/articles/CBMie0FVX3lxTE1GVzF5RTJMWlNzajEwaE5fbWh2LXdOUHhJU1hZWkFKMllUWHRzMG4tYVFqQmVqQjJmM0RWVmZhbUpnZkJpRWhpZlVsY1lwLVU4VEpwVGUzdFpLc0tOeWQydjhId0dYUm5fN3pibEhESHF4T0hZWkJTanppZ9IBgAFBVV95cUxPNWdiZHJSZFlmQnN6V09rVGg3LTNUVEI2VV9WRE9JMkpDNDk4MEpudmx4VHFuR0loeFpUQ2pJczFqTzNJaEtGWnZlak5BNlBib1pkR3JRQXVRaE5lZXlIRjRvRG1LcEdxcDFhTFlhX0l6VDU4ak16d1VMMk1sa1A1Rw?oc=5",
+          "source": "CNBC",
           "published": "Thu, 30 Apr 2026 07:00:00 GMT"
         },
         {
@@ -1089,30 +1091,30 @@
   "candidates": {
     "candidates": [
       {
+        "ticker": "NVDA",
+        "thesis": "NVIDIA is a leader in AI and compute infrastructure, benefiting from the growing demand for AI applications and high-performance computing.",
+        "entry_zone": "$400-$450",
+        "risk": "high",
+        "horizon": "long_term"
+      },
+      {
+        "ticker": "PLUG",
+        "thesis": "Plug Power is at the forefront of clean energy solutions with its hydrogen fuel cell technology, aligning with the theme of small modular reactors and clean energy.",
+        "entry_zone": "$10-$15",
+        "risk": "high",
+        "horizon": "long_term"
+      },
+      {
         "ticker": "CRWD",
-        "thesis": "CrowdStrike is a leader in cybersecurity solutions, benefiting from increasing demand for cloud-based security services as organizations prioritize data protection.",
-        "entry_zone": "$130 - $150",
-        "risk": "high",
-        "horizon": "long_term"
-      },
-      {
-        "ticker": "PLTR",
-        "thesis": "Palantir Technologies specializes in data analytics and AI, positioning itself to capitalize on the growing need for advanced data processing solutions across industries.",
-        "entry_zone": "$10 - $12",
-        "risk": "high",
-        "horizon": "long_term"
-      },
-      {
-        "ticker": "ENPH",
-        "thesis": "Enphase Energy is a key player in the clean energy sector, focusing on solar energy solutions and benefiting from the global shift towards renewable energy sources.",
-        "entry_zone": "$150 - $170",
+        "thesis": "CrowdStrike is a key player in the cybersecurity space, providing cloud-delivered endpoint protection and benefiting from the increasing need for cybersecurity solutions.",
+        "entry_zone": "$150-$180",
         "risk": "high",
         "horizon": "long_term"
       },
       {
         "ticker": "SNOW",
-        "thesis": "Snowflake Inc. offers a cloud-based data warehousing solution, which is essential for businesses leveraging big data and AI, making it a strong candidate for growth.",
-        "entry_zone": "$180 - $210",
+        "thesis": "Snowflake is a leading cloud data platform that supports the secular growth of tech through data analytics and storage solutions.",
+        "entry_zone": "$180-$220",
         "risk": "high",
         "horizon": "long_term"
       }

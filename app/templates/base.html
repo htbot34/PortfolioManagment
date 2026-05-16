@@ -5,28 +5,33 @@
   <title>{% block title %}Portfolio Advisor{% endblock %}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/htmx.org@2.0.3"></script>
   <style>
-    body { background: #0b0f1a; color: #e6edf3; }
+    body { background: #0b0f1a; color: #e6edf3; font-family: ui-sans-serif, system-ui, sans-serif; }
     .card { background: #11182a; border: 1px solid #1f2a44; }
     .pos { color: #22c55e; } .neg { color: #ef4444; }
     th { font-weight: 600; color: #9aa6b2; }
     td, th { padding: 0.5rem 0.75rem; }
     tr:nth-child(odd) td { background: #0f1424; }
+    a.tlink { color: #38bdf8; }
+    a.tlink:hover { text-decoration: underline; }
   </style>
 </head>
 <body class="min-h-screen">
-  <nav class="px-6 py-4 border-b border-[#1f2a44] flex items-center gap-6">
-    <a href="/" class="text-lg font-semibold">Portfolio Advisor</a>
-    <a href="/" class="text-sm text-slate-300 hover:text-white">Dashboard</a>
-    <a href="/recommendations" class="text-sm text-slate-300 hover:text-white">Recommendations</a>
-    <div class="ml-auto text-xs text-slate-400">
-      {% if not flags.has_anthropic %}<span class="px-2 py-1 rounded bg-amber-900 text-amber-200 mr-2">ANTHROPIC_API_KEY not set</span>{% endif %}
-      {% if not flags.has_finnhub %}<span class="px-2 py-1 rounded bg-amber-900 text-amber-200">FINNHUB_API_KEY not set</span>{% endif %}
+  <nav class="px-6 py-4 border-b border-[#1f2a44] flex flex-wrap items-center gap-4">
+    <a href="{{ base }}index.html" class="text-lg font-semibold">Portfolio Advisor</a>
+    <a href="{{ base }}index.html" class="text-sm text-slate-300 hover:text-white">Dashboard</a>
+    <a href="{{ base }}recommendations.html" class="text-sm text-slate-300 hover:text-white">Recommendations</a>
+    <a href="{{ base }}candidates.html" class="text-sm text-slate-300 hover:text-white">Candidates</a>
+    <div class="ml-auto text-xs text-slate-400 flex items-center gap-2">
+      {% if not flags.has_llm %}<span class="px-2 py-1 rounded bg-slate-700 text-slate-200">Rule-based mode</span>{% else %}<span class="px-2 py-1 rounded bg-emerald-900 text-emerald-200">LLM augmented</span>{% endif %}
+      <span>Generated {{ generated_at }}</span>
     </div>
   </nav>
   <main class="p-6 max-w-7xl mx-auto">
     {% block content %}{% endblock %}
   </main>
+  <footer class="px-6 py-6 text-xs text-slate-500 max-w-7xl mx-auto">
+    Advice only. Educational use. Not financial advice.
+  </footer>
 </body>
 </html>

@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - Portfolio Advisor{% endblock %}
+{% block content %}
+{% set total = exposures.portfolio_value %}
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+  <div class="card rounded-lg p-4">
+    <div class="text-xs text-slate-400">Portfolio Value</div>
+    <div class="text-2xl font-semibold">${{ '%.2f'|format(total) }}</div>
+  </div>
+  <div class="card rounded-lg p-4">
+    <div class="text-xs text-slate-400">Positions Mkt Value</div>
+    <div class="text-2xl font-semibold">${{ '%.2f'|format(exposures.total_market_value) }}</div>
+  </div>
+  <div class="card rounded-lg p-4">
+    <div class="text-xs text-slate-400">Cash</div>
+    <div class="text-2xl font-semibold">${{ '%.2f'|format(exposures.cash) }}</div>
+    <div class="text-xs text-slate-400">{{ '%.1f'|format(exposures.cash_pct) }}% of portfolio</div>
+  </div>
+  <div class="card rounded-lg p-4">
+    <div class="text-xs text-slate-400">Risk profile</div>
+    <div class="text-lg font-semibold">{{ risk.investor.risk_tolerance | capitalize }}</div>
+    <div class="text-xs text-slate-400">{{ risk.investor.horizon_years }}y horizon, {{ risk.style.allowed | join(' / ') }}</div>
+  </div>
+</div>
+
+<div class="card rounded-lg overflow-hidden mb-6">
+  <div class="px-4 py-3 border-b border-[#1f2a44]">
+    <h2 class="text-lg font-semibold">Positions</h2>
+  </div>
+  <div class="overflow-x-auto">
+  <table class="w-full text-sm">
+    <thead>
+      <tr class="text-left">
+        <th>Ticker</th><th>Shares</th><th>Cost</th><th>Price</th>
+        <th>Mkt Value</th><th>Day %</th><th>Unrealized</th><th>Weight</th><th>Sector</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in exposures.positions %}
+      <tr>
+        <td><a href="{{ base }}ticker/{{ row.ticker }}.html" class="tlink">{{ row.ticker }}</a></td>
+        <td>{{ row.shares }}</td>
+        <td>${{ '%.2f'|format(row.cost_basis) }}</td>
+        <td>{% if row.price %}${{ '%.2f'|format(row.price) }}{% else %}-{% endif %}</td>
+        <td>{% if row.market_value is not none %}${{ '%.2f'|format(row.market_value) }}{% else %}-{% endif %}</td>
+        <td class="{% if row.day_change_pct and row.day_change_pct > 0 %}pos{% elif row.day_change_pct %}neg{% endif %}">
+          {% if row.day_change_pct is not none %}{{ '%.2f'|format(row.day_change_pct) }}%{% else %}-{% endif %}
+        </td>
+        <td class="{% if row.unrealized_pl and row.unrealized_pl > 0 %}pos{% elif row.unrealized_pl %}neg{% endif %}">
+          {% if row.unrealized_pl is not none %}${{ '%.2f'|format(row.unrealized_pl) }} ({{ '%.1f'|format(row.unrealized_pl_pct) }}%){% else %}-{% endif %}
+        </td>
+        <td>{{ '%.1f'|format(row.weight_pct) }}%</td>
+        <td class="text-slate-400">{{ row.sector or '-' }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+  <div class="card rounded-lg p-4">
+    <h2 class="text-lg font-semibold mb-3">Sector exposure</h2>
+    <div class="space-y-2">
+    {% for sector, pct in exposures.sector_pct.items() %}
+      <div>
+        <div class="flex justify-between text-xs text-slate-400">
+          <span>{{ sector }}</span><span>{{ '%.1f'|format(pct) }}%</span>
+        </div>
+        <div class="h-2 bg-[#0f1424] rounded">
+          <div class="h-2 bg-sky-600 rounded" style="width: {{ pct }}%"></div>
+        </div>
+      </div>
+    {% endfor %}
+    </div>
+  </div>
+
+  <div class="card rounded-lg p-4">
+    <h2 class="text-lg font-semibold mb-3">Portfolio review</h2>
+    {% if review.observations %}
+      <div class="text-xs text-slate-300 mb-2 font-semibold">Observations</div>
+      <ul class="list-disc list-inside text-sm text-slate-300 mb-3">
+        {% for o in review.observations %}<li>{{ o }}</li>{% endfor %}
+      </ul>
+    {% endif %}
+    {% if review.suggested_changes %}
+      <div class="text-xs text-slate-300 mb-2 font-semibold">Suggested changes</div>
+      <ul class="list-disc list-inside text-sm text-slate-300">
+        {% for c in review.suggested_changes %}<li>{{ c }}</li>{% endfor %}
+      </ul>
+    {% endif %}
+    {% if not review.observations and not review.suggested_changes %}
+      <div class="text-sm text-slate-400">No issues flagged.</div>
+    {% endif %}
+  </div>
+</div>
+
+<div class="card rounded-lg overflow-hidden">
+  <div class="px-4 py-3 border-b border-[#1f2a44]">
+    <h2 class="text-lg font-semibold">Latest recommendations</h2>
+  </div>
+  <div class="divide-y divide-[#1f2a44]">
+  {% for r in recs %}
+    <div class="px-4 py-3">
+      <div class="flex items-center justify-between mb-1">
+        <a href="{{ base }}ticker/{{ r.ticker }}.html" class="tlink font-semibold">{{ r.ticker }}</a>
+        <div class="flex gap-2 text-xs">
+          <span class="px-2 py-0.5 rounded
+            {% if r.action in ['add','new_buy'] %}bg-emerald-900 text-emerald-200
+            {% elif r.action in ['trim','sell'] %}bg-rose-900 text-rose-200
+            {% else %}bg-slate-700 text-slate-200{% endif %}">{{ r.action|upper }}</span>
+          <span class="px-2 py-0.5 rounded bg-slate-700 text-slate-200">{{ r.horizon }}</span>
+          <span class="px-2 py-0.5 rounded bg-slate-700 text-slate-200">conv {{ r.conviction }}/5</span>
+        </div>
+      </div>
+      <p class="text-sm text-slate-300">{{ r.thesis }}</p>
+    </div>
+  {% endfor %}
+  </div>
+</div>
+{% endblock %}

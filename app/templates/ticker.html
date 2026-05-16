@@ -1,19 +1,53 @@
 {% extends "base.html" %}
 {% block title %}{{ ticker }} - Portfolio Advisor{% endblock %}
 {% block content %}
+{% set q = payload.quote %}
+{% set t = payload.technicals %}
+{% set p = payload.position %}
+
 <div class="flex items-center justify-between mb-4">
   <div>
     <h1 class="text-2xl font-semibold">{{ ticker }}</h1>
-    <div class="text-sm text-slate-400">{{ quote.sector or '-' }} / {{ quote.industry or '-' }}</div>
+    <div class="text-sm text-slate-400">{{ q.sector or '-' }} / {{ q.industry or '-' }}</div>
   </div>
   <div class="text-right">
-    {% if quote.price %}
-    <div class="text-2xl font-semibold">${{ '%.2f'|format(quote.price) }}</div>
-    {% if quote.day_change_pct is not none %}
-      <div class="text-sm {% if quote.day_change_pct > 0 %}pos{% else %}neg{% endif %}">
-        {{ '%.2f'|format(quote.day_change_pct) }}% today
+    {% if q.price %}
+    <div class="text-2xl font-semibold">${{ '%.2f'|format(q.price) }}</div>
+    {% if q.day_change_pct is not none %}
+      <div class="text-sm {% if q.day_change_pct > 0 %}pos{% else %}neg{% endif %}">{{ '%.2f'|format(q.day_change_pct) }}% today</div>
+    {% endif %}
+    {% endif %}
+  </div>
+</div>
+
+<div class="card rounded-lg p-4 mb-4">
+  <div class="flex flex-wrap items-center gap-2 mb-2">
+    <span class="px-2 py-0.5 rounded text-xs
+      {% if payload.action in ['add','new_buy'] %}bg-emerald-900 text-emerald-200
+      {% elif payload.action in ['trim','sell'] %}bg-rose-900 text-rose-200
+      {% else %}bg-slate-700 text-slate-200{% endif %}">{{ payload.action|upper }}</span>
+    <span class="px-2 py-0.5 rounded text-xs bg-slate-700 text-slate-200">{{ payload.horizon }}</span>
+    <span class="px-2 py-0.5 rounded text-xs bg-slate-700 text-slate-200">conviction {{ payload.conviction }}/5</span>
+    <span class="text-[10px] text-slate-500">source: {{ payload.source or 'rules' }}</span>
+  </div>
+  <p class="text-sm text-slate-200 mb-2">{{ payload.thesis }}</p>
+  {% if payload.suggested_action_detail %}
+    <div class="text-xs text-slate-400 mb-2"><b>Action:</b> {{ payload.suggested_action_detail }}</div>
+  {% endif %}
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+    {% if payload.key_catalysts %}
+      <div class="text-xs text-slate-300"><b>Catalysts</b>
+        <ul class="list-disc list-inside text-slate-400">
+        {% for c in payload.key_catalysts %}<li>{{ c }}</li>{% endfor %}
+        </ul>
       </div>
     {% endif %}
+    {% if payload.key_risks %}
+      <div class="text-xs text-slate-300"><b>Risks</b>
+        <ul class="list-disc list-inside text-slate-400">
+        {% for risk in payload.key_risks %}<li>{{ risk }}</li>{% endfor %}
+        </ul>
+      </div>
     {% endif %}
   </div>
 </div>
@@ -21,16 +55,17 @@
 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
   <div class="card rounded-lg p-4">
     <h3 class="text-sm font-semibold mb-2">Position</h3>
-    {% if position %}
-      <div class="text-sm">Shares: <b>{{ position.shares }}</b></div>
-      <div class="text-sm">Cost basis: <b>${{ '%.2f'|format(position.cost_basis) }}</b></div>
-      {% if quote.price %}
-      <div class="text-sm">Market value: <b>${{ '%.2f'|format(quote.price * position.shares) }}</b></div>
+    {% if p.shares %}
+      <div class="text-sm">Shares: <b>{{ p.shares }}</b></div>
+      <div class="text-sm">Cost: <b>${{ '%.2f'|format(p.cost_basis) }}</b></div>
+      {% if p.market_value %}
+      <div class="text-sm">Mkt value: <b>${{ '%.2f'|format(p.market_value) }}</b></div>
       <div class="text-sm">Unrealized P/L:
-        <b class="{% if quote.price > position.cost_basis %}pos{% else %}neg{% endif %}">
-          ${{ '%.2f'|format((quote.price - position.cost_basis) * position.shares) }}
+        <b class="{% if p.unrealized_pl > 0 %}pos{% else %}neg{% endif %}">
+          ${{ '%.2f'|format(p.unrealized_pl) }} ({{ '%.1f'|format(p.unrealized_pl_pct) }}%)
         </b>
       </div>
+      <div class="text-sm">Weight: <b>{{ '%.1f'|format(p.weight_pct) }}%</b></div>
       {% endif %}
     {% else %}
       <div class="text-sm text-slate-400">Not currently held.</div>
@@ -39,51 +74,36 @@
 
   <div class="card rounded-lg p-4">
     <h3 class="text-sm font-semibold mb-2">Technicals</h3>
-    {% if technicals.error %}
-      <div class="text-sm text-slate-400">{{ technicals.error }}</div>
+    {% if t.error %}
+      <div class="text-sm text-slate-400">{{ t.error }}</div>
     {% else %}
-      <div class="text-sm">RSI(14): <b>{{ '%.1f'|format(technicals.rsi14) if technicals.rsi14 else '-' }}</b></div>
-      <div class="text-sm">SMA50: <b>${{ '%.2f'|format(technicals.sma50) if technicals.sma50 else '-' }}</b></div>
-      <div class="text-sm">SMA200: <b>${{ '%.2f'|format(technicals.sma200) if technicals.sma200 else '-' }}</b></div>
-      <div class="text-sm">52w high: <b>${{ '%.2f'|format(technicals.high_52w) }}</b>
-        ({{ '%.1f'|format(technicals.pct_off_52w_high) }}% off)</div>
+      <div class="text-sm">RSI(14): <b>{{ '%.1f'|format(t.rsi14) if t.rsi14 else '-' }}</b></div>
+      <div class="text-sm">SMA50: <b>${{ '%.2f'|format(t.sma50) if t.sma50 else '-' }}</b></div>
+      <div class="text-sm">SMA200: <b>${{ '%.2f'|format(t.sma200) if t.sma200 else '-' }}</b></div>
+      <div class="text-sm">52w high: <b>${{ '%.2f'|format(t.high_52w) }}</b>
+        ({{ '%.1f'|format(t.pct_off_52w_high) }}% off)</div>
     {% endif %}
   </div>
 
   <div class="card rounded-lg p-4">
     <h3 class="text-sm font-semibold mb-2">Fundamentals</h3>
-    <div class="text-sm">P/E: <b>{{ '%.2f'|format(quote.pe_ratio) if quote.pe_ratio else '-' }}</b></div>
-    <div class="text-sm">Market cap: <b>{% if quote.market_cap %}${{ '{:,.0f}'.format(quote.market_cap) }}{% else %}-{% endif %}</b></div>
+    <div class="text-sm">P/E: <b>{{ '%.2f'|format(q.pe_ratio) if q.pe_ratio else '-' }}</b></div>
+    <div class="text-sm">Mkt cap: <b>{% if q.market_cap %}${{ '{:,.0f}'.format(q.market_cap) }}{% else %}-{% endif %}</b></div>
   </div>
-</div>
-
-<div class="card rounded-lg p-4 mb-6">
-  <h3 class="text-sm font-semibold mb-2">Recent news</h3>
-  {% if not news %}
-    <div class="text-sm text-slate-400">No news fetched. Set <code>FINNHUB_API_KEY</code> to enable.</div>
-  {% endif %}
-  <ul class="space-y-2">
-  {% for n in news %}
-    <li class="text-sm">
-      <a href="{{ n.url }}" target="_blank" class="text-sky-400 hover:underline">{{ n.headline }}</a>
-      <span class="text-xs text-slate-500"> — {{ n.source }}</span>
-    </li>
-  {% endfor %}
-  </ul>
 </div>
 
 <div class="card rounded-lg p-4">
-  <h3 class="text-sm font-semibold mb-2">Recommendation history</h3>
-  {% if not history %}
-    <div class="text-sm text-slate-400">No recommendations recorded yet for this ticker.</div>
+  <h3 class="text-sm font-semibold mb-2">Recent news</h3>
+  {% if not payload.news %}
+    <div class="text-sm text-slate-400">No news fetched.</div>
   {% endif %}
-  <div class="space-y-3">
-  {% for r in history %}
-    <div class="border-t border-[#1f2a44] pt-2">
-      <div class="text-xs text-slate-400">{{ r.created_at[:19].replace('T', ' ') }} — {{ (r.action or '?') | upper }} ({{ r.horizon }}, conviction {{ r.conviction }}/5)</div>
-      {% if r.payload.thesis %}<div class="text-sm text-slate-200 mt-1">{{ r.payload.thesis }}</div>{% endif %}
-    </div>
+  <ul class="space-y-2">
+  {% for n in payload.news %}
+    <li class="text-sm">
+      <a href="{{ n.url }}" target="_blank" rel="noopener" class="tlink">{{ n.headline }}</a>
+      {% if n.source %}<span class="text-xs text-slate-500"> &mdash; {{ n.source }}</span>{% endif %}
+    </li>
   {% endfor %}
-  </div>
+  </ul>
 </div>
 {% endblock %}

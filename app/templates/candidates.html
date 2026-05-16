@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Candidates - Portfolio Advisor{% endblock %}
+{% block content %}
+<h1 class="text-2xl font-semibold mb-2">New position candidates</h1>
+<p class="text-sm text-slate-400 mb-4">Ideas that match your aggressive, long-horizon profile. Not currently held.</p>
+
+{% if candidates.error %}
+<div class="card rounded-lg p-4 text-sm text-amber-300">{{ candidates.error }}</div>
+{% endif %}
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+{% for c in candidates.candidates %}
+  <div class="card rounded-lg p-4">
+    <div class="flex items-center justify-between mb-2">
+      <div class="text-lg font-semibold">{{ c.ticker }}</div>
+      <span class="px-2 py-0.5 rounded bg-slate-700 text-slate-200 text-xs">{{ c.horizon }}</span>
+    </div>
+    <p class="text-sm text-slate-200 mb-2">{{ c.thesis }}</p>
+    {% if c.entry_zone %}<div class="text-xs text-slate-400"><b>Entry zone:</b> {{ c.entry_zone }}</div>{% endif %}
+    {% if c.risk %}<div class="text-xs text-slate-400"><b>Primary risk:</b> {{ c.risk }}</div>{% endif %}
+  </div>
+{% endfor %}
+</div>
+
+{% if not candidates.candidates and not candidates.error %}
+  <div class="card rounded-lg p-4 text-sm text-slate-400">No candidates this run.</div>
+{% endif %}
+{% endblock %}

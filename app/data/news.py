@@ -1,55 +1,60 @@
-"""News + sentiment via Finnhub. Returns empty list when FINNHUB_API_KEY unset."""
-from datetime import date, timedelta
+"""Free news: yfinance (Yahoo) + Google News RSS. No API keys required."""
+from datetime import datetime
+from urllib.parse import quote_plus
 
+import feedparser
 import httpx
-
-from app.config import settings
-
-_BASE = "https://finnhub.io/api/v1"
+import yfinance as yf
 
 
-def company_news(ticker: str, days: int = 30) -> list[dict]:
-    if not settings.finnhub_api_key:
-        return []
-    to_d = date.today()
-    from_d = to_d - timedelta(days=days)
+def _yahoo_news(ticker: str) -> list[dict]:
     try:
-        r = httpx.get(
-            f"{_BASE}/company-news",
-            params={
-                "symbol": ticker.upper(),
-                "from": from_d.isoformat(),
-                "to": to_d.isoformat(),
-                "token": settings.finnhub_api_key,
-            },
-            timeout=15,
-        )
-        r.raise_for_status()
-        items = r.json() or []
+        items = yf.Ticker(ticker).news or []
     except Exception:
         return []
-    return [
-        {
-            "datetime": it.get("datetime"),
-            "headline": it.get("headline"),
-            "source": it.get("source"),
-            "summary": it.get("summary"),
-            "url": it.get("url"),
-        }
-        for it in items[:50]
-    ]
+    out = []
+    for it in items:
+        content = it.get("content") or it
+        title = content.get("title") or it.get("title")
+        if not title:
+            continue
+        link = (content.get("clickThroughUrl") or {}).get("url") or content.get("canonicalUrl", {}).get("url") or it.get("link")
+        provider = (content.get("provider") or {}).get("displayName") or it.get("publisher", "")
+        pub = content.get("pubDate") or it.get("providerPublishTime")
+        out.append({"headline": title, "url": link, "source": provider, "published": str(pub) if pub else None})
+    return out
 
 
-def news_sentiment(ticker: str) -> dict | None:
-    if not settings.finnhub_api_key:
-        return None
+def _google_news(ticker: str, limit: int = 10) -> list[dict]:
+    q = quote_plus(f"{ticker} stock")
+    url = f"https://news.google.com/rss/search?q={q}&hl=en-US&gl=US&ceid=US:en"
     try:
-        r = httpx.get(
-            f"{_BASE}/news-sentiment",
-            params={"symbol": ticker.upper(), "token": settings.finnhub_api_key},
-            timeout=15,
-        )
+        r = httpx.get(url, timeout=15, headers={"User-Agent": "Mozilla/5.0"})
         r.raise_for_status()
-        return r.json()
+        feed = feedparser.parse(r.text)
     except Exception:
-        return None
+        return []
+    out = []
+    for entry in feed.entries[:limit]:
+        out.append({
+            "headline": entry.get("title"),
+            "url": entry.get("link"),
+            "source": (entry.get("source") or {}).get("title", "Google News"),
+            "published": entry.get("published"),
+        })
+    return out
+
+
+def company_news(ticker: str, limit: int = 20) -> list[dict]:
+    """Merge Yahoo and Google News results, dedupe by headline, return up to `limit`."""
+    seen: set[str] = set()
+    out: list[dict] = []
+    for item in _yahoo_news(ticker) + _google_news(ticker, limit=limit):
+        key = (item.get("headline") or "").strip().lower()
+        if not key or key in seen:
+            continue
+        seen.add(key)
+        out.append(item)
+        if len(out) >= limit:
+            break
+    return out

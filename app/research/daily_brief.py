@@ -12,6 +12,10 @@ from app.data import market_news
 from app.research import llm, prompts
 
 
+def _round(v, n=2):
+    return round(v, n) if isinstance(v, (int, float)) else v
+
+
 def _condensed_position(rec: dict) -> dict:
     q = rec.get("quote") or {}
     p = rec.get("position") or {}
@@ -20,60 +24,61 @@ def _condensed_position(rec: dict) -> dict:
     c = rec.get("consensus") or {}
     f4 = rec.get("insider_form4") or {}
     soc = rec.get("social_attention") or {}
-    return {
-        "ticker": rec["ticker"],
-        "price": q.get("price"),
-        "day_pct": q.get("day_change_pct"),
-        "weight_pct": p.get("weight_pct"),
-        "unrealized_pl_pct": p.get("unrealized_pl_pct"),
-        "rsi14": t.get("rsi14"),
-        "macd_hist": t.get("macd_hist"),
-        "bb_pct": t.get("bb_pct"),
-        "atr_pct": t.get("atr_pct"),
-        "pct_off_52w_high": t.get("pct_off_52w_high"),
-        "stacked_uptrend": t.get("stacked_uptrend"),
-        "stacked_downtrend": t.get("stacked_downtrend"),
-        "earnings_date": e.get("date"),
-        "earnings_days_away": e.get("days_away"),
-        "analyst_target_mean": c.get("target_mean"),
-        "analyst_actions_30d": len(rec.get("analyst_recs") or []),
-        "insider_form4_30d": f4.get("count"),
-        "reddit_posts_7d": soc.get("post_count_7d"),
-        "reddit_upvotes_7d": soc.get("total_upvotes_7d"),
-        "rule_action": rec.get("action"),
-        "rule_thesis": rec.get("thesis"),
-        "top_news": [n["headline"] for n in (rec.get("news") or [])[:3]],
+    out = {
+        "tk": rec["ticker"],
+        "px": _round(q.get("price")),
+        "d%": _round(q.get("day_change_pct"), 2),
+        "wt%": _round(p.get("weight_pct"), 1),
+        "pl%": _round(p.get("unrealized_pl_pct"), 1),
+        "rsi": _round(t.get("rsi14"), 0),
+        "macd": _round(t.get("macd_hist"), 2),
+        "atr%": _round(t.get("atr_pct"), 1),
+        "off52": _round(t.get("pct_off_52w_high"), 1),
+        "up": t.get("stacked_uptrend"),
+        "dn": t.get("stacked_downtrend"),
+        "er": e.get("date"),
+        "erDay": e.get("days_away"),
+        "tgt": _round(c.get("target_mean")),
+        "f4": f4.get("count"),
+        "wsb": soc.get("post_count_7d"),
+        "rule": rec.get("action"),
+        "rThesis": (rec.get("thesis") or "")[:200],
     }
+    return {k: v for k, v in out.items() if v not in (None, "", False)}
 
 
 def _macro_summary(macro: dict) -> dict:
     return {
-        "indices": {k: {"price": v.get("price"), "day_pct": v.get("day_change_pct")}
-                    for k, v in macro["indices"].items()},
-        "leaders": [{"name": s["name"], "day_pct": s["day_change_pct"]} for s in macro["leaders"]],
-        "laggards": [{"name": s["name"], "day_pct": s["day_change_pct"]} for s in macro["laggards"]],
+        "idx": {k: _round(v.get("day_change_pct"), 2) for k, v in macro["indices"].items()},
+        "lead": [f"{s['name']} {_round(s['day_change_pct'],1)}%" for s in macro["leaders"]],
+        "lag": [f"{s['name']} {_round(s['day_change_pct'],1)}%" for s in macro["laggards"]],
     }
 
 
 def _scanner_condensed(scan_result: dict) -> dict:
-    """Trim the scanner output aggressively for prompt size."""
+    """Hyper-compact scanner output: ticker + price + key signal only."""
     def slim(rows, n=4):
-        return [
-            {
-                "tk": r["ticker"], "th": r.get("theme"),
-                "px": r.get("price"), "d%": r.get("day_change_pct"),
-                "rsi": r.get("rsi14"), "macd": r.get("macd_hist"),
-                "atr%": r.get("atr_pct"), "vol": r.get("vol_ratio_20d"),
-                "off52": r.get("pct_off_52w_high"),
-                "h": r.get("held"),
-            }
-            for r in rows[:n]
-        ]
+        out = []
+        for r in rows[:n]:
+            entry = {"tk": r["ticker"], "px": _round(r.get("price"))}
+            if r.get("rsi14") is not None:
+                entry["rsi"] = _round(r["rsi14"], 0)
+            if r.get("vol_ratio_20d"):
+                entry["vol"] = _round(r["vol_ratio_20d"], 1)
+            if r.get("pct_off_52w_high") is not None:
+                entry["off52"] = _round(r["pct_off_52w_high"], 0)
+            if r.get("held"):
+                entry["h"] = True
+            out.append(entry)
+        return out
+    keep_buckets = ("breakouts", "momentum_continuation", "oversold_bounces",
+                    "pullbacks_to_support", "new_52w_highs")
     return {
-        "universe_size": scan_result.get("universe_size"),
-        "buckets": {name: slim(rows, 4) for name, rows in scan_result.get("buckets", {}).items()},
-        "top_up": slim(scan_result.get("top_movers_up", []), 5),
-        "top_down": slim(scan_result.get("top_movers_down", []), 5),
+        "size": scan_result.get("universe_size"),
+        "buckets": {name: slim(scan_result["buckets"].get(name, []), 3) for name in keep_buckets
+                    if scan_result["buckets"].get(name)},
+        "up": slim(scan_result.get("top_movers_up", []), 4),
+        "down": slim(scan_result.get("top_movers_down", []), 4),
     }
 
 
@@ -202,30 +207,21 @@ def build(macro: dict, recommendations: list[dict], review: dict,
         return out
 
     payload = {
-        "today": date.today().isoformat(),
-        "risk": {"tolerance": risk.get("investor", {}).get("risk_tolerance"),
-                  "horizon": risk.get("investor", {}).get("horizon_years"),
-                  "themes": risk.get("preferences", {}).get("themes")},
+        "date": date.today().isoformat(),
+        "risk": risk.get("investor", {}).get("risk_tolerance"),
+        "themes": risk.get("preferences", {}).get("themes"),
         "macro": _macro_summary(macro),
-        "market_headlines": [h["title"] for h in headlines[:12]],
-        "exposures": {
-            "portfolio_value": exposures.get("portfolio_value"),
-            "cash_pct": exposures.get("cash_pct"),
-            "sector_pct": exposures.get("sector_pct"),
-        },
-        "positions": [_condensed_position(r) for r in recommendations],
-        "scanner": _scanner_condensed(scan_result),
-        "rule_observations": review.get("observations", []),
+        "news": [h["title"][:100] for h in headlines[:8]],
+        "cash%": _round(exposures.get("cash_pct"), 1),
+        "sec%": {k: _round(v, 0) for k, v in (exposures.get("sector_pct") or {}).items()},
+        "book": [_condensed_position(r) for r in recommendations],
+        "scan": _scanner_condensed(scan_result),
     }
 
     user_blob = (
-        "Below is every signal you have for today's call. Your job is to "
-        "cherry-pick the 5-10 best moves and give the client concrete trades "
-        "with entries, stops, targets, and size.\n\n"
-        f"{json.dumps(payload, indent=2, default=str)}\n\n"
-        "Write the morning brief JSON now. 5-10 trade ideas - QUALITY over "
-        "quantity. Specific levels. Stops on every trade. Lead with the "
-        "single highest-conviction call by name in the headline."
+        "Today's signals. Pick 5-10 best moves. Concrete trades with "
+        "entry/stop/T1/size. Lead with highest-conviction call by ticker name.\n"
+        f"{json.dumps(payload, separators=(',', ':'), default=str)}"
     )
 
     out = llm.chat_json(

@@ -104,10 +104,13 @@ def _defense_from_book(recommendations: list[dict], macro_line: str,
             target_txt = f"exit fully; reload only above ${sma200:.2f}" if sma200 else "exit fully"
         thesis = r.get("thesis") or ""
         action_word = "Trim" if r["action"] == "trim" else "Exit"
+        weight_pct = (r.get('position') or {}).get('weight_pct')
         if r["action"] == "trim":
-            short = f"position weight {(r.get('position') or {}).get('weight_pct', 0):.0f}%" if (r.get('position') or {}).get('weight_pct') else "overweight"
+            short = f"position weight {weight_pct:.0f}%" if weight_pct else "overweight"
+            invalidation = f"Weight back under 25% (after trim) - then hold the remaining core."
         else:
             short = "confirmed downtrend"
+            invalidation = f"Daily close back above SMA50 (${(t.get('sma50') or 0):.2f}) on volume - reconsider exit."
         return {
             "verdict": "defense",
             "headline": f"{action_word} {r['ticker']} - {short}.",
@@ -119,7 +122,7 @@ def _defense_from_book(recommendations: list[dict], macro_line: str,
                 "target": target_txt,
                 "size_pct": None,
                 "thesis": thesis,
-                "invalidation": (r.get("key_risks") or [""])[0],
+                "invalidation": invalidation,
                 "conviction": 5,
             },
             "secondary_actions": [],

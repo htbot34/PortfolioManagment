@@ -142,11 +142,13 @@ def recommend(ticker: str, quote: dict, tech: dict, position_ctx: dict,
 def _build(action: str, horizon: str, conviction: int,
            reasons: list[str], catalysts: list[str], risks: list[str],
            detail: str) -> dict:
+    thesis = ". ".join(r.rstrip(".") for r in reasons) + "." if reasons else \
+             "No strong signal; default hold under aggressive profile."
     return {
         "action": action,
         "horizon": horizon,
         "conviction": conviction,
-        "thesis": " ".join(reasons) or "No strong signal; default hold under aggressive profile.",
+        "thesis": thesis,
         "key_catalysts": catalysts,
         "key_risks": risks,
         "suggested_action_detail": detail,

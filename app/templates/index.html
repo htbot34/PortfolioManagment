@@ -30,7 +30,15 @@
 {% endmacro %}
 
 <div class="max-w-3xl mx-auto">
-<div class="text-xs text-slate-500 mb-3">{{ brief.generated_for }}</div>
+<div class="flex items-center justify-between mb-3">
+  <div class="text-xs text-slate-500">{{ brief.generated_for }}</div>
+  {% set diag = diagnostics or {} %}
+  {% set live_ns = namespace(any=false) %}
+  {% for v in diag.values() %}{% if v and v.startswith('ok') %}{% set live_ns.any = true %}{% endif %}{% endfor %}
+  {% if not live_ns.any %}
+    <div class="text-[10px] text-amber-300 bg-amber-900/40 px-2 py-0.5 rounded">Prices stale (using cache)</div>
+  {% endif %}
+</div>
 
 {% if brief.verdict == 'no_trade' %}
   <div class="card rounded-lg p-10 mb-4 text-center">

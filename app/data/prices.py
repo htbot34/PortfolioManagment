@@ -5,17 +5,25 @@ Provider chain (each wrapped, never raises):
   2) Yahoo chart API   - direct HTTP, no yfinance overhead (often works when
                          yfinance's full client doesn't)
   3) yfinance          - last resort, also pulls fundamentals (sector, P/E)
+  4) Persistent disk cache - prices from last successful run, so the brief
+                              still computes when all live sources fail.
 
 If everything fails, error fields carry the diagnosis so the failure is visible
 in the rendered site and in data.json.
 """
 import io
+import json
 import logging
 from dataclasses import dataclass, asdict
+from pathlib import Path
 from time import time
 
 import httpx
 import pandas as pd
+
+from app.config import settings
+
+_CACHE_PATH = Path(__file__).resolve().parent.parent.parent / "price_cache.json"
 
 log = logging.getLogger("prices")
 
@@ -117,6 +125,23 @@ _SOURCES = [
 ]
 
 
+def _load_persistent_cache() -> dict:
+    if not _CACHE_PATH.exists():
+        return {}
+    try:
+        return json.loads(_CACHE_PATH.read_text())
+    except Exception:
+        return {}
+
+
+def _save_persistent_cache(data: dict) -> None:
+    try:
+        _CACHE_PATH.parent.mkdir(exist_ok=True)
+        _CACHE_PATH.write_text(json.dumps(data, default=str))
+    except Exception:
+        pass
+
+
 def _history_with_source(ticker: str) -> tuple[pd.DataFrame | None, str | None]:
     cached = _HISTORY_CACHE.get(ticker)
     now = time()
@@ -129,6 +154,21 @@ def _history_with_source(ticker: str) -> tuple[pd.DataFrame | None, str | None]:
             return df, name
     _HISTORY_CACHE[ticker] = (now, None, None)
     return None, None
+
+
+def _from_persistent_cache(ticker: str) -> dict | None:
+    """Return cached quote dict if available."""
+    cache = _load_persistent_cache()
+    entry = cache.get(ticker.upper())
+    if not entry:
+        return None
+    return entry
+
+
+def _save_to_persistent_cache(ticker: str, payload: dict) -> None:
+    cache = _load_persistent_cache()
+    cache[ticker.upper()] = payload
+    _save_persistent_cache(cache)
 
 
 def _yfinance_fundamentals(ticker: str) -> dict:
@@ -163,13 +203,35 @@ def quote(ticker: str) -> Quote:
         error = f"No price source returned data (tried: {', '.join(s for s, _ in _SOURCES)})"
 
     fund = _yfinance_fundamentals(ticker)
-    return Quote(
+    q = Quote(
         ticker=ticker, price=price, prev_close=prev_close, day_change_pct=day_change_pct,
         market_cap=fund.get("market_cap"), pe_ratio=fund.get("pe_ratio"),
         high_52w=high_52w, low_52w=low_52w,
         sector=fund.get("sector"), industry=fund.get("industry"),
         source=source, error=error,
     )
+    if price is not None:
+        # Persist the live fetch for future fallback use.
+        _save_to_persistent_cache(ticker, q.to_dict())
+        return q
+    # Live fetch failed for every source - fall back to persistent cache.
+    cached = _from_persistent_cache(ticker)
+    if cached and cached.get("price") is not None:
+        return Quote(
+            ticker=ticker,
+            price=cached.get("price"),
+            prev_close=cached.get("prev_close"),
+            day_change_pct=None,
+            market_cap=cached.get("market_cap"),
+            pe_ratio=cached.get("pe_ratio"),
+            high_52w=cached.get("high_52w"),
+            low_52w=cached.get("low_52w"),
+            sector=cached.get("sector"),
+            industry=cached.get("industry"),
+            source="cache",
+            error="using cached price (live sources failed)",
+        )
+    return q
 
 
 def quotes(tickers: list[str]) -> dict[str, Quote]:

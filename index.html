@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Dashboard - Portfolio Advisor</title>
+  <title>Morning Brief - Portfolio Advisor</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
@@ -19,380 +19,308 @@
 <body class="min-h-screen">
   <nav class="px-6 py-4 border-b border-[#1f2a44] flex flex-wrap items-center gap-4">
     <a href="index.html" class="text-lg font-semibold">Portfolio Advisor</a>
-    <a href="index.html" class="text-sm text-slate-300 hover:text-white">Dashboard</a>
+    <a href="index.html" class="text-sm text-slate-300 hover:text-white">Brief</a>
+    <a href="positions.html" class="text-sm text-slate-300 hover:text-white">Positions</a>
     <a href="recommendations.html" class="text-sm text-slate-300 hover:text-white">Recommendations</a>
     <a href="candidates.html" class="text-sm text-slate-300 hover:text-white">Candidates</a>
     <div class="ml-auto text-xs text-slate-400 flex items-center gap-2">
-      <span class="px-2 py-1 rounded bg-emerald-900 text-emerald-200">LLM augmented</span>
-      <span>Generated 2026-05-16 20:10 UTC</span>
+      <span class="px-2 py-1 rounded bg-slate-700 text-slate-200">Rule-based mode</span>
+      <span>Generated 2026-05-17 00:15 UTC</span>
     </div>
   </nav>
   <main class="p-6 max-w-7xl mx-auto">
     
+<div class="mb-2 text-xs text-slate-400">2026-05-17</div>
+<h1 class="text-3xl font-semibold mb-4">Morning Brief</h1>
 
-<div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-  <div class="card rounded-lg p-4">
-    <div class="text-xs text-slate-400">Portfolio Value</div>
-    <div class="text-2xl font-semibold">$10587.19</div>
-  </div>
-  <div class="card rounded-lg p-4">
-    <div class="text-xs text-slate-400">Positions Mkt Value</div>
-    <div class="text-2xl font-semibold">$9352.28</div>
-  </div>
-  <div class="card rounded-lg p-4">
-    <div class="text-xs text-slate-400">Cash</div>
-    <div class="text-2xl font-semibold">$1234.91</div>
-    <div class="text-xs text-slate-400">11.7% of portfolio</div>
-  </div>
-  <div class="card rounded-lg p-4">
-    <div class="text-xs text-slate-400">Risk profile</div>
-    <div class="text-lg font-semibold">Aggressive</div>
-    <div class="text-xs text-slate-400">20y horizon, swing / long_term</div>
+<div class="card rounded-lg p-5 mb-6 border-l-4 border-l-emerald-500">
+  <div class="text-xs text-slate-400 uppercase tracking-wide mb-1">Today's call</div>
+  <p class="text-lg text-slate-100 leading-relaxed">LLM unavailable - see recommendations and portfolio review for rule-based output.</p>
+</div>
+
+
+
+
+<div class="card rounded-lg p-4 mb-6">
+  <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wide mb-3">Action list</h2>
+  <div class="space-y-3">
+  
+    <div class="border-l-2 pl-3
+      border-l-slate-600">
+      <div class="flex flex-wrap items-baseline gap-2">
+        
+          <a href="ticker/NBIS.html" class="tlink font-semibold">NBIS</a>
+        
+        <span class="px-1.5 py-0.5 rounded text-xs
+          bg-slate-700 text-slate-200">HOLD</span>
+        <span class="text-xs text-slate-400">@ Maintain current size; review on next earnings or 10%+ move</span>
+        <span class="text-xs text-slate-500">patient</span>
+      </div>
+      <p class="text-sm text-slate-200 mt-1">No strong signal; default hold under aggressive profile.</p>
+    </div>
+  
+    <div class="border-l-2 pl-3
+      border-l-slate-600">
+      <div class="flex flex-wrap items-baseline gap-2">
+        
+          <a href="ticker/AMZN.html" class="tlink font-semibold">AMZN</a>
+        
+        <span class="px-1.5 py-0.5 rounded text-xs
+          bg-slate-700 text-slate-200">HOLD</span>
+        <span class="text-xs text-slate-400">@ Maintain current size; review on next earnings or 10%+ move</span>
+        <span class="text-xs text-slate-500">patient</span>
+      </div>
+      <p class="text-sm text-slate-200 mt-1">No strong signal; default hold under aggressive profile.</p>
+    </div>
+  
+    <div class="border-l-2 pl-3
+      border-l-slate-600">
+      <div class="flex flex-wrap items-baseline gap-2">
+        
+          <a href="ticker/OKLO.html" class="tlink font-semibold">OKLO</a>
+        
+        <span class="px-1.5 py-0.5 rounded text-xs
+          bg-slate-700 text-slate-200">HOLD</span>
+        <span class="text-xs text-slate-400">@ Maintain current size; review on next earnings or 10%+ move</span>
+        <span class="text-xs text-slate-500">patient</span>
+      </div>
+      <p class="text-sm text-slate-200 mt-1">No strong signal; default hold under aggressive profile.</p>
+    </div>
+  
+    <div class="border-l-2 pl-3
+      border-l-slate-600">
+      <div class="flex flex-wrap items-baseline gap-2">
+        
+          <a href="ticker/NFLX.html" class="tlink font-semibold">NFLX</a>
+        
+        <span class="px-1.5 py-0.5 rounded text-xs
+          bg-slate-700 text-slate-200">HOLD</span>
+        <span class="text-xs text-slate-400">@ Maintain current size; review on next earnings or 10%+ move</span>
+        <span class="text-xs text-slate-500">patient</span>
+      </div>
+      <p class="text-sm text-slate-200 mt-1">No strong signal; default hold under aggressive profile.</p>
+    </div>
+  
+    <div class="border-l-2 pl-3
+      border-l-slate-600">
+      <div class="flex flex-wrap items-baseline gap-2">
+        
+          <a href="ticker/IREN.html" class="tlink font-semibold">IREN</a>
+        
+        <span class="px-1.5 py-0.5 rounded text-xs
+          bg-slate-700 text-slate-200">HOLD</span>
+        <span class="text-xs text-slate-400">@ Maintain current size; review on next earnings or 10%+ move</span>
+        <span class="text-xs text-slate-500">patient</span>
+      </div>
+      <p class="text-sm text-slate-200 mt-1">No strong signal; default hold under aggressive profile.</p>
+    </div>
+  
+    <div class="border-l-2 pl-3
+      border-l-slate-600">
+      <div class="flex flex-wrap items-baseline gap-2">
+        
+          <a href="ticker/FBL.html" class="tlink font-semibold">FBL</a>
+        
+        <span class="px-1.5 py-0.5 rounded text-xs
+          bg-slate-700 text-slate-200">HOLD</span>
+        <span class="text-xs text-slate-400">@ Maintain current size; review on next earnings or 10%+ move</span>
+        <span class="text-xs text-slate-500">patient</span>
+      </div>
+      <p class="text-sm text-slate-200 mt-1">No strong signal; default hold under aggressive profile.</p>
+    </div>
+  
+    <div class="border-l-2 pl-3
+      border-l-slate-600">
+      <div class="flex flex-wrap items-baseline gap-2">
+        
+          <a href="ticker/LEU.html" class="tlink font-semibold">LEU</a>
+        
+        <span class="px-1.5 py-0.5 rounded text-xs
+          bg-slate-700 text-slate-200">HOLD</span>
+        <span class="text-xs text-slate-400">@ Maintain current size; review on next earnings or 10%+ move</span>
+        <span class="text-xs text-slate-500">patient</span>
+      </div>
+      <p class="text-sm text-slate-200 mt-1">No strong signal; default hold under aggressive profile.</p>
+    </div>
+  
+    <div class="border-l-2 pl-3
+      border-l-slate-600">
+      <div class="flex flex-wrap items-baseline gap-2">
+        
+          <a href="ticker/META.html" class="tlink font-semibold">META</a>
+        
+        <span class="px-1.5 py-0.5 rounded text-xs
+          bg-slate-700 text-slate-200">HOLD</span>
+        <span class="text-xs text-slate-400">@ Maintain current size; review on next earnings or 10%+ move</span>
+        <span class="text-xs text-slate-500">patient</span>
+      </div>
+      <p class="text-sm text-slate-200 mt-1">No strong signal; default hold under aggressive profile.</p>
+    </div>
+  
   </div>
 </div>
 
-<div class="card rounded-lg overflow-hidden mb-6">
-  <div class="px-4 py-3 border-b border-[#1f2a44]">
-    <h2 class="text-lg font-semibold">Positions</h2>
+
+
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+  
+
+  
+</div>
+
+<div class="card rounded-lg overflow-hidden">
+  <div class="px-4 py-3 border-b border-[#1f2a44] flex items-center justify-between">
+    <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wide">Positions snapshot</h2>
+    <a href="positions.html" class="tlink text-xs">Full dashboard -&gt;</a>
   </div>
   <div class="overflow-x-auto">
   <table class="w-full text-sm">
     <thead>
       <tr class="text-left">
-        <th>Ticker</th><th>Shares</th><th>Cost</th><th>Price</th>
-        <th>Mkt Value</th><th>Day %</th><th>Unrealized</th><th>Weight</th><th>Sector</th>
+        <th>Ticker</th><th>Price</th><th>Day %</th><th>Unrealized</th><th>Weight</th><th>RSI</th><th>Next earnings</th>
       </tr>
     </thead>
     <tbody>
       
+      
       <tr>
         <td><a href="ticker/NBIS.html" class="tlink">NBIS</a></td>
-        <td>2.0</td>
-        <td>$86.27</td>
-        <td>$219.94</td>
-        <td>$439.88</td>
-        <td class="neg">
-          -0.55%
+        <td>-</td>
+        <td class="">
+          -
         </td>
-        <td class="pos">
-          $267.34 (154.9%)
+        <td class="">
+          -
         </td>
-        <td>4.2%</td>
-        <td class="text-slate-400">Communication Services</td>
+        <td>0.0%</td>
+        <td>-</td>
+        <td class="text-slate-400">
+          -
+        </td>
       </tr>
+      
       
       <tr>
         <td><a href="ticker/AMZN.html" class="tlink">AMZN</a></td>
-        <td>2.0</td>
-        <td>$220.25</td>
-        <td>$264.14</td>
-        <td>$528.28</td>
-        <td class="neg">
-          -1.15%
+        <td>-</td>
+        <td class="">
+          -
         </td>
-        <td class="pos">
-          $87.78 (19.9%)
+        <td class="">
+          -
         </td>
-        <td>5.0%</td>
-        <td class="text-slate-400">Consumer Cyclical</td>
+        <td>0.0%</td>
+        <td>-</td>
+        <td class="text-slate-400">
+          -
+        </td>
       </tr>
+      
       
       <tr>
         <td><a href="ticker/OKLO.html" class="tlink">OKLO</a></td>
-        <td>1.0</td>
-        <td>$87.80</td>
-        <td>$62.25</td>
-        <td>$62.25</td>
-        <td class="neg">
-          -7.38%
+        <td>-</td>
+        <td class="">
+          -
         </td>
-        <td class="neg">
-          $-25.55 (-29.1%)
+        <td class="">
+          -
         </td>
-        <td>0.6%</td>
-        <td class="text-slate-400">Utilities</td>
+        <td>0.0%</td>
+        <td>-</td>
+        <td class="text-slate-400">
+          -
+        </td>
       </tr>
+      
       
       <tr>
         <td><a href="ticker/NFLX.html" class="tlink">NFLX</a></td>
-        <td>9.0</td>
-        <td>$90.11</td>
-        <td>$87.02</td>
-        <td>$783.18</td>
-        <td class="pos">
-          0.09%
+        <td>-</td>
+        <td class="">
+          -
         </td>
-        <td class="neg">
-          $-27.81 (-3.4%)
+        <td class="">
+          -
         </td>
-        <td>7.4%</td>
-        <td class="text-slate-400">Communication Services</td>
+        <td>0.0%</td>
+        <td>-</td>
+        <td class="text-slate-400">
+          -
+        </td>
       </tr>
+      
       
       <tr>
         <td><a href="ticker/IREN.html" class="tlink">IREN</a></td>
-        <td>4.0</td>
-        <td>$60.20</td>
-        <td>$52.94</td>
-        <td>$211.76</td>
-        <td class="neg">
-          -9.35%
+        <td>-</td>
+        <td class="">
+          -
         </td>
-        <td class="neg">
-          $-29.04 (-12.1%)
+        <td class="">
+          -
         </td>
-        <td>2.0%</td>
-        <td class="text-slate-400">Financial Services</td>
+        <td>0.0%</td>
+        <td>-</td>
+        <td class="text-slate-400">
+          -
+        </td>
       </tr>
+      
       
       <tr>
         <td><a href="ticker/FBL.html" class="tlink">FBL</a></td>
-        <td>8.0</td>
-        <td>$39.28</td>
-        <td>$25.65</td>
-        <td>$205.20</td>
-        <td class="neg">
-          -1.38%
+        <td>-</td>
+        <td class="">
+          -
         </td>
-        <td class="neg">
-          $-109.04 (-34.7%)
+        <td class="">
+          -
         </td>
-        <td>1.9%</td>
-        <td class="text-slate-400">Unknown</td>
+        <td>0.0%</td>
+        <td>-</td>
+        <td class="text-slate-400">
+          -
+        </td>
       </tr>
+      
       
       <tr>
         <td><a href="ticker/LEU.html" class="tlink">LEU</a></td>
-        <td>2.0</td>
-        <td>$303.90</td>
-        <td>$182.60</td>
-        <td>$365.20</td>
-        <td class="neg">
-          -5.05%
+        <td>-</td>
+        <td class="">
+          -
         </td>
-        <td class="neg">
-          $-242.60 (-39.9%)
+        <td class="">
+          -
         </td>
-        <td>3.4%</td>
-        <td class="text-slate-400">Energy</td>
+        <td>0.0%</td>
+        <td>-</td>
+        <td class="text-slate-400">
+          -
+        </td>
       </tr>
+      
       
       <tr>
         <td><a href="ticker/META.html" class="tlink">META</a></td>
-        <td>11.0</td>
-        <td>$677.22</td>
-        <td>$614.23</td>
-        <td>$6756.53</td>
-        <td class="neg">
-          -0.68%
+        <td>-</td>
+        <td class="">
+          -
         </td>
-        <td class="neg">
-          $-692.89 (-9.3%)
+        <td class="">
+          -
         </td>
-        <td>63.8%</td>
-        <td class="text-slate-400">Communication Services</td>
+        <td>0.0%</td>
+        <td>-</td>
+        <td class="text-slate-400">
+          -
+        </td>
       </tr>
       
     </tbody>
   </table>
-  </div>
-</div>
-
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
-  <div class="card rounded-lg p-4">
-    <h2 class="text-lg font-semibold mb-3">Sector exposure</h2>
-    <div class="space-y-2">
-    
-      <div>
-        <div class="flex justify-between text-xs text-slate-400">
-          <span>Communication Services</span><span>75.4%</span>
-        </div>
-        <div class="h-2 bg-[#0f1424] rounded">
-          <div class="h-2 bg-sky-600 rounded" style="width: 75.37023436818085%"></div>
-        </div>
-      </div>
-    
-      <div>
-        <div class="flex justify-between text-xs text-slate-400">
-          <span>Consumer Cyclical</span><span>5.0%</span>
-        </div>
-        <div class="h-2 bg-[#0f1424] rounded">
-          <div class="h-2 bg-sky-600 rounded" style="width: 4.989804090003725%"></div>
-        </div>
-      </div>
-    
-      <div>
-        <div class="flex justify-between text-xs text-slate-400">
-          <span>Utilities</span><span>0.6%</span>
-        </div>
-        <div class="h-2 bg-[#0f1424] rounded">
-          <div class="h-2 bg-sky-600 rounded" style="width: 0.5879747243448737%"></div>
-        </div>
-      </div>
-    
-      <div>
-        <div class="flex justify-between text-xs text-slate-400">
-          <span>Financial Services</span><span>2.0%</span>
-        </div>
-        <div class="h-2 bg-[#0f1424] rounded">
-          <div class="h-2 bg-sky-600 rounded" style="width: 2.0001530023683345%"></div>
-        </div>
-      </div>
-    
-      <div>
-        <div class="flex justify-between text-xs text-slate-400">
-          <span>Unknown</span><span>1.9%</span>
-        </div>
-        <div class="h-2 bg-[#0f1424] rounded">
-          <div class="h-2 bg-sky-600 rounded" style="width: 1.9381913516660503%"></div>
-        </div>
-      </div>
-    
-      <div>
-        <div class="flex justify-between text-xs text-slate-400">
-          <span>Energy</span><span>3.4%</span>
-        </div>
-        <div class="h-2 bg-[#0f1424] rounded">
-          <div class="h-2 bg-sky-600 rounded" style="width: 3.449451831456606%"></div>
-        </div>
-      </div>
-    
-    </div>
-  </div>
-
-  <div class="card rounded-lg p-4">
-    <h2 class="text-lg font-semibold mb-3">Portfolio review</h2>
-    
-      <div class="text-xs text-slate-300 mb-2 font-semibold">Observations</div>
-      <ul class="list-disc list-inside text-sm text-slate-300 mb-3">
-        <li>META is 64% of portfolio (cap 25%)</li><li>Communication Services sector at 75% (cap 45%)</li><li>Cash position is 11.66%, exceeding the minimum cash buffer of 5%</li><li>High concentration in Communication Services could lead to increased volatility</li><li>Positions in Utilities and Financial Services are significantly underweight compared to the overall portfolio</li>
-      </ul>
-    
-    
-      <div class="text-xs text-slate-300 mb-2 font-semibold">Suggested changes</div>
-      <ul class="list-disc list-inside text-sm text-slate-300">
-        <li>Trim META to bring weight under 25%</li><li>Diversify outside Communication Services</li><li>Consider reallocating some cash to sectors with lower exposure, such as Utilities or Financial Services</li><li>Evaluate the performance and future outlook of underperforming positions like OKLO, IREN, FBL, and LEU</li>
-      </ul>
-    
-    
-  </div>
-</div>
-
-<div class="card rounded-lg overflow-hidden">
-  <div class="px-4 py-3 border-b border-[#1f2a44]">
-    <h2 class="text-lg font-semibold">Latest recommendations</h2>
-  </div>
-  <div class="divide-y divide-[#1f2a44]">
-  
-    <div class="px-4 py-3">
-      <div class="flex items-center justify-between mb-1">
-        <a href="ticker/NBIS.html" class="tlink font-semibold">NBIS</a>
-        <div class="flex gap-2 text-xs">
-          <span class="px-2 py-0.5 rounded
-            bg-rose-900 text-rose-200
-            ">TRIM</span>
-          <span class="px-2 py-0.5 rounded bg-slate-700 text-slate-200">long_term</span>
-          <span class="px-2 py-0.5 rounded bg-slate-700 text-slate-200">conv 3/5</span>
-        </div>
-      </div>
-      <p class="text-sm text-slate-300">Nebius has shown impressive growth with a 684% revenue increase, driven by AI-related contracts, positioning it well in the communication services sector. However, the stock is currently at an all-time high and overbought, suggesting a potential pullback. A partial trim will help lock in gains while maintaining exposure to future growth.</p>
-    </div>
-  
-    <div class="px-4 py-3">
-      <div class="flex items-center justify-between mb-1">
-        <a href="ticker/AMZN.html" class="tlink font-semibold">AMZN</a>
-        <div class="flex gap-2 text-xs">
-          <span class="px-2 py-0.5 rounded
-            bg-emerald-900 text-emerald-200
-            ">ADD</span>
-          <span class="px-2 py-0.5 rounded bg-slate-700 text-slate-200">long_term</span>
-          <span class="px-2 py-0.5 rounded bg-slate-700 text-slate-200">conv 3/5</span>
-        </div>
-      </div>
-      <p class="text-sm text-slate-300">Amazon is well-positioned to benefit from the ongoing AI boom, as highlighted by recent headlines emphasizing its attractiveness in the AI sector. The stock is trading near its 52-week high, supported by strong technical indicators, but caution is warranted given the potential for volatility in the tech sector.</p>
-    </div>
-  
-    <div class="px-4 py-3">
-      <div class="flex items-center justify-between mb-1">
-        <a href="ticker/OKLO.html" class="tlink font-semibold">OKLO</a>
-        <div class="flex gap-2 text-xs">
-          <span class="px-2 py-0.5 rounded
-            bg-slate-700 text-slate-200">HOLD</span>
-          <span class="px-2 py-0.5 rounded bg-slate-700 text-slate-200">long_term</span>
-          <span class="px-2 py-0.5 rounded bg-slate-700 text-slate-200">conv 2/5</span>
-        </div>
-      </div>
-      <p class="text-sm text-slate-300">OKLO is currently trading 64% below its 52-week high, indicating significant volatility and potential for recovery. Recent partnerships and ongoing developments in advanced reactor design using AI could provide future growth catalysts, but the stock&#39;s performance remains uncertain amid deepening losses and mixed analyst sentiment.</p>
-    </div>
-  
-    <div class="px-4 py-3">
-      <div class="flex items-center justify-between mb-1">
-        <a href="ticker/NFLX.html" class="tlink font-semibold">NFLX</a>
-        <div class="flex gap-2 text-xs">
-          <span class="px-2 py-0.5 rounded
-            bg-slate-700 text-slate-200">HOLD</span>
-          <span class="px-2 py-0.5 rounded bg-slate-700 text-slate-200">long_term</span>
-          <span class="px-2 py-0.5 rounded bg-slate-700 text-slate-200">conv 3/5</span>
-        </div>
-      </div>
-      <p class="text-sm text-slate-300">While NFLX is currently facing downward pressure, recent developments such as the AI INKubator launch and guidance raise indicate potential for long-term growth. However, the stock remains significantly off its 52-week high and below key moving averages, suggesting caution is warranted.</p>
-    </div>
-  
-    <div class="px-4 py-3">
-      <div class="flex items-center justify-between mb-1">
-        <a href="ticker/IREN.html" class="tlink font-semibold">IREN</a>
-        <div class="flex gap-2 text-xs">
-          <span class="px-2 py-0.5 rounded
-            bg-emerald-900 text-emerald-200
-            ">ADD</span>
-          <span class="px-2 py-0.5 rounded bg-slate-700 text-slate-200">long_term</span>
-          <span class="px-2 py-0.5 rounded bg-slate-700 text-slate-200">conv 3/5</span>
-        </div>
-      </div>
-      <p class="text-sm text-slate-300">IREN is currently experiencing a significant pullback, presenting an opportunity for long-term investors to capitalize on its AI cloud expansion strategy. The recent $3 billion convertible note offering, while initially causing a drop in stock price, is aimed at funding growth in AI infrastructure, aligning with aggressive growth themes.</p>
-    </div>
-  
-    <div class="px-4 py-3">
-      <div class="flex items-center justify-between mb-1">
-        <a href="ticker/FBL.html" class="tlink font-semibold">FBL</a>
-        <div class="flex gap-2 text-xs">
-          <span class="px-2 py-0.5 rounded
-            bg-slate-700 text-slate-200">HOLD</span>
-          <span class="px-2 py-0.5 rounded bg-slate-700 text-slate-200">long_term</span>
-          <span class="px-2 py-0.5 rounded bg-slate-700 text-slate-200">conv 2/5</span>
-        </div>
-      </div>
-      <p class="text-sm text-slate-300">FBL is currently in a downtrend, trading below both its 50-day and 200-day moving averages, with an RSI indicating oversold conditions. While it is significantly off its 52-week high, there is potential for a bounce given the recent news cycle, although the risks of capital preservation remain pertinent.</p>
-    </div>
-  
-    <div class="px-4 py-3">
-      <div class="flex items-center justify-between mb-1">
-        <a href="ticker/LEU.html" class="tlink font-semibold">LEU</a>
-        <div class="flex gap-2 text-xs">
-          <span class="px-2 py-0.5 rounded
-            bg-rose-900 text-rose-200
-            ">SELL</span>
-          <span class="px-2 py-0.5 rounded bg-slate-700 text-slate-200">long_term</span>
-          <span class="px-2 py-0.5 rounded bg-slate-700 text-slate-200">conv 3/5</span>
-        </div>
-      </div>
-      <p class="text-sm text-slate-300">Centrus Energy (LEU) is currently experiencing a significant downtrend, with the price below both the 50-day and 200-day moving averages, and it is down 58% from its 52-week high. Despite some positive long-term growth outlooks from analysts, recent performance and volatility raise concerns about capital preservation.</p>
-    </div>
-  
-    <div class="px-4 py-3">
-      <div class="flex items-center justify-between mb-1">
-        <a href="ticker/META.html" class="tlink font-semibold">META</a>
-        <div class="flex gap-2 text-xs">
-          <span class="px-2 py-0.5 rounded
-            bg-rose-900 text-rose-200
-            ">TRIM</span>
-          <span class="px-2 py-0.5 rounded bg-slate-700 text-slate-200">long_term</span>
-          <span class="px-2 py-0.5 rounded bg-slate-700 text-slate-200">conv 3/5</span>
-        </div>
-      </div>
-      <p class="text-sm text-slate-300">While Meta&#39;s stock is currently experiencing a downtrend and is below both its 50-day and 200-day moving averages, there are signs of potential oversold conditions. However, the weight of this position exceeds the 25% cap, necessitating a trim to align with portfolio constraints and preserve capital.</p>
-    </div>
-  
   </div>
 </div>
 

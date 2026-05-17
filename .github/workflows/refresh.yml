@@ -2,8 +2,8 @@ name: Refresh portfolio site
 
 on:
   schedule:
-    # Every weekday at 22:00 UTC (~5pm ET, after US market close)
-    - cron: "0 22 * * 1-5"
+    # Weekdays at 11:00 UTC = 7am ET (EDT) / 6am ET (EST) - before market open
+    - cron: "0 11 * * 1-5"
   workflow_dispatch: {}
   push:
     branches: [main]
@@ -42,7 +42,8 @@ jobs:
       - name: Build site
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_MODEL: openai/gpt-4o-mini
+          GITHUB_MODEL_ROUTINE: openai/gpt-4o-mini
+          GITHUB_MODEL_SYNTHESIS: openai/gpt-4o
           SEC_USER_AGENT: PortfolioAdvisor ${{ github.repository_owner }}@users.noreply.github.com
         run: python -m app.build_site
 
@@ -50,7 +51,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html recommendations.html candidates.html data.json ticker .nojekyll 2>/dev/null || true
+          git add index.html positions.html recommendations.html candidates.html data.json ticker .nojekyll 2>/dev/null || true
           if git diff --staged --quiet; then
             echo "No site changes."
           else

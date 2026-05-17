@@ -1,19 +1,20 @@
 {% extends "base.html" %}
 {% block title %}Candidates - Portfolio Advisor{% endblock %}
 {% block content %}
-<h1 class="text-2xl font-semibold mb-2">New position candidates</h1>
-<p class="text-sm text-slate-400 mb-4">Ideas that match your aggressive, long-horizon profile. Not currently held.</p>
+<h1 class="text-2xl font-semibold mb-2">Outside ideas</h1>
+<p class="text-sm text-slate-400 mb-4">Stocks that fit your themes and risk profile - not currently held.</p>
 
-{% if candidates.error %}
-<div class="card rounded-lg p-4 text-sm text-amber-300">{{ candidates.error }}</div>
-{% endif %}
+{% if candidates.error %}<div class="card rounded-lg p-4 text-sm text-amber-300 mb-4">{{ candidates.error }}</div>{% endif %}
 
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
 {% for c in candidates.candidates %}
   <div class="card rounded-lg p-4">
     <div class="flex items-center justify-between mb-2">
       <div class="text-lg font-semibold">{{ c.ticker }}</div>
-      <span class="px-2 py-0.5 rounded bg-slate-700 text-slate-200 text-xs">{{ c.horizon }}</span>
+      <div class="flex gap-2 text-xs">
+        {% if c.horizon %}<span class="px-2 py-0.5 rounded bg-slate-700 text-slate-200">{{ c.horizon }}</span>{% endif %}
+        {% if c.conviction %}<span class="px-2 py-0.5 rounded bg-slate-700 text-slate-200">conv {{ c.conviction }}/5</span>{% endif %}
+      </div>
     </div>
     <p class="text-sm text-slate-200 mb-2">{{ c.thesis }}</p>
     {% if c.entry_zone %}<div class="text-xs text-slate-400"><b>Entry zone:</b> {{ c.entry_zone }}</div>{% endif %}
@@ -22,7 +23,34 @@
 {% endfor %}
 </div>
 
-{% if not candidates.candidates and not candidates.error %}
-  <div class="card rounded-lg p-4 text-sm text-slate-400">No candidates this run.</div>
+{% if candidates.screen_results %}
+<div class="card rounded-lg overflow-hidden">
+  <div class="px-4 py-3 border-b border-[#1f2a44]">
+    <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wide">Full screen results</h2>
+  </div>
+  <div class="overflow-x-auto">
+  <table class="w-full text-sm">
+    <thead>
+      <tr class="text-left">
+        <th>Ticker</th><th>Score</th><th>Price</th><th>RSI</th><th>SMA50</th><th>SMA200</th><th>Off 52w high</th><th>Sector</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for s in candidates.screen_results %}
+      <tr>
+        <td class="font-semibold">{{ s.ticker }}</td>
+        <td>{{ '%+.2f'|format(s.score) }}</td>
+        <td>{% if s.price %}${{ '%.2f'|format(s.price) }}{% else %}-{% endif %}</td>
+        <td>{% if s.rsi14 %}{{ '%.0f'|format(s.rsi14) }}{% else %}-{% endif %}</td>
+        <td>{% if s.sma50 %}${{ '%.2f'|format(s.sma50) }}{% else %}-{% endif %}</td>
+        <td>{% if s.sma200 %}${{ '%.2f'|format(s.sma200) }}{% else %}-{% endif %}</td>
+        <td>{% if s.pct_off_52w_high is not none %}{{ '%.1f'|format(s.pct_off_52w_high) }}%{% else %}-{% endif %}</td>
+        <td class="text-slate-400">{{ s.sector or '-' }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  </div>
+</div>
 {% endif %}
 {% endblock %}

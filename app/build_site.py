@@ -1,12 +1,13 @@
 """Render the portfolio advisor as a static site at the repo root.
 
-Outputs (relative to site_dir = repo root):
-  index.html              dashboard
-  recommendations.html    rec feed
-  candidates.html         new ideas
-  ticker/<SYMBOL>.html    per-ticker deep dive
-  data.json               raw payload (debugging + status)
-  .nojekyll               disables Jekyll processing on Pages
+Outputs:
+  index.html              morning brief (the page)
+  positions.html          full position dashboard
+  recommendations.html    per-ticker recommendations
+  candidates.html         outside-the-portfolio ideas
+  ticker/<SYMBOL>.html    deep dive per ticker
+  data.json               full machine-readable dump
+  .nojekyll               disables Jekyll
 """
 import json
 import sys
@@ -17,9 +18,12 @@ from pathlib import Path
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from app.config import risk_profile, settings
+from app.data import macro as macro_mod
 from app.data import prices
 from app.portfolio import store
-from app.research import analyst, candidates as cands, llm, portfolio_review
+from app.research import (
+    analyst, candidates as cands, daily_brief, llm, portfolio_review,
+)
 
 
 def _env() -> Environment:
@@ -43,16 +47,21 @@ def main() -> int:
     diag = prices.diagnose("META")
     for name, status in diag.items():
         print(f"  {name}: {status}")
+    print(f"LLM available: {llm.available()} (synthesis={llm.synthesis_model()}, routine={llm.routine_model()})")
+
+    print("Pulling macro snapshot...")
+    macro = macro_mod.snapshot()
 
     account = store.load()
     exposures = portfolio_review.compute_exposures(account)
     review_out = portfolio_review.review(exposures)
     weight_by_ticker = {row["ticker"]: row for row in exposures["positions"]}
 
+    print("Analyzing positions...")
     recs: list[dict] = []
     ticker_payloads: dict[str, dict] = {}
     for p in account.positions:
-        print(f"Analyzing {p.ticker}...")
+        print(f"  {p.ticker}")
         try:
             rec = analyst.analyze_ticker(p.ticker, position_context=weight_by_ticker.get(p.ticker, {}))
         except Exception as e:
@@ -60,11 +69,26 @@ def main() -> int:
             rec = {"ticker": p.ticker, "error": str(e), "action": "hold", "horizon": "long_term",
                    "conviction": 1, "thesis": f"Failed to analyze: {e}",
                    "key_catalysts": [], "key_risks": [], "suggested_action_detail": "",
-                   "quote": {}, "technicals": {}, "news": []}
+                   "quote": {}, "technicals": {}, "news": [], "earnings": None,
+                   "consensus": None, "analyst_recs": [], "position": {}}
         recs.append(rec)
         ticker_payloads[p.ticker] = rec
 
-    cand_out = cands.candidates(account)
+    print("Generating candidates...")
+    try:
+        cand_out = cands.candidates(account)
+    except Exception as e:
+        traceback.print_exc()
+        cand_out = {"candidates": [], "error": str(e)}
+
+    print("Writing daily brief...")
+    try:
+        brief = daily_brief.build(macro, recs, review_out, cand_out, exposures)
+    except Exception as e:
+        traceback.print_exc()
+        brief = {"headline_call": f"Brief generation failed: {e}",
+                 "market_context": "", "actions": [],
+                 "portfolio_health": "", "upcoming_catalysts": [], "outside_ideas": []}
 
     common = {
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
@@ -74,8 +98,13 @@ def main() -> int:
     }
 
     env = _env()
+
     _write(site / "index.html", env.get_template("index.html").render(
-        exposures=exposures, review=review_out, recs=recs, base="", **common,
+        brief=brief, macro=macro, exposures=exposures,
+        recs_by_ticker=ticker_payloads, base="", **common,
+    ))
+    _write(site / "positions.html", env.get_template("positions.html").render(
+        exposures=exposures, review=review_out, base="", **common,
     ))
     _write(site / "recommendations.html", env.get_template("recommendations.html").render(
         recs=recs, base="", **common,
@@ -92,14 +121,16 @@ def main() -> int:
     data_dump = {
         "generated_at": common["generated_at"],
         "diagnostics": diag,
+        "macro": macro,
         "exposures": exposures,
         "review": review_out,
+        "brief": brief,
         "recommendations": recs,
         "candidates": cand_out,
     }
     (site / "data.json").write_text(json.dumps(data_dump, default=str, indent=2))
     (site / ".nojekyll").write_text("")
-    print(f"Built {len(recs)} recommendations to {site}")
+    print(f"Built site to {site}")
     return 0
 
 

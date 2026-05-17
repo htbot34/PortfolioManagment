@@ -24,8 +24,14 @@
   <main class="p-6 max-w-7xl mx-auto">
     {% block content %}{% endblock %}
   </main>
-  <footer class="px-6 py-6 text-xs text-slate-500 max-w-7xl mx-auto">
-    Advice only. Educational use. Not financial advice.
+  <footer class="px-6 py-6 text-xs text-slate-500 max-w-7xl mx-auto flex flex-wrap gap-3 items-center">
+    <a href="https://github.com/htbot34/PortfolioManagment/issues/new?template=trade-log.yml"
+       target="_blank" rel="noopener"
+       class="px-3 py-1.5 rounded bg-sky-700 hover:bg-sky-600 text-white text-xs font-semibold">
+      Log a trade
+    </a>
+    <span class="text-slate-600">Records BUY / SELL / DEPOSIT / WITHDRAW. Portfolio auto-updates within a minute.</span>
+    <span class="ml-auto">Advice only. Educational use. Not financial advice.</span>
   </footer>
 </body>
 </html>

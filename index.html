@@ -19,7 +19,7 @@
 <body class="min-h-screen">
   <nav class="px-6 py-3 border-b border-[#1f2a44] flex items-center gap-4">
     <a href="index.html" class="text-sm font-semibold text-slate-200">Portfolio Advisor</a>
-    <div class="ml-auto text-[10px] text-slate-500">2026-05-17 18:56 UTC</div>
+    <div class="ml-auto text-[10px] text-slate-500">2026-05-17 19:13 UTC</div>
   </nav>
   <main class="p-6 max-w-7xl mx-auto">
     
@@ -33,57 +33,19 @@
   
   
   
+    <div class="text-[10px] text-amber-300 bg-amber-900/40 px-2 py-0.5 rounded">Prices stale (using cache)</div>
+  
 </div>
 
 
-  <div class="text-xs text-amber-300 uppercase tracking-widest mb-2 text-center">Defensive action</div>
-  
-<div class="card rounded-lg p-6 mb-4 border-l-4
-  border-l-rose-500
-  ">
-  <div class="flex items-baseline justify-between mb-3">
-    <div class="text-xs text-slate-400 uppercase tracking-widest">Today&#39;s call</div>
-    <div class="text-xs text-slate-500">Conviction 5/5</div>
+  <div class="card rounded-lg p-10 mb-4 text-center">
+    <div class="text-5xl font-bold text-slate-300 mb-3">No trade today</div>
+    <div class="text-sm text-slate-400 max-w-xl mx-auto">No setup meets the conviction bar.</div>
   </div>
-  <div class="flex items-baseline gap-3 mb-4">
-    <span class="text-3xl font-bold
-      text-rose-400
-      ">TRIM</span>
-    <a href="ticker/META.html" class="text-3xl font-bold text-slate-100 tlink">META</a>
-  </div>
-  <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4 text-sm">
-    <div><div class="text-[10px] text-slate-500 uppercase">Entry</div><div class="text-slate-100 font-semibold">~$614.23</div></div>
-    <div><div class="text-[10px] text-slate-500 uppercase">Stop</div><div class="text-rose-300 font-semibold">$631.50 (give it room)</div></div>
-    <div><div class="text-[10px] text-slate-500 uppercase">Target</div><div class="text-emerald-300 font-semibold">trim 25-50% at ~$614.23</div></div>
-    
-  </div>
-  <p class="text-base text-slate-200 leading-relaxed mb-3">Downtrend (price &lt; SMA50 &lt; SMA200). RSI oversold at 25. Weight 64% far above 25% cap - urgent trim.</p>
-  <div class="text-sm text-slate-400 border-t border-[#1f2a44] pt-3"><span class="text-rose-400 font-semibold">Invalidation:</span> Weight back under 25% (after trim) - then hold the remaining core.</div>
-</div>
 
 
 
 
-<div class="text-center text-xs text-slate-400 mb-4">SPX -1.24%, VIX 18.4, Energy leads +2.4%.</div>
-
-
-
-<div class="card rounded-lg p-4 mb-4">
-  <div class="text-xs text-slate-400 uppercase tracking-widest mb-2">Watching</div>
-  <ul class="text-sm space-y-1">
-  
-    <li class="text-slate-300">- ENPH - watching for clean breakout</li>
-  
-    <li class="text-slate-300">- ZS - watching for clean breakout</li>
-  
-    <li class="text-slate-300">- ASML - watching for pullback entry</li>
-  
-    <li class="text-slate-300">- NVDA - watching for pullback entry</li>
-  
-    <li class="text-slate-300">- ABNB - watching for reversal confirmation</li>
-  
-  </ul>
-</div>
 
 
 <div class="mt-8 pt-4 border-t border-[#1f2a44] flex flex-wrap gap-3 justify-center text-xs text-slate-500">
@@ -98,8 +60,14 @@
 </div>
 
   </main>
-  <footer class="px-6 py-6 text-xs text-slate-500 max-w-7xl mx-auto">
-    Advice only. Educational use. Not financial advice.
+  <footer class="px-6 py-6 text-xs text-slate-500 max-w-7xl mx-auto flex flex-wrap gap-3 items-center">
+    <a href="https://github.com/htbot34/PortfolioManagment/issues/new?template=trade-log.yml"
+       target="_blank" rel="noopener"
+       class="px-3 py-1.5 rounded bg-sky-700 hover:bg-sky-600 text-white text-xs font-semibold">
+      Log a trade
+    </a>
+    <span class="text-slate-600">Records BUY / SELL / DEPOSIT / WITHDRAW. Portfolio auto-updates within a minute.</span>
+    <span class="ml-auto">Advice only. Educational use. Not financial advice.</span>
   </footer>
 </body>
 </html>

@@ -1,0 +1,57 @@
+name: Log a trade
+description: Record a BUY / SELL / DEPOSIT / WITHDRAW. The bot updates portfolio.yaml automatically.
+title: "Trade: "
+labels: ["trade-log"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Fill in the fields below. The bot will parse this, update your portfolio, and close the issue.
+        For BUY / SELL: ticker, shares, price all required.
+        For DEPOSIT / WITHDRAW: only amount is required.
+  - type: dropdown
+    id: action
+    attributes:
+      label: Action
+      options:
+        - BUY
+        - SELL
+        - DEPOSIT
+        - WITHDRAW
+    validations:
+      required: true
+  - type: input
+    id: ticker
+    attributes:
+      label: Ticker
+      description: Required for BUY / SELL. Leave blank for cash deposit/withdraw.
+      placeholder: "e.g. NVDA"
+  - type: input
+    id: shares
+    attributes:
+      label: Shares
+      description: Required for BUY / SELL. Fractional allowed.
+      placeholder: "e.g. 3"
+  - type: input
+    id: price
+    attributes:
+      label: Fill price (per share)
+      description: Required for BUY / SELL. Use the actual price you executed at.
+      placeholder: "e.g. 145.50"
+  - type: input
+    id: amount
+    attributes:
+      label: Cash amount
+      description: Required for DEPOSIT / WITHDRAW. Use the dollar amount.
+      placeholder: "e.g. 500"
+  - type: input
+    id: date
+    attributes:
+      label: Date
+      description: Optional. Defaults to today.
+      placeholder: "YYYY-MM-DD"
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      description: Optional context for your own records.

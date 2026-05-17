@@ -66,7 +66,7 @@ def analyze_ticker(ticker: str, position_context: dict | None = None) -> dict:
             "Write the recommendation JSON now. Specific levels and dates."
         )
         refined = llm.chat_json(prompts.SYSTEM_ANALYST, user_blob, model=llm.routine_model(),
-                                max_tokens=900)
+                                max_tokens=900, tag=f"analyst:{ticker}")
         if refined and "action" in refined and "thesis" in refined:
             refined["source"] = "llm"
             base = {**base, **refined}

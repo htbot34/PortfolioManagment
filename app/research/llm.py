@@ -1,12 +1,8 @@
 """GitHub Models client. Free LLM via OpenAI-compatible API.
 
-Two model tiers:
-  - ROUTINE: gpt-4o-mini, used for per-ticker JSON analyses
-  - SYNTHESIS: gpt-4o-mini (default), used for the daily brief and
-    candidate ranking. Configurable to a higher tier model via env var.
-
-chat_json automatically retries with a fallback model if the primary
-returns a non-200 or empty payload (rate limits / 5xx).
+Records every call attempt into ATTEMPTS so failures are visible in the
+build output / data.json. Fallback chain only uses OpenAI models (Llama
+free tier has an 8k context cap that we exceed on the synthesis call).
 """
 import json
 import os
@@ -16,7 +12,9 @@ import httpx
 from app.config import settings
 
 _ENDPOINT = "https://models.github.ai/inference/chat/completions"
-_FALLBACKS = ["openai/gpt-4o-mini", "meta/Llama-3.3-70B-Instruct"]
+_FALLBACKS = ["openai/gpt-4o-mini"]
+
+ATTEMPTS: list[dict] = []
 
 
 def routine_model() -> str:
@@ -31,11 +29,19 @@ def available() -> bool:
     return bool(settings.github_token)
 
 
-LAST_ERROR: dict = {}
+def reset_attempts() -> None:
+    ATTEMPTS.clear()
 
 
-def _call(model: str, system: str, user: str, max_tokens: int, temperature: float) -> dict | None:
-    global LAST_ERROR
+def _record(entry: dict) -> None:
+    ATTEMPTS.append(entry)
+    if len(ATTEMPTS) > 50:
+        del ATTEMPTS[: len(ATTEMPTS) - 50]
+
+
+def _call(model: str, system: str, user: str, max_tokens: int, temperature: float,
+          tag: str) -> dict | None:
+    entry: dict = {"model": model, "tag": tag, "prompt_chars": len(system) + len(user)}
     try:
         r = httpx.post(
             _ENDPOINT,
@@ -56,34 +62,39 @@ def _call(model: str, system: str, user: str, max_tokens: int, temperature: floa
             timeout=180,
         )
     except Exception as e:
-        msg = f"exception (model={model}): {e}"
-        print(f"  LLM {msg}")
-        LAST_ERROR = {"model": model, "kind": "exception", "msg": str(e)[:300]}
+        entry.update(kind="exception", msg=str(e)[:300])
+        _record(entry)
+        print(f"  LLM {entry}")
         return None
+    entry["status"] = r.status_code
     if r.status_code != 200:
-        msg = f"failed model={model} HTTP {r.status_code} body={r.text[:300]}"
-        print(f"  LLM {msg}")
-        LAST_ERROR = {"model": model, "kind": "http", "status": r.status_code, "body": r.text[:600]}
+        entry.update(kind="http_error", body=r.text[:500])
+        _record(entry)
+        print(f"  LLM {entry}")
         return None
     try:
         body = r.json()
-        finish_reason = body["choices"][0].get("finish_reason")
-        text = body["choices"][0]["message"]["content"]
+        choice = body["choices"][0]
+        finish_reason = choice.get("finish_reason")
+        text = choice["message"]["content"]
         out = json.loads(text)
-        LAST_ERROR = {"model": model, "kind": "ok", "finish_reason": finish_reason,
-                      "input_tokens": body.get("usage", {}).get("prompt_tokens"),
-                      "output_tokens": body.get("usage", {}).get("completion_tokens")}
+        usage = body.get("usage", {})
+        entry.update(kind="ok", finish_reason=finish_reason,
+                     input_tokens=usage.get("prompt_tokens"),
+                     output_tokens=usage.get("completion_tokens"),
+                     total_tokens=usage.get("total_tokens"))
+        _record(entry)
         return out
     except Exception as e:
-        msg = f"parse failed (model={model}): {e}; body[:300]={r.text[:300]}"
-        print(f"  LLM {msg}")
-        LAST_ERROR = {"model": model, "kind": "parse_error", "msg": str(e)[:200],
-                      "body_excerpt": r.text[:600]}
+        entry.update(kind="parse_error", msg=str(e)[:200], body=r.text[:500])
+        _record(entry)
+        print(f"  LLM {entry}")
         return None
 
 
 def chat_json(system: str, user: str, *, model: str | None = None,
-              max_tokens: int = 1200, temperature: float = 0.3) -> dict | None:
+              max_tokens: int = 1200, temperature: float = 0.3,
+              tag: str = "") -> dict | None:
     if not settings.github_token:
         return None
     primary = model or routine_model()
@@ -92,7 +103,7 @@ def chat_json(system: str, user: str, *, model: str | None = None,
         if m in tried:
             continue
         tried.add(m)
-        out = _call(m, system, user, max_tokens, temperature)
+        out = _call(m, system, user, max_tokens, temperature, tag)
         if out:
             out.setdefault("_model_used", m)
             return out

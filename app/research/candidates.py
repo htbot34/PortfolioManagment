@@ -103,6 +103,7 @@ def candidates(account: Account) -> dict:
         prompts.SYSTEM_CANDIDATES, user,
         model=llm.synthesis_model(),
         max_tokens=1500,
+        tag="candidates",
     )
     if not out or "candidates" not in out:
         return {"candidates": [], "screen_results": short}

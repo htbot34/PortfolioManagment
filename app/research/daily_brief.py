@@ -233,6 +233,7 @@ def build(macro: dict, recommendations: list[dict], review: dict,
         model=llm.synthesis_model(),
         max_tokens=2200,
         temperature=0.4,
+        tag="brief",
     )
     if not out or "trade_ideas" not in out or len(out.get("trade_ideas") or []) == 0:
         print("Synthesis LLM did not return usable JSON - using rule-based fallback.")

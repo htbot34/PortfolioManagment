@@ -82,7 +82,7 @@ def review(exposures: dict) -> dict:
             f"RULE-BASED OBSERVATIONS:\n{json.dumps(out, indent=2)}\n\n"
             "Add anything substantive the rules missed. Output the JSON now."
         )
-        refined = llm.chat_json(prompts.SYSTEM_PORTFOLIO_REVIEW, user_blob, max_tokens=900)
+        refined = llm.chat_json(prompts.SYSTEM_PORTFOLIO_REVIEW, user_blob, max_tokens=900, tag="portfolio_review")
         if refined and "observations" in refined:
             out = refined
     return out

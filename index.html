@@ -19,7 +19,7 @@
 <body class="min-h-screen">
   <nav class="px-6 py-3 border-b border-[#1f2a44] flex items-center gap-4">
     <a href="index.html" class="text-sm font-semibold text-slate-200">Portfolio Advisor</a>
-    <div class="ml-auto text-[10px] text-slate-500">2026-05-17 19:17 UTC</div>
+    <div class="ml-auto text-[10px] text-slate-500">2026-05-17 23:08 UTC</div>
   </nav>
   <main class="p-6 max-w-7xl mx-auto">
     
@@ -33,58 +33,106 @@
   
   
   
+    <div class="text-[10px] text-amber-300 bg-amber-900/40 px-2 py-0.5 rounded">Prices stale (using cache)</div>
+  
 </div>
 
 
-  <div class="text-xs text-amber-300 uppercase tracking-widest mb-2 text-center">Defensive action</div>
-  
-<div class="card rounded-lg p-6 mb-4 border-l-4
-  border-l-rose-500
-  ">
+  <div class="card rounded-lg p-10 mb-4 text-center">
+    <div class="text-5xl font-bold text-slate-300 mb-3">No trade today</div>
+    <div class="text-sm text-slate-400 max-w-xl mx-auto">No setup meets the conviction bar.</div>
+  </div>
+
+
+
+
+
+
+<!-- ============== Chat panel ============== -->
+<div class="card rounded-lg p-5 mb-4">
   <div class="flex items-baseline justify-between mb-3">
-    <div class="text-xs text-slate-400 uppercase tracking-widest">Today&#39;s call</div>
-    <div class="text-xs text-slate-500">Conviction 5/5</div>
+    <div class="text-sm font-semibold text-slate-200">Tell the advisor</div>
+    <div class="text-[10px] text-slate-500">Trades + ideas</div>
   </div>
-  <div class="flex items-baseline gap-3 mb-4">
-    <span class="text-3xl font-bold
-      text-rose-400
-      ">TRIM</span>
-    <a href="ticker/META.html" class="text-3xl font-bold text-slate-100 tlink">META</a>
+
+  
+  <div class="text-xs text-slate-500 mb-3">No activity yet. Tell me what you did or what you're watching.</div>
+  
+
+  <textarea id="chat-input"
+            rows="3"
+            placeholder="Bought 3 NVDA at 145.50  •  Sold 4 META at 614  •  Deposited 500  •  Watching PLTR for $35 entry"
+            class="w-full bg-[#0b1020] border border-[#1f2a44] rounded-md p-3 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-sky-600 resize-none"></textarea>
+
+  <div id="chat-preview" class="mt-2 text-xs text-slate-400 min-h-[1.5rem]"></div>
+
+  <div class="mt-3 flex flex-wrap items-center gap-2">
+    <button id="chat-submit"
+            class="px-4 py-2 rounded bg-sky-600 hover:bg-sky-500 text-white text-sm font-semibold disabled:opacity-40 disabled:cursor-not-allowed"
+            disabled>Send</button>
+    <span class="text-[10px] text-slate-500">Opens a confirmation tab on GitHub. The bot applies it within a minute.</span>
   </div>
-  <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4 text-sm">
-    <div><div class="text-[10px] text-slate-500 uppercase">Entry</div><div class="text-slate-100 font-semibold">~$614.23</div></div>
-    <div><div class="text-[10px] text-slate-500 uppercase">Stop</div><div class="text-rose-300 font-semibold">$631.50 (give it room)</div></div>
-    <div><div class="text-[10px] text-slate-500 uppercase">Target</div><div class="text-emerald-300 font-semibold">trim 25-50% at ~$614.23</div></div>
-    
-  </div>
-  <p class="text-base text-slate-200 leading-relaxed mb-3">Downtrend (price &lt; SMA50 &lt; SMA200). RSI oversold at 25. Weight 64% far above 25% cap - urgent trim.</p>
-  <div class="text-sm text-slate-400 border-t border-[#1f2a44] pt-3"><span class="text-rose-400 font-semibold">Invalidation:</span> Weight back under 25% (after trim) - then hold the remaining core.</div>
 </div>
 
+<script>
+(function() {
+  const ta = document.getElementById('chat-input');
+  const btn = document.getElementById('chat-submit');
+  const preview = document.getElementById('chat-preview');
 
+  // Client-side regex preview - mirrors app/portfolio/trade_log.py
+  const BUY_RE = /\b(?:bought|buy|added|picked up|grabbed|opened)\s+(\d+(?:\.\d+)?)\s+(?:shares?\s+of\s+)?([A-Za-z]{1,5})\s+(?:at|@|for|around|near)\s*\$?(\d+(?:\.\d+)?)/i;
+  const SELL_RE = /\b(?:sold|sell|trimmed|trim|dumped|exited|closed)\s+(\d+(?:\.\d+)?)\s+(?:shares?\s+of\s+)?([A-Za-z]{1,5})\s+(?:at|@|for|around|near)\s*\$?(\d+(?:\.\d+)?)/i;
+  const DEP_RE  = /\b(?:deposit(?:ed)?|added\s+cash|put\s+in|funded|wired\s+in)\s*\$?(\d+(?:[\.,]\d+)?)/i;
+  const WIT_RE  = /\b(?:withdrew|withdraw|withdrawal\s+of|took\s+out|pulled\s+out)\s*\$?(\d+(?:[\.,]\d+)?)/i;
 
+  function interpret(text) {
+    let m;
+    if ((m = text.match(BUY_RE))) return `BUY ${m[1]} ${m[2].toUpperCase()} @ $${m[3]}`;
+    if ((m = text.match(SELL_RE))) return `SELL ${m[1]} ${m[2].toUpperCase()} @ $${m[3]}`;
+    if ((m = text.match(DEP_RE))) return `DEPOSIT $${m[1]}`;
+    if ((m = text.match(WIT_RE))) return `WITHDRAW $${m[1]}`;
+    return null;
+  }
 
-<div class="text-center text-xs text-slate-400 mb-4">SPX -1.24%, VIX 18.4, Energy leads +2.4%.</div>
+  function update() {
+    const text = ta.value.trim();
+    btn.disabled = text.length === 0;
+    if (!text) { preview.textContent = ''; return; }
+    const interp = interpret(text);
+    if (interp) {
+      preview.innerHTML = '<span class="text-emerald-300 font-semibold">Will record:</span> ' + interp;
+    } else {
+      preview.innerHTML = '<span class="text-slate-400 font-semibold">Will save as note.</span> "' + text.slice(0, 120) + (text.length > 120 ? '...' : '') + '"';
+    }
+  }
 
+  ta.addEventListener('input', update);
 
+  btn.addEventListener('click', function() {
+    const text = ta.value.trim();
+    if (!text) return;
+    // Open a centered popup with the prefilled chat issue form
+    const url = new URL('https://github.com/htbot34/PortfolioManagment/issues/new');
+    url.searchParams.set('template', 'chat.yml');
+    url.searchParams.set('message', text);
+    const w = 720, h = 780;
+    const left = (window.screen.width - w) / 2;
+    const top = (window.screen.height - h) / 2;
+    const win = window.open(url.toString(), 'pa_chat', `width=${w},height=${h},left=${left},top=${top},popup=yes`);
+    if (!win) {
+      // Popup blocked - fallback to new tab
+      window.open(url.toString(), '_blank');
+    }
+    preview.innerHTML = '<span class="text-amber-300">Sent to GitHub.</span> Submit the issue there - this dashboard will reflect the change on the next refresh.';
+    ta.value = '';
+    btn.disabled = true;
+  });
 
-<div class="card rounded-lg p-4 mb-4">
-  <div class="text-xs text-slate-400 uppercase tracking-widest mb-2">Watching</div>
-  <ul class="text-sm space-y-1">
-  
-    <li class="text-slate-300">- ENPH - watching for clean breakout</li>
-  
-    <li class="text-slate-300">- ZS - watching for clean breakout</li>
-  
-    <li class="text-slate-300">- ASML - watching for pullback entry</li>
-  
-    <li class="text-slate-300">- NVDA - watching for pullback entry</li>
-  
-    <li class="text-slate-300">- ABNB - watching for reversal confirmation</li>
-  
-  </ul>
-</div>
-
+  update();
+})();
+</script>
+<!-- ============== /Chat panel ============== -->
 
 <div class="mt-8 pt-4 border-t border-[#1f2a44] flex flex-wrap gap-3 justify-center text-xs text-slate-500">
   <a href="positions.html" class="hover:text-slate-300">Your positions</a>
@@ -98,14 +146,8 @@
 </div>
 
   </main>
-  <footer class="px-6 py-6 text-xs text-slate-500 max-w-7xl mx-auto flex flex-wrap gap-3 items-center">
-    <a href="https://github.com/htbot34/PortfolioManagment/issues/new?template=trade-log.yml"
-       target="_blank" rel="noopener"
-       class="px-3 py-1.5 rounded bg-sky-700 hover:bg-sky-600 text-white text-xs font-semibold">
-      Log a trade
-    </a>
-    <span class="text-slate-600">Records BUY / SELL / DEPOSIT / WITHDRAW. Portfolio auto-updates within a minute.</span>
-    <span class="ml-auto">Advice only. Educational use. Not financial advice.</span>
+  <footer class="px-6 py-6 text-[10px] text-slate-600 max-w-7xl mx-auto text-center">
+    Advice only. Educational use. Not financial advice.
   </footer>
 </body>
 </html>

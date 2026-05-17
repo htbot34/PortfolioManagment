@@ -15,6 +15,7 @@ import traceback
 from datetime import datetime, timezone
 from pathlib import Path
 
+import yaml
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from app.config import risk_profile, settings
@@ -24,6 +25,40 @@ from app.portfolio import store
 from app.research import (
     analyst, candidates as cands, daily_brief, llm, portfolio_review, scanner,
 )
+
+
+ROOT = Path(__file__).resolve().parent.parent
+NOTES_PATH = ROOT / "notes.yaml"
+HISTORY_PATH = ROOT / "portfolio_history.yaml"
+
+
+def _load_yaml_list(path: Path) -> list:
+    if not path.exists():
+        return []
+    try:
+        data = yaml.safe_load(path.read_text()) or []
+        return data if isinstance(data, list) else []
+    except Exception:
+        return []
+
+
+def _recent_activity(limit: int = 8) -> list[dict]:
+    """Combine trades and notes into a single activity feed, newest first."""
+    activity: list[dict] = []
+    for h in _load_yaml_list(HISTORY_PATH):
+        activity.append({
+            "date": h.get("date") or h.get("logged_at", "")[:10],
+            "kind": "trade",
+            "summary": h.get("summary", ""),
+        })
+    for n in _load_yaml_list(NOTES_PATH):
+        activity.append({
+            "date": n.get("date") or n.get("logged_at", "")[:10],
+            "kind": "note",
+            "summary": n.get("content", ""),
+        })
+    activity.sort(key=lambda r: r.get("date") or "", reverse=True)
+    return activity[:limit]
 
 
 def _env() -> Environment:
@@ -113,9 +148,10 @@ def main() -> int:
 
     env = _env()
 
+    activity = _recent_activity(limit=8)
     _write(site / "index.html", env.get_template("index.html").render(
         brief=brief, macro=macro, exposures=exposures, scan=scan_result,
-        recs_by_ticker=ticker_payloads, base="", **common,
+        recs_by_ticker=ticker_payloads, activity=activity, base="", **common,
     ))
     _write(site / "positions.html", env.get_template("positions.html").render(
         exposures=exposures, review=review_out, base="", **common,

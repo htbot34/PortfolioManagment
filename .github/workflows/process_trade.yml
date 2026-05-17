@@ -1,4 +1,4 @@
-name: Process trade-log issue
+name: Process trade-log / chat issue
 
 on:
   issues:
@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   process:
-    if: contains(github.event.issue.labels.*.name, 'trade-log')
+    if: contains(github.event.issue.labels.*.name, 'trade-log') || contains(github.event.issue.labels.*.name, 'chat')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -23,18 +23,18 @@ jobs:
       - name: Install deps
         run: pip install pyyaml
 
-      - name: Apply trade
+      - name: Apply
         id: apply
         env:
           ISSUE_BODY: ${{ github.event.issue.body }}
         run: python -m app.portfolio.trade_log
 
-      - name: Commit portfolio update
+      - name: Commit changes
         if: steps.apply.outputs.summary
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add portfolio.yaml portfolio_history.yaml 2>/dev/null || true
+          git add portfolio.yaml portfolio_history.yaml notes.yaml 2>/dev/null || true
           if git diff --staged --quiet; then
             echo "No changes to commit."
           else
@@ -71,4 +71,4 @@ jobs:
             -H "Authorization: token $GH_TOKEN" \
             -H "Accept: application/vnd.github+json" \
             "https://api.github.com/repos/${{ github.repository }}/issues/$ISSUE_NUMBER/comments" \
-            -d "$(jq -n --arg b "Could not apply trade: $ERR. Edit the issue body and the bot will retry." '{body:$b}')"
+            -d "$(jq -n --arg b "Could not apply: $ERR. Edit the issue body and the bot will retry." '{body:$b}')"

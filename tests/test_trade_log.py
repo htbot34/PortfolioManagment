@@ -138,6 +138,41 @@ def test_apply_sell_rejects_overshoot():
         trade_log.apply(trade, acct)
 
 
+def test_parse_freeform_buy():
+    t = trade_log.parse_freeform("Bought 3 NVDA at 145.50")
+    assert t.action == "BUY" and t.ticker == "NVDA" and t.shares == 3 and t.price == 145.50
+
+
+def test_parse_freeform_buy_variants():
+    for s in [
+        "bought 2 META @ 614",
+        "Picked up 5 shares of PLTR at $35.25",
+        "added 1.5 NVDA for 142",
+    ]:
+        t = trade_log.parse_freeform(s)
+        assert t is not None and t.action == "BUY", s
+
+
+def test_parse_freeform_sell():
+    t = trade_log.parse_freeform("Sold 4 META at 614")
+    assert t.action == "SELL" and t.ticker == "META" and t.shares == 4 and t.price == 614
+
+
+def test_parse_freeform_deposit():
+    t = trade_log.parse_freeform("Deposited 500")
+    assert t.action == "DEPOSIT" and t.amount == 500
+
+
+def test_parse_freeform_withdraw():
+    t = trade_log.parse_freeform("Withdrew $200 today")
+    assert t.action == "WITHDRAW" and t.amount == 200
+
+
+def test_parse_freeform_not_a_trade():
+    assert trade_log.parse_freeform("Watching PLTR for $35 entry") is None
+    assert trade_log.parse_freeform("I'm bearish on energy this week") is None
+
+
 def test_apply_deposit_withdraw():
     acct = _account(cash=100)
     out, _ = trade_log.apply(trade_log.Trade("DEPOSIT", None, None, None, 500, "2026-05-17"), acct)

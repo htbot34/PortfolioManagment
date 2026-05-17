@@ -1,34 +1,24 @@
-"""Parse a GitHub Issue body produced by the trade-log issue form and
-apply the trade to portfolio.yaml.
+"""Parse a GitHub Issue body and apply the result to the portfolio.
 
-The issue form (.github/ISSUE_TEMPLATE/trade-log.yml) produces a body of
-the shape:
+Two input modes:
 
-  ### Action
-  BUY
+  1. Structured (issue-form mode) - the body looks like:
+       ### Action
+       BUY
+       ### Ticker
+       NVDA
+       ...
+     Handled by parse() which extracts each ### section.
 
-  ### Ticker
-  NVDA
+  2. Freeform (chat mode) - the body is plain English:
+       "Bought 3 NVDA at 145.50"
+       "Sold 4 META at 614"
+       "Deposited 500"
+       "Watching PLTR for a $35 entry"
+     Handled by parse_freeform() with regex. If no trade pattern matches,
+     the message is saved as a note in notes.yaml.
 
-  ### Shares
-  3
-
-  ### Fill price (per share)
-  145.50
-
-  ### Cash amount
-  _No response_
-
-  ### Date
-  2026-05-17
-
-  ### Notes
-  _No response_
-
-This module exposes:
-  parse(body) -> dict
-  apply(trade, account) -> tuple[Account, str]   # returns (updated account, summary)
-  main()                                         # CLI used by the workflow
+  apply()/append_note()/main() handle persistence and history.
 """
 from __future__ import annotations
 
@@ -49,6 +39,7 @@ from app.portfolio import store
 
 
 HISTORY_PATH = Path(__file__).resolve().parent.parent.parent / "portfolio_history.yaml"
+NOTES_PATH = Path(__file__).resolve().parent.parent.parent / "notes.yaml"
 
 _FIELD_HEADERS = {
     "action": "Action",
@@ -59,6 +50,34 @@ _FIELD_HEADERS = {
     "date": "Date",
     "notes": "Notes",
 }
+
+# Freeform patterns (case-insensitive). Each pattern captures named groups.
+_BUY_RE = re.compile(
+    r"\b(?:bought|buy|added|picked up|grabbed|opened)\s+"
+    r"(?P<shares>\d+(?:\.\d+)?)\s+"
+    r"(?:shares?\s+of\s+)?(?P<ticker>[A-Za-z]{1,5})\s+"
+    r"(?:at|@|for|around|near)\s*"
+    r"\$?(?P<price>\d+(?:\.\d+)?)",
+    re.IGNORECASE,
+)
+_SELL_RE = re.compile(
+    r"\b(?:sold|sell|trimmed|trim|dumped|exited|closed)\s+"
+    r"(?P<shares>\d+(?:\.\d+)?)\s+"
+    r"(?:shares?\s+of\s+)?(?P<ticker>[A-Za-z]{1,5})\s+"
+    r"(?:at|@|for|around|near)\s*"
+    r"\$?(?P<price>\d+(?:\.\d+)?)",
+    re.IGNORECASE,
+)
+_DEPOSIT_RE = re.compile(
+    r"\b(?:deposit(?:ed)?|added\s+cash|put\s+in|funded|wired\s+in)\s*"
+    r"\$?(?P<amount>\d+(?:[\.,]\d+)?)",
+    re.IGNORECASE,
+)
+_WITHDRAW_RE = re.compile(
+    r"\b(?:withdrew|withdraw|withdrawal\s+of|took\s+out|pulled\s+out)\s*"
+    r"\$?(?P<amount>\d+(?:[\.,]\d+)?)",
+    re.IGNORECASE,
+)
 
 
 @dataclass
@@ -73,7 +92,6 @@ class Trade:
 
 
 def _section(body: str, label: str) -> str:
-    """Return the text under '### <label>' until the next '###' or EOF."""
     pattern = rf"###\s*{re.escape(label)}\s*\n+([\s\S]*?)(?=\n###|\Z)"
     m = re.search(pattern, body)
     if not m:
@@ -82,6 +100,10 @@ def _section(body: str, label: str) -> str:
     if val.lower() in ("_no response_", "no response", "n/a", "-", "none"):
         return ""
     return val
+
+
+def _is_structured(body: str) -> bool:
+    return bool(re.search(r"###\s*Action\s*\n", body))
 
 
 def parse(body: str) -> Trade:
@@ -121,6 +143,28 @@ def parse(body: str) -> Trade:
                  amount=amount, trade_date=trade_date, notes=notes)
 
 
+def parse_freeform(text: str) -> Trade | None:
+    """Try to extract a trade from natural English. Return None if not a trade."""
+    today = date_cls.today().isoformat()
+    m = _BUY_RE.search(text)
+    if m:
+        return Trade("BUY", m.group("ticker").upper(), float(m.group("shares")),
+                     float(m.group("price")), None, today, text.strip())
+    m = _SELL_RE.search(text)
+    if m:
+        return Trade("SELL", m.group("ticker").upper(), float(m.group("shares")),
+                     float(m.group("price")), None, today, text.strip())
+    m = _DEPOSIT_RE.search(text)
+    if m:
+        amt = float(m.group("amount").replace(",", ""))
+        return Trade("DEPOSIT", None, None, None, amt, today, text.strip())
+    m = _WITHDRAW_RE.search(text)
+    if m:
+        amt = float(m.group("amount").replace(",", ""))
+        return Trade("WITHDRAW", None, None, None, amt, today, text.strip())
+    return None
+
+
 def apply(trade: Trade, account: store.Account) -> tuple[store.Account, str]:
     if trade.action == "BUY":
         cost_delta = trade.shares * trade.price
@@ -131,7 +175,6 @@ def apply(trade: Trade, account: store.Account) -> tuple[store.Account, str]:
             )
         pos = account.position(trade.ticker)
         if pos:
-            # weighted-average cost basis
             new_shares = pos.shares + trade.shares
             new_cost = ((pos.shares * pos.cost_basis) + cost_delta) / new_shares
             pos.shares = new_shares
@@ -198,18 +241,57 @@ def append_history(trade: Trade, summary: str) -> None:
     HISTORY_PATH.write_text(yaml.safe_dump(history, sort_keys=False))
 
 
+def append_note(text: str) -> str:
+    """Save a freeform note (idea / observation) to notes.yaml."""
+    notes: list = []
+    if NOTES_PATH.exists():
+        try:
+            notes = yaml.safe_load(NOTES_PATH.read_text()) or []
+        except Exception:
+            notes = []
+    if not isinstance(notes, list):
+        notes = []
+    entry = {
+        "date": date_cls.today().isoformat(),
+        "content": text.strip(),
+        "logged_at": datetime.utcnow().isoformat() + "Z",
+    }
+    notes.append(entry)
+    NOTES_PATH.write_text(yaml.safe_dump(notes, sort_keys=False))
+    return f'Saved as note: "{text.strip()[:120]}"'
+
+
 def main() -> int:
-    """Workflow entrypoint. Reads ISSUE_BODY env, applies, writes summary to GITHUB_OUTPUT."""
+    """Workflow entrypoint. Accepts structured OR freeform bodies."""
     body = os.environ.get("ISSUE_BODY", "")
     if not body:
         print("ISSUE_BODY empty; nothing to do.")
+        _write_output("error", "empty body")
         return 1
-    try:
-        trade = parse(body)
-    except ValueError as e:
-        print(f"::error::Could not parse trade: {e}")
-        _write_output("error", str(e))
+
+    # Decide which parser to use
+    trade: Trade | None = None
+    err: str | None = None
+    if _is_structured(body):
+        try:
+            trade = parse(body)
+        except ValueError as e:
+            err = str(e)
+    else:
+        trade = parse_freeform(body)
+
+    if trade is None:
+        # Freeform with no trade pattern -> save as note
+        summary = append_note(body)
+        print(f"Applied: {summary}")
+        _write_output("summary", summary)
+        return 0
+
+    if err:
+        print(f"::error::Could not parse structured trade: {err}")
+        _write_output("error", err)
         return 2
+
     account = store.load()
     try:
         account, summary = apply(trade, account)
@@ -228,7 +310,6 @@ def _write_output(key: str, value: str) -> None:
     out = os.environ.get("GITHUB_OUTPUT")
     if not out:
         return
-    # GH multiline outputs use delimiter syntax
     delim = "EOF_TRADE_LOG"
     with open(out, "a") as f:
         f.write(f"{key}<<{delim}\n{value}\n{delim}\n")

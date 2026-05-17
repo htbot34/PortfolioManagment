@@ -70,6 +70,102 @@
 </div>
 {% endif %}
 
+<!-- ============== Chat panel ============== -->
+<div class="card rounded-lg p-5 mb-4">
+  <div class="flex items-baseline justify-between mb-3">
+    <div class="text-sm font-semibold text-slate-200">Tell the advisor</div>
+    <div class="text-[10px] text-slate-500">Trades + ideas</div>
+  </div>
+
+  {% if activity %}
+  <div class="mb-4 space-y-1 max-h-44 overflow-y-auto pr-2">
+    {% for a in activity %}
+    <div class="text-xs flex gap-2 items-baseline">
+      <span class="text-slate-500 font-mono">{{ a.date }}</span>
+      <span class="px-1.5 py-0.5 rounded text-[10px] font-semibold {% if a.kind == 'trade' %}bg-emerald-900/60 text-emerald-200{% else %}bg-slate-700 text-slate-300{% endif %}">{{ a.kind }}</span>
+      <span class="text-slate-300 leading-snug">{{ a.summary }}</span>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="text-xs text-slate-500 mb-3">No activity yet. Tell me what you did or what you're watching.</div>
+  {% endif %}
+
+  <textarea id="chat-input"
+            rows="3"
+            placeholder="Bought 3 NVDA at 145.50  •  Sold 4 META at 614  •  Deposited 500  •  Watching PLTR for $35 entry"
+            class="w-full bg-[#0b1020] border border-[#1f2a44] rounded-md p-3 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-sky-600 resize-none"></textarea>
+
+  <div id="chat-preview" class="mt-2 text-xs text-slate-400 min-h-[1.5rem]"></div>
+
+  <div class="mt-3 flex flex-wrap items-center gap-2">
+    <button id="chat-submit"
+            class="px-4 py-2 rounded bg-sky-600 hover:bg-sky-500 text-white text-sm font-semibold disabled:opacity-40 disabled:cursor-not-allowed"
+            disabled>Send</button>
+    <span class="text-[10px] text-slate-500">Opens a confirmation tab on GitHub. The bot applies it within a minute.</span>
+  </div>
+</div>
+
+<script>
+(function() {
+  const ta = document.getElementById('chat-input');
+  const btn = document.getElementById('chat-submit');
+  const preview = document.getElementById('chat-preview');
+
+  // Client-side regex preview - mirrors app/portfolio/trade_log.py
+  const BUY_RE = /\b(?:bought|buy|added|picked up|grabbed|opened)\s+(\d+(?:\.\d+)?)\s+(?:shares?\s+of\s+)?([A-Za-z]{1,5})\s+(?:at|@|for|around|near)\s*\$?(\d+(?:\.\d+)?)/i;
+  const SELL_RE = /\b(?:sold|sell|trimmed|trim|dumped|exited|closed)\s+(\d+(?:\.\d+)?)\s+(?:shares?\s+of\s+)?([A-Za-z]{1,5})\s+(?:at|@|for|around|near)\s*\$?(\d+(?:\.\d+)?)/i;
+  const DEP_RE  = /\b(?:deposit(?:ed)?|added\s+cash|put\s+in|funded|wired\s+in)\s*\$?(\d+(?:[\.,]\d+)?)/i;
+  const WIT_RE  = /\b(?:withdrew|withdraw|withdrawal\s+of|took\s+out|pulled\s+out)\s*\$?(\d+(?:[\.,]\d+)?)/i;
+
+  function interpret(text) {
+    let m;
+    if ((m = text.match(BUY_RE))) return `BUY ${m[1]} ${m[2].toUpperCase()} @ $${m[3]}`;
+    if ((m = text.match(SELL_RE))) return `SELL ${m[1]} ${m[2].toUpperCase()} @ $${m[3]}`;
+    if ((m = text.match(DEP_RE))) return `DEPOSIT $${m[1]}`;
+    if ((m = text.match(WIT_RE))) return `WITHDRAW $${m[1]}`;
+    return null;
+  }
+
+  function update() {
+    const text = ta.value.trim();
+    btn.disabled = text.length === 0;
+    if (!text) { preview.textContent = ''; return; }
+    const interp = interpret(text);
+    if (interp) {
+      preview.innerHTML = '<span class="text-emerald-300 font-semibold">Will record:</span> ' + interp;
+    } else {
+      preview.innerHTML = '<span class="text-slate-400 font-semibold">Will save as note.</span> "' + text.slice(0, 120) + (text.length > 120 ? '...' : '') + '"';
+    }
+  }
+
+  ta.addEventListener('input', update);
+
+  btn.addEventListener('click', function() {
+    const text = ta.value.trim();
+    if (!text) return;
+    // Open a centered popup with the prefilled chat issue form
+    const url = new URL('https://github.com/htbot34/PortfolioManagment/issues/new');
+    url.searchParams.set('template', 'chat.yml');
+    url.searchParams.set('message', text);
+    const w = 720, h = 780;
+    const left = (window.screen.width - w) / 2;
+    const top = (window.screen.height - h) / 2;
+    const win = window.open(url.toString(), 'pa_chat', `width=${w},height=${h},left=${left},top=${top},popup=yes`);
+    if (!win) {
+      // Popup blocked - fallback to new tab
+      window.open(url.toString(), '_blank');
+    }
+    preview.innerHTML = '<span class="text-amber-300">Sent to GitHub.</span> Submit the issue there - this dashboard will reflect the change on the next refresh.';
+    ta.value = '';
+    btn.disabled = true;
+  });
+
+  update();
+})();
+</script>
+<!-- ============== /Chat panel ============== -->
+
 <div class="mt-8 pt-4 border-t border-[#1f2a44] flex flex-wrap gap-3 justify-center text-xs text-slate-500">
   <a href="positions.html" class="hover:text-slate-300">Your positions</a>
   <span>|</span>

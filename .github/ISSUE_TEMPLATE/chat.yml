@@ -1,0 +1,25 @@
+name: Chat - log a trade or share an idea
+description: Free-form message. The bot parses it for trade patterns; otherwise saves as a note.
+title: "Chat"
+labels: ["chat"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Just type what you did or what you're thinking. The bot parses messages like:
+
+        - **Bought 3 NVDA at 145.50**
+        - **Sold 4 META at 614**
+        - **Deposited 500**
+        - **Withdrew 200**
+
+        Anything else gets saved as a note the advisor sees on future runs.
+        Examples: "Watching PLTR for $35 entry", "Bearish on energy this week".
+  - type: textarea
+    id: message
+    attributes:
+      label: Message
+      description: Trade in plain English, or any thought / idea.
+      placeholder: "Bought 3 NVDA at 145.50"
+    validations:
+      required: true

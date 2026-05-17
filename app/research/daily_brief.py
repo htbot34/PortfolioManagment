@@ -125,36 +125,62 @@ def _defense_from_book(recommendations: list[dict], macro_line: str,
     return None
 
 
+_QUALITY_THEMES = {
+    "Mega cap tech", "Semiconductors", "AI infra / data",
+    "Cloud / SaaS", "Cybersecurity", "Quality compounders",
+    "SMR / nuclear / clean energy",
+}
+
+
 def _trade_from_scanner(scan_result: dict, macro: dict, macro_line: str,
                          exclude: set[str]) -> dict | None:
     """Promote a high-quality scanner setup to a trade verdict.
 
-    Bar:
-      breakout: vol_ratio_20d >= 1.8 AND RSI in [55, 68]
-      oversold: RSI <= 30 AND near SMA200 (within 8%) AND quality theme
+    Bars (intentionally strict so most days have no trade):
+
+      Breakout requires ALL of:
+        - 20-day breakout AND new 52w high (or within 1% of it)
+        - vol_ratio_20d >= 2.0
+        - RSI in [55, 65] (momentum without being extended)
+        - MACD histogram positive
+        - Quality theme
+
+      Oversold quality bounce requires ALL of:
+        - RSI <= 25
+        - MACD bullish cross today (positive divergence)
+        - Near SMA200 (within 6%)
+        - vol_ratio_20d >= 1.2
+        - Quality theme
 
     Skip if macro is risk-off.
     """
     if _macro_risk_off(macro):
         return None
-    # Prefer breakouts
     for s in scan_result["buckets"].get("breakouts", []):
         if s.get("held") or s["ticker"].upper() in exclude:
             continue
         rsi = s.get("rsi14") or 0
         vol = s.get("vol_ratio_20d") or 0
-        if not (55 <= rsi <= 68 and vol >= 1.8):
+        macd_h = s.get("macd_hist") or 0
+        off52 = s.get("pct_off_52w_high") or -100
+        theme = s.get("theme") or ""
+        if not (55 <= rsi <= 65 and vol >= 2.0 and macd_h > 0
+                and off52 >= -2 and theme in _QUALITY_THEMES):
             continue
-        return _build_trade(s, "buy", "20-day breakout on heavy volume", macro_line,
-                            scan_result, exclude)
-    # Then oversold bounces on quality
+        return _build_trade(s, "buy", "Quality breakout to new highs on heavy volume",
+                             macro_line, scan_result, exclude)
     for s in scan_result["buckets"].get("oversold_bounces", []):
         if s.get("held") or s["ticker"].upper() in exclude:
             continue
         rsi = s.get("rsi14") or 100
-        if rsi <= 30:
-            return _build_trade(s, "buy", "Deep oversold near SMA200 support", macro_line,
-                                scan_result, exclude)
+        macd_h = s.get("macd_hist") or -1
+        vol = s.get("vol_ratio_20d") or 0
+        theme = s.get("theme") or ""
+        if not (rsi <= 25 and macd_h > 0 and vol >= 1.2
+                and theme in _QUALITY_THEMES):
+            continue
+        return _build_trade(s, "buy", "Deep oversold quality name with bullish MACD cross",
+                             macro_line, scan_result, exclude)
     return None
 
 

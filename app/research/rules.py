@@ -66,6 +66,26 @@ def recommend(ticker: str, quote: dict, tech: dict, position_ctx: dict,
             if score >= 0 and aggressive:
                 catalysts.append("Deep pullback in an aggressive risk profile - opportunistic add zone")
 
+    # Conviction-5 defense triggers
+    if weight > 30:
+        action = "trim"
+        conviction = 5
+        reasons.append(f"Weight {weight:.0f}% far above {max_single}% cap - urgent trim")
+        return _build(action, horizon, conviction, reasons, catalysts, risks,
+                      f"Trim immediately to bring weight under {max_single}%")
+
+    if (sma200 and price and price < sma200
+            and tech.get("stacked_downtrend")
+            and pct_off_high is not None and pct_off_high < -30):
+        action = "sell"
+        conviction = 5
+        reasons.append(
+            f"Confirmed downtrend: below SMA200, stacked bearish, {pct_off_high:.0f}% off high"
+        )
+        risks.append("Long bag risk - structural break, no recovery signal")
+        return _build(action, horizon, conviction, reasons, catalysts, risks,
+                      "Exit fully on any bounce toward SMA50")
+
     if weight > max_single:
         reasons.append(f"Weight {weight:.0f}% exceeds {max_single}% cap")
         action = "trim"

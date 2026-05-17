@@ -3,9 +3,12 @@
 Pipeline:
   1. Pull quote, technicals, news, earnings date, analyst consensus.
   2. Compute a rule-based signal (always available, no LLM required).
-  3. Refine with LLM (GitHub Models) using the wealth-advisor persona.
+  3. Optionally refine with LLM (gated by USE_LLM_PER_TICKER env var to
+     preserve GitHub Models daily quota - the deterministic brief doesn't
+     need this enrichment).
 """
 import json
+import os
 
 from app.config import risk_profile
 from app.data import calendar, insider, news as news_mod, prices, reddit
@@ -49,7 +52,8 @@ def analyze_ticker(ticker: str, position_context: dict | None = None) -> dict:
         news_count=len(bundle["news"]),
     )
 
-    if llm.available():
+    use_llm = llm.available() and os.getenv("USE_LLM_PER_TICKER", "").lower() in ("1", "true", "yes")
+    if use_llm:
         user_blob = (
             f"INVESTOR RISK PROFILE:\n{json.dumps(risk, indent=2)}\n\n"
             f"TICKER: {ticker}\n"

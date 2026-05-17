@@ -213,15 +213,14 @@ def build(macro: dict, recommendations: list[dict], review: dict,
         "themes": risk.get("preferences", {}).get("themes"),
         "macro": _macro_summary(macro),
         "macro_risk_off": _macro_is_risk_off(macro),
-        "news": [h["title"][:90] for h in headlines[:8]],
         "cash%": _round(exposures.get("cash_pct"), 1),
         "book": [_condensed_position(r) for r in recommendations],
         "scan": _scanner_condensed(scan_result),
     }
 
     user_blob = (
-        "Today's full data. Be the strict gatekeeper. Default no_trade. "
-        "Only emit a primary_action at conviction 5 with full fields.\n"
+        "Today's data follows. Apply the conditions in the system message "
+        "and return the verdict JSON.\n"
         f"{json.dumps(payload, separators=(',', ':'), default=str)}"
     )
 

@@ -49,7 +49,8 @@ def _condensed_position(rec: dict) -> dict:
 
 def _macro_summary(macro: dict) -> dict:
     return {
-        "idx": {k: _round(v.get("day_change_pct"), 2) for k, v in macro["indices"].items()},
+        "idx": {k: {"px": _round(v.get("price"), 2), "d%": _round(v.get("day_change_pct"), 2)}
+                for k, v in macro["indices"].items()},
         "lead": [f"{s['name']} {_round(s['day_change_pct'],1)}%" for s in macro["leaders"]],
         "lag": [f"{s['name']} {_round(s['day_change_pct'],1)}%" for s in macro["laggards"]],
     }

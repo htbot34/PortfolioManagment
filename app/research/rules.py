@@ -74,15 +74,26 @@ def recommend(ticker: str, quote: dict, tech: dict, position_ctx: dict,
         return _build(action, horizon, conviction, reasons, catalysts, risks,
                       f"Trim immediately to bring weight under {max_single}%")
 
+    # Conviction-5 SELL only fires on speculative / non-quality names with a
+    # full structural breakdown. Quality compounders, mega-cap tech, and AI
+    # leaders in drawdowns get held - they tend to recover.
+    quality_themes = {
+        "Mega cap tech", "Semiconductors", "AI infra / data", "Cloud / SaaS",
+        "Cybersecurity", "Quality compounders",
+    }
+    sector = (quote.get("sector") or "").lower()
+    theme = quote.get("theme") or ""
+    is_quality = theme in quality_themes or "technology" in sector or "communication" in sector
     if (sma200 and price and price < sma200
             and tech.get("stacked_downtrend")
-            and pct_off_high is not None and pct_off_high < -30):
+            and pct_off_high is not None and pct_off_high < -40
+            and not is_quality):
         action = "sell"
         conviction = 5
         reasons.append(
-            f"Confirmed downtrend: below SMA200, stacked bearish, {pct_off_high:.0f}% off high"
+            f"Confirmed structural breakdown: below SMA200, stacked bearish, {pct_off_high:.0f}% off high"
         )
-        risks.append("Long bag risk - structural break, no recovery signal")
+        risks.append("Continued drawdown if thesis stays broken")
         return _build(action, horizon, conviction, reasons, catalysts, risks,
                       "Exit fully on any bounce toward SMA50")
 

@@ -103,9 +103,14 @@ def _defense_from_book(recommendations: list[dict], macro_line: str,
             stop_txt = "n/a (closing position)"
             target_txt = f"exit fully; reload only above ${sma200:.2f}" if sma200 else "exit fully"
         thesis = r.get("thesis") or ""
+        action_word = "Trim" if r["action"] == "trim" else "Exit"
+        if r["action"] == "trim":
+            short = f"position weight {(r.get('position') or {}).get('weight_pct', 0):.0f}%" if (r.get('position') or {}).get('weight_pct') else "overweight"
+        else:
+            short = "confirmed downtrend"
         return {
             "verdict": "defense",
-            "headline": f"{r['action'].upper()} {r['ticker']} - {thesis.split('.')[0]}.",
+            "headline": f"{action_word} {r['ticker']} - {short}.",
             "primary_action": {
                 "ticker": r["ticker"],
                 "action": r["action"],

@@ -19,7 +19,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from app.config import risk_profile, settings
 from app.data import macro as macro_mod
-from app.data import prices
+from app.data import market_news, prices
 from app.portfolio import store
 from app.research import (
     analyst, candidates as cands, daily_brief, llm, portfolio_review, scanner,
@@ -48,9 +48,19 @@ def main() -> int:
     for name, status in diag.items():
         print(f"  {name}: {status}")
     print(f"LLM available: {llm.available()} (synthesis={llm.synthesis_model()}, routine={llm.routine_model()})")
+    if llm.available():
+        print("=== LLM ping ===")
+        ping = llm.chat_json("Respond with JSON only.",
+                             'Reply with exactly: {"ok": true, "model": "<your model id>"}',
+                             max_tokens=50)
+        print(f"  ping result: {ping}")
 
     print("Pulling macro snapshot...")
     macro = macro_mod.snapshot()
+
+    print("Pulling market headlines...")
+    headlines = market_news.top_headlines()
+    print(f"  collected {len(headlines)} headlines from {len({h['source'] for h in headlines})} sources")
 
     account = store.load()
     held_set = {p.ticker.upper() for p in account.positions}
@@ -90,7 +100,7 @@ def main() -> int:
 
     print("Writing daily brief...")
     try:
-        brief = daily_brief.build(macro, recs, review_out, cand_out, exposures, scan_result)
+        brief = daily_brief.build(macro, recs, review_out, cand_out, exposures, scan_result, headlines)
     except Exception as e:
         traceback.print_exc()
         brief = {"headline": f"Brief generation failed: {e}",
@@ -132,6 +142,7 @@ def main() -> int:
         "generated_at": common["generated_at"],
         "diagnostics": diag,
         "macro": macro,
+        "headlines": headlines,
         "scanner": scan_result,
         "exposures": exposures,
         "review": review_out,

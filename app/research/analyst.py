@@ -8,7 +8,7 @@ Pipeline:
 import json
 
 from app.config import risk_profile
-from app.data import calendar, news as news_mod, prices
+from app.data import calendar, insider, news as news_mod, prices, reddit
 from app.research import llm, prompts, rules
 
 
@@ -20,6 +20,8 @@ def gather(ticker: str, position_context: dict | None = None) -> dict:
     earnings = calendar.earnings_date(ticker)
     consensus = calendar.consensus(ticker)
     recs = calendar.analyst_recs(ticker, limit=5)
+    form4 = insider.recent_form4(ticker, days=30)
+    social = reddit.attention(ticker)
     return {
         "ticker": ticker,
         "quote": q,
@@ -28,6 +30,8 @@ def gather(ticker: str, position_context: dict | None = None) -> dict:
         "earnings": earnings,
         "consensus": consensus,
         "analyst_recs": recs,
+        "insider_form4": form4,
+        "social_attention": social,
         "position": position_context or {},
     }
 
@@ -55,6 +59,8 @@ def analyze_ticker(ticker: str, position_context: dict | None = None) -> dict:
             f"EARNINGS: {json.dumps(bundle['earnings'])}\n"
             f"ANALYST CONSENSUS: {json.dumps(bundle['consensus'])}\n"
             f"RECENT ANALYST ACTIONS:\n{json.dumps(bundle['analyst_recs'], indent=2)}\n"
+            f"INSIDER FORM 4 (last 30d): {json.dumps(bundle['insider_form4'])}\n"
+            f"REDDIT ATTENTION (last 7d): {json.dumps(bundle['social_attention'])}\n"
             f"RULE-BASED FIRST READ: {json.dumps(base)}\n\n"
             f"RECENT HEADLINES:\n" + "\n".join(f"- {n['headline']}" for n in bundle["news"][:12]) + "\n\n"
             "Write the recommendation JSON now. Specific levels and dates."
@@ -74,5 +80,7 @@ def analyze_ticker(ticker: str, position_context: dict | None = None) -> dict:
         "earnings": bundle["earnings"],
         "consensus": bundle["consensus"],
         "analyst_recs": bundle["analyst_recs"],
+        "insider_form4": bundle["insider_form4"],
+        "social_attention": bundle["social_attention"],
         "position": bundle["position"],
     }

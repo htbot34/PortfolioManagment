@@ -8,6 +8,7 @@ import json
 from datetime import date
 
 from app.config import risk_profile
+from app.data import market_news
 from app.research import llm, prompts
 
 
@@ -17,6 +18,8 @@ def _condensed_position(rec: dict) -> dict:
     t = rec.get("technicals") or {}
     e = rec.get("earnings") or {}
     c = rec.get("consensus") or {}
+    f4 = rec.get("insider_form4") or {}
+    soc = rec.get("social_attention") or {}
     return {
         "ticker": rec["ticker"],
         "price": q.get("price"),
@@ -33,6 +36,10 @@ def _condensed_position(rec: dict) -> dict:
         "earnings_date": e.get("date"),
         "earnings_days_away": e.get("days_away"),
         "analyst_target_mean": c.get("target_mean"),
+        "analyst_actions_30d": len(rec.get("analyst_recs") or []),
+        "insider_form4_30d": f4.get("count"),
+        "reddit_posts_7d": soc.get("post_count_7d"),
+        "reddit_upvotes_7d": soc.get("total_upvotes_7d"),
         "rule_action": rec.get("action"),
         "rule_thesis": rec.get("thesis"),
         "top_news": [n["headline"] for n in (rec.get("news") or [])[:3]],
@@ -184,18 +191,22 @@ def _fallback(recommendations: list[dict], scan_result: dict, review: dict) -> d
 
 
 def build(macro: dict, recommendations: list[dict], review: dict,
-          candidates: dict, exposures: dict, scan_result: dict) -> dict:
+          candidates: dict, exposures: dict, scan_result: dict,
+          headlines: list[dict] | None = None) -> dict:
     risk = risk_profile()
+    headlines = headlines or []
 
     if not llm.available():
         out = _fallback(recommendations, scan_result, review)
         out["generated_for"] = date.today().isoformat()
+        out["headlines"] = headlines[:15]
         return out
 
     payload = {
         "today": date.today().isoformat(),
         "investor_risk_profile": risk,
         "macro": _macro_summary(macro),
+        "market_headlines": [{"source": h["source"], "title": h["title"]} for h in headlines[:25]],
         "exposures": {
             "portfolio_value": exposures.get("portfolio_value"),
             "cash": exposures.get("cash"),
@@ -209,21 +220,24 @@ def build(macro: dict, recommendations: list[dict], review: dict,
     }
 
     user_blob = (
-        "Below is every signal you have for today's call. The scanner has "
-        "already done the mechanical work. Your job: cherry-pick the best "
-        "setups, give the client concrete trades with entries/stops/targets/size, "
-        "lead with defense on the existing book, then offense.\n\n"
+        "Below is every signal you have for today's call. Your job is to "
+        "cherry-pick the 5-10 best moves and give the client concrete trades "
+        "with entries, stops, targets, and size.\n\n"
         f"{json.dumps(payload, indent=2, default=str)}\n\n"
-        "Write the morning brief JSON now. 5-10 trade ideas. Specific levels. Stops on every trade."
+        "Write the morning brief JSON now. 5-10 trade ideas - QUALITY over "
+        "quantity. Specific levels. Stops on every trade. Lead with the "
+        "single highest-conviction call by name in the headline."
     )
 
     out = llm.chat_json(
         prompts.SYSTEM_DAILY_BRIEF, user_blob,
         model=llm.synthesis_model(),
         max_tokens=3500,
-        temperature=0.35,
+        temperature=0.4,
     )
-    if not out or "trade_ideas" not in out:
+    if not out or "trade_ideas" not in out or len(out.get("trade_ideas") or []) == 0:
+        print("Synthesis LLM did not return usable JSON - using rule-based fallback.")
         out = _fallback(recommendations, scan_result, review)
     out["generated_for"] = date.today().isoformat()
+    out["headlines"] = headlines[:15]
     return out

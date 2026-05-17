@@ -31,7 +31,11 @@ def available() -> bool:
     return bool(settings.github_token)
 
 
+LAST_ERROR: dict = {}
+
+
 def _call(model: str, system: str, user: str, max_tokens: int, temperature: float) -> dict | None:
+    global LAST_ERROR
     try:
         r = httpx.post(
             _ENDPOINT,
@@ -49,20 +53,32 @@ def _call(model: str, system: str, user: str, max_tokens: int, temperature: floa
                 "temperature": temperature,
                 "response_format": {"type": "json_object"},
             },
-            timeout=120,
+            timeout=180,
         )
     except Exception as e:
-        print(f"  LLM call exception (model={model}): {e}")
+        msg = f"exception (model={model}): {e}"
+        print(f"  LLM {msg}")
+        LAST_ERROR = {"model": model, "kind": "exception", "msg": str(e)[:300]}
         return None
     if r.status_code != 200:
-        print(f"  LLM call failed: model={model} HTTP {r.status_code} - {r.text[:300]}")
+        msg = f"failed model={model} HTTP {r.status_code} body={r.text[:300]}"
+        print(f"  LLM {msg}")
+        LAST_ERROR = {"model": model, "kind": "http", "status": r.status_code, "body": r.text[:600]}
         return None
     try:
         body = r.json()
+        finish_reason = body["choices"][0].get("finish_reason")
         text = body["choices"][0]["message"]["content"]
-        return json.loads(text)
+        out = json.loads(text)
+        LAST_ERROR = {"model": model, "kind": "ok", "finish_reason": finish_reason,
+                      "input_tokens": body.get("usage", {}).get("prompt_tokens"),
+                      "output_tokens": body.get("usage", {}).get("completion_tokens")}
+        return out
     except Exception as e:
-        print(f"  LLM parse failed (model={model}): {e}; body={r.text[:300]}")
+        msg = f"parse failed (model={model}): {e}; body[:300]={r.text[:300]}"
+        print(f"  LLM {msg}")
+        LAST_ERROR = {"model": model, "kind": "parse_error", "msg": str(e)[:200],
+                      "body_excerpt": r.text[:600]}
         return None
 
 

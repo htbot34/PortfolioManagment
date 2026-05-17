@@ -56,25 +56,24 @@ def _macro_summary(macro: dict) -> dict:
 
 
 def _scanner_condensed(scan_result: dict) -> dict:
-    """Trim the scanner output to what's useful in the prompt."""
-    def slim(rows):
+    """Trim the scanner output aggressively for prompt size."""
+    def slim(rows, n=4):
         return [
             {
-                "ticker": r["ticker"], "theme": r.get("theme"),
-                "price": r.get("price"), "day_pct": r.get("day_change_pct"),
-                "rsi14": r.get("rsi14"), "macd_hist": r.get("macd_hist"),
-                "atr_pct": r.get("atr_pct"), "vol_ratio": r.get("vol_ratio_20d"),
-                "pct_off_52w_high": r.get("pct_off_52w_high"),
-                "stacked_uptrend": r.get("stacked_uptrend"),
-                "held": r.get("held"),
+                "tk": r["ticker"], "th": r.get("theme"),
+                "px": r.get("price"), "d%": r.get("day_change_pct"),
+                "rsi": r.get("rsi14"), "macd": r.get("macd_hist"),
+                "atr%": r.get("atr_pct"), "vol": r.get("vol_ratio_20d"),
+                "off52": r.get("pct_off_52w_high"),
+                "h": r.get("held"),
             }
-            for r in rows
+            for r in rows[:n]
         ]
     return {
         "universe_size": scan_result.get("universe_size"),
-        "buckets": {name: slim(rows) for name, rows in scan_result.get("buckets", {}).items()},
-        "top_up": slim(scan_result.get("top_movers_up", []))[:5],
-        "top_down": slim(scan_result.get("top_movers_down", []))[:5],
+        "buckets": {name: slim(rows, 4) for name, rows in scan_result.get("buckets", {}).items()},
+        "top_up": slim(scan_result.get("top_movers_up", []), 5),
+        "top_down": slim(scan_result.get("top_movers_down", []), 5),
     }
 
 
@@ -204,19 +203,19 @@ def build(macro: dict, recommendations: list[dict], review: dict,
 
     payload = {
         "today": date.today().isoformat(),
-        "investor_risk_profile": risk,
+        "risk": {"tolerance": risk.get("investor", {}).get("risk_tolerance"),
+                  "horizon": risk.get("investor", {}).get("horizon_years"),
+                  "themes": risk.get("preferences", {}).get("themes")},
         "macro": _macro_summary(macro),
-        "market_headlines": [{"source": h["source"], "title": h["title"]} for h in headlines[:25]],
+        "market_headlines": [h["title"] for h in headlines[:12]],
         "exposures": {
             "portfolio_value": exposures.get("portfolio_value"),
-            "cash": exposures.get("cash"),
             "cash_pct": exposures.get("cash_pct"),
             "sector_pct": exposures.get("sector_pct"),
         },
         "positions": [_condensed_position(r) for r in recommendations],
         "scanner": _scanner_condensed(scan_result),
-        "rule_based_review": review,
-        "candidate_universe_picks": candidates.get("candidates", []),
+        "rule_observations": review.get("observations", []),
     }
 
     user_blob = (
@@ -232,7 +231,7 @@ def build(macro: dict, recommendations: list[dict], review: dict,
     out = llm.chat_json(
         prompts.SYSTEM_DAILY_BRIEF, user_blob,
         model=llm.synthesis_model(),
-        max_tokens=3500,
+        max_tokens=2200,
         temperature=0.4,
     )
     if not out or "trade_ideas" not in out or len(out.get("trade_ideas") or []) == 0:

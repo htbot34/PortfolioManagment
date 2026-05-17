@@ -48,12 +48,16 @@ def main() -> int:
     for name, status in diag.items():
         print(f"  {name}: {status}")
     print(f"LLM available: {llm.available()} (synthesis={llm.synthesis_model()}, routine={llm.routine_model()})")
+    ping_result = None
+    ping_diag = None
     if llm.available():
         print("=== LLM ping ===")
-        ping = llm.chat_json("Respond with JSON only.",
-                             'Reply with exactly: {"ok": true, "model": "<your model id>"}',
-                             max_tokens=50)
-        print(f"  ping result: {ping}")
+        ping_result = llm.chat_json("Respond with JSON only.",
+                                     'Reply with exactly: {"ok": true, "model": "<your model id>"}',
+                                     max_tokens=50)
+        ping_diag = dict(llm.LAST_ERROR)
+        print(f"  ping result: {ping_result}")
+        print(f"  ping diag: {ping_diag}")
 
     print("Pulling macro snapshot...")
     macro = macro_mod.snapshot()
@@ -106,6 +110,8 @@ def main() -> int:
         brief = {"headline": f"Brief generation failed: {e}",
                  "market_pulse": "", "trade_ideas": [],
                  "portfolio_notes": [], "catalysts_this_week": []}
+    brief_call_diag = dict(llm.LAST_ERROR)
+    print(f"  brief call diag: {brief_call_diag}")
 
     common = {
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
@@ -141,6 +147,8 @@ def main() -> int:
     data_dump = {
         "generated_at": common["generated_at"],
         "diagnostics": diag,
+        "llm_ping": {"result": ping_result, "diag": ping_diag},
+        "brief_call_diag": brief_call_diag,
         "macro": macro,
         "headlines": headlines,
         "scanner": scan_result,

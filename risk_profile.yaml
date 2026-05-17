@@ -6,9 +6,9 @@ investor:
 
 style:
   allowed:
-    - swing      # weeks to months
-    - long_term  # 1+ year
+    - long_term  # 6 months to multi-year hold
   disallowed:
+    - swing
     - day_trade
     - scalp
 

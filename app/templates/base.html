@@ -17,17 +17,9 @@
   </style>
 </head>
 <body class="min-h-screen">
-  <nav class="px-6 py-4 border-b border-[#1f2a44] flex flex-wrap items-center gap-4">
-    <a href="{{ base }}index.html" class="text-lg font-semibold">Portfolio Advisor</a>
-    <a href="{{ base }}index.html" class="text-sm text-slate-300 hover:text-white">Brief</a>
-    <a href="{{ base }}scanner.html" class="text-sm text-slate-300 hover:text-white">Scanner</a>
-    <a href="{{ base }}positions.html" class="text-sm text-slate-300 hover:text-white">Positions</a>
-    <a href="{{ base }}recommendations.html" class="text-sm text-slate-300 hover:text-white">Recommendations</a>
-    <a href="{{ base }}candidates.html" class="text-sm text-slate-300 hover:text-white">Candidates</a>
-    <div class="ml-auto text-xs text-slate-400 flex items-center gap-2">
-      {% if not flags.has_llm %}<span class="px-2 py-1 rounded bg-slate-700 text-slate-200">Rule-based mode</span>{% else %}<span class="px-2 py-1 rounded bg-emerald-900 text-emerald-200">LLM augmented</span>{% endif %}
-      <span>Generated {{ generated_at }}</span>
-    </div>
+  <nav class="px-6 py-3 border-b border-[#1f2a44] flex items-center gap-4">
+    <a href="{{ base }}index.html" class="text-sm font-semibold text-slate-200">Portfolio Advisor</a>
+    <div class="ml-auto text-[10px] text-slate-500">{{ generated_at }}</div>
   </nav>
   <main class="p-6 max-w-7xl mx-auto">
     {% block content %}{% endblock %}

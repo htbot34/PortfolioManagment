@@ -1,196 +1,75 @@
 {% extends "base.html" %}
-{% block title %}Morning Brief - Portfolio Advisor{% endblock %}
+{% block title %}Today - Portfolio Advisor{% endblock %}
 {% block content %}
 
-<div class="flex items-baseline justify-between mb-2">
-  <div class="text-xs text-slate-400">Morning Brief - {{ brief.generated_for or generated_at }}</div>
-  {% if brief.trade_ideas %}<div class="text-xs text-slate-500">{{ brief.trade_ideas|length }} calls today</div>{% endif %}
-</div>
-
-<div class="card rounded-lg p-5 mb-6 border-l-4 border-l-emerald-500">
-  <div class="text-xs text-slate-400 uppercase tracking-wide mb-1">Today's call</div>
-  <p class="text-2xl text-slate-100 leading-relaxed font-semibold">{{ brief.headline }}</p>
-  {% if brief.market_pulse %}
-  <p class="text-sm text-slate-300 mt-3 leading-relaxed">{{ brief.market_pulse }}</p>
-  {% endif %}
-</div>
-
-{% if brief.trade_ideas %}
-<h2 class="text-2xl font-semibold mb-3">Trade Ideas</h2>
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8">
-{% for t in brief.trade_ideas[:10] %}
-  <div class="card rounded-lg p-5
-    {% if t.action in ['sell','trim'] %}border-l-4 border-l-rose-500
-    {% elif t.action in ['buy','add','new_buy'] %}border-l-4 border-l-emerald-500
-    {% elif t.action == 'watch' %}border-l-4 border-l-sky-500
-    {% else %}border-l-4 border-l-slate-600{% endif %}">
-
-    <div class="flex flex-wrap items-baseline gap-2 mb-3">
-      <a href="ticker/{{ t.ticker }}.html" class="tlink text-xl font-bold">{{ t.ticker }}</a>
-      <span class="px-2 py-1 rounded text-xs font-bold tracking-wide
-        {% if t.action in ['sell','trim'] %}bg-rose-900 text-rose-100
-        {% elif t.action in ['buy','add','new_buy'] %}bg-emerald-900 text-emerald-100
-        {% elif t.action == 'watch' %}bg-sky-900 text-sky-100
-        {% else %}bg-slate-700 text-slate-200{% endif %}">{{ t.action|upper|replace('_',' ') }}</span>
-      {% if t.setup %}<span class="px-2 py-0.5 rounded text-xs bg-slate-700 text-slate-300">{{ t.setup|replace('_',' ') }}</span>{% endif %}
-      {% if t.urgency %}<span class="px-2 py-0.5 rounded text-xs
-        {% if t.urgency == 'today' %}bg-amber-900 text-amber-100
-        {% elif t.urgency == 'this_week' %}bg-slate-700 text-slate-200
-        {% else %}bg-slate-800 text-slate-400{% endif %}">{{ t.urgency|replace('_',' ') }}</span>{% endif %}
-    </div>
-
-    <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-3 text-sm">
-      {% if t.entry %}<div><div class="text-[10px] text-slate-500 uppercase tracking-wide">Entry</div><div class="text-slate-100 font-semibold">{{ t.entry }}</div></div>{% endif %}
-      {% if t.stop %}<div><div class="text-[10px] text-slate-500 uppercase tracking-wide">Stop</div><div class="text-rose-300 font-semibold">{{ t.stop }}</div></div>{% endif %}
-      {% if t.target_1 %}<div><div class="text-[10px] text-slate-500 uppercase tracking-wide">Target 1</div><div class="text-emerald-300 font-semibold">{{ t.target_1 }}</div></div>{% endif %}
-      {% if t.target_2 %}<div><div class="text-[10px] text-slate-500 uppercase tracking-wide">Target 2</div><div class="text-emerald-300 font-semibold">{{ t.target_2 }}</div></div>{% endif %}
-      {% if t.size_pct %}<div><div class="text-[10px] text-slate-500 uppercase tracking-wide">Size</div><div class="text-slate-100 font-semibold">{{ t.size_pct }}%</div></div>{% endif %}
-    </div>
-
-    {% if t.thesis %}<p class="text-sm text-slate-200 leading-relaxed mb-2">{{ t.thesis }}</p>{% endif %}
-    {% if t.invalidation %}<div class="text-xs text-slate-400 border-t border-[#1f2a44] pt-2 mt-2"><span class="text-rose-400 font-semibold">Invalidation:</span> {{ t.invalidation }}</div>{% endif %}
-    {% if t.horizon %}<div class="text-[10px] text-slate-500 mt-1">{{ t.horizon|replace('_',' ') }}</div>{% endif %}
+{% macro action_card(a, label) %}
+<div class="card rounded-lg p-6 mb-4 border-l-4
+  {% if a.action in ['buy','add'] %}border-l-emerald-500
+  {% elif a.action in ['sell','trim'] %}border-l-rose-500
+  {% else %}border-l-slate-500{% endif %}">
+  <div class="flex items-baseline justify-between mb-3">
+    <div class="text-xs text-slate-400 uppercase tracking-widest">{{ label }}</div>
+    <div class="text-xs text-slate-500">Conviction {{ a.conviction or 5 }}/5</div>
   </div>
-{% endfor %}
+  <div class="flex items-baseline gap-3 mb-4">
+    <span class="text-3xl font-bold
+      {% if a.action in ['buy','add'] %}text-emerald-400
+      {% elif a.action in ['sell','trim'] %}text-rose-400
+      {% else %}text-slate-200{% endif %}">{{ (a.action or '')|upper }}</span>
+    <a href="ticker/{{ a.ticker }}.html" class="text-3xl font-bold text-slate-100 tlink">{{ a.ticker }}</a>
+  </div>
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4 text-sm">
+    {% if a.entry %}<div><div class="text-[10px] text-slate-500 uppercase">Entry</div><div class="text-slate-100 font-semibold">{{ a.entry }}</div></div>{% endif %}
+    {% if a.stop %}<div><div class="text-[10px] text-slate-500 uppercase">Stop</div><div class="text-rose-300 font-semibold">{{ a.stop }}</div></div>{% endif %}
+    {% if a.target %}<div><div class="text-[10px] text-slate-500 uppercase">Target</div><div class="text-emerald-300 font-semibold">{{ a.target }}</div></div>{% endif %}
+    {% if a.size_pct %}<div><div class="text-[10px] text-slate-500 uppercase">Size</div><div class="text-slate-100 font-semibold">{{ a.size_pct }}%</div></div>{% endif %}
+  </div>
+  {% if a.thesis %}<p class="text-base text-slate-200 leading-relaxed mb-3">{{ a.thesis }}</p>{% endif %}
+  {% if a.invalidation %}<div class="text-sm text-slate-400 border-t border-[#1f2a44] pt-3"><span class="text-rose-400 font-semibold">Invalidation:</span> {{ a.invalidation }}</div>{% endif %}
 </div>
+{% endmacro %}
+
+<div class="max-w-3xl mx-auto">
+<div class="text-xs text-slate-500 mb-3">{{ brief.generated_for }}</div>
+
+{% if brief.verdict == 'no_trade' %}
+  <div class="card rounded-lg p-10 mb-4 text-center">
+    <div class="text-5xl font-bold text-slate-300 mb-3">No trade today</div>
+    <div class="text-sm text-slate-400 max-w-xl mx-auto">{{ brief.headline|replace('No trade today.','')|trim or 'Setups don\'t meet the conviction bar.' }}</div>
+  </div>
+{% elif brief.verdict == 'defense' %}
+  <div class="text-xs text-amber-300 uppercase tracking-widest mb-2 text-center">Defensive action</div>
+  {{ action_card(brief.primary_action, 'Today\'s call') }}
+{% else %}
+  {{ action_card(brief.primary_action, 'Today\'s call') }}
+  {% for a in brief.secondary_actions %}
+    {{ action_card(a, 'Also today') }}
+  {% endfor %}
 {% endif %}
 
-<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-  {% if brief.what_changed_today %}
-  <div class="card rounded-lg p-4">
-    <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-2">What changed today</h2>
-    <ul class="text-sm text-slate-200 space-y-2 list-disc list-inside">
-    {% for n in brief.what_changed_today %}<li>{{ n }}</li>{% endfor %}
-    </ul>
-  </div>
-  {% endif %}
+{% if brief.market_snapshot %}
+<div class="text-center text-xs text-slate-400 mb-4">{{ brief.market_snapshot }}</div>
+{% endif %}
 
-  {% if brief.catalysts_this_week %}
-  <div class="card rounded-lg p-4">
-    <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-2">Catalysts this week</h2>
-    <ul class="text-sm text-slate-200 space-y-1">
-    {% for c in brief.catalysts_this_week %}
-      <li>
-        {% if c.ticker %}<a href="ticker/{{ c.ticker }}.html" class="tlink">{{ c.ticker }}</a>{% endif %}
-        <span class="text-slate-300">{{ c.event }}</span>
-        {% if c.date %}<span class="text-slate-400">({{ c.date }})</span>{% endif %}
-        {% if c.note %}<div class="text-xs text-slate-400 ml-4">{{ c.note }}</div>{% endif %}
-      </li>
-    {% endfor %}
-    </ul>
-  </div>
-  {% endif %}
-
-  {% if brief.portfolio_notes %}
-  <div class="card rounded-lg p-4">
-    <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-2">Portfolio notes</h2>
-    <ul class="text-sm text-slate-200 space-y-1 list-disc list-inside">
-    {% for n in brief.portfolio_notes %}<li>{{ n }}</li>{% endfor %}
-    </ul>
-  </div>
-  {% endif %}
-</div>
-
-<div class="card rounded-lg p-4 mb-6">
-  <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-2">Macro tape</h2>
-  <div class="grid grid-cols-3 md:grid-cols-6 gap-3 text-xs mb-3">
-    {% for label, idx in macro.indices.items() %}
-    <div>
-      <div class="text-slate-400">{{ label }}</div>
-      <div class="text-slate-100 font-semibold">{% if idx.price %}{{ '%.2f'|format(idx.price) }}{% else %}-{% endif %}</div>
-      <div class="{% if idx.day_change_pct and idx.day_change_pct > 0 %}pos{% elif idx.day_change_pct %}neg{% else %}text-slate-400{% endif %}">
-        {% if idx.day_change_pct is not none %}{{ '%+.2f'|format(idx.day_change_pct) }}%{% else %}-{% endif %}
-      </div>
-    </div>
-    {% endfor %}
-  </div>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-    <div>
-      <div class="text-slate-400 mb-1">Sector leaders</div>
-      {% for s in macro.leaders %}
-        <div class="flex justify-between"><span>{{ s.name }}</span><span class="pos">{{ '%+.2f'|format(s.day_change_pct) }}%</span></div>
-      {% endfor %}
-    </div>
-    <div>
-      <div class="text-slate-400 mb-1">Sector laggards</div>
-      {% for s in macro.laggards %}
-        <div class="flex justify-between"><span>{{ s.name }}</span><span class="neg">{{ '%+.2f'|format(s.day_change_pct) }}%</span></div>
-      {% endfor %}
-    </div>
-  </div>
-</div>
-
-{% if brief.headlines %}
-<div class="card rounded-lg p-4 mb-6">
-  <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-2">Top market news</h2>
-  <ul class="text-sm space-y-2">
-  {% for h in brief.headlines[:12] %}
-    <li>
-      <a href="{{ h.url }}" target="_blank" rel="noopener" class="tlink">{{ h.title }}</a>
-      <span class="text-xs text-slate-500"> &mdash; {{ h.source }}</span>
-    </li>
+{% if brief.watching %}
+<div class="card rounded-lg p-4 mb-4">
+  <div class="text-xs text-slate-400 uppercase tracking-widest mb-2">Watching</div>
+  <ul class="text-sm space-y-1">
+  {% for w in brief.watching %}
+    <li class="text-slate-300">- {{ w }}</li>
   {% endfor %}
   </ul>
 </div>
 {% endif %}
 
-{% if scan %}
-<div class="card rounded-lg p-4 mb-6">
-  <div class="flex items-baseline justify-between mb-2">
-    <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wide">Scanner buckets ({{ scan.universe_size }} names)</h2>
-    <a href="scanner.html" class="tlink text-xs">Full scanner -&gt;</a>
-  </div>
-  <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
-    {% for name, rows in scan.buckets.items() %}
-      {% if rows %}
-      <div>
-        <div class="text-slate-400 font-semibold mb-1">{{ name|replace('_',' ')|title }} ({{ rows|length }})</div>
-        {% for r in rows[:4] %}
-          <div class="flex justify-between"><a href="ticker/{{ r.ticker }}.html" class="tlink">{{ r.ticker }}{% if r.held %}*{% endif %}</a><span class="text-slate-400">{% if r.day_change_pct is not none %}{{ '%+.1f'|format(r.day_change_pct) }}%{% endif %}</span></div>
-        {% endfor %}
-      </div>
-      {% endif %}
-    {% endfor %}
-  </div>
+<div class="mt-8 pt-4 border-t border-[#1f2a44] flex flex-wrap gap-3 justify-center text-xs text-slate-500">
+  <a href="positions.html" class="hover:text-slate-300">Your positions</a>
+  <span>|</span>
+  <a href="scanner.html" class="hover:text-slate-300">Full market scanner</a>
+  <span>|</span>
+  <a href="recommendations.html" class="hover:text-slate-300">Per-ticker reads</a>
+  <span>|</span>
+  <a href="candidates.html" class="hover:text-slate-300">Watchlist candidates</a>
 </div>
-{% endif %}
-
-<div class="card rounded-lg overflow-hidden">
-  <div class="px-4 py-3 border-b border-[#1f2a44] flex items-baseline justify-between">
-    <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wide">Your book (snapshot)</h2>
-    <a href="positions.html" class="tlink text-xs">Full dashboard -&gt;</a>
-  </div>
-  <div class="overflow-x-auto">
-  <table class="w-full text-sm">
-    <thead>
-      <tr class="text-left">
-        <th>Ticker</th><th>Price</th><th>Day %</th><th>Unrealized</th><th>Weight</th><th>RSI</th><th>MACD</th><th>Next ER</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for row in exposures.positions %}
-      {% set rec = recs_by_ticker.get(row.ticker) %}
-      <tr>
-        <td><a href="ticker/{{ row.ticker }}.html" class="tlink">{{ row.ticker }}</a></td>
-        <td>{% if row.price %}${{ '%.2f'|format(row.price) }}{% else %}-{% endif %}</td>
-        <td class="{% if row.day_change_pct and row.day_change_pct > 0 %}pos{% elif row.day_change_pct %}neg{% endif %}">
-          {% if row.day_change_pct is not none %}{{ '%+.2f'|format(row.day_change_pct) }}%{% else %}-{% endif %}
-        </td>
-        <td class="{% if row.unrealized_pl and row.unrealized_pl > 0 %}pos{% elif row.unrealized_pl %}neg{% endif %}">
-          {% if row.unrealized_pl_pct is not none %}{{ '%+.1f'|format(row.unrealized_pl_pct) }}%{% else %}-{% endif %}
-        </td>
-        <td>{{ '%.1f'|format(row.weight_pct) }}%</td>
-        <td>{% if rec and rec.technicals.rsi14 %}{{ '%.0f'|format(rec.technicals.rsi14) }}{% else %}-{% endif %}</td>
-        <td class="{% if rec and rec.technicals.macd_hist and rec.technicals.macd_hist > 0 %}pos{% elif rec and rec.technicals.macd_hist %}neg{% endif %}">
-          {% if rec and rec.technicals.macd_hist is not none %}{{ '%+.2f'|format(rec.technicals.macd_hist) }}{% else %}-{% endif %}
-        </td>
-        <td class="text-slate-400 text-xs">
-          {% if rec and rec.earnings and rec.earnings.date %}{{ rec.earnings.date }}{% if rec.earnings.days_away is not none %} ({{ rec.earnings.days_away }}d){% endif %}{% else %}-{% endif %}
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-  </div>
 </div>
 {% endblock %}

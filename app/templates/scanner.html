@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Scanner - Portfolio Advisor{% endblock %}
+{% block content %}
+<h1 class="text-2xl font-semibold mb-1">Market Scanner</h1>
+<p class="text-sm text-slate-400 mb-4">{{ scan.universe_size }} tickers scanned. Setups detected mechanically; advisor commentary on the brief.</p>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+  <div class="card rounded-lg overflow-hidden">
+    <div class="px-4 py-3 border-b border-[#1f2a44]"><h2 class="text-sm font-semibold">Top movers up</h2></div>
+    <table class="w-full text-xs">
+      <tbody>
+      {% for r in scan.top_movers_up %}
+      <tr>
+        <td><a href="ticker/{{ r.ticker }}.html" class="tlink">{{ r.ticker }}</a></td>
+        <td>{% if r.price %}${{ '%.2f'|format(r.price) }}{% else %}-{% endif %}</td>
+        <td class="pos">{{ '%+.2f'|format(r.day_change_pct) }}%</td>
+        <td class="text-slate-400">{{ r.theme or '-' }}</td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="card rounded-lg overflow-hidden">
+    <div class="px-4 py-3 border-b border-[#1f2a44]"><h2 class="text-sm font-semibold">Top movers down</h2></div>
+    <table class="w-full text-xs">
+      <tbody>
+      {% for r in scan.top_movers_down %}
+      <tr>
+        <td><a href="ticker/{{ r.ticker }}.html" class="tlink">{{ r.ticker }}</a></td>
+        <td>{% if r.price %}${{ '%.2f'|format(r.price) }}{% else %}-{% endif %}</td>
+        <td class="neg">{{ '%+.2f'|format(r.day_change_pct) }}%</td>
+        <td class="text-slate-400">{{ r.theme or '-' }}</td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% for name, rows in scan.buckets.items() %}
+  {% if rows %}
+  <div class="card rounded-lg overflow-hidden mb-4">
+    <div class="px-4 py-3 border-b border-[#1f2a44]">
+      <h2 class="text-sm font-semibold">{{ name|replace('_',' ')|title }} ({{ rows|length }})</h2>
+    </div>
+    <div class="overflow-x-auto">
+    <table class="w-full text-xs">
+      <thead>
+        <tr class="text-left"><th>Ticker</th><th>Theme</th><th>Price</th><th>Day %</th><th>RSI</th><th>MACD hist</th><th>Vol vs 20d</th><th>Off 52w high</th><th>ATR %</th></tr>
+      </thead>
+      <tbody>
+      {% for r in rows %}
+      <tr>
+        <td><a href="ticker/{{ r.ticker }}.html" class="tlink">{{ r.ticker }}</a>{% if r.held %} <span class="text-amber-400 text-[10px]">(held)</span>{% endif %}</td>
+        <td class="text-slate-400">{{ r.theme or '-' }}</td>
+        <td>{% if r.price %}${{ '%.2f'|format(r.price) }}{% else %}-{% endif %}</td>
+        <td class="{% if r.day_change_pct and r.day_change_pct > 0 %}pos{% elif r.day_change_pct %}neg{% endif %}">{% if r.day_change_pct is not none %}{{ '%+.2f'|format(r.day_change_pct) }}%{% else %}-{% endif %}</td>
+        <td>{% if r.rsi14 %}{{ '%.0f'|format(r.rsi14) }}{% else %}-{% endif %}</td>
+        <td class="{% if r.macd_hist and r.macd_hist > 0 %}pos{% elif r.macd_hist %}neg{% endif %}">{% if r.macd_hist is not none %}{{ '%+.2f'|format(r.macd_hist) }}{% else %}-{% endif %}</td>
+        <td>{% if r.vol_ratio_20d %}{{ '%.1f'|format(r.vol_ratio_20d) }}x{% else %}-{% endif %}</td>
+        <td>{% if r.pct_off_52w_high is not none %}{{ '%.1f'|format(r.pct_off_52w_high) }}%{% else %}-{% endif %}</td>
+        <td>{% if r.atr_pct %}{{ '%.1f'|format(r.atr_pct) }}%{% else %}-{% endif %}</td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    </div>
+  </div>
+  {% endif %}
+{% endfor %}
+{% endblock %}

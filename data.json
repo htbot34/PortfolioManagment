@@ -1,209 +1,168 @@
 {
-  "generated_at": "2026-05-17 00:17 UTC",
+  "generated_at": "2026-05-17 00:29 UTC",
   "diagnostics": {
     "stooq": "no data",
-    "yahoo_chart": "ok (251 rows, last close $614.23)",
-    "yfinance": "ok (251 rows, last close $614.23)"
+    "yahoo_chart": "no data",
+    "yfinance": "no data"
   },
   "macro": {
     "indices": {
       "SPX": {
         "ticker": "^GSPC",
-        "price": 7408.5,
-        "day_change_pct": -1.2363320128051742,
-        "high_52w": 7501.240234375,
-        "low_52w": 5802.81982421875,
-        "pct_off_52w_high": -1.2363320128051742
+        "price": null,
+        "day_change_pct": null,
+        "high_52w": null,
+        "low_52w": null,
+        "pct_off_52w_high": null
       },
       "NDX": {
         "ticker": "^NDX",
-        "price": 29125.19921875,
-        "day_change_pct": -1.5385291916587753,
-        "high_52w": 29580.30078125,
-        "low_52w": 20915.66015625,
-        "pct_off_52w_high": -1.5385291916587753
+        "price": null,
+        "day_change_pct": null,
+        "high_52w": null,
+        "low_52w": null,
+        "pct_off_52w_high": null
       },
       "RUT": {
         "ticker": "^RUT",
-        "price": 2793.300048828125,
-        "day_change_pct": -2.4375774746898604,
-        "high_52w": 2886.77001953125,
-        "low_52w": 2039.8499755859375,
-        "pct_off_52w_high": -3.237873819900019
+        "price": null,
+        "day_change_pct": null,
+        "high_52w": null,
+        "low_52w": null,
+        "pct_off_52w_high": null
       },
       "VIX": {
         "ticker": "^VIX",
-        "price": 18.43000030517578,
-        "day_change_pct": 6.77867937878783,
-        "high_52w": 31.049999237060547,
-        "low_52w": 13.470000267028809,
-        "pct_off_52w_high": -40.6441199419478
+        "price": null,
+        "day_change_pct": null,
+        "high_52w": null,
+        "low_52w": null,
+        "pct_off_52w_high": null
       },
       "DXY": {
         "ticker": "DX-Y.NYB",
-        "price": 99.2699966430664,
-        "day_change_pct": 0.3944168694189122,
-        "high_52w": 101.08999633789062,
-        "low_52w": 96.22000122070312,
-        "pct_off_52w_high": -1.8003756659965822
+        "price": null,
+        "day_change_pct": null,
+        "high_52w": null,
+        "low_52w": null,
+        "pct_off_52w_high": null
       },
       "TNX": {
         "ticker": "^TNX",
-        "price": 4.59499979019165,
-        "day_change_pct": 3.003806894310716,
-        "high_52w": 4.5960001945495605,
-        "low_52w": 3.953000068664551,
-        "pct_off_52w_high": -0.02176684759710291
+        "price": null,
+        "day_change_pct": null,
+        "high_52w": null,
+        "low_52w": null,
+        "pct_off_52w_high": null
       }
     },
     "sectors": {
       "Tech": {
         "ticker": "XLK",
-        "price": 176.25999450683594,
-        "day_change_pct": -1.8050169878351323,
-        "high_52w": 179.5,
-        "low_52w": 113.40499877929688,
-        "pct_off_52w_high": -1.8050169878351323
+        "price": null,
+        "day_change_pct": null,
+        "high_52w": null,
+        "low_52w": null,
+        "pct_off_52w_high": null
       },
       "Comm": {
         "ticker": "XLC",
-        "price": 116.08000183105469,
-        "day_change_pct": -0.8795139389708375,
-        "high_52w": 120.08000183105469,
-        "low_52w": 100.19000244140625,
-        "pct_off_52w_high": -3.3311125408107154
+        "price": null,
+        "day_change_pct": null,
+        "high_52w": null,
+        "low_52w": null,
+        "pct_off_52w_high": null
       },
       "Cons Disc": {
         "ticker": "XLY",
-        "price": 116.52999877929688,
-        "day_change_pct": -1.8033196449550908,
-        "high_52w": 124.5199966430664,
-        "low_52w": 104.7249984741211,
-        "pct_off_52w_high": -6.416638354619193
+        "price": null,
+        "day_change_pct": null,
+        "high_52w": null,
+        "low_52w": null,
+        "pct_off_52w_high": null
       },
       "Cons Stap": {
         "ticker": "XLP",
-        "price": 84.63999938964844,
-        "day_change_pct": -0.40009879248541474,
-        "high_52w": 90.01000213623047,
-        "low_52w": 75.5999984741211,
-        "pct_off_52w_high": -5.966006687184066
+        "price": null,
+        "day_change_pct": null,
+        "high_52w": null,
+        "low_52w": null,
+        "pct_off_52w_high": null
       },
       "Financials": {
         "ticker": "XLF",
-        "price": 51.099998474121094,
-        "day_change_pct": -0.3704473347917788,
-        "high_52w": 56.400001525878906,
-        "low_52w": 47.810001373291016,
-        "pct_off_52w_high": -9.397168277248943
+        "price": null,
+        "day_change_pct": null,
+        "high_52w": null,
+        "low_52w": null,
+        "pct_off_52w_high": null
       },
       "Energy": {
         "ticker": "XLE",
-        "price": 59.439998626708984,
-        "day_change_pct": 2.359219802108719,
-        "high_52w": 62.560001373291016,
-        "low_52w": 40.76499938964844,
-        "pct_off_52w_high": -4.987216557054083
+        "price": null,
+        "day_change_pct": null,
+        "high_52w": null,
+        "low_52w": null,
+        "pct_off_52w_high": null
       },
       "Healthcare": {
         "ticker": "XLV",
-        "price": 145.10000610351562,
-        "day_change_pct": -1.0434418115989688,
-        "high_52w": 160.1999969482422,
-        "low_52w": 129.00999450683594,
-        "pct_off_52w_high": -9.425712317338624
+        "price": null,
+        "day_change_pct": null,
+        "high_52w": null,
+        "low_52w": null,
+        "pct_off_52w_high": null
       },
       "Industrials": {
         "ticker": "XLI",
-        "price": 171.39999389648438,
-        "day_change_pct": -1.7821332349132226,
-        "high_52w": 178.89999389648438,
-        "low_52w": 140.8300018310547,
-        "pct_off_52w_high": -4.192286336432002
+        "price": null,
+        "day_change_pct": null,
+        "high_52w": null,
+        "low_52w": null,
+        "pct_off_52w_high": null
       },
       "Materials": {
         "ticker": "XLB",
-        "price": 50.29999923706055,
-        "day_change_pct": -2.6514398692356873,
-        "high_52w": 53.619998931884766,
-        "low_52w": 42.22999954223633,
-        "pct_off_52w_high": -6.191719061840569
+        "price": null,
+        "day_change_pct": null,
+        "high_52w": null,
+        "low_52w": null,
+        "pct_off_52w_high": null
       },
       "Real Estate": {
         "ticker": "XLRE",
-        "price": 43.22999954223633,
-        "day_change_pct": -1.5486228821197727,
-        "high_52w": 44.7400016784668,
-        "low_52w": 40.0099983215332,
-        "pct_off_52w_high": -3.3750605265560987
+        "price": null,
+        "day_change_pct": null,
+        "high_52w": null,
+        "low_52w": null,
+        "pct_off_52w_high": null
       },
       "Utilities": {
         "ticker": "XLU",
-        "price": 43.869998931884766,
-        "day_change_pct": -2.2939923362819497,
-        "high_52w": 47.72999954223633,
-        "low_52w": 40.04999923706055,
-        "pct_off_52w_high": -8.087158280686435
+        "price": null,
+        "day_change_pct": null,
+        "high_52w": null,
+        "low_52w": null,
+        "pct_off_52w_high": null
       }
     },
-    "leaders": [
-      {
-        "name": "Energy",
-        "ticker": "XLE",
-        "price": 59.439998626708984,
-        "day_change_pct": 2.359219802108719,
-        "high_52w": 62.560001373291016,
-        "low_52w": 40.76499938964844,
-        "pct_off_52w_high": -4.987216557054083
-      },
-      {
-        "name": "Financials",
-        "ticker": "XLF",
-        "price": 51.099998474121094,
-        "day_change_pct": -0.3704473347917788,
-        "high_52w": 56.400001525878906,
-        "low_52w": 47.810001373291016,
-        "pct_off_52w_high": -9.397168277248943
-      },
-      {
-        "name": "Cons Stap",
-        "ticker": "XLP",
-        "price": 84.63999938964844,
-        "day_change_pct": -0.40009879248541474,
-        "high_52w": 90.01000213623047,
-        "low_52w": 75.5999984741211,
-        "pct_off_52w_high": -5.966006687184066
-      }
-    ],
-    "laggards": [
-      {
-        "name": "Tech",
-        "ticker": "XLK",
-        "price": 176.25999450683594,
-        "day_change_pct": -1.8050169878351323,
-        "high_52w": 179.5,
-        "low_52w": 113.40499877929688,
-        "pct_off_52w_high": -1.8050169878351323
-      },
-      {
-        "name": "Utilities",
-        "ticker": "XLU",
-        "price": 43.869998931884766,
-        "day_change_pct": -2.2939923362819497,
-        "high_52w": 47.72999954223633,
-        "low_52w": 40.04999923706055,
-        "pct_off_52w_high": -8.087158280686435
-      },
-      {
-        "name": "Materials",
-        "ticker": "XLB",
-        "price": 50.29999923706055,
-        "day_change_pct": -2.6514398692356873,
-        "high_52w": 53.619998931884766,
-        "low_52w": 42.22999954223633,
-        "pct_off_52w_high": -6.191719061840569
-      }
-    ]
+    "leaders": [],
+    "laggards": []
+  },
+  "scanner": {
+    "universe_size": 0,
+    "buckets": {
+      "breakouts": [],
+      "momentum_continuation": [],
+      "oversold_bounces": [],
+      "pullbacks_to_support": [],
+      "macd_bullish_cross": [],
+      "macd_bearish_cross": [],
+      "new_52w_highs": [],
+      "rsi_extreme_overbought": []
+    },
+    "top_movers_up": [],
+    "top_movers_down": []
   },
   "exposures": {
     "positions": [
@@ -211,1799 +170,650 @@
         "ticker": "NBIS",
         "shares": 2.0,
         "cost_basis": 86.27,
-        "price": 219.94000244140625,
-        "day_change_pct": -0.5471361015024474,
-        "market_value": 439.8800048828125,
-        "unrealized_pl": 267.34000488281254,
-        "unrealized_pl_pct": 154.94378398215633,
-        "sector": "Communication Services",
-        "weight_pct": 4.154832523948488
+        "price": null,
+        "day_change_pct": null,
+        "market_value": null,
+        "unrealized_pl": null,
+        "unrealized_pl_pct": null,
+        "sector": "Unknown",
+        "weight_pct": 0
       },
       {
         "ticker": "AMZN",
         "shares": 2.0,
         "cost_basis": 220.25,
-        "price": 264.1400146484375,
-        "day_change_pct": -1.1526033074604298,
-        "market_value": 528.280029296875,
-        "unrealized_pl": 87.780029296875,
-        "unrealized_pl_pct": 19.927361928916003,
-        "sector": "Consumer Cyclical",
-        "weight_pct": 4.989804090003725
+        "price": null,
+        "day_change_pct": null,
+        "market_value": null,
+        "unrealized_pl": null,
+        "unrealized_pl_pct": null,
+        "sector": "Unknown",
+        "weight_pct": 0
       },
       {
         "ticker": "OKLO",
         "shares": 1.0,
         "cost_basis": 87.8,
-        "price": 62.25,
-        "day_change_pct": -7.379852926703211,
-        "market_value": 62.25,
-        "unrealized_pl": -25.549999999999997,
-        "unrealized_pl_pct": -29.100227790432797,
-        "sector": "Utilities",
-        "weight_pct": 0.5879747243448737
+        "price": null,
+        "day_change_pct": null,
+        "market_value": null,
+        "unrealized_pl": null,
+        "unrealized_pl_pct": null,
+        "sector": "Unknown",
+        "weight_pct": 0
       },
       {
         "ticker": "NFLX",
         "shares": 9.0,
         "cost_basis": 90.11,
-        "price": 87.0199966430664,
-        "day_change_pct": 0.09201081138003055,
-        "market_value": 783.1799697875977,
-        "unrealized_pl": -27.810030212402353,
-        "unrealized_pl_pct": -3.429145884955715,
-        "sector": "Communication Services",
-        "weight_pct": 7.397430150173322
+        "price": null,
+        "day_change_pct": null,
+        "market_value": null,
+        "unrealized_pl": null,
+        "unrealized_pl_pct": null,
+        "sector": "Unknown",
+        "weight_pct": 0
       },
       {
         "ticker": "IREN",
         "shares": 4.0,
         "cost_basis": 60.2,
-        "price": 52.939998626708984,
-        "day_change_pct": -9.349319788545587,
-        "market_value": 211.75999450683594,
-        "unrealized_pl": -29.040005493164074,
-        "unrealized_pl_pct": -12.059802945666142,
-        "sector": "Financial Services",
-        "weight_pct": 2.0001530023683345
+        "price": null,
+        "day_change_pct": null,
+        "market_value": null,
+        "unrealized_pl": null,
+        "unrealized_pl_pct": null,
+        "sector": "Unknown",
+        "weight_pct": 0
       },
       {
         "ticker": "FBL",
         "shares": 8.0,
         "cost_basis": 39.28,
-        "price": 25.649999618530273,
-        "day_change_pct": -1.3840853794065455,
-        "market_value": 205.1999969482422,
-        "unrealized_pl": -109.04000305175782,
-        "unrealized_pl_pct": -34.69959363917955,
+        "price": null,
+        "day_change_pct": null,
+        "market_value": null,
+        "unrealized_pl": null,
+        "unrealized_pl_pct": null,
         "sector": "Unknown",
-        "weight_pct": 1.9381913516660503
+        "weight_pct": 0
       },
       {
         "ticker": "LEU",
         "shares": 2.0,
         "cost_basis": 303.9,
-        "price": 182.60000610351562,
-        "day_change_pct": -5.054076981349558,
-        "market_value": 365.20001220703125,
-        "unrealized_pl": -242.5999877929687,
-        "unrealized_pl_pct": -39.91444353290042,
-        "sector": "Energy",
-        "weight_pct": 3.449451831456606
+        "price": null,
+        "day_change_pct": null,
+        "market_value": null,
+        "unrealized_pl": null,
+        "unrealized_pl_pct": null,
+        "sector": "Unknown",
+        "weight_pct": 0
       },
       {
         "ticker": "META",
         "shares": 11.0,
         "cost_basis": 677.22,
-        "price": 614.22998046875,
-        "day_change_pct": -0.679141092245368,
-        "market_value": 6756.52978515625,
-        "unrealized_pl": -692.8902148437501,
-        "unrealized_pl_pct": -9.301263921805322,
-        "sector": "Communication Services",
-        "weight_pct": 63.81797169405904
+        "price": null,
+        "day_change_pct": null,
+        "market_value": null,
+        "unrealized_pl": null,
+        "unrealized_pl_pct": null,
+        "sector": "Unknown",
+        "weight_pct": 0
       }
     ],
-    "total_market_value": 9352.279792785645,
+    "total_market_value": 0.0,
     "cash": 1234.91,
-    "portfolio_value": 10587.189792785644,
-    "sector_pct": {
-      "Communication Services": 75.37023436818085,
-      "Consumer Cyclical": 4.989804090003725,
-      "Utilities": 0.5879747243448737,
-      "Financial Services": 2.0001530023683345,
-      "Unknown": 1.9381913516660503,
-      "Energy": 3.449451831456606
-    },
-    "cash_pct": 11.664190631979567
+    "portfolio_value": 1234.91,
+    "sector_pct": {},
+    "cash_pct": 100.0
   },
   "review": {
-    "observations": [
-      "META is 64% of portfolio (cap 25%)",
-      "Communication Services sector at 75% (cap 45%)",
-      "Position in OKLO is showing significant unrealized loss (-29.1%) and may need reevaluation.",
-      "LEU is also underperforming with a -39.9% unrealized loss, indicating a potential need for exit.",
-      "Cash position at 11.66% exceeds minimum cash buffer requirement of 5%, allowing for further deployment."
-    ],
-    "suggested_changes": [
-      "Trim META to bring weight under 25% immediately, selling at least 50% of the position.",
-      "Diversify outside Communication Services by reallocating proceeds into sectors aligned with preferences, such as AI or clean energy.",
-      "Consider exiting OKLO and LEU due to significant unrealized losses and lack of alignment with preferred themes."
-    ],
-    "open_questions": [
-      "What is the target allocation for new positions in preferred sectors?",
-      "Are there specific stocks or ETFs in AI, clean energy, or cybersecurity that you are considering for investment?"
-    ]
+    "observations": [],
+    "suggested_changes": [],
+    "open_questions": []
   },
   "brief": {
-    "headline_call": "Trim META immediately to bring position weight under 25%. This is a critical risk management move given its outsized 64% allocation in the portfolio and sector concentration in Communication Services at 75%. Use proceeds to diversify into preferred themes like AI and clean energy.",
-    "market_context": "The macro tape is flashing caution. SPX and NDX are down over 1%, with RUT leading losses at -2.4%. The VIX spiked 6.8% to 18.43, signaling elevated fear. Tech is the worst-performing sector, down 1.8%, while Energy is the only bright spot, up 2.3%. Rising Treasury yields (TNX +3%) and a stronger DXY (+0.39%) suggest tightening financial conditions. Defensive positioning is prudent today as volatility increases.",
-    "actions": [
-      {
-        "ticker": "META",
-        "action": "trim",
-        "target": "Sell 50% of position at market open",
-        "urgency": "today",
-        "rationale": "META is 64% of the portfolio, far exceeding the 25% single-position cap. The stock is oversold with an RSI of 25, but a break below $600 would invalidate any bounce thesis. Use proceeds to reduce sector concentration and deploy into preferred themes."
-      },
-      {
-        "ticker": "LEU",
-        "action": "sell",
-        "target": "Sell entire position at market open",
-        "urgency": "today",
-        "rationale": "LEU is down 58% from its 52-week high and continues to underperform. The stock is in a clear downtrend, trading below its 50-day and 200-day SMAs. A break below $170 would signal further downside risk. Exit now to preserve capital."
-      },
-      {
-        "ticker": "OKLO",
-        "action": "sell",
-        "target": "Sell entire position at market open",
-        "urgency": "today",
-        "rationale": "OKLO is 64% off its 52-week high and has an unrealized loss of -29%. While it aligns with the clean energy theme, the stock is showing weak technicals with an RSI of 39. A break below $55 would signal further downside risk. Exit and reassess post-earnings."
-      },
-      {
-        "ticker": "AMZN",
-        "action": "add",
-        "target": "Buy at $250 or lower",
-        "urgency": "this_week",
-        "rationale": "AMZN is trading near its 52-week high and showing strong momentum above its 50-day and 200-day SMAs. Its leadership in AI positions it for significant growth. A break below $236 would invalidate the thesis."
-      },
-      {
-        "ticker": "IREN",
-        "action": "add",
-        "target": "Buy at $45-50",
-        "urgency": "this_week",
-        "rationale": "IREN is 30.7% off its 52-week high but holding above its 50-day SMA of $44.72. The $3 billion convertible note offering is a strong catalyst for its AI transformation. A break below $44.72 would invalidate the thesis."
-      },
-      {
-        "ticker": "NBIS",
-        "action": "trim",
-        "target": "Sell 25% of position at $220 or higher",
-        "urgency": "this_week",
-        "rationale": "NBIS is trading near its 52-week high and is overbought with an RSI of 74. Lock in gains as the stock is up 155%. A break below $200 would invalidate the bullish thesis."
-      },
-      {
-        "ticker": "NFLX",
-        "action": "sell",
-        "target": "$90 or higher",
-        "urgency": "on_confirmation",
-        "rationale": "NFLX is in a downtrend, trading below its 50-day and 200-day SMAs. The stock is 35% off its 52-week high and shows weak technicals. A bounce toward $102.56 (SMA200) would be an ideal exit point."
-      }
-    ],
-    "portfolio_health": "The portfolio is heavily concentrated in META at 64%, far exceeding the 25% single-position cap. Communication Services sector exposure is at 75%, which is well above the 45% limit. Cash buffer is healthy at 11.66%, providing flexibility for new allocations. Immediate trimming of META is required to address concentration risk.",
-    "upcoming_catalysts": [
-      {
-        "ticker": "AMZN",
-        "event": "Earnings",
-        "date": "2026-07-30"
-      },
-      {
-        "ticker": "NFLX",
-        "event": "Earnings",
-        "date": "2026-07-16"
-      },
-      {
-        "ticker": "LEU",
-        "event": "Earnings",
-        "date": "2026-08-04"
-      },
-      {
-        "ticker": "NBIS",
-        "event": "Earnings",
-        "date": "2026-08-06"
-      },
-      {
-        "ticker": "OKLO",
-        "event": "Earnings",
-        "date": "2026-08-10"
-      },
-      {
-        "ticker": "META",
-        "event": "Earnings",
-        "date": "2026-07-29"
-      }
-    ],
-    "outside_ideas": [
-      {
-        "ticker": "NVDA",
-        "thesis": "NVIDIA remains a leader in AI and GPU technology, with strong exposure to AI-driven growth in data centers, autonomous vehicles, and gaming. Recent pullback from 52-week highs presents an attractive entry point, with solid support near its 50-day SMA.",
-        "entry_zone": "210-225"
-      },
-      {
-        "ticker": "AVGO",
-        "thesis": "Broadcom is a key player in semiconductors, benefiting from secular growth in 5G, cloud computing, and AI. Trading near its 50-day SMA with limited downside risk and strong fundamentals.",
-        "entry_zone": "400-430"
-      },
-      {
-        "ticker": "MRVL",
-        "thesis": "Marvell is a high-growth semiconductor company with strong exposure to 5G, cloud infrastructure, and AI. Recent momentum and proximity to its 50-day SMA make it a compelling swing trade candidate.",
-        "entry_zone": "165-180"
-      }
-    ],
+    "headline": "LLM unavailable - rule-based trade ideas from scanner. Configure GITHUB_TOKEN for advisor commentary.",
+    "market_pulse": "",
+    "trade_ideas": [],
+    "portfolio_notes": [],
+    "catalysts_this_week": [],
     "generated_for": "2026-05-17"
   },
   "recommendations": [
     {
-      "action": "trim",
+      "action": "hold",
       "horizon": "long_term",
-      "conviction": 3,
-      "thesis": "NBIS has shown a strong stacked uptrend with the price above both the 50-day and 200-day moving averages. Currently trading near its 52-week high, the stock is up 155% and is exhibiting overbought conditions. To manage risk and lock in some gains, a partial trim is advisable. If the price falls below $200, this would invalidate the bullish thesis.",
-      "key_catalysts": [
-        "Q1 2026 earnings call on 2026-08-06"
-      ],
-      "key_risks": [
-        "A significant pullback if broader market conditions worsen",
-        "Disappointing guidance or earnings results on the upcoming earnings call"
-      ],
-      "suggested_action_detail": "Trim 20-30% of your position at current levels around $219.94, which would mean selling 0.4 to 0.6 shares to lock in profits while maintaining a core position.",
-      "source": "llm",
+      "conviction": 2,
+      "thesis": "No strong signal; default hold under aggressive profile.",
+      "key_catalysts": [],
+      "key_risks": [],
+      "suggested_action_detail": "Maintain current size; review on next earnings or 10%+ move",
+      "source": "rules",
       "ticker": "NBIS",
       "quote": {
         "ticker": "NBIS",
-        "price": 219.94000244140625,
-        "prev_close": 221.14999389648438,
-        "day_change_pct": -0.5471361015024474,
-        "market_cap": 55842369536,
-        "pe_ratio": 84.59231,
-        "high_52w": 221.14999389648438,
-        "low_52w": 36.02000045776367,
-        "sector": "Communication Services",
-        "industry": "Internet Content & Information",
-        "source": "yahoo_chart",
-        "error": null
+        "price": null,
+        "prev_close": null,
+        "day_change_pct": null,
+        "market_cap": null,
+        "pe_ratio": null,
+        "high_52w": null,
+        "low_52w": null,
+        "sector": null,
+        "industry": null,
+        "source": null,
+        "error": "No price source returned data (tried: stooq, yahoo_chart, yfinance)"
       },
       "technicals": {
-        "last": 219.94000244140625,
-        "sma50": 140.6115008544922,
-        "sma200": 105.85137559890747,
-        "above_sma50": true,
-        "above_sma200": true,
-        "high_52w": 221.14999389648438,
-        "low_52w": 36.02000045776367,
-        "pct_off_52w_high": -0.5471361015024474,
-        "rsi14": 74.45850367318879
+        "last": null,
+        "sma20": null,
+        "sma50": null,
+        "sma200": null,
+        "above_sma50": null,
+        "above_sma200": null,
+        "stacked_uptrend": null,
+        "stacked_downtrend": null,
+        "high_52w": null,
+        "low_52w": null,
+        "pct_off_52w_high": null,
+        "rsi14": null,
+        "macd_hist": null,
+        "macd_cross_up": null,
+        "macd_cross_down": null,
+        "bb_upper": null,
+        "bb_lower": null,
+        "bb_pct": null,
+        "atr14": null,
+        "atr_pct": null,
+        "vol_ratio_20d": null,
+        "breakout_20d": null,
+        "error": "no price history"
       },
-      "news": [
-        {
-          "headline": "Nebius Stock Hit an All-Time High This Week. Is It Too Late to Buy?",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/nebius-stock-hit-time-high-130140906.html",
-          "source": "Motley Fool",
-          "published": "2026-05-16T13:01:40Z"
-        },
-        {
-          "headline": "Stock Market Erases Gains As Oil Prices, Yields Jump; Cisco, Trump-Xi In Focus: Weekly Review",
-          "url": "https://www.investors.com/news/stock-market-oil-prices-yields-cisco-trump-xi/?src=A00220&yptr=yahoo",
-          "source": "Investor's Business Daily",
-          "published": "2026-05-15T17:12:51Z"
-        },
-        {
-          "headline": "Morgan Stanley resets Nebius stock price forecast",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/morgan-stanley-resets-nebius-stock-161700881.html",
-          "source": "TheStreet",
-          "published": "2026-05-15T16:17:00Z"
-        },
-        {
-          "headline": "Nebius Stock Up Post Q1 Earnings: Should You Buy, Hold or Sell?",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/nebius-stock-post-q1-earnings-144200142.html",
-          "source": "Zacks",
-          "published": "2026-05-15T14:42:00Z"
-        },
-        {
-          "headline": "Nebius Stock Soars as Top Analyst Unleashes Massive New Price Target",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/nebius-stock-soars-top-analyst-122153228.html",
-          "source": "GuruFocus.com",
-          "published": "2026-05-15T12:21:53Z"
-        },
-        {
-          "headline": "Nebius Group NV (NBIS) Q1 2026 Earnings Call Highlights: Record Revenue Surge and Strategic ...",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/nebius-group-nv-nbis-q1-010234579.html",
-          "source": "GuruFocus.com",
-          "published": "2026-05-15T01:02:34Z"
-        },
-        {
-          "headline": "DA Davidson, Citizens Lift Nebius Targets After 684% Revenue Quarter",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/da-davidson-citizens-lift-nebius-232918070.html",
-          "source": "GuruFocus.com",
-          "published": "2026-05-14T23:29:18Z"
-        },
-        {
-          "headline": "Here's Why I'd Sell Nebius Stock and Buy Astera Labs Instead",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/heres-why-id-sell-nebius-222000635.html",
-          "source": "Motley Fool",
-          "published": "2026-05-14T22:20:00Z"
-        },
-        {
-          "headline": "Why Nebius Group Stock Is Rocketing Higher Today",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/why-nebius-group-stock-rocketing-190810300.html",
-          "source": "Motley Fool",
-          "published": "2026-05-14T19:08:10Z"
-        },
-        {
-          "headline": "Nebius Group Stock Soars 16% as AI Revenue Growth Hits 684%. Its Meta Deal Changes Everything.",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/nebius-group-stock-soars-16-175121255.html",
-          "source": "Barchart",
-          "published": "2026-05-14T17:51:21Z"
-        },
-        {
-          "headline": "Why Nebius Is Catching Up to CoreWeave as the Top \u2018Neocloud\u2019 Stock - Barron's",
-          "url": "https://news.google.com/rss/articles/CBMifEFVX3lxTE4yd0h4WjhUNEh1S0JIbDFiM0dyU3JiSk0wa0JpaWQ0bG12c005aGlxOEFyYml2cnltN0xYcnJVQ2JvS0lMOGYxaDJhSXFuZXB1NTR2dzVqakpReG9kNld6TFBUcktCamNudU9EbGNQOEl2dVZWV3BPX1Npd0k?oc=5",
-          "source": "Barron's",
-          "published": "Wed, 13 May 2026 18:13:00 GMT"
-        },
-        {
-          "headline": "Morgan Stanley resets Nebius stock price forecast - thestreet.com",
-          "url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxPLUYtVU1yWWVsZmlJenVjVUVDSWUyLTZWZF9sOFI3T2dnUVhtbElhdmtmT2lPYkhUY2JNWVhHbG9hNFJxbHcxNExNelk3Z0ROY3BuYmszcERlWnFCX201VE5mUTd0cGNJaXZITkNuTl9hS2dwVkVpTXdCU2duN3FTc01rUWdycWxFLU40cjdrUHhXOEhaZlVJ?oc=5",
-          "source": "thestreet.com",
-          "published": "Fri, 15 May 2026 13:17:00 GMT"
-        }
-      ],
-      "earnings": {
-        "date": "2026-08-06",
-        "days_away": 81
-      },
-      "consensus": {
-        "target_mean": 206.76923,
-        "target_high": 291.0,
-        "target_low": 110.0,
-        "recommendation": "buy",
-        "num_analysts": 13
-      },
-      "analyst_recs": [
-        {
-          "date": "2025-01-13",
-          "firm": "BWS Financial",
-          "to_grade": "Buy",
-          "from_grade": null,
-          "action": "init"
-        },
-        {
-          "date": "2025-01-28",
-          "firm": "BWS Financial",
-          "to_grade": "Buy",
-          "from_grade": "Buy",
-          "action": "main"
-        },
-        {
-          "date": "2025-02-21",
-          "firm": "BWS Financial",
-          "to_grade": "Buy",
-          "from_grade": "Buy",
-          "action": "main"
-        },
-        {
-          "date": "2025-02-25",
-          "firm": "DA Davidson",
-          "to_grade": "Buy",
-          "from_grade": null,
-          "action": "init"
-        },
-        {
-          "date": "2025-03-04",
-          "firm": "BWS Financial",
-          "to_grade": "Buy",
-          "from_grade": "Buy",
-          "action": "main"
-        }
-      ],
+      "news": [],
+      "earnings": null,
+      "consensus": null,
+      "analyst_recs": [],
       "position": {
         "ticker": "NBIS",
         "shares": 2.0,
         "cost_basis": 86.27,
-        "price": 219.94000244140625,
-        "day_change_pct": -0.5471361015024474,
-        "market_value": 439.8800048828125,
-        "unrealized_pl": 267.34000488281254,
-        "unrealized_pl_pct": 154.94378398215633,
-        "sector": "Communication Services",
-        "weight_pct": 4.154832523948488
+        "price": null,
+        "day_change_pct": null,
+        "market_value": null,
+        "unrealized_pl": null,
+        "unrealized_pl_pct": null,
+        "sector": "Unknown",
+        "weight_pct": 0
       }
     },
     {
-      "action": "add",
+      "action": "hold",
       "horizon": "long_term",
-      "conviction": 3,
-      "thesis": "Amazon (AMZN) is showing strong momentum with its price above both the 50-day and 200-day moving averages, indicating a solid uptrend. The stock is currently trading near its 52-week high of $274.99, and recent headlines highlight its position as a leader in AI, which is expected to drive significant growth. A break below the SMA50 at approximately $236 would invalidate this thesis.",
-      "key_catalysts": [
-        "Earnings report on July 30, 2026",
-        "Continued positive sentiment around AI investments"
-      ],
-      "key_risks": [
-        "A significant market correction that impacts tech stocks",
-        "Failure to meet earnings expectations in July 2026"
-      ],
-      "suggested_action_detail": "Add 1 share of AMZN at $260 or lower. Monitor for dips toward the SMA50 at $236 for potential scaling in. Avoid chasing above current levels.",
-      "source": "llm",
+      "conviction": 2,
+      "thesis": "No strong signal; default hold under aggressive profile.",
+      "key_catalysts": [],
+      "key_risks": [],
+      "suggested_action_detail": "Maintain current size; review on next earnings or 10%+ move",
+      "source": "rules",
       "ticker": "AMZN",
       "quote": {
         "ticker": "AMZN",
-        "price": 264.1400146484375,
-        "prev_close": 267.2200012207031,
-        "day_change_pct": -1.1526033074604298,
-        "market_cap": 2841383010304,
-        "pe_ratio": 31.633533,
-        "high_52w": 274.989990234375,
-        "low_52w": 198.7899932861328,
-        "sector": "Consumer Cyclical",
-        "industry": "Internet Retail",
-        "source": "yahoo_chart",
-        "error": null
+        "price": null,
+        "prev_close": null,
+        "day_change_pct": null,
+        "market_cap": null,
+        "pe_ratio": null,
+        "high_52w": null,
+        "low_52w": null,
+        "sector": null,
+        "industry": null,
+        "source": null,
+        "error": "No price source returned data (tried: stooq, yahoo_chart, yfinance)"
       },
       "technicals": {
-        "last": 264.1400146484375,
-        "sma50": 236.70800018310547,
-        "sma200": 229.4175,
-        "above_sma50": true,
-        "above_sma200": true,
-        "high_52w": 274.989990234375,
-        "low_52w": 198.7899932861328,
-        "pct_off_52w_high": -3.9455892837008446,
-        "rsi14": 53.85207652459863
+        "last": null,
+        "sma20": null,
+        "sma50": null,
+        "sma200": null,
+        "above_sma50": null,
+        "above_sma200": null,
+        "stacked_uptrend": null,
+        "stacked_downtrend": null,
+        "high_52w": null,
+        "low_52w": null,
+        "pct_off_52w_high": null,
+        "rsi14": null,
+        "macd_hist": null,
+        "macd_cross_up": null,
+        "macd_cross_down": null,
+        "bb_upper": null,
+        "bb_lower": null,
+        "bb_pct": null,
+        "atr14": null,
+        "atr_pct": null,
+        "vol_ratio_20d": null,
+        "breakout_20d": null,
+        "error": "no price history"
       },
-      "news": [
-        {
-          "headline": "$800B in AI spending is juicing GDP and stocks \u2014 while real wages fall and Americans cut back on goods",
-          "url": "https://finance.yahoo.com/economy/articles/800b-ai-spending-juicing-gdp-193500398.html",
-          "source": "Moneywise",
-          "published": "2026-05-16T19:35:00Z"
-        },
-        {
-          "headline": "NANC Traders Beat the Crowd by 33 Points and the Difference Keeps Growing",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/nanc-traders-beat-crowd-33-171520563.html",
-          "source": "24/7 Wall St.",
-          "published": "2026-05-16T17:15:20Z"
-        },
-        {
-          "headline": "'Equal Opportunity. Not Equal Outcomes.' Anthony Scaramucci Says People Who Work Harder Deserve More, But Every Child Also Deserves A Fair Shot",
-          "url": "https://finance.yahoo.com/economy/policy/articles/equal-opportunity-not-equal-outcomes-170114368.html",
-          "source": "Benzinga",
-          "published": "2026-05-16T17:01:14Z"
-        },
-        {
-          "headline": "AXT Turned the AI Data Center Boom Into an 8,436% 1-Year Return",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/axt-turned-ai-data-center-170002890.html",
-          "source": "Barchart",
-          "published": "2026-05-16T17:00:02Z"
-        },
-        {
-          "headline": "The Staggering Number Jensen Huang Just Revealed Changes Everything About AI",
-          "url": "https://finance.yahoo.com/sectors/technology/articles/staggering-number-jensen-huang-just-163715189.html",
-          "source": "24/7 Wall St.",
-          "published": "2026-05-16T16:37:15Z"
-        },
-        {
-          "headline": "Cerebras Is the Biggest IPO of the Year. If You Buy CBRS Stock Now, Brace Yourself for Volatility Ahead.",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/cerebras-biggest-ipo-buy-cbrs-153002579.html",
-          "source": "Barchart",
-          "published": "2026-05-16T15:30:02Z"
-        },
-        {
-          "headline": "Trump\u2019s More Than 3,700 Trades Astonish Wall Street Insiders",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/trump-traded-nvidia-boeing-intel-030913697.html",
-          "source": "Bloomberg",
-          "published": "2026-05-16T14:10:49Z"
-        },
-        {
-          "headline": "Wall Street Billionaires Make Amazon Their Top AI Trade",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/wall-street-billionaires-amazon-top-133127511.html",
-          "source": "BeInCrypto",
-          "published": "2026-05-16T13:31:27Z"
-        },
-        {
-          "headline": "How The Globalstar (GSAT) Story Is Evolving With The Amazon Deal And Spectrum Rethink",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/globalstar-gsat-story-evolving-amazon-131631528.html",
-          "source": "Simply Wall St.",
-          "published": "2026-05-16T13:16:31Z"
-        },
-        {
-          "headline": "Here is why Amazon (AMZN) Is Among the Top Stocks to Benefit From AI",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/why-amazon-amzn-among-top-104506397.html",
-          "source": "Insider Monkey",
-          "published": "2026-05-16T10:45:06Z"
-        },
-        {
-          "headline": "Amazon: Most Attractive Of The Hyperscalers (NASDAQ:AMZN) - Seeking Alpha",
-          "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxQM0Q5dXFmVGRTeWxuaG9mamlucjdXNUNsY2tJeFpGcWtLQXM0dDY3LTNMMHVHMWwyOGtUOExSQ01zUkRGS3E2OFR4bzI1MDVWMmtYaTRZdWJsb0JiejNUYkhMN25zajVpcEFqWTM1RlpYUlFrWFZvemJUd1dfSDVURDUxUW9OZEg1eGhJ?oc=5",
-          "source": "Seeking Alpha",
-          "published": "Thu, 14 May 2026 16:42:45 GMT"
-        },
-        {
-          "headline": "Amazon\u2019s AI Success Sends Stock Racing Toward $3 Trillion Club - Bloomberg.com",
-          "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxNbkZPaEVGeDAycWQwaTRRRjlNWWZjZ0ZENnBlNmY3Yi1pdFcyZEM5a0h5Zk9IdlJkaVdVb1Y1OEQ2ZkczTjEyVElBMGpPdnFzdDFDS05OaXM2X0pHaHJ6Z2dnMGs0SmFwX2tHTHRLSk1uTDR0eklQUC1ESDUzUnYwUlNLS3UxVlZMb0xLeVR3S1d3SFRPSmxTV0h4VkNmVXV6d2VZSW5SMl9oZ2V3R2g0VGNR?oc=5",
-          "source": "Bloomberg.com",
-          "published": "Thu, 14 May 2026 13:34:26 GMT"
-        }
-      ],
-      "earnings": {
-        "date": "2026-07-30",
-        "days_away": 74
-      },
-      "consensus": {
-        "target_mean": 311.55145,
-        "target_high": 370.0,
-        "target_low": 207.0,
-        "recommendation": "strong_buy",
-        "num_analysts": 62
-      },
-      "analyst_recs": [
-        {
-          "date": "2019-10-25",
-          "firm": "Oppenheimer",
-          "to_grade": "Outperform",
-          "from_grade": null,
-          "action": "main"
-        },
-        {
-          "date": "2019-10-25",
-          "firm": "SunTrust Robinson Humphrey",
-          "to_grade": "Buy",
-          "from_grade": null,
-          "action": "main"
-        },
-        {
-          "date": "2019-10-25",
-          "firm": "JMP Securities",
-          "to_grade": "Market Outperform",
-          "from_grade": null,
-          "action": "main"
-        },
-        {
-          "date": "2019-11-26",
-          "firm": "China Renaissance",
-          "to_grade": "Hold",
-          "from_grade": null,
-          "action": "init"
-        },
-        {
-          "date": "2020-01-10",
-          "firm": "Bernstein",
-          "to_grade": "Market Perform",
-          "from_grade": null,
-          "action": "init"
-        }
-      ],
+      "news": [],
+      "earnings": null,
+      "consensus": null,
+      "analyst_recs": [],
       "position": {
         "ticker": "AMZN",
         "shares": 2.0,
         "cost_basis": 220.25,
-        "price": 264.1400146484375,
-        "day_change_pct": -1.1526033074604298,
-        "market_value": 528.280029296875,
-        "unrealized_pl": 87.780029296875,
-        "unrealized_pl_pct": 19.927361928916003,
-        "sector": "Consumer Cyclical",
-        "weight_pct": 4.989804090003725
+        "price": null,
+        "day_change_pct": null,
+        "market_value": null,
+        "unrealized_pl": null,
+        "unrealized_pl_pct": null,
+        "sector": "Unknown",
+        "weight_pct": 0
       }
     },
     {
       "action": "hold",
       "horizon": "long_term",
       "conviction": 2,
-      "thesis": "OKLO is currently trading 64% off its 52-week high, indicating significant downside from its peak. The stock has seen a recent pullback, which could present an opportunistic add zone if it stabilizes around the $60 level. The upcoming earnings report on August 10, 2026, could serve as a catalyst for a potential rebound or further decline. If the price breaks below $55, it would invalidate the thesis, suggesting a more severe downturn.",
-      "key_catalysts": [
-        "Earnings report on 2026-08-10",
-        "Potential narrative shifts from recent news items"
-      ],
-      "key_risks": [
-        "Further deterioration in market sentiment towards SMR technology",
-        "Failure to meet expectations in upcoming earnings"
-      ],
-      "suggested_action_detail": "Maintain current position size of 1 share; review the position after the earnings report or if the stock moves 10%+ in either direction.",
-      "source": "llm",
+      "thesis": "No strong signal; default hold under aggressive profile.",
+      "key_catalysts": [],
+      "key_risks": [],
+      "suggested_action_detail": "Maintain current size; review on next earnings or 10%+ move",
+      "source": "rules",
       "ticker": "OKLO",
       "quote": {
         "ticker": "OKLO",
-        "price": 62.25,
-        "prev_close": 67.20999908447266,
-        "day_change_pct": -7.379852926703211,
-        "market_cap": 10830939136,
+        "price": null,
+        "prev_close": null,
+        "day_change_pct": null,
+        "market_cap": null,
         "pe_ratio": null,
-        "high_52w": 174.13999938964844,
-        "low_52w": 36.810001373291016,
-        "sector": "Utilities",
-        "industry": "Utilities - Independent Power Producers",
-        "source": "yahoo_chart",
-        "error": null
+        "high_52w": null,
+        "low_52w": null,
+        "sector": null,
+        "industry": null,
+        "source": null,
+        "error": "No price source returned data (tried: stooq, yahoo_chart, yfinance)"
       },
       "technicals": {
-        "last": 62.25,
-        "sma50": 61.46779983520508,
-        "sma200": 86.38824979782105,
-        "above_sma50": true,
-        "above_sma200": false,
-        "high_52w": 174.13999938964844,
-        "low_52w": 36.810001373291016,
-        "pct_off_52w_high": -64.25289984025325,
-        "rsi14": 39.278995856807974
+        "last": null,
+        "sma20": null,
+        "sma50": null,
+        "sma200": null,
+        "above_sma50": null,
+        "above_sma200": null,
+        "stacked_uptrend": null,
+        "stacked_downtrend": null,
+        "high_52w": null,
+        "low_52w": null,
+        "pct_off_52w_high": null,
+        "rsi14": null,
+        "macd_hist": null,
+        "macd_cross_up": null,
+        "macd_cross_down": null,
+        "bb_upper": null,
+        "bb_lower": null,
+        "bb_pct": null,
+        "atr14": null,
+        "atr_pct": null,
+        "vol_ratio_20d": null,
+        "breakout_20d": null,
+        "error": "no price history"
       },
-      "news": [
-        {
-          "headline": "1 Surprising Way Oklo Could Benefit From the Looming SpaceX IPO",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/1-surprising-way-oklo-could-182000946.html",
-          "source": "Motley Fool",
-          "published": "2026-05-16T18:20:00Z"
-        },
-        {
-          "headline": "Oklo vs. Uranium Energy: Both Are Volatile in 2026, but Only One Is Worth Buying Now",
-          "url": "https://finance.yahoo.com/sectors/energy/articles/oklo-vs-uranium-energy-both-120400633.html",
-          "source": "Motley Fool",
-          "published": "2026-05-16T12:04:00Z"
-        },
-        {
-          "headline": "JPMorgan Stops Short Of Turning Bullish On Oklo (OKLO) Despite Strong SMR Outlook, Check Out Why",
-          "url": "https://finance.yahoo.com/sectors/energy/articles/jpmorgan-stops-short-turning-bullish-173632369.html",
-          "source": "Insider Monkey",
-          "published": "2026-05-15T17:36:32Z"
-        },
-        {
-          "headline": "POET Stock Doubled In Days. Can The Rally Last?",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/poet-stock-doubled-days-rally-110157111.html",
-          "source": "Trefis",
-          "published": "2026-05-15T11:01:57Z"
-        },
-        {
-          "headline": "Why Oklo Stock Fell Further on Thursday",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/why-oklo-stock-fell-further-193835646.html",
-          "source": "Motley Fool",
-          "published": "2026-05-14T19:38:35Z"
-        },
-        {
-          "headline": "Should You Buy Oklo Stock Before Jul. 4?",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/buy-oklo-stock-jul-4-184000446.html",
-          "source": "Motley Fool",
-          "published": "2026-05-14T18:40:00Z"
-        },
-        {
-          "headline": "Oklo (OKLO) Partners With INL to Accelerate Advanced Reactor Design Using AI platform",
-          "url": "https://finance.yahoo.com/sectors/technology/articles/oklo-oklo-partners-inl-accelerate-161456728.html",
-          "source": "Insider Monkey",
-          "published": "2026-05-14T16:14:56Z"
-        },
-        {
-          "headline": "Oklo Stock Is Sinking After Earnings. Is a Turnaround Possible Before Its July 4 Deadline?",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/oklo-stock-sinking-earnings-turnaround-132132571.html",
-          "source": "Motley Fool",
-          "published": "2026-05-14T13:21:32Z"
-        },
-        {
-          "headline": "A Look At Oklo (OKLO) Valuation As Equity Raise And Nuclear Projects Gain Commercial Momentum",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/look-oklo-oklo-valuation-equity-100947142.html",
-          "source": "Simply Wall St.",
-          "published": "2026-05-14T10:09:47Z"
-        },
-        {
-          "headline": "Oklo\u2019s Losses Deepen. Why the Nuclear Start-Up Still Has Wall Street\u2019s Attention.",
-          "url": "https://www.barrons.com/articles/oklo-earnings-stock-price-nuclear-8228360e?siteid=yhoof2&yptr=yahoo",
-          "source": "Barrons.com",
-          "published": "2026-05-13T20:29:00Z"
-        },
-        {
-          "headline": "Oklo Sinks On Earnings. Why Nuclear Startup Is Revving Up For July 4. - Investor's Business Daily",
-          "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxNbzV1NVpzbF9LbF9Nd1dGZG9jbDhRdXEycFFhSVl1Y0d0djk1YkJMQ2h5cTh4SmlGMFcxRENmdHg2bldWM2prODZNZGxPTDRxaHNRR1JQbzhMQm5DYVJEWnROQ2NPR1EyNTR5S21lTHM4cEJfMEVoZGJjTUNfZXYySC1Eb2RwYmI0VFhRYmdId3QtNWFB?oc=5",
-          "source": "Investor's Business Daily",
-          "published": "Wed, 13 May 2026 19:23:00 GMT"
-        },
-        {
-          "headline": "OKLO \u2013 The $25 Stock That Hit $193 And Then Lost Most Of It - Trefis",
-          "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxNSUp4R3kzbFdlVmxUNnAxakV4M2VEQjdQQno0RE5Sa09ESkFIeEU4UlI0bXotRXU5ZXljVnJaMlJ0YWdFVFZBSmNuaS1NZGxNbFhkeW9JMlJvQzk5c1l2MEp1NkJzRXRHblJzR3U0enl4YmwtOXkzMmVEQVF2bVhHQVNfX3RnQ2VVTlJfclZ3QmZwRHJOeEl4bmlsMUdDcHZydXVDdWNteFRxREY1cTc2QmEzeVJ5Sms?oc=5",
-          "source": "Trefis",
-          "published": "Wed, 13 May 2026 17:28:14 GMT"
-        }
-      ],
-      "earnings": {
-        "date": "2026-08-10",
-        "days_away": 85
-      },
-      "consensus": {
-        "target_mean": 91.21053,
-        "target_high": 140.0,
-        "target_low": 14.0,
-        "recommendation": "buy",
-        "num_analysts": 19
-      },
-      "analyst_recs": [
-        {
-          "date": "2024-06-04",
-          "firm": "Citigroup",
-          "to_grade": "Neutral",
-          "from_grade": null,
-          "action": "init"
-        },
-        {
-          "date": "2024-09-06",
-          "firm": "Seaport Global",
-          "to_grade": "Neutral",
-          "from_grade": null,
-          "action": "init"
-        },
-        {
-          "date": "2024-09-19",
-          "firm": "B. Riley Securities",
-          "to_grade": "Buy",
-          "from_grade": null,
-          "action": "init"
-        },
-        {
-          "date": "2024-09-24",
-          "firm": "Citigroup",
-          "to_grade": "Neutral",
-          "from_grade": "Neutral",
-          "action": "main"
-        },
-        {
-          "date": "2024-12-19",
-          "firm": "Wedbush",
-          "to_grade": "Outperform",
-          "from_grade": null,
-          "action": "init"
-        }
-      ],
+      "news": [],
+      "earnings": null,
+      "consensus": null,
+      "analyst_recs": [],
       "position": {
         "ticker": "OKLO",
         "shares": 1.0,
         "cost_basis": 87.8,
-        "price": 62.25,
-        "day_change_pct": -7.379852926703211,
-        "market_value": 62.25,
-        "unrealized_pl": -25.549999999999997,
-        "unrealized_pl_pct": -29.100227790432797,
-        "sector": "Utilities",
-        "weight_pct": 0.5879747243448737
-      }
-    },
-    {
-      "action": "sell",
-      "horizon": "swing",
-      "conviction": 3,
-      "thesis": "NFLX is currently in a downtrend, trading below both its 50-day and 200-day simple moving averages (SMA), which indicates weakness. The stock is approximately 35% off its 52-week high of $133.91, and recent analyst actions have not provided a strong bullish signal. If NFLX fails to reclaim the $90 level, it could continue to face selling pressure. A bounce toward the SMA200 at approximately $102.56 would be an ideal exit point to preserve capital.",
-      "key_catalysts": [
-        "Earnings report on July 16, 2026",
-        "Potential narrative shifts from recent headlines regarding Netflix's AI initiatives and guidance adjustments"
-      ],
-      "key_risks": [
-        "If the stock closes below $80, it may indicate a further downtrend, risking capital preservation",
-        "Continued negative sentiment from analysts could suppress price recovery"
-      ],
-      "suggested_action_detail": "Exit fully on any bounce toward the SMA200 at $102.56. Monitor the stock closely and be prepared to act if it approaches this level within the next month.",
-      "source": "llm",
-      "ticker": "NFLX",
-      "quote": {
-        "ticker": "NFLX",
-        "price": 87.0199966430664,
-        "prev_close": 86.94000244140625,
-        "day_change_pct": 0.09201081138003055,
-        "market_cap": 366423670784,
-        "pe_ratio": 28.070967,
-        "high_52w": 133.91299438476562,
-        "low_52w": 75.86000061035156,
-        "sector": "Communication Services",
-        "industry": "Entertainment",
-        "source": "yahoo_chart",
-        "error": null
-      },
-      "technicals": {
-        "last": 87.0199966430664,
-        "sma50": 94.45219970703126,
-        "sma200": 102.5641900253296,
-        "above_sma50": false,
-        "above_sma200": false,
-        "high_52w": 133.91299438476562,
-        "low_52w": 75.86000061035156,
-        "pct_off_52w_high": -35.017511151280715,
-        "rsi14": 34.96886550213276
-      },
-      "news": [
-        {
-          "headline": "NANC Traders Beat the Crowd by 33 Points and the Difference Keeps Growing",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/nanc-traders-beat-crowd-33-171520563.html",
-          "source": "24/7 Wall St.",
-          "published": "2026-05-16T17:15:20Z"
-        },
-        {
-          "headline": "Trump\u2019s More Than 3,700 Trades Astonish Wall Street Insiders",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/trump-traded-nvidia-boeing-intel-030913697.html",
-          "source": "Bloomberg",
-          "published": "2026-05-16T14:10:49Z"
-        },
-        {
-          "headline": "Netflix (NFLX) Stock Is Up, What You Need To Know",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/netflix-nflx-stock-know-045255117.html",
-          "source": "StockStory",
-          "published": "2026-05-16T04:52:55Z"
-        },
-        {
-          "headline": "Netflix AI INKubator Launch Raises New Questions For NFLX Valuation",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/netflix-ai-inkubator-launch-raises-151644938.html",
-          "source": "Simply Wall St.",
-          "published": "2026-05-15T15:16:44Z"
-        },
-        {
-          "headline": "Google's YouTube Revenue May Be Bigger Than Wall Street Thought, Topping Netflix",
-          "url": "https://www.investors.com/news/technology/google-stock-youtube-subscription-revenue-netflix/?src=A00220&yptr=yahoo",
-          "source": "Investor's Business Daily",
-          "published": "2026-05-15T11:58:31Z"
-        },
-        {
-          "headline": "Nvidia Stock Is the King of the AI Castle. History Tells Us It Will Fall Hard and Its Replacement Will Emerge From Thin Air.",
-          "url": "https://finance.yahoo.com/sectors/technology/articles/nvidia-stock-king-ai-castle-161350497.html",
-          "source": "Barchart",
-          "published": "2026-05-14T16:13:50Z"
-        },
-        {
-          "headline": "Netflix Just Raised Guidance. The Market Sold It Off. We See 283% Upside",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/netflix-just-raised-guidance-market-153610147.html",
-          "source": "24/7 Wall St.",
-          "published": "2026-05-14T15:36:10Z"
-        },
-        {
-          "headline": "JPMorgan Doubles Down on Netflix: $118 Price Target on Path to Becoming Global TV",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/jpmorgan-doubles-down-netflix-118-150442529.html",
-          "source": "24/7 Wall St.",
-          "published": "2026-05-14T15:04:42Z"
-        },
-        {
-          "headline": "Netflix NFL Push And Ad Tier Expansion Reframe Long Term Upside",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/netflix-nfl-push-ad-tier-141009431.html",
-          "source": "Simply Wall St.",
-          "published": "2026-05-14T14:10:09Z"
-        },
-        {
-          "headline": "The Zacks Analyst Blog Netflix, Amazon's, Disney's  and Apple's",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/zacks-analyst-blog-netflix-amazons-101200385.html",
-          "source": "Zacks",
-          "published": "2026-05-14T10:12:00Z"
-        },
-        {
-          "headline": "Why the NFL could power Netflix stock up more than 30% - Yahoo Finance",
-          "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxOWFBFTGFDVEpIV0RxdVYxaFBDbE5CUVlRVDlBQlpxQWc1UjdpUWpzR3Y3LXpUVUxFbzFIWnp1SUR2blZtUDNaR011Y2xya0toamltNV9DRnpQMXA2MkhiUzUyXzYyZy04WUZ6RXE1dERTMzYxRnZicGlEamxqcHdjekFSUXVnbi1vMElmc3QxLUltbjBleHBoM2VITTlkdWFkUWEtUXF1a1ZFbFQ0bFFF?oc=5",
-          "source": "Yahoo Finance",
-          "published": "Thu, 14 May 2026 13:28:07 GMT"
-        },
-        {
-          "headline": "Netflix Stock (NFLX) Drops as Analyst Says Engagement Debate Far from Over - TipRanks",
-          "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxPVHlTSkZMRS1KTUx5UXVpOE1FUThrSEJERGk0cElMamFXbnIzQWRkRFc4dU1fNzQ1em5MU3NDTWV2NXQ4WGVMV3J6OWt6Vm1xUURmVzdxazM0OE5Wc0ZUOEE3NWd3X0RhcUstQUV2YmhoUXQ2enRBTmhEcFJjcVhIMGFFcWIxMDR1bzg0T2NEdHRtazg1VWMxRWdxVFdib0QtLXVkMw?oc=5",
-          "source": "TipRanks",
-          "published": "Fri, 15 May 2026 12:10:23 GMT"
-        }
-      ],
-      "earnings": {
-        "date": "2026-07-16",
-        "days_away": 60
-      },
-      "consensus": {
-        "target_mean": 114.555,
-        "target_high": 151.4,
-        "target_low": 80.0,
-        "recommendation": "buy",
-        "num_analysts": 44
-      },
-      "analyst_recs": [
-        {
-          "date": "2013-04-16",
-          "firm": "MKM Partners",
-          "to_grade": "Buy",
-          "from_grade": null,
-          "action": "init"
-        },
-        {
-          "date": "2013-04-19",
-          "firm": "National Alliance Securities",
-          "to_grade": null,
-          "from_grade": "Market Perform",
-          "action": "up"
-        },
-        {
-          "date": "2013-04-22",
-          "firm": "B. Riley Securities",
-          "to_grade": "Neutral",
-          "from_grade": "Sell",
-          "action": "up"
-        },
-        {
-          "date": "2013-04-23",
-          "firm": "Barclays",
-          "to_grade": "Equal-Weight",
-          "from_grade": null,
-          "action": "main"
-        },
-        {
-          "date": "2013-04-23",
-          "firm": "Piper Sandler",
-          "to_grade": "Neutral",
-          "from_grade": null,
-          "action": "main"
-        }
-      ],
-      "position": {
-        "ticker": "NFLX",
-        "shares": 9.0,
-        "cost_basis": 90.11,
-        "price": 87.0199966430664,
-        "day_change_pct": 0.09201081138003055,
-        "market_value": 783.1799697875977,
-        "unrealized_pl": -27.810030212402353,
-        "unrealized_pl_pct": -3.429145884955715,
-        "sector": "Communication Services",
-        "weight_pct": 7.397430150173322
-      }
-    },
-    {
-      "action": "add",
-      "horizon": "long_term",
-      "conviction": 2,
-      "thesis": "IREN is currently 30.7% off its 52-week high of $76.41 and has shown resilience above its 50-day SMA of $44.72. The recent $3 billion convertible note offering is a significant catalyst for funding its AI transformation, despite the short-term price drop. If the stock breaks below $44.72, it would invalidate the bullish thesis.",
-      "key_catalysts": [
-        "Earnings report on May 7, 2026",
-        "Continued narrative shifts in AI funding and market sentiment"
-      ],
-      "key_risks": [
-        "Failure to execute on AI transformation leading to further stock declines",
-        "Market reaction to convertible note dilution"
-      ],
-      "suggested_action_detail": "Consider adding 2 shares at $50.00 or lower. If it dips to the SMA50 around $44.72, increase position size to 6 shares total. Monitor closely for any negative news that could impact the thesis.",
-      "source": "llm",
-      "ticker": "IREN",
-      "quote": {
-        "ticker": "IREN",
-        "price": 52.939998626708984,
-        "prev_close": 58.400001525878906,
-        "day_change_pct": -9.349319788545587,
-        "market_cap": 18919626752,
-        "pe_ratio": 68.75325,
-        "high_52w": 76.41000366210938,
-        "low_52w": 8.390000343322754,
-        "sector": "Financial Services",
-        "industry": "Capital Markets",
-        "source": "yahoo_chart",
-        "error": null
-      },
-      "technicals": {
-        "last": 52.939998626708984,
-        "sma50": 44.72119998931885,
-        "sma200": 43.85887508392334,
-        "above_sma50": true,
-        "above_sma200": true,
-        "high_52w": 76.41000366210938,
-        "low_52w": 8.390000343322754,
-        "pct_off_52w_high": -30.71588000333892,
-        "rsi14": 54.613212144229024
-      },
-      "news": [
-        {
-          "headline": "Blockspace: IREN\u2019s $3B Note, CME Compute Futures, Mike Alfred\u2019s Stock Picks, Trump\u2019s Q1 Bitcoin Equities",
-          "url": "https://finance.yahoo.com/video/blockspace-iren-3b-note-cme-130926856.html",
-          "source": "CoinDesk",
-          "published": "2026-05-16T13:09:26Z"
-        },
-        {
-          "headline": "Weekly Wrap: Crypto Falls Alongside Stocks As Treasury Yields Spike",
-          "url": "https://finance.yahoo.com/markets/crypto/articles/weekly-wrap-crypto-falls-alongside-212200569.html",
-          "source": "CryptoProwl",
-          "published": "2026-05-15T21:22:00Z"
-        },
-        {
-          "headline": "Mike Alfred Shares His Top Picks for AI Stocks",
-          "url": "https://finance.yahoo.com/video/mike-alfred-shares-top-picks-201844758.html",
-          "source": "Blockspace",
-          "published": "2026-05-15T20:18:44Z"
-        },
-        {
-          "headline": "NVIDIA-linked stock sinks after $3 billion capital raise",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/nvidia-linked-stock-sinks-3-201530336.html",
-          "source": "TheStreet",
-          "published": "2026-05-15T20:15:30Z"
-        },
-        {
-          "headline": "IREN\u2019s $3B Note, CME Compute Futures, Mike Alfred\u2019s Stock Picks, Trump\u2019s Q1 Bitcoin Equities",
-          "url": "https://finance.yahoo.com/video/iren-3b-note-cme-compute-195554591.html",
-          "source": "Blockspace",
-          "published": "2026-05-15T19:55:54Z"
-        },
-        {
-          "headline": "Iren Stock Sinks 8% After Massive $3 Billion Convertible Note Deal",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/iren-stock-sinks-8-massive-195124452.html",
-          "source": "GuruFocus.com",
-          "published": "2026-05-15T19:51:24Z"
-        },
-        {
-          "headline": "Bitcoin Miner IREN Closes $3 Billion Convertible Notes Offering to Fuel AI Transformation",
-          "url": "https://finance.yahoo.com/markets/crypto/articles/bitcoin-miner-iren-closes-3-172855132.html",
-          "source": "decrypt",
-          "published": "2026-05-15T17:28:55Z"
-        },
-        {
-          "headline": "IREN Raises $3 Billion To Fund A.I. Cloud Expansion",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/iren-raises-3-billion-fund-133300387.html",
-          "source": "CryptoProwl",
-          "published": "2026-05-15T13:33:00Z"
-        },
-        {
-          "headline": "IREN closes $3 billion convertible notes offering",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/iren-closes-3-billion-convertible-124254840.html",
-          "source": "Blockspace",
-          "published": "2026-05-15T12:42:54Z"
-        },
-        {
-          "headline": "Zacks Investment Ideas feature highlights: IREN and NVIDIA",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/zacks-investment-ideas-feature-highlights-070500778.html",
-          "source": "Zacks",
-          "published": "2026-05-15T07:05:00Z"
-        },
-        {
-          "headline": "Zacks Investment Ideas feature highlights: IREN and NVIDIA - Yahoo Finance",
-          "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxPTXN0eW9ubV9PRU1id3NqcG9SM1BiUjczc3FoNFFjUURyQVlMUWlSOWlCb3VqbTVOa2trd25JUnlXTkRsVURzRTBPT0JpS3FackRlaFNtemxCSTZkbTdMb3hjQXBpRHduZngyc0RhdTdUdlcxNGVrdktjNTJ6Zi12c0NCT2ZuNDFoOVpDMTNsTjBkMTYwWW94eTBUMDJBeU1QNmJRRTBsQ1YyUQ?oc=5",
-          "source": "Yahoo Finance",
-          "published": "Fri, 15 May 2026 07:05:00 GMT"
-        },
-        {
-          "headline": "Iren Stock Sinks 8% After Massive $3 Billion Convertible Note Deal - TradingView",
-          "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxNTzltbVlPSjNDZ0FqNEdLdVFwaTBBZ2xpX2xYY3N3LWhHbXhqWHhtOWVBTG5vbmwxYzU4eUtZaTliRGs4SnprcVd0ZEFYS1JMWk12VjhVTE5zbEZ2TkRmZWFBYk0zNWNLUV8wMF9zWmoyNFNDUEZMdEFhbzdwVUFpbWZwalo0ZUk1Wm15czJqbmEyM2VuT2ptVjRJMk93eVhLTk5DWFBRRWVxWTFNb2hZZl90Nk81MWtObDlFVTYyODMyQQ?oc=5",
-          "source": "TradingView",
-          "published": "Fri, 15 May 2026 19:51:24 GMT"
-        }
-      ],
-      "earnings": {
-        "date": "2026-05-07",
-        "days_away": -10
-      },
-      "consensus": {
-        "target_mean": 74.07143,
-        "target_high": 105.0,
-        "target_low": 41.0,
-        "recommendation": "buy",
-        "num_analysts": 14
-      },
-      "analyst_recs": [
-        {
-          "date": "2021-12-13",
-          "firm": "JP Morgan",
-          "to_grade": "Overweight",
-          "from_grade": null,
-          "action": "init"
-        },
-        {
-          "date": "2021-12-13",
-          "firm": "Compass Point",
-          "to_grade": "Buy",
-          "from_grade": null,
-          "action": "init"
-        },
-        {
-          "date": "2021-12-13",
-          "firm": "Canaccord Genuity",
-          "to_grade": "Buy",
-          "from_grade": null,
-          "action": "init"
-        },
-        {
-          "date": "2021-12-13",
-          "firm": "Macquarie",
-          "to_grade": "Outperform",
-          "from_grade": null,
-          "action": "init"
-        },
-        {
-          "date": "2021-12-14",
-          "firm": "Citigroup",
-          "to_grade": "Buy",
-          "from_grade": null,
-          "action": "init"
-        }
-      ],
-      "position": {
-        "ticker": "IREN",
-        "shares": 4.0,
-        "cost_basis": 60.2,
-        "price": 52.939998626708984,
-        "day_change_pct": -9.349319788545587,
-        "market_value": 211.75999450683594,
-        "unrealized_pl": -29.040005493164074,
-        "unrealized_pl_pct": -12.059802945666142,
-        "sector": "Financial Services",
-        "weight_pct": 2.0001530023683345
+        "price": null,
+        "day_change_pct": null,
+        "market_value": null,
+        "unrealized_pl": null,
+        "unrealized_pl_pct": null,
+        "sector": "Unknown",
+        "weight_pct": 0
       }
     },
     {
       "action": "hold",
       "horizon": "long_term",
       "conviction": 2,
-      "thesis": "FBL is currently in a downtrend with the price below both the 50-day and 200-day moving averages, indicating bearish momentum. The RSI is oversold at 23, suggesting potential for a bounce. However, the stock is still 50% off its 52-week high of $51.04, which raises concerns about its long-term viability. If the price falls below $19.49 (the 52-week low), this would invalidate the thesis and warrant an exit.",
-      "key_catalysts": [
-        "Oversold bounce potential",
-        "Monitoring for narrative shifts in upcoming news",
-        "Next earnings report expected in Q2 2024"
-      ],
-      "key_risks": [
-        "Continued downtrend below long-term trend lines",
-        "Failure to recover above $27.09 (50-day SMA) could signal further weakness"
-      ],
-      "suggested_action_detail": "Maintain current position of 8 shares. Review for potential action if the stock moves above $27.09 or below $19.49. Consider trimming if it rallies significantly (10%+) to $28.20.",
-      "source": "llm",
+      "thesis": "No strong signal; default hold under aggressive profile.",
+      "key_catalysts": [],
+      "key_risks": [],
+      "suggested_action_detail": "Maintain current size; review on next earnings or 10%+ move",
+      "source": "rules",
+      "ticker": "NFLX",
+      "quote": {
+        "ticker": "NFLX",
+        "price": null,
+        "prev_close": null,
+        "day_change_pct": null,
+        "market_cap": null,
+        "pe_ratio": null,
+        "high_52w": null,
+        "low_52w": null,
+        "sector": null,
+        "industry": null,
+        "source": null,
+        "error": "No price source returned data (tried: stooq, yahoo_chart, yfinance)"
+      },
+      "technicals": {
+        "last": null,
+        "sma20": null,
+        "sma50": null,
+        "sma200": null,
+        "above_sma50": null,
+        "above_sma200": null,
+        "stacked_uptrend": null,
+        "stacked_downtrend": null,
+        "high_52w": null,
+        "low_52w": null,
+        "pct_off_52w_high": null,
+        "rsi14": null,
+        "macd_hist": null,
+        "macd_cross_up": null,
+        "macd_cross_down": null,
+        "bb_upper": null,
+        "bb_lower": null,
+        "bb_pct": null,
+        "atr14": null,
+        "atr_pct": null,
+        "vol_ratio_20d": null,
+        "breakout_20d": null,
+        "error": "no price history"
+      },
+      "news": [],
+      "earnings": null,
+      "consensus": null,
+      "analyst_recs": [],
+      "position": {
+        "ticker": "NFLX",
+        "shares": 9.0,
+        "cost_basis": 90.11,
+        "price": null,
+        "day_change_pct": null,
+        "market_value": null,
+        "unrealized_pl": null,
+        "unrealized_pl_pct": null,
+        "sector": "Unknown",
+        "weight_pct": 0
+      }
+    },
+    {
+      "action": "hold",
+      "horizon": "long_term",
+      "conviction": 2,
+      "thesis": "No strong signal; default hold under aggressive profile.",
+      "key_catalysts": [],
+      "key_risks": [],
+      "suggested_action_detail": "Maintain current size; review on next earnings or 10%+ move",
+      "source": "rules",
+      "ticker": "IREN",
+      "quote": {
+        "ticker": "IREN",
+        "price": null,
+        "prev_close": null,
+        "day_change_pct": null,
+        "market_cap": null,
+        "pe_ratio": null,
+        "high_52w": null,
+        "low_52w": null,
+        "sector": null,
+        "industry": null,
+        "source": null,
+        "error": "No price source returned data (tried: stooq, yahoo_chart, yfinance)"
+      },
+      "technicals": {
+        "last": null,
+        "sma20": null,
+        "sma50": null,
+        "sma200": null,
+        "above_sma50": null,
+        "above_sma200": null,
+        "stacked_uptrend": null,
+        "stacked_downtrend": null,
+        "high_52w": null,
+        "low_52w": null,
+        "pct_off_52w_high": null,
+        "rsi14": null,
+        "macd_hist": null,
+        "macd_cross_up": null,
+        "macd_cross_down": null,
+        "bb_upper": null,
+        "bb_lower": null,
+        "bb_pct": null,
+        "atr14": null,
+        "atr_pct": null,
+        "vol_ratio_20d": null,
+        "breakout_20d": null,
+        "error": "no price history"
+      },
+      "news": [],
+      "earnings": null,
+      "consensus": null,
+      "analyst_recs": [],
+      "position": {
+        "ticker": "IREN",
+        "shares": 4.0,
+        "cost_basis": 60.2,
+        "price": null,
+        "day_change_pct": null,
+        "market_value": null,
+        "unrealized_pl": null,
+        "unrealized_pl_pct": null,
+        "sector": "Unknown",
+        "weight_pct": 0
+      }
+    },
+    {
+      "action": "hold",
+      "horizon": "long_term",
+      "conviction": 2,
+      "thesis": "No strong signal; default hold under aggressive profile.",
+      "key_catalysts": [],
+      "key_risks": [],
+      "suggested_action_detail": "Maintain current size; review on next earnings or 10%+ move",
+      "source": "rules",
       "ticker": "FBL",
       "quote": {
         "ticker": "FBL",
-        "price": 25.649999618530273,
-        "prev_close": 26.010000228881836,
-        "day_change_pct": -1.3840853794065455,
+        "price": null,
+        "prev_close": null,
+        "day_change_pct": null,
         "market_cap": null,
         "pe_ratio": null,
-        "high_52w": 51.040000915527344,
-        "low_52w": 19.489999771118164,
+        "high_52w": null,
+        "low_52w": null,
         "sector": null,
         "industry": null,
-        "source": "yahoo_chart",
-        "error": null
+        "source": null,
+        "error": "No price source returned data (tried: stooq, yahoo_chart, yfinance)"
       },
       "technicals": {
-        "last": 25.649999618530273,
-        "sma50": 27.087919883728027,
-        "sma200": 34.82584991455078,
-        "above_sma50": false,
-        "above_sma200": false,
-        "high_52w": 51.040000915527344,
-        "low_52w": 19.489999771118164,
-        "pct_off_52w_high": -49.745299454477376,
-        "rsi14": 23.208043007367962
+        "last": null,
+        "sma20": null,
+        "sma50": null,
+        "sma200": null,
+        "above_sma50": null,
+        "above_sma200": null,
+        "stacked_uptrend": null,
+        "stacked_downtrend": null,
+        "high_52w": null,
+        "low_52w": null,
+        "pct_off_52w_high": null,
+        "rsi14": null,
+        "macd_hist": null,
+        "macd_cross_up": null,
+        "macd_cross_down": null,
+        "bb_upper": null,
+        "bb_lower": null,
+        "bb_pct": null,
+        "atr14": null,
+        "atr_pct": null,
+        "vol_ratio_20d": null,
+        "breakout_20d": null,
+        "error": "no price history"
       },
-      "news": [
-        {
-          "headline": "Single-Stock ETFs in Focus as Big Tech Earnings Unfold",
-          "url": "https://finance.yahoo.com/news/single-stock-etfs-focus-big-140000413.html",
-          "source": "Zacks",
-          "published": "2025-07-29T14:00:00Z"
-        },
-        {
-          "headline": "Technical Reactions to FBL Trends in Macro Strategies - Stock Traders Daily",
-          "url": "https://news.google.com/rss/articles/CBMizAFBVV95cUxOaWNQZHBKeGwwNDdHdjdlcVBFNFlObHhzQnB4T2hfRDRQc2JWX1FtVVk5MVpnSG00R2pnQUxMR2NqX0c5TThYcUZWVXJ3UFoza1E0dWktTElOQzgtZGtQMk16Sm1WTjdRSW9FVFVTSm96NHpBdzRTQ1hxUGtIRUZlMzFxV2dqU19mZ3BhMlBLOXNuUGlJRjItaGhudTMzZVI0NnpEa2g1a0JMSVMzbWNDX3ZYYXItenZhNktZM3k5UFN0X0VZNm9GanpUNkY?oc=5",
-          "source": "Stock Traders Daily",
-          "published": "Wed, 13 May 2026 01:00:02 GMT"
-        },
-        {
-          "headline": "FBL 260515 21.00C (FBL260515C21000) Stock Options Chain | Quotes & News - Moomoo",
-          "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE1mWlRzNnFyblRWVFpKdzZyb3NneTNFUk5TMU9KRE1ZU3lIbVpHVGp3ZVIyU21sN1k2Zi1VeG5lU2trR3ZoSG9uT0c1a0d4dG81bFFVMkY1a0VKeENHcVE?oc=5",
-          "source": "Moomoo",
-          "published": "Fri, 08 May 2026 13:25:45 GMT"
-        },
-        {
-          "headline": "Single-Stock ETFs in Focus as Big Tech Earnings Unfold - Yahoo Finance",
-          "url": "https://news.google.com/rss/articles/CBMifkFVX3lxTFBlLVI3OWo5RjB2TDQwckh1LTV3MmR0cmZJLWdhYWZEMWpsbU5WOXJUU3J5aVBjZnJnS29WLUpEZldwcjhFOTBBcDhSdWJ2QjZzUThWOWwtWWdLb2xHc3lUUDE4TGZzSXRISHNJQVRoVGotM2ZPOXhsX3hjSFVKUQ?oc=5",
-          "source": "Yahoo Finance",
-          "published": "Tue, 29 Jul 2025 07:00:00 GMT"
-        },
-        {
-          "headline": "Meta Stock Drops Over 10% After Q1 Earnings, Loses $175B in Market Cap - KuCoin",
-          "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxNUDA3WlYwdkhZTHgwWl9XX3hnMFpTckFqQ1RFZFU0SHU0VlZqcmNsTEh4cmZ2UVpXNWNSYUU5Z1U0UndYLXQ0TXpnM2JrRTNHVFB1UlN6OGhuV2UtUThlU0tjWEtaLUh6azNIX2Y2OWxOSW9MWEVaNGdGd3FoVG9NMmVfYm5wWk54akdNNUJHdVdKN0pDSUZfZy00c1MwTXBFRkpB?oc=5",
-          "source": "KuCoin",
-          "published": "Thu, 30 Apr 2026 18:52:50 GMT"
-        },
-        {
-          "headline": "Price-Driven Insight from (FBL) for Rule-Based Strategy - Stock Traders Daily",
-          "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxNQklKUHVnSXpnYzRQREVnVkJNUTdVQ2dSb1BkNVdFbzlockhEX01sWnhmbEZIUHpVSm50Z0pzd05la2tIZS1IcHd1Tk11cEMzT2VCejdNNzVfV3FMWXFiaFZrN0ZNMmNjWDVsXzBqdjZ3S0JtR2UzLXktZGZKVlU2aGxYMVdCcGZRbHVZNGdwbkkyMWNKckVGMG1OUzRITmpPbURYblNvZUJidDZmTklobE5KUEZ3bFRINTF4TjkzNm5CdW1aZjRyb2QtbFJUUQ?oc=5",
-          "source": "Stock Traders Daily",
-          "published": "Thu, 09 Apr 2026 21:34:01 GMT"
-        },
-        {
-          "headline": "Funds - Zacks Investment Research",
-          "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE1CTWN3X3I5ZDlPZmVEWnY4N2FMOHNCelJwSjFKRld1YWNGU2hYcVVhZW1NY1N4MEQtRU83YTdXdDNnQkZWdXA1anJZUDk1RTRkMFpPbEsyc0ZibmV0WFc3aQ?oc=5",
-          "source": "Zacks Investment Research",
-          "published": "Wed, 29 Apr 2026 13:03:26 GMT"
-        },
-        {
-          "headline": "FBL Stock Fund Price and Chart \u2014 NASDAQ:FBL - TradingView",
-          "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE5vQ2lqMnpFRlZ4bFF4NFhjNTJFOVc0UmxDT3M2Ty1OanIxQ253aDRpOGowQjV1U3dGQkhXOGZvTWFhaXlaTHRpVUdtV0lybmpYTVY5ODJ2SEFCVU0?oc=5",
-          "source": "TradingView",
-          "published": "Sun, 18 Dec 2022 04:52:28 GMT"
-        },
-        {
-          "headline": "Top Performing Leveraged/Inverse ETFs: 05/04/2025 - ETF Database",
-          "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxNazNWYVZRVE9Ka0tjbGJialV2WVFyMGswWjdPM0U2UU5uSjcyelFNdTdjOWFfMUgzVV9nRlljTGNMTzNia0lPTzJmODFTck1VVWlkSF9NSDBXSTRvMEZwRzM3eVBILVVLMlZXYWNpSFplWHV3b2FMQkZjVVJGRVlRNWhTZUtIYW0wSUZwZQ?oc=5",
-          "source": "ETF Database",
-          "published": "Tue, 06 May 2025 07:00:00 GMT"
-        },
-        {
-          "headline": "FBL Stock Price, Quote & Chart | GRANITESH 2XLNG META ETF-USD (NASDAQ:FBL) - ChartMill",
-          "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE0xUUplQk82cnVGbDBHVlhxNUpaWVV4cXZiV0xFbEQzQkRYVVVfcm5yTndEVGpsUmVtWkRvOUZhMjNNQUg4dW1KZk9nMXpNbHl0aG04VDRlSTV1cFpLbHc?oc=5",
-          "source": "ChartMill",
-          "published": "Tue, 16 Apr 2024 04:58:54 GMT"
-        },
-        {
-          "headline": "Top Performing Leveraged/Inverse ETFs: 12/08/2024 - etftrends.com",
-          "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxPRnRJNHFPb1R1SHE0Y2NiWnB5MGVxNW9JSk1XQ2RkMko4ZWo0MnlJUm0wMUU5VmR6UlhnYjVXRnl1V3FCVk1kOUQ5QTR0QV9Sc0hjZDZzZFdrcUgzS1NwZzBPTkhhX28yWUxKZ0Y5MWhQVWhrQmxtdWs3TmlFNW15N0E4ZHFBMVMyLXVWTElGX2xsUHFmTXlxTW1lZU45d9IBrgFBVV95cUxOM3lkYWVVaTdVY2o4NW9sWURzVmFhdF9UWjA0RlA3NG1TSFNtZHNsVVE4VG1JOXVPemNKekZrbGpKOUVYREZUdDZtNXZNVWJzUVNBX016LTYtNWFzQmNfWEt3UjZrNEdGbW96SVZiR0hyZXBlMXJfMU9icEJRdWFVU0pfZFNGNXJmYjB1dnp6N1NQMk5rYUdnaWpuRXlPS0FfbzdLbUlnbDZUWUxydGc?oc=5",
-          "source": "etftrends.com",
-          "published": "Wed, 11 Dec 2024 08:00:00 GMT"
-        },
-        {
-          "headline": "GraniteShares 2x Long META Daily ETF (FBL) Dividend Yield 2026 & History $FBL - MarketBeat",
-          "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE1kTkp5SzhmVmE3UkFhb3dQY3phMFFJdFItYkRaVmdzSTJGUHp0LWRmUkxBUWsySnlKd29tYXdtUmQ3R0NfU3owdjJPcXZtaUI3QVdTbllrbG5uZmUxTTR3bmh0WTQ?oc=5",
-          "source": "MarketBeat",
-          "published": "Wed, 27 Dec 2023 23:45:35 GMT"
-        }
-      ],
+      "news": [],
       "earnings": null,
-      "consensus": {
-        "target_mean": null,
-        "target_high": null,
-        "target_low": null,
-        "recommendation": null,
-        "num_analysts": null
-      },
+      "consensus": null,
       "analyst_recs": [],
       "position": {
         "ticker": "FBL",
         "shares": 8.0,
         "cost_basis": 39.28,
-        "price": 25.649999618530273,
-        "day_change_pct": -1.3840853794065455,
-        "market_value": 205.1999969482422,
-        "unrealized_pl": -109.04000305175782,
-        "unrealized_pl_pct": -34.69959363917955,
+        "price": null,
+        "day_change_pct": null,
+        "market_value": null,
+        "unrealized_pl": null,
+        "unrealized_pl_pct": null,
         "sector": "Unknown",
-        "weight_pct": 1.9381913516660503
+        "weight_pct": 0
       }
     },
     {
-      "action": "sell",
-      "horizon": "swing",
-      "conviction": 3,
-      "thesis": "LEU is currently in a downtrend with the price below both the 50-day and 200-day moving averages, indicating weakness. The stock is down 58% from its 52-week high of $436, and recent news about a major HALEU deal has not been enough to sustain a rally. If LEU falls below $170, it would signal a further breakdown, invalidating any bullish thesis.",
-      "key_catalysts": [
-        "Earnings report on August 4, 2026, which may shift sentiment",
-        "Any significant news regarding uranium market dynamics"
-      ],
-      "key_risks": [
-        "Further decline below $170, indicating a loss of investor confidence",
-        "Continued negative sentiment from analysts or market conditions"
-      ],
-      "suggested_action_detail": "Sell all shares at market price, ideally on a bounce toward the 200-day SMA around $250. Monitor for any recovery signs before the earnings date.",
-      "source": "llm",
+      "action": "hold",
+      "horizon": "long_term",
+      "conviction": 2,
+      "thesis": "No strong signal; default hold under aggressive profile.",
+      "key_catalysts": [],
+      "key_risks": [],
+      "suggested_action_detail": "Maintain current size; review on next earnings or 10%+ move",
+      "source": "rules",
       "ticker": "LEU",
       "quote": {
         "ticker": "LEU",
-        "price": 182.60000610351562,
-        "prev_close": 192.32000732421875,
-        "day_change_pct": -5.054076981349558,
-        "market_cap": 3592252416,
-        "pe_ratio": 66.159424,
-        "high_52w": 436.0,
-        "low_52w": 93.16999816894531,
-        "sector": "Energy",
-        "industry": "Uranium",
-        "source": "yahoo_chart",
-        "error": null
+        "price": null,
+        "prev_close": null,
+        "day_change_pct": null,
+        "market_cap": null,
+        "pe_ratio": null,
+        "high_52w": null,
+        "low_52w": null,
+        "sector": null,
+        "industry": null,
+        "source": null,
+        "error": "No price source returned data (tried: stooq, yahoo_chart, yfinance)"
       },
       "technicals": {
-        "last": 182.60000610351562,
-        "sma50": 198.37860076904298,
-        "sma200": 250.65195014953613,
-        "above_sma50": false,
-        "above_sma200": false,
-        "high_52w": 436.0,
-        "low_52w": 93.16999816894531,
-        "pct_off_52w_high": -58.11926465515697,
-        "rsi14": 36.164989133263155
+        "last": null,
+        "sma20": null,
+        "sma50": null,
+        "sma200": null,
+        "above_sma50": null,
+        "above_sma200": null,
+        "stacked_uptrend": null,
+        "stacked_downtrend": null,
+        "high_52w": null,
+        "low_52w": null,
+        "pct_off_52w_high": null,
+        "rsi14": null,
+        "macd_hist": null,
+        "macd_cross_up": null,
+        "macd_cross_down": null,
+        "bb_upper": null,
+        "bb_lower": null,
+        "bb_pct": null,
+        "atr14": null,
+        "atr_pct": null,
+        "vol_ratio_20d": null,
+        "breakout_20d": null,
+        "error": "no price history"
       },
-      "news": [
-        {
-          "headline": "Why Centrus Energy (LEU) Is Down 11.9% After Raising 2026 Outlook And Winning Major HALEU Deal",
-          "url": "https://finance.yahoo.com/sectors/energy/articles/why-centrus-energy-leu-down-161537548.html",
-          "source": "Simply Wall St.",
-          "published": "2026-05-16T16:15:37Z"
-        },
-        {
-          "headline": "Roth Capital Factors In Centrus Energy (LEU)\u2019s Long-Term Growth, Raises PT To $230",
-          "url": "https://finance.yahoo.com/sectors/energy/articles/roth-capital-factors-centrus-energy-173631647.html",
-          "source": "Insider Monkey",
-          "published": "2026-05-15T17:36:31Z"
-        },
-        {
-          "headline": "Centrus Energy (LEU) Beats Q1 Non-GAAP EPS Estimates by Nearly 3xs",
-          "url": "https://finance.yahoo.com/sectors/energy/articles/centrus-energy-leu-beats-q1-154441845.html",
-          "source": "Insider Monkey",
-          "published": "2026-05-15T15:44:41Z"
-        },
-        {
-          "headline": "5 Insightful Analyst Questions From Centrus Energy\u2019s Q1 Earnings Call",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/5-insightful-analyst-questions-centrus-082055020.html",
-          "source": "StockStory",
-          "published": "2026-05-15T08:20:55Z"
-        },
-        {
-          "headline": "Is Centrus Energy Corp. (LEU) A Good Stock To Buy Now?",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/centrus-energy-corp-leu-good-204036866.html",
-          "source": "Insider Monkey",
-          "published": "2026-05-14T20:40:36Z"
-        },
-        {
-          "headline": "3 Small-Cap Stocks We Keep Off Our Radar",
-          "url": "https://finance.yahoo.com/news/3-small-cap-stocks-keep-205255355.html",
-          "source": "StockStory",
-          "published": "2026-05-13T20:52:55Z"
-        },
-        {
-          "headline": "OKLO - The $25 Stock That Hit $193 And Then Lost Most Of It",
-          "url": "https://finance.yahoo.com/news/oklo-25-stock-hit-193-172841989.html",
-          "source": "Trefis",
-          "published": "2026-05-13T17:28:41Z"
-        },
-        {
-          "headline": "Energy Fuels' Uranium Revenues Surge 112% in Q126: More Upside Ahead?",
-          "url": "https://finance.yahoo.com/news/energy-fuels-uranium-revenues-surge-172800418.html",
-          "source": "Zacks",
-          "published": "2026-05-13T17:28:00Z"
-        },
-        {
-          "headline": "Centrus Energy Q1 Earnings Call Highlights",
-          "url": "https://finance.yahoo.com/sectors/energy/articles/centrus-energy-q1-earnings-call-100737968.html",
-          "source": "MarketBeat",
-          "published": "2026-05-11T10:07:37Z"
-        },
-        {
-          "headline": "A Look At Centrus Energy (LEU) Valuation As Mixed Share Performance Meets Contrasting Analyst Targets",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/look-centrus-energy-leu-valuation-071221557.html",
-          "source": "Simply Wall St.",
-          "published": "2026-05-09T07:12:21Z"
-        },
-        {
-          "headline": "Centrus Reports First Quarter 2026 Results - PR Newswire",
-          "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxPbENOZUZ5VWVNT2tEbXBkb2lTSWdFbEhfdlNBR201Uk9VRDBJWkhNUlNlMWRxU0VPa2VqcDFWdjNDcUpuYmpSam9BTno1TE5xZVpwTTJ2a0tmUC01ZV92R2dUT2RhbkJNX2huNHk0NkN2anQ2SFJudjU1S2o5YWtNdTdpVmcyTFhrZlBOM1AzUVA5VEo4TlcwamRqSnRXMWc?oc=5",
-          "source": "PR Newswire",
-          "published": "Tue, 05 May 2026 07:00:00 GMT"
-        },
-        {
-          "headline": "Is Centrus Energy Corp. (LEU) A Good Stock To Buy Now? - Yahoo Finance",
-          "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxPbmk4Rlc2MTBNSW1tXzNfSVFZZlBJZEUydVZrLU54bzZmNV9BczR6bENCb2tQUzFXelZQeHJPYXN2WWlSMHNaOTZ2TnY4ZjU4dUJhLTNhdlBFa2ZjMFRIQ0t2eUN1cWlYbmFsMnZtNzZ4UnJNRGtFajY4SU9IM3FsbVlIMmZvV1JtX25NT19XWFZjdDFMdTVMOA?oc=5",
-          "source": "Yahoo Finance",
-          "published": "Thu, 14 May 2026 20:40:36 GMT"
-        }
-      ],
-      "earnings": {
-        "date": "2026-08-04",
-        "days_away": 79
-      },
-      "consensus": {
-        "target_mean": 278.64285,
-        "target_high": 390.0,
-        "target_low": 195.0,
-        "recommendation": "buy",
-        "num_analysts": 14
-      },
-      "analyst_recs": [
-        {
-          "date": "2020-01-31",
-          "firm": "Benchmark",
-          "to_grade": "Buy",
-          "from_grade": null,
-          "action": "init"
-        },
-        {
-          "date": "2020-09-15",
-          "firm": "Lake Street",
-          "to_grade": "Buy",
-          "from_grade": null,
-          "action": "init"
-        },
-        {
-          "date": "2020-11-16",
-          "firm": "Roth Capital",
-          "to_grade": "Buy",
-          "from_grade": null,
-          "action": "main"
-        },
-        {
-          "date": "2020-11-19",
-          "firm": "Roth Capital",
-          "to_grade": "Buy",
-          "from_grade": null,
-          "action": "main"
-        },
-        {
-          "date": "2021-05-18",
-          "firm": "Roth Capital",
-          "to_grade": "Buy",
-          "from_grade": null,
-          "action": "main"
-        }
-      ],
+      "news": [],
+      "earnings": null,
+      "consensus": null,
+      "analyst_recs": [],
       "position": {
         "ticker": "LEU",
         "shares": 2.0,
         "cost_basis": 303.9,
-        "price": 182.60000610351562,
-        "day_change_pct": -5.054076981349558,
-        "market_value": 365.20001220703125,
-        "unrealized_pl": -242.5999877929687,
-        "unrealized_pl_pct": -39.91444353290042,
-        "sector": "Energy",
-        "weight_pct": 3.449451831456606
+        "price": null,
+        "day_change_pct": null,
+        "market_value": null,
+        "unrealized_pl": null,
+        "unrealized_pl_pct": null,
+        "sector": "Unknown",
+        "weight_pct": 0
       }
     },
     {
-      "action": "trim",
+      "action": "hold",
       "horizon": "long_term",
-      "conviction": 4,
-      "thesis": "META is currently in a downtrend with the price below both the 50-day and 200-day moving averages, indicating weakness. The RSI is oversold at 25, suggesting a potential bounce, but the current weight of 63.82% in the portfolio exceeds the 25% cap. To align with risk management principles, trimming this position is prudent. A break below $600 would invalidate this thesis.",
-      "key_catalysts": [
-        "Earnings report on July 29, 2026, which could provide insights into future growth prospects."
-      ],
-      "key_risks": [
-        "Continued downtrend below long-term trend lines, leading to further capital preservation risk."
-      ],
-      "suggested_action_detail": "Trim the position by selling 5 shares at current market price around $614.23 to reduce the weight to approximately 29% of the portfolio.",
-      "source": "llm",
+      "conviction": 2,
+      "thesis": "No strong signal; default hold under aggressive profile.",
+      "key_catalysts": [],
+      "key_risks": [],
+      "suggested_action_detail": "Maintain current size; review on next earnings or 10%+ move",
+      "source": "rules",
       "ticker": "META",
       "quote": {
         "ticker": "META",
-        "price": 614.22998046875,
-        "prev_close": 618.4299926757812,
-        "day_change_pct": -0.679141092245368,
-        "market_cap": 1559175626752,
-        "pe_ratio": 22.319403,
-        "high_52w": 790.0,
-        "low_52w": 525.719970703125,
-        "sector": "Communication Services",
-        "industry": "Internet Content & Information",
-        "source": "yahoo_chart",
-        "error": null
+        "price": null,
+        "prev_close": null,
+        "day_change_pct": null,
+        "market_cap": null,
+        "pe_ratio": null,
+        "high_52w": null,
+        "low_52w": null,
+        "sector": null,
+        "industry": null,
+        "source": null,
+        "error": "No price source returned data (tried: stooq, yahoo_chart, yfinance)"
       },
       "technicals": {
-        "last": 614.22998046875,
-        "sma50": 621.8707983398438,
-        "sma200": 673.4232489013672,
-        "above_sma50": false,
-        "above_sma200": false,
-        "high_52w": 790.0,
-        "low_52w": 525.719970703125,
-        "pct_off_52w_high": -22.249369560917724,
-        "rsi14": 25.338931147816893
+        "last": null,
+        "sma20": null,
+        "sma50": null,
+        "sma200": null,
+        "above_sma50": null,
+        "above_sma200": null,
+        "stacked_uptrend": null,
+        "stacked_downtrend": null,
+        "high_52w": null,
+        "low_52w": null,
+        "pct_off_52w_high": null,
+        "rsi14": null,
+        "macd_hist": null,
+        "macd_cross_up": null,
+        "macd_cross_down": null,
+        "bb_upper": null,
+        "bb_lower": null,
+        "bb_pct": null,
+        "atr14": null,
+        "atr_pct": null,
+        "vol_ratio_20d": null,
+        "breakout_20d": null,
+        "error": "no price history"
       },
-      "news": [
-        {
-          "headline": "$800B in AI spending is juicing GDP and stocks \u2014 while real wages fall and Americans cut back on goods",
-          "url": "https://finance.yahoo.com/economy/articles/800b-ai-spending-juicing-gdp-193500398.html",
-          "source": "Moneywise",
-          "published": "2026-05-16T19:35:00Z"
-        },
-        {
-          "headline": "Marketing operating system Nectar Social raises $30M Series A led by Menlo",
-          "url": "https://finance.yahoo.com/sectors/technology/articles/marketing-operating-system-nectar-social-192614046.html",
-          "source": "TechCrunch",
-          "published": "2026-05-16T19:26:14Z"
-        },
-        {
-          "headline": "5-star analysts reset Broadcom stock price target",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/5-star-analysts-reset-broadcom-173300375.html",
-          "source": "TheStreet",
-          "published": "2026-05-16T17:33:00Z"
-        },
-        {
-          "headline": "The SpaceX IPO Is Coming June 12. Here\u2019s Why You Shouldn\u2019t Rush In to Buy",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/spacex-ipo-coming-june-12-172220729.html",
-          "source": "24/7 Wall St.",
-          "published": "2026-05-16T17:22:20Z"
-        },
-        {
-          "headline": "AXT Turned the AI Data Center Boom Into an 8,436% 1-Year Return",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/axt-turned-ai-data-center-170002890.html",
-          "source": "Barchart",
-          "published": "2026-05-16T17:00:02Z"
-        },
-        {
-          "headline": "The Staggering Number Jensen Huang Just Revealed Changes Everything About AI",
-          "url": "https://finance.yahoo.com/sectors/technology/articles/staggering-number-jensen-huang-just-163715189.html",
-          "source": "24/7 Wall St.",
-          "published": "2026-05-16T16:37:15Z"
-        },
-        {
-          "headline": "Cerebras Is the Biggest IPO of the Year. If You Buy CBRS Stock Now, Brace Yourself for Volatility Ahead.",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/cerebras-biggest-ipo-buy-cbrs-153002579.html",
-          "source": "Barchart",
-          "published": "2026-05-16T15:30:02Z"
-        },
-        {
-          "headline": "Oracle Corporation (ORCL) Named Top Pick as Oppenheimer Lifts Price Target",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/oracle-corporation-orcl-named-top-152629171.html",
-          "source": "Insider Monkey",
-          "published": "2026-05-16T15:26:29Z"
-        },
-        {
-          "headline": "Trump\u2019s More Than 3,700 Trades Astonish Wall Street Insiders",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/trump-traded-nvidia-boeing-intel-030913697.html",
-          "source": "Bloomberg",
-          "published": "2026-05-16T14:10:49Z"
-        },
-        {
-          "headline": "Alibaba Profit Fell Sharply, But Full-Stack AI Moved From Incubation to Commercialization. What This Means for BABA Stock.",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/alibaba-profit-fell-sharply-full-140002337.html",
-          "source": "Barchart",
-          "published": "2026-05-16T14:00:02Z"
-        },
-        {
-          "headline": "Meta Stock: Big Growth, Big Discount, Big Buy - 24/7 Wall St.",
-          "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxQR0JCdWNkNzRkVm91RUU0UjVHRE9QNTFuUnAyU0V0ZzVSWTE2YjNzNkdUajdfcUM4T3VWbzliSHNJb0JjTjZCU1Mxem5tUTgwbDRHYmRQWS1MZENpMzM4V3BMR1pSc2VpeGNBZmYyXzFMeDZDdGlpNWtOTDhQLXBfbGc5REF6eUVnR0tlLThrZw?oc=5",
-          "source": "24/7 Wall St.",
-          "published": "Thu, 14 May 2026 13:42:21 GMT"
-        },
-        {
-          "headline": "Meta Stock vs. Google Stock: One Is Clearly the Better Buy for the Next 10 Years - Barchart.com",
-          "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxQa294ZHJJdnJZclJ5RzE1d0ZxdEpNWXllbUlEWWlzeDEya2U4QjVURFYxcmViSkR0dlhuZFBCdDVEdU1sMndYRDVkYVR6dnlJUUdyaGpkUnFfSU1kWGtyTzJhalJXM3VvVFZVdGxsUm91ZV9MT1E0VEswYUdwdFlmRS1feTZrdE9qa3Z2WlFHM19CbjFxVWZvalc1bkp1eU9pbkJUaXpkZ3lFRWNBTF9vNFd4NWtnRVMxdFBFTE1NMA?oc=5",
-          "source": "Barchart.com",
-          "published": "Thu, 14 May 2026 20:02:35 GMT"
-        }
-      ],
-      "earnings": {
-        "date": "2026-07-29",
-        "days_away": 73
-      },
-      "consensus": {
-        "target_mean": 826.69104,
-        "target_high": 1015.0,
-        "target_low": 614.0,
-        "recommendation": "strong_buy",
-        "num_analysts": 58
-      },
-      "analyst_recs": [
-        {
-          "date": "2021-05-03",
-          "firm": "Argus Research",
-          "to_grade": "Buy",
-          "from_grade": "Buy",
-          "action": "main"
-        },
-        {
-          "date": "2022-01-19",
-          "firm": "Morgan Stanley",
-          "to_grade": "Overweight",
-          "from_grade": null,
-          "action": "main"
-        },
-        {
-          "date": "2022-01-26",
-          "firm": "RBC Capital",
-          "to_grade": "Outperform",
-          "from_grade": null,
-          "action": "main"
-        },
-        {
-          "date": "2022-02-03",
-          "firm": "Keybanc",
-          "to_grade": "Overweight",
-          "from_grade": null,
-          "action": "main"
-        },
-        {
-          "date": "2022-02-03",
-          "firm": "Raymond James",
-          "to_grade": "Outperform",
-          "from_grade": "Strong Buy",
-          "action": "down"
-        }
-      ],
+      "news": [],
+      "earnings": null,
+      "consensus": null,
+      "analyst_recs": [],
       "position": {
         "ticker": "META",
         "shares": 11.0,
         "cost_basis": 677.22,
-        "price": 614.22998046875,
-        "day_change_pct": -0.679141092245368,
-        "market_value": 6756.52978515625,
-        "unrealized_pl": -692.8902148437501,
-        "unrealized_pl_pct": -9.301263921805322,
-        "sector": "Communication Services",
-        "weight_pct": 63.81797169405904
+        "price": null,
+        "day_change_pct": null,
+        "market_value": null,
+        "unrealized_pl": null,
+        "unrealized_pl_pct": null,
+        "sector": "Unknown",
+        "weight_pct": 0
       }
     }
   ],
   "candidates": {
-    "candidates": [
-      {
-        "ticker": "NVDA",
-        "thesis": "NVIDIA remains a leader in AI and GPU technology, with strong exposure to AI-driven growth in data centers, autonomous vehicles, and gaming. Recent pullback from 52-week highs presents an attractive entry point, with solid support near its 50-day SMA.",
-        "entry_zone": "210-225",
-        "risk": "Stop loss at $190, targeting $275 for a 2:1 risk-reward ratio",
-        "horizon": "swing",
-        "conviction": 5
-      },
-      {
-        "ticker": "AVGO",
-        "thesis": "Broadcom is a key player in semiconductors, benefiting from secular growth in 5G, cloud computing, and AI. Trading near its 50-day SMA with limited downside risk and strong fundamentals.",
-        "entry_zone": "400-430",
-        "risk": "Stop loss at $375, targeting $500 for a 2:1 risk-reward ratio",
-        "horizon": "long_term",
-        "conviction": 4
-      },
-      {
-        "ticker": "MRVL",
-        "thesis": "Marvell is a high-growth semiconductor company with strong exposure to 5G, cloud infrastructure, and AI. Recent momentum and proximity to its 50-day SMA make it a compelling swing trade candidate.",
-        "entry_zone": "165-180",
-        "risk": "Stop loss at $150, targeting $210 for a 2.5:1 risk-reward ratio",
-        "horizon": "swing",
-        "conviction": 4
-      },
-      {
-        "ticker": "ASML",
-        "thesis": "ASML is the dominant supplier of EUV lithography equipment, critical for advanced semiconductor manufacturing. Long-term growth in semiconductor demand makes this a must-own for the next decade.",
-        "entry_zone": "1400-1500",
-        "risk": "Stop loss at $1300, targeting $1800 for a 2:1 risk-reward ratio",
-        "horizon": "long_term",
-        "conviction": 5
-      },
-      {
-        "ticker": "ARM",
-        "thesis": "Recently IPO'd ARM Holdings is positioned to benefit from the proliferation of AI and IoT devices, with its chip design architecture being a key enabler for these technologies. Current pullback offers an opportunity to build a position.",
-        "entry_zone": "190-210",
-        "risk": "Stop loss at $175, targeting $260 for a 2:1 risk-reward ratio",
-        "horizon": "long_term",
-        "conviction": 4
-      }
-    ],
-    "screen_results": [
-      {
-        "ticker": "NVDA",
-        "score": 4.0,
-        "price": 225.32000732421875,
-        "sector": "Technology",
-        "rsi14": 56.23657918192527,
-        "sma50": 193.07119995117188,
-        "sma200": 185.97255027770996,
-        "pct_off_52w_high": -4.420122985552178
-      },
-      {
-        "ticker": "AVGO",
-        "score": 4.0,
-        "price": 425.19000244140625,
-        "sector": "Technology",
-        "rsi14": 52.52327981429027,
-        "sma50": 369.4028009033203,
-        "sma200": 346.8270007324219,
-        "pct_off_52w_high": -3.3197675753982763
-      },
-      {
-        "ticker": "TSM",
-        "score": 4.0,
-        "price": 404.3500061035156,
-        "sector": "Technology",
-        "rsi14": 49.714231609162304,
-        "sma50": 367.5926007080078,
-        "sma200": 313.73134994506836,
-        "pct_off_52w_high": -3.6114407381369187
-      },
-      {
-        "ticker": "MRVL",
-        "score": 4.0,
-        "price": 176.88999938964844,
-        "sector": "Technology",
-        "rsi14": 61.68083708855556,
-        "sma50": 128.1918002319336,
-        "sma200": 93.22830001831055,
-        "pct_off_52w_high": -3.116443413485851
-      },
-      {
-        "ticker": "ARM",
-        "score": 4.0,
-        "price": 209.16000366210938,
-        "sector": "Technology",
-        "rsi14": 47.61735913700751,
-        "sma50": 167.8105010986328,
-        "sma200": 144.03000034332274,
-        "pct_off_52w_high": -11.858406669936192
-      },
-      {
-        "ticker": "ASML",
-        "score": 4.0,
-        "price": 1501.81005859375,
-        "sector": "Technology",
-        "rsi14": 55.466259592502595,
-        "sma50": 1417.319404296875,
-        "sma200": 1156.2891485595703,
-        "pct_off_52w_high": -5.666383577516894
-      },
-      {
-        "ticker": "LRCX",
-        "score": 4.0,
-        "price": 284.7200012207031,
-        "sector": "Technology",
-        "rsi14": 61.19733924611974,
-        "sma50": 247.86779876708985,
-        "sma200": 183.6807493209839,
-        "pct_off_52w_high": -4.823664706733872
-      },
-      {
-        "ticker": "AMD",
-        "score": 3.0,
-        "price": 424.1000061035156,
-        "sector": "Technology",
-        "rsi14": 67.615665419326,
-        "sma50": 279.2126007080078,
-        "sma200": 224.18884994506837,
-        "pct_off_52w_high": -7.561193965715934
-      },
-      {
-        "ticker": "MU",
-        "score": 3.0,
-        "price": 724.6599731445312,
-        "sector": "Technology",
-        "rsi14": 70.06617648408967,
-        "sma50": 486.2376025390625,
-        "sma200": 307.1270506286621,
-        "pct_off_52w_high": -9.826665412996478
-      },
-      {
-        "ticker": "GEV",
-        "score": 3.0,
-        "price": 1049.22998046875,
-        "sector": "Industrials",
-        "rsi14": 39.72503617945007,
-        "sma50": 966.4827941894531,
-        "sma200": 731.8270989990234,
-        "pct_off_52w_high": -8.725309149990178
-      },
-      {
-        "ticker": "RIOT",
-        "score": 3.0,
-        "price": 23.489999771118164,
-        "sector": "Financial Services",
-        "rsi14": 68.10284198859408,
-        "sma50": 17.081200141906738,
-        "sma200": 16.223450031280517,
-        "pct_off_52w_high": -7.300711800827642
-      },
-      {
-        "ticker": "CIFR",
-        "score": 3.0,
-        "price": 20.329999923706055,
-        "sector": "Technology",
-        "rsi14": 57.72241957132309,
-        "sma50": 16.7227001953125,
-        "sma200": 15.155775022506713,
-        "pct_off_52w_high": -17.72561441946357
-      },
-      {
-        "ticker": "HUT",
-        "score": 3.0,
-        "price": 102.47000122070312,
-        "sector": "Financial Services",
-        "rsi14": 68.86100813174609,
-        "sma50": 67.99500007629395,
-        "sma200": 49.050124893188475,
-        "pct_off_52w_high": -6.308861070312574
-      },
-      {
-        "ticker": "ROKU",
-        "score": 3.0,
-        "price": 124.0199966430664,
-        "sector": "Communication Services",
-        "rsi14": 65.52835289103481,
-        "sma50": 107.57840026855469,
-        "sma200": 100.59387500762939,
-        "pct_off_52w_high": -4.253842498384357
-      },
-      {
-        "ticker": "COST",
-        "score": 2.0,
-        "price": 1048.949951171875,
-        "sector": "Consumer Defensive",
-        "rsi14": 69.42196725492623,
-        "sma50": 1001.44759765625,
-        "sma200": 954.5023995971679,
-        "pct_off_52w_high": -0.7475067035586179
-      }
-    ]
+    "candidates": [],
+    "screen_results": []
   }
 }

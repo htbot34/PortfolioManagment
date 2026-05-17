@@ -1,8 +1,8 @@
 """Daily advisory brief - the top-of-page synthesis.
 
-Pulls together macro snapshot, per-ticker analyses, portfolio review, and
-candidate ideas, then asks the highest-tier model to write the morning note
-in the wealth-advisor voice.
+Pulls macro snapshot + scanner results + per-ticker analyses + portfolio
+context, then asks the synthesis-tier model to produce concrete trade ideas
+with entry/stop/target/size and urgency tags in the wealth-advisor voice.
 """
 import json
 from datetime import date
@@ -12,70 +12,127 @@ from app.research import llm, prompts
 
 
 def _condensed_position(rec: dict) -> dict:
-    """Keep the brief prompt tight - one line per position."""
     q = rec.get("quote") or {}
     p = rec.get("position") or {}
-    earnings = rec.get("earnings") or {}
-    consensus = rec.get("consensus") or {}
+    t = rec.get("technicals") or {}
+    e = rec.get("earnings") or {}
+    c = rec.get("consensus") or {}
     return {
         "ticker": rec["ticker"],
         "price": q.get("price"),
-        "day_change_pct": q.get("day_change_pct"),
+        "day_pct": q.get("day_change_pct"),
         "weight_pct": p.get("weight_pct"),
         "unrealized_pl_pct": p.get("unrealized_pl_pct"),
-        "rsi14": (rec.get("technicals") or {}).get("rsi14"),
-        "pct_off_52w_high": (rec.get("technicals") or {}).get("pct_off_52w_high"),
+        "rsi14": t.get("rsi14"),
+        "macd_hist": t.get("macd_hist"),
+        "bb_pct": t.get("bb_pct"),
+        "atr_pct": t.get("atr_pct"),
+        "pct_off_52w_high": t.get("pct_off_52w_high"),
+        "stacked_uptrend": t.get("stacked_uptrend"),
+        "stacked_downtrend": t.get("stacked_downtrend"),
+        "earnings_date": e.get("date"),
+        "earnings_days_away": e.get("days_away"),
+        "analyst_target_mean": c.get("target_mean"),
         "rule_action": rec.get("action"),
         "rule_thesis": rec.get("thesis"),
-        "rule_conviction": rec.get("conviction"),
-        "earnings_date": earnings.get("date"),
-        "earnings_days_away": earnings.get("days_away"),
-        "analyst_target_mean": consensus.get("target_mean"),
-        "analyst_recommendation": consensus.get("recommendation"),
-        "top_news": [n["headline"] for n in (rec.get("news") or [])[:5]],
+        "top_news": [n["headline"] for n in (rec.get("news") or [])[:3]],
     }
 
 
 def _macro_summary(macro: dict) -> dict:
-    """Strip macro snapshot down to essentials for the prompt."""
     return {
-        "indices": {k: {"price": v["price"], "day_pct": v["day_change_pct"]}
+        "indices": {k: {"price": v.get("price"), "day_pct": v.get("day_change_pct")}
                     for k, v in macro["indices"].items()},
         "leaders": [{"name": s["name"], "day_pct": s["day_change_pct"]} for s in macro["leaders"]],
         "laggards": [{"name": s["name"], "day_pct": s["day_change_pct"]} for s in macro["laggards"]],
     }
 
 
-def build(macro: dict, recommendations: list[dict], review: dict,
-          candidates: dict, exposures: dict) -> dict:
-    """Return the brief payload. If LLM is unavailable, return a stub."""
-    risk = risk_profile()
-    fallback = {
-        "generated_for": date.today().isoformat(),
-        "headline_call": "LLM unavailable - see recommendations and portfolio review for rule-based output.",
-        "market_context": "",
-        "actions": [
+def _scanner_condensed(scan_result: dict) -> dict:
+    """Trim the scanner output to what's useful in the prompt."""
+    def slim(rows):
+        return [
             {
-                "ticker": r["ticker"], "action": r["action"], "target": r.get("suggested_action_detail", ""),
-                "urgency": "this_week" if r.get("conviction", 2) >= 4 else "patient",
-                "rationale": r.get("thesis", ""),
+                "ticker": r["ticker"], "theme": r.get("theme"),
+                "price": r.get("price"), "day_pct": r.get("day_change_pct"),
+                "rsi14": r.get("rsi14"), "macd_hist": r.get("macd_hist"),
+                "atr_pct": r.get("atr_pct"), "vol_ratio": r.get("vol_ratio_20d"),
+                "pct_off_52w_high": r.get("pct_off_52w_high"),
+                "stacked_uptrend": r.get("stacked_uptrend"),
+                "held": r.get("held"),
             }
-            for r in sorted(recommendations,
-                            key=lambda x: (x.get("action") not in {"sell", "trim"},
-                                           -(x.get("conviction") or 0)))
-        ],
-        "portfolio_health": "; ".join(review.get("observations") or []),
-        "upcoming_catalysts": [
-            {"ticker": r["ticker"], "event": "Earnings",
-             "date": (r.get("earnings") or {}).get("date")}
-            for r in recommendations
-            if (r.get("earnings") or {}).get("date")
-        ],
-        "outside_ideas": candidates.get("candidates", [])[:3],
+            for r in rows
+        ]
+    return {
+        "universe_size": scan_result.get("universe_size"),
+        "buckets": {name: slim(rows) for name, rows in scan_result.get("buckets", {}).items()},
+        "top_up": slim(scan_result.get("top_movers_up", []))[:5],
+        "top_down": slim(scan_result.get("top_movers_down", []))[:5],
     }
 
+
+def _fallback(recommendations: list[dict], scan_result: dict, review: dict) -> dict:
+    """Rule-based fallback when the LLM is unavailable."""
+    trade_ideas: list[dict] = []
+    # Defense: trim oversized / overbought held positions
+    for r in recommendations:
+        if r.get("action") in {"trim", "sell"} and r.get("conviction", 0) >= 3:
+            trade_ideas.append({
+                "ticker": r["ticker"],
+                "action": r["action"],
+                "setup": "trim_overweight" if "weight" in (r.get("thesis", "").lower()) else "exit",
+                "entry": "",
+                "stop": "",
+                "target_1": "",
+                "target_2": None,
+                "size_pct": None,
+                "urgency": "this_week" if r["action"] == "trim" else "today",
+                "horizon": r.get("horizon", "long_term"),
+                "thesis": r.get("thesis", ""),
+                "invalidation": "",
+            })
+    # Offense: take top scanner picks
+    for bucket_name in ("breakouts", "momentum_continuation", "pullbacks_to_support", "oversold_bounces"):
+        for s in scan_result["buckets"].get(bucket_name, [])[:2]:
+            if s.get("held"):
+                continue
+            trade_ideas.append({
+                "ticker": s["ticker"],
+                "action": "buy",
+                "setup": bucket_name.rstrip("s"),
+                "entry": f"~${s['price']:.2f}" if s.get("price") else "",
+                "stop": f"${s['price'] * 0.93:.2f}" if s.get("price") else "",
+                "target_1": f"${s['price'] * 1.10:.2f}" if s.get("price") else "",
+                "target_2": f"${s['price'] * 1.20:.2f}" if s.get("price") else None,
+                "size_pct": 3,
+                "urgency": "this_week",
+                "horizon": "swing",
+                "thesis": f"{bucket_name.replace('_',' ')} setup; RSI {s.get('rsi14'):.0f}." if s.get("rsi14") else "",
+                "invalidation": f"Break below ${s['price'] * 0.93:.2f}" if s.get("price") else "",
+            })
+    return {
+        "headline": "LLM unavailable - rule-based trade ideas from scanner. Configure GITHUB_TOKEN for advisor commentary.",
+        "market_pulse": "",
+        "trade_ideas": trade_ideas,
+        "portfolio_notes": review.get("observations", []),
+        "catalysts_this_week": [
+            {"ticker": r["ticker"], "event": "earnings",
+             "date": (r.get("earnings") or {}).get("date"), "note": ""}
+            for r in recommendations
+            if (r.get("earnings") or {}).get("days_away") is not None
+            and (r["earnings"]["days_away"] is not None and r["earnings"]["days_away"] <= 10)
+        ],
+    }
+
+
+def build(macro: dict, recommendations: list[dict], review: dict,
+          candidates: dict, exposures: dict, scan_result: dict) -> dict:
+    risk = risk_profile()
+
     if not llm.available():
-        return fallback
+        out = _fallback(recommendations, scan_result, review)
+        out["generated_for"] = date.today().isoformat()
+        return out
 
     payload = {
         "today": date.today().isoformat(),
@@ -83,29 +140,32 @@ def build(macro: dict, recommendations: list[dict], review: dict,
         "macro": _macro_summary(macro),
         "exposures": {
             "portfolio_value": exposures.get("portfolio_value"),
+            "cash": exposures.get("cash"),
             "cash_pct": exposures.get("cash_pct"),
             "sector_pct": exposures.get("sector_pct"),
         },
         "positions": [_condensed_position(r) for r in recommendations],
+        "scanner": _scanner_condensed(scan_result),
         "rule_based_review": review,
-        "outside_ideas_available": candidates.get("candidates", []),
+        "candidate_universe_picks": candidates.get("candidates", []),
     }
 
     user_blob = (
-        "Here is everything you need to write today's note.\n\n"
+        "Below is every signal you have for today's call. The scanner has "
+        "already done the mechanical work. Your job: cherry-pick the best "
+        "setups, give the client concrete trades with entries/stops/targets/size, "
+        "lead with defense on the existing book, then offense.\n\n"
         f"{json.dumps(payload, indent=2, default=str)}\n\n"
-        "Now write the morning brief JSON. Be specific. Lead with the most "
-        "important action. Reference levels and dates. Defense first."
+        "Write the morning brief JSON now. 5-10 trade ideas. Specific levels. Stops on every trade."
     )
 
     out = llm.chat_json(
         prompts.SYSTEM_DAILY_BRIEF, user_blob,
         model=llm.synthesis_model(),
-        max_tokens=2500,
-        temperature=0.4,
+        max_tokens=3500,
+        temperature=0.35,
     )
-    if not out or "headline_call" not in out:
-        return fallback
-
+    if not out or "trade_ideas" not in out:
+        out = _fallback(recommendations, scan_result, review)
     out["generated_for"] = date.today().isoformat()
     return out

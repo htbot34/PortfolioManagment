@@ -181,18 +181,35 @@ def history(ticker: str, period: str = "6mo") -> pd.DataFrame | None:
     return df
 
 
+_EMPTY_TECHNICALS = {
+    "last": None, "sma20": None, "sma50": None, "sma200": None,
+    "above_sma50": None, "above_sma200": None,
+    "stacked_uptrend": None, "stacked_downtrend": None,
+    "high_52w": None, "low_52w": None, "pct_off_52w_high": None,
+    "rsi14": None, "macd_hist": None, "macd_cross_up": None, "macd_cross_down": None,
+    "bb_upper": None, "bb_lower": None, "bb_pct": None,
+    "atr14": None, "atr_pct": None, "vol_ratio_20d": None, "breakout_20d": None,
+}
+
+
 def technicals(ticker: str) -> dict:
     df, _ = _history_with_source(ticker)
     if df is None or df.empty:
-        return {"error": "no price history"}
+        return {**_EMPTY_TECHNICALS, "error": "no price history"}
     close = df["Close"]
+    high = df["High"] if "High" in df.columns else close
+    low = df["Low"] if "Low" in df.columns else close
+    volume = df["Volume"] if "Volume" in df.columns else None
     last = float(close.iloc[-1])
+    sma20 = float(close.tail(20).mean()) if len(close) >= 20 else None
     sma50 = float(close.tail(50).mean()) if len(close) >= 50 else None
     sma200 = float(close.tail(200).mean()) if len(close) >= 200 else None
     high_52w = float(close.max())
     low_52w = float(close.min())
+    high_20d = float(close.tail(20).max()) if len(close) >= 20 else None
     pct_off_high = (last - high_52w) / high_52w * 100 if high_52w else None
 
+    # RSI(14)
     delta = close.diff()
     up = delta.clip(lower=0).rolling(14).mean()
     down = (-delta.clip(upper=0)).rolling(14).mean()
@@ -200,16 +217,69 @@ def technicals(ticker: str) -> dict:
     rsi = 100 - (100 / (1 + rs))
     rsi_last = float(rsi.iloc[-1]) if not rsi.empty else None
 
+    # MACD (12, 26, 9)
+    ema12 = close.ewm(span=12, adjust=False).mean()
+    ema26 = close.ewm(span=26, adjust=False).mean()
+    macd_line = ema12 - ema26
+    signal_line = macd_line.ewm(span=9, adjust=False).mean()
+    macd_hist = macd_line - signal_line
+    macd_cross_up = bool(len(macd_hist) >= 2 and macd_hist.iloc[-2] < 0 < macd_hist.iloc[-1])
+    macd_cross_down = bool(len(macd_hist) >= 2 and macd_hist.iloc[-2] > 0 > macd_hist.iloc[-1])
+
+    # Bollinger Bands (20, 2)
+    if len(close) >= 20:
+        ma20 = close.tail(20).mean()
+        sd20 = close.tail(20).std()
+        bb_upper = float(ma20 + 2 * sd20)
+        bb_lower = float(ma20 - 2 * sd20)
+        bb_pct = (last - bb_lower) / (bb_upper - bb_lower) if bb_upper != bb_lower else None
+    else:
+        bb_upper = bb_lower = bb_pct = None
+
+    # ATR(14) for stop sizing
+    if "High" in df.columns and "Low" in df.columns and len(df) >= 15:
+        prev_close = close.shift(1)
+        tr = (high - low).combine((high - prev_close).abs(), max).combine((low - prev_close).abs(), max)
+        atr14 = float(tr.tail(14).mean())
+        atr_pct = atr14 / last * 100 if last else None
+    else:
+        atr14 = atr_pct = None
+
+    # Volume ratio vs 20-day avg
+    if volume is not None and len(volume) >= 21:
+        v_last = float(volume.iloc[-1])
+        v_avg = float(volume.tail(20).mean())
+        vol_ratio = v_last / v_avg if v_avg else None
+    else:
+        vol_ratio = None
+
+    # 20-day breakout: today's close above the prior 20-day high
+    breakout_20d = bool(high_20d is not None and last >= high_20d and len(close) >= 21
+                        and last > float(close.iloc[-21:-1].max()))
+
     return {
         "last": last,
+        "sma20": sma20,
         "sma50": sma50,
         "sma200": sma200,
         "above_sma50": (last > sma50) if sma50 else None,
         "above_sma200": (last > sma200) if sma200 else None,
+        "stacked_uptrend": bool(sma20 and sma50 and sma200 and last > sma20 > sma50 > sma200),
+        "stacked_downtrend": bool(sma20 and sma50 and sma200 and last < sma20 < sma50 < sma200),
         "high_52w": high_52w,
         "low_52w": low_52w,
         "pct_off_52w_high": pct_off_high,
         "rsi14": rsi_last,
+        "macd_hist": float(macd_hist.iloc[-1]) if not macd_hist.empty else None,
+        "macd_cross_up": macd_cross_up,
+        "macd_cross_down": macd_cross_down,
+        "bb_upper": bb_upper,
+        "bb_lower": bb_lower,
+        "bb_pct": bb_pct,
+        "atr14": atr14,
+        "atr_pct": atr_pct,
+        "vol_ratio_20d": vol_ratio,
+        "breakout_20d": breakout_20d,
     }
 
 

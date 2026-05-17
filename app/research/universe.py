@@ -1,30 +1,59 @@
-"""Curated candidate universe organized by the investor's themes.
+"""Expanded universe of trade-able names organized by theme.
 
-Used by the candidate generator to ground LLM suggestions in real tickers
-we can actually fetch data for, rather than letting the model hallucinate.
+This is the scanning surface for daily opportunity detection. Bias is toward
+aggressive growth / momentum names appropriate for a young, aggressive
+risk profile.
 """
 
 UNIVERSE: dict[str, list[str]] = {
-    "AI infrastructure": [
-        "NVDA", "AMD", "AVGO", "TSM", "MU", "MRVL", "SMCI", "ARM", "ASML", "LRCX",
+    "Mega cap tech": [
+        "AAPL", "MSFT", "GOOGL", "AMZN", "META", "NVDA", "TSLA", "NFLX", "AVGO", "ORCL",
     ],
-    "AI applications": [
-        "GOOGL", "MSFT", "CRM", "NOW", "SNOW", "DDOG", "NET", "MDB", "PLTR", "AI",
+    "Semiconductors": [
+        "AMD", "TSM", "MU", "MRVL", "ARM", "LRCX", "ASML", "AMAT", "KLAC", "QCOM",
+        "INTC", "SMCI", "ALAB", "ONTO",
     ],
-    "Small modular reactors / clean energy": [
-        "SMR", "NNE", "BWXT", "GEV", "VST", "CEG", "CCJ", "URA", "UEC", "LEU",
+    "AI infra / data": [
+        "PLTR", "SNOW", "DDOG", "MDB", "NET", "ESTC", "PATH", "AI", "BBAI", "SOUN",
+    ],
+    "Cloud / SaaS": [
+        "CRM", "NOW", "WDAY", "ADBE", "INTU", "VEEV", "ZS", "PANW", "CRWD", "S",
+        "OKTA", "TEAM", "HUBS",
     ],
     "Cybersecurity": [
-        "PANW", "CRWD", "ZS", "S", "FTNT", "OKTA", "CYBR", "RBRK",
+        "FTNT", "CYBR", "RBRK", "QLYS", "TENB", "VRNS",
+    ],
+    "SMR / nuclear / clean energy": [
+        "SMR", "NNE", "BWXT", "CCJ", "URA", "UEC", "LEU", "GEV", "VST", "CEG",
+        "NEE", "ENPH", "FSLR", "RUN",
     ],
     "Bitcoin / digital assets infra": [
-        "COIN", "MSTR", "MARA", "RIOT", "CIFR", "IREN", "HUT",
+        "COIN", "MSTR", "MARA", "RIOT", "CIFR", "IREN", "HUT", "BTBT", "CLSK", "WULF",
     ],
-    "Secular growth": [
-        "SHOP", "MELI", "SOFI", "HOOD", "ROKU", "U", "RBLX",
+    "Fintech / payments": [
+        "V", "MA", "PYPL", "SQ", "SOFI", "HOOD", "AFRM", "NU", "TOST",
+    ],
+    "Consumer growth": [
+        "SHOP", "MELI", "SE", "ABNB", "UBER", "LYFT", "DASH", "CMG", "DKNG", "ROKU",
+    ],
+    "Healthcare / biotech": [
+        "LLY", "NVO", "VRTX", "REGN", "ISRG", "DXCM", "MRNA", "RXRX", "CRSP", "BEAM",
+    ],
+    "Industrials growth": [
+        "GE", "ETN", "PWR", "ROK", "TT", "URI", "CAT",
+    ],
+    "Defense / aero": [
+        "RTX", "LMT", "NOC", "GD", "LDOS", "KTOS", "ASTS", "RKLB", "ACHR",
+    ],
+    "Speculative / high-beta": [
+        "NBIS", "OKLO", "FBL", "RDDT", "TEM", "QBTS", "RGTI", "IONQ", "LUNR", "JOBY",
     ],
     "Quality compounders": [
-        "META", "AMZN", "NFLX", "COST", "BKNG",
+        "BRK-B", "COST", "BKNG", "MA", "SPGI",
+    ],
+    "Sector / index ETFs": [
+        "SPY", "QQQ", "IWM", "DIA", "XLK", "XLF", "XLE", "XLV", "XLY", "XLI",
+        "XLC", "XBI", "SMH", "ARKK", "BITQ", "URA",
     ],
 }
 
@@ -41,3 +70,11 @@ def all_tickers(exclude: set[str] | None = None) -> list[str]:
             seen.add(tu)
             out.append(tu)
     return out
+
+
+def theme_of(ticker: str) -> str | None:
+    t = ticker.upper()
+    for theme, names in UNIVERSE.items():
+        if t in (n.upper() for n in names):
+            return theme
+    return None

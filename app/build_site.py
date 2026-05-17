@@ -22,7 +22,7 @@ from app.data import macro as macro_mod
 from app.data import prices
 from app.portfolio import store
 from app.research import (
-    analyst, candidates as cands, daily_brief, llm, portfolio_review,
+    analyst, candidates as cands, daily_brief, llm, portfolio_review, scanner,
 )
 
 
@@ -53,6 +53,13 @@ def main() -> int:
     macro = macro_mod.snapshot()
 
     account = store.load()
+    held_set = {p.ticker.upper() for p in account.positions}
+
+    print("Running market scanner across universe...")
+    scan_result = scanner.scan(held=held_set)
+    print(f"  scanned {scan_result['universe_size']} names; buckets: " +
+          ", ".join(f"{k}={len(v)}" for k, v in scan_result["buckets"].items() if v))
+
     exposures = portfolio_review.compute_exposures(account)
     review_out = portfolio_review.review(exposures)
     weight_by_ticker = {row["ticker"]: row for row in exposures["positions"]}
@@ -83,12 +90,12 @@ def main() -> int:
 
     print("Writing daily brief...")
     try:
-        brief = daily_brief.build(macro, recs, review_out, cand_out, exposures)
+        brief = daily_brief.build(macro, recs, review_out, cand_out, exposures, scan_result)
     except Exception as e:
         traceback.print_exc()
-        brief = {"headline_call": f"Brief generation failed: {e}",
-                 "market_context": "", "actions": [],
-                 "portfolio_health": "", "upcoming_catalysts": [], "outside_ideas": []}
+        brief = {"headline": f"Brief generation failed: {e}",
+                 "market_pulse": "", "trade_ideas": [],
+                 "portfolio_notes": [], "catalysts_this_week": []}
 
     common = {
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
@@ -100,11 +107,14 @@ def main() -> int:
     env = _env()
 
     _write(site / "index.html", env.get_template("index.html").render(
-        brief=brief, macro=macro, exposures=exposures,
+        brief=brief, macro=macro, exposures=exposures, scan=scan_result,
         recs_by_ticker=ticker_payloads, base="", **common,
     ))
     _write(site / "positions.html", env.get_template("positions.html").render(
         exposures=exposures, review=review_out, base="", **common,
+    ))
+    _write(site / "scanner.html", env.get_template("scanner.html").render(
+        scan=scan_result, base="", **common,
     ))
     _write(site / "recommendations.html", env.get_template("recommendations.html").render(
         recs=recs, base="", **common,
@@ -122,6 +132,7 @@ def main() -> int:
         "generated_at": common["generated_at"],
         "diagnostics": diag,
         "macro": macro,
+        "scanner": scan_result,
         "exposures": exposures,
         "review": review_out,
         "brief": brief,

@@ -84,7 +84,7 @@ def _call(model: str, system: str, user: str, max_tokens: int, temperature: floa
         return None
     entry["status"] = r.status_code
     if r.status_code != 200:
-        entry.update(kind="http_error", body=r.text[:500])
+        entry.update(kind="http_error", body=r.text[:1800])
         _record(entry)
         print(f"  LLM {entry}")
         return None
@@ -102,7 +102,7 @@ def _call(model: str, system: str, user: str, max_tokens: int, temperature: floa
         _record(entry)
         return out
     except Exception as e:
-        entry.update(kind="parse_error", msg=str(e)[:200], body=r.text[:500])
+        entry.update(kind="parse_error", msg=str(e)[:200], body=r.text[:1800])
         _record(entry)
         print(f"  LLM {entry}")
         return None

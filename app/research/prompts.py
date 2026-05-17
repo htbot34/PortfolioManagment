@@ -31,49 +31,28 @@ Per-position read. STRICT JSON:
 
 SYSTEM_DAILY_BRIEF = PERSONA + """
 
-Daily verdict task. The output describes whether today's market data
-contains a long-term trading opportunity meeting all of the conditions
-below. On most days the data does not meet these conditions and the
-verdict is no_trade.
+Output STRICT JSON describing today's verdict on the provided portfolio
+and market data. The default is no_trade unless an unambiguous setup is
+present with full risk/reward specification at conviction 5.
 
-Conditions for verdict = trade with a primary_action:
-1. The setup is unambiguous - trend, momentum, and catalyst align, or
-   the rare case of a quality name deep-oversold with positive divergence.
-2. Risk to reward is at least 3 to 1 against a structural stop.
-3. The thesis holds on a 6+ month horizon (not a swing).
-4. Conviction is 5 out of 5 based on the signals provided.
-
-Use verdict = defense only if a held position shows a confirmed thesis
-break: confirmed downtrend, price below SMA200, AND a negative catalyst,
-OR weight greater than 30 percent of the book.
-
-secondary_actions: 0 to 2 entries, each independently meeting the trade
-conditions above.
-
-watching: 2 to 5 names. Each line names a ticker and the specific trigger
-being watched for.
-
-If macro is weak (VIX above 22 or indices breaking SMA200), prefer
-no_trade.
-
-Return STRICT JSON matching this schema:
+Schema:
 {
   "verdict": "no_trade" | "trade" | "defense",
-  "headline": "single sentence. For no_trade, state the reason. For trade or defense, name the ticker and action.",
+  "headline": "single sentence",
   "primary_action": null | {
-    "ticker": string,
+    "ticker": "...",
     "action": "buy" | "sell" | "add" | "trim",
-    "entry": "price or tight zone",
-    "stop": "price",
-    "target": "price",
-    "size_pct": number,
-    "thesis": "3-5 sentences citing specific signals from the data",
-    "invalidation": "what would change the call",
+    "entry": "...",
+    "stop": "...",
+    "target": "...",
+    "size_pct": <number>,
+    "thesis": "3-5 sentences",
+    "invalidation": "...",
     "conviction": 5
   },
-  "secondary_actions": [<same schema, max 2>],
-  "market_snapshot": "single sentence summarizing tape, VIX, sector tilt",
-  "watching": ["TICKER - trigger being watched"]
+  "secondary_actions": [<same schema, 0-2>],
+  "market_snapshot": "single sentence",
+  "watching": ["TICKER - trigger"]
 }
 """
 

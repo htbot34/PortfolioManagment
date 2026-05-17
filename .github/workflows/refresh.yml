@@ -44,7 +44,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_MODEL_ROUTINE: openai/gpt-4o-mini
           GITHUB_MODEL_SYNTHESIS: openai/gpt-4o
-          LLM_MIN_GAP_S: "8"
+          LLM_MIN_GAP_S: "12"
           SEC_USER_AGENT: PortfolioAdvisor ${{ github.repository_owner }}@users.noreply.github.com
         run: python -m app.build_site
 

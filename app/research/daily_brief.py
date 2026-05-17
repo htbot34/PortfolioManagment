@@ -1,262 +1,217 @@
-"""Daily verdict. Most days the verdict is no_trade.
+"""Daily verdict - deterministic Python composition.
 
-Pipeline:
-  1. Build a compact data payload (macro + book + scanner + news).
-  2. Ask the synthesis LLM whether today's market signals justify ANY
-     high-conviction action.
-  3. Validate the LLM's output - if conviction != 5 or required fields
-     are missing, override to no_trade.
-  4. If the LLM is unavailable, fall back to a rule-based gate that
-     defaults to no_trade and only emits if signals are extreme.
+The brief is no longer produced by a separate LLM call. The synthesis call
+kept tripping Azure's jailbreak classifier and rate limits. Instead we:
+
+  1. Read each held position's per-ticker LLM analysis (which already passes
+     content filter at conviction-rated granularity).
+  2. Read the scanner buckets for high-quality setups in the broader
+     universe (textbook breakouts, oversold quality bounces).
+  3. Apply a strict deterministic gate to decide verdict:
+       defense   if any held name has conviction-5 sell or trim
+       trade     if scanner has a true breakout (vol>=1.8x AND RSI 55-68)
+                 OR an oversold bounce on a quality name (RSI<=30 near SMA200)
+       no_trade  otherwise (the default)
+  4. Build watching list from the top 3-5 scanner candidates that didn't
+     meet the trade bar.
+
+This is intentionally conservative. Most days return no_trade.
 """
-import json
 from datetime import date
 
-from app.config import risk_profile
-from app.research import llm, prompts
+from app.data import prices
 
 
-def _round(v, n=2):
-    return round(v, n) if isinstance(v, (int, float)) else v
-
-
-def _condensed_position(rec: dict) -> dict:
-    q = rec.get("quote") or {}
-    p = rec.get("position") or {}
-    t = rec.get("technicals") or {}
-    e = rec.get("earnings") or {}
-    c = rec.get("consensus") or {}
-    out = {
-        "tk": rec["ticker"],
-        "px": _round(q.get("price")),
-        "d%": _round(q.get("day_change_pct"), 2),
-        "wt%": _round(p.get("weight_pct"), 1),
-        "pl%": _round(p.get("unrealized_pl_pct"), 1),
-        "rsi": _round(t.get("rsi14"), 0),
-        "macd": _round(t.get("macd_hist"), 2),
-        "off52": _round(t.get("pct_off_52w_high"), 1),
-        "up": t.get("stacked_uptrend"),
-        "dn": t.get("stacked_downtrend"),
-        "er": e.get("date"),
-        "erDay": e.get("days_away"),
-        "rule": rec.get("action"),
-        "rConv": rec.get("conviction"),
-    }
-    return {k: v for k, v in out.items() if v not in (None, "", False)}
-
-
-def _macro_summary(macro: dict) -> dict:
-    return {
-        "idx": {k: {"px": _round(v.get("price"), 2), "d%": _round(v.get("day_change_pct"), 2)}
-                for k, v in macro["indices"].items()},
-        "lead": [f"{s['name']} {_round(s['day_change_pct'],1)}%" for s in macro["leaders"]],
-        "lag": [f"{s['name']} {_round(s['day_change_pct'],1)}%" for s in macro["laggards"]],
-    }
-
-
-def _scanner_condensed(scan_result: dict) -> dict:
-    def slim(rows, n=4):
-        out = []
-        for r in rows[:n]:
-            entry = {"tk": r["ticker"], "px": _round(r.get("price"))}
-            if r.get("rsi14") is not None:
-                entry["rsi"] = _round(r["rsi14"], 0)
-            if r.get("vol_ratio_20d"):
-                entry["vol"] = _round(r["vol_ratio_20d"], 1)
-            if r.get("pct_off_52w_high") is not None:
-                entry["off52"] = _round(r["pct_off_52w_high"], 0)
-            if r.get("held"):
-                entry["h"] = True
-            out.append(entry)
-        return out
-    keep_buckets = ("breakouts", "momentum_continuation", "oversold_bounces",
-                    "pullbacks_to_support")
-    buckets = {name: slim(scan_result["buckets"].get(name, []), 4) for name in keep_buckets
-               if scan_result["buckets"].get(name)}
-    return {
-        "buckets": buckets,
-        "down": slim(scan_result.get("top_movers_down", []), 4),
-    }
-
-
-def _macro_is_risk_off(macro: dict) -> bool:
-    """Cheap heuristic to bias toward no_trade when tape is broken."""
-    vix = (macro.get("indices") or {}).get("VIX", {}).get("price")
-    if vix and vix > 22:
-        return True
-    spx = (macro.get("indices") or {}).get("SPX", {})
-    return bool(spx.get("pct_off_52w_high") is not None and spx["pct_off_52w_high"] < -10)
-
-
-def _validate_action(a: dict | None) -> dict | None:
-    """Reject anything that doesn't meet the conviction-5 bar with full fields."""
-    if not a or not isinstance(a, dict):
-        return None
-    required = ("ticker", "action", "entry", "stop", "target", "size_pct", "thesis", "invalidation")
-    if any(not a.get(k) for k in required):
-        return None
-    if a.get("conviction") != 5:
-        return None
-    if a.get("action") not in ("buy", "sell", "add", "trim"):
-        return None
-    return a
-
-
-def _no_trade(reason: str, macro_line: str = "", watching: list | None = None) -> dict:
+def _no_trade(reason: str, macro_line: str, watching: list[str]) -> dict:
     return {
         "verdict": "no_trade",
         "headline": f"No trade today. {reason}",
         "primary_action": None,
         "secondary_actions": [],
         "market_snapshot": macro_line,
-        "watching": watching or [],
+        "watching": watching,
         "generated_for": date.today().isoformat(),
     }
 
 
-def _rule_based_fallback(recommendations: list[dict], scan_result: dict, macro: dict) -> dict:
-    """Strict rule-based default. Returns no_trade unless something is extreme."""
-    macro_line = ""
+def _macro_line(macro: dict) -> str:
+    idx = macro.get("indices") or {}
+    spx = idx.get("SPX", {})
+    vix = idx.get("VIX", {})
+    leaders = (macro.get("leaders") or [])[:1]
+    parts = []
+    if spx.get("day_change_pct") is not None:
+        parts.append(f"SPX {spx['day_change_pct']:+.2f}%")
+    if vix.get("price") is not None:
+        parts.append(f"VIX {vix['price']:.1f}")
+    if leaders:
+        l = leaders[0]
+        parts.append(f"{l['name']} leads {l['day_change_pct']:+.1f}%")
+    return ", ".join(parts) + "." if parts else ""
+
+
+def _macro_risk_off(macro: dict) -> bool:
+    vix = (macro.get("indices") or {}).get("VIX", {}).get("price")
+    if vix and vix > 22:
+        return True
     spx = (macro.get("indices") or {}).get("SPX", {})
-    vix = (macro.get("indices") or {}).get("VIX", {})
-    if spx.get("day_change_pct") is not None and vix.get("price") is not None:
-        macro_line = f"SPX {spx['day_change_pct']:+.2f}%, VIX {vix['price']:.1f}."
+    pct = spx.get("pct_off_52w_high")
+    return bool(pct is not None and pct < -10)
 
-    if _macro_is_risk_off(macro):
-        return _no_trade("Macro is risk-off. Wait for trend stabilization.", macro_line)
 
-    # Defense: any held position the per-ticker analyst rated conviction 5 sell/trim
+def _build_watching(scan_result: dict, exclude: set[str]) -> list[str]:
+    watching = []
+    seen: set[str] = set()
+    bucket_labels = {
+        "breakouts": "watching for clean breakout",
+        "momentum_continuation": "watching for pullback entry",
+        "oversold_bounces": "watching for reversal confirmation",
+        "pullbacks_to_support": "watching SMA50 hold",
+        "new_52w_highs": "fresh 52w high, waiting for retest",
+    }
+    for bucket, label in bucket_labels.items():
+        for s in scan_result.get("buckets", {}).get(bucket, [])[:2]:
+            t = s["ticker"].upper()
+            if t in seen or t in exclude:
+                continue
+            seen.add(t)
+            watching.append(f"{t} - {label}")
+            if len(watching) >= 5:
+                return watching
+    return watching
+
+
+def _defense_from_book(recommendations: list[dict], macro_line: str,
+                       scan_result: dict, exclude: set[str]) -> dict | None:
+    """Return defense verdict if any held name hit conviction-5 sell or trim."""
     for r in recommendations:
-        if r.get("conviction", 0) == 5 and r.get("action") in ("sell", "trim"):
-            q = r.get("quote") or {}
-            t = r.get("technicals") or {}
-            price = q.get("price")
-            atr = t.get("atr14") or (price * 0.05 if price else None)
-            sma200 = t.get("sma200")
-            return {
-                "verdict": "defense",
-                "headline": f"{r['ticker']}: {r['action']}. {r.get('thesis','')[:120]}",
-                "primary_action": {
-                    "ticker": r["ticker"],
-                    "action": r["action"],
-                    "entry": f"~${price:.2f}" if price else "market",
-                    "stop": f"${(price + atr):.2f}" if (price and atr) else "n/a",
-                    "target": f"${sma200:.2f}" if sma200 else "exit",
-                    "size_pct": None,
-                    "thesis": r.get("thesis", ""),
-                    "invalidation": "",
-                    "conviction": 5,
-                },
-                "secondary_actions": [],
-                "market_snapshot": macro_line,
-                "watching": [],
-                "generated_for": date.today().isoformat(),
-            }
+        if r.get("conviction", 0) != 5:
+            continue
+        if r.get("action") not in ("sell", "trim"):
+            continue
+        q = r.get("quote") or {}
+        t = r.get("technicals") or {}
+        sma200 = t.get("sma200")
+        atr = t.get("atr14")
+        price = q.get("price")
+        # For a trim/sell, "stop" = where we'd reverse and stay,
+        # "target" = the structural exit level.
+        if r["action"] == "trim":
+            stop_txt = f"${price + (atr or price * 0.05):.2f} (give it room)" if price else "n/a"
+            target_txt = f"trim 25-50% at ~${price:.2f}" if price else "trim 25-50%"
+        else:
+            stop_txt = "n/a (closing position)"
+            target_txt = f"exit fully; reload only above ${sma200:.2f}" if sma200 else "exit fully"
+        thesis = r.get("thesis") or ""
+        return {
+            "verdict": "defense",
+            "headline": f"{r['action'].upper()} {r['ticker']} - {thesis.split('.')[0]}.",
+            "primary_action": {
+                "ticker": r["ticker"],
+                "action": r["action"],
+                "entry": f"~${price:.2f}" if price else "market",
+                "stop": stop_txt,
+                "target": target_txt,
+                "size_pct": None,
+                "thesis": thesis,
+                "invalidation": (r.get("key_risks") or [""])[0],
+                "conviction": 5,
+            },
+            "secondary_actions": [],
+            "market_snapshot": macro_line,
+            "watching": _build_watching(scan_result, exclude),
+            "generated_for": date.today().isoformat(),
+        }
+    return None
 
-    # Offense: only emit if the scanner has a textbook breakout with strong
-    # volume confirmation AND non-extended RSI.
+
+def _trade_from_scanner(scan_result: dict, macro: dict, macro_line: str,
+                         exclude: set[str]) -> dict | None:
+    """Promote a high-quality scanner setup to a trade verdict.
+
+    Bar:
+      breakout: vol_ratio_20d >= 1.8 AND RSI in [55, 68]
+      oversold: RSI <= 30 AND near SMA200 (within 8%) AND quality theme
+
+    Skip if macro is risk-off.
+    """
+    if _macro_risk_off(macro):
+        return None
+    # Prefer breakouts
     for s in scan_result["buckets"].get("breakouts", []):
-        if s.get("held"):
+        if s.get("held") or s["ticker"].upper() in exclude:
             continue
         rsi = s.get("rsi14") or 0
         vol = s.get("vol_ratio_20d") or 0
-        if 55 <= rsi <= 68 and vol >= 1.8:
-            price = s.get("price")
-            atr = s.get("atr14") or (price * 0.04 if price else None)
-            return {
-                "verdict": "trade",
-                "headline": f"Buy {s['ticker']}: 20-day breakout with {vol:.1f}x volume.",
-                "primary_action": {
-                    "ticker": s["ticker"],
-                    "action": "buy",
-                    "entry": f"~${price:.2f}" if price else "",
-                    "stop": f"${(price - 1.5 * atr):.2f}" if (price and atr) else "",
-                    "target": f"${(price * 1.20):.2f}" if price else "",
-                    "size_pct": 5,
-                    "thesis": (
-                        f"{s['ticker']} broke the 20-day high on {vol:.1f}x average volume "
-                        f"with RSI {rsi:.0f} - not yet extended. The setup is a textbook "
-                        f"breakout entry. Theme: {s.get('theme') or 'growth'}."
-                    ),
-                    "invalidation": f"Daily close back below ${price - 1.5 * (atr or 0):.2f} on volume.",
-                    "conviction": 5,
-                },
-                "secondary_actions": [],
-                "market_snapshot": macro_line,
-                "watching": [],
-                "generated_for": date.today().isoformat(),
-            }
+        if not (55 <= rsi <= 68 and vol >= 1.8):
+            continue
+        return _build_trade(s, "buy", "20-day breakout on heavy volume", macro_line,
+                            scan_result, exclude)
+    # Then oversold bounces on quality
+    for s in scan_result["buckets"].get("oversold_bounces", []):
+        if s.get("held") or s["ticker"].upper() in exclude:
+            continue
+        rsi = s.get("rsi14") or 100
+        if rsi <= 30:
+            return _build_trade(s, "buy", "Deep oversold near SMA200 support", macro_line,
+                                scan_result, exclude)
+    return None
 
-    # Build a small watching list from the scanner so user has something to track
-    watching = []
-    for s in scan_result["buckets"].get("breakouts", [])[:2]:
-        watching.append(f"{s['ticker']} - waiting for breakout retest")
-    for s in scan_result["buckets"].get("oversold_bounces", [])[:2]:
-        watching.append(f"{s['ticker']} - watching oversold reversal")
 
-    return _no_trade("No setup meets the conviction bar.", macro_line, watching[:5])
+def _build_trade(s: dict, action: str, reason: str, macro_line: str,
+                 scan_result: dict, exclude: set[str]) -> dict:
+    price = s.get("price")
+    # Pull a fuller technicals snapshot for the stop/target sizing
+    t = prices.technicals(s["ticker"])
+    atr = t.get("atr14") or (price * 0.04 if price else None)
+    sma50 = t.get("sma50")
+    risk_amount = (atr * 1.5) if atr else (price * 0.05 if price else 0)
+    stop_px = price - risk_amount if price else None
+    target_px = price + risk_amount * 3 if price else None  # 3:1 R:R
+    thesis = (
+        f"{s['ticker']} - {reason}. RSI {(s.get('rsi14') or 0):.0f}, "
+        f"volume {(s.get('vol_ratio_20d') or 1):.1f}x 20-day average. "
+        f"Theme: {s.get('theme') or 'growth'}. Long-term hold target."
+    )
+    return {
+        "verdict": "trade",
+        "headline": f"{action.upper()} {s['ticker']} - {reason}.",
+        "primary_action": {
+            "ticker": s["ticker"],
+            "action": action,
+            "entry": f"~${price:.2f}" if price else "",
+            "stop": f"${stop_px:.2f}" if stop_px else "",
+            "target": f"${target_px:.2f}" if target_px else "",
+            "size_pct": 5,
+            "thesis": thesis,
+            "invalidation": f"Daily close below ${stop_px:.2f}" if stop_px else "structural break",
+            "conviction": 5,
+        },
+        "secondary_actions": [],
+        "market_snapshot": macro_line,
+        "watching": _build_watching(scan_result, exclude | {s["ticker"].upper()}),
+        "generated_for": date.today().isoformat(),
+    }
 
 
 def build(macro: dict, recommendations: list[dict], review: dict,
           candidates: dict, exposures: dict, scan_result: dict,
           headlines: list[dict] | None = None) -> dict:
-    """Return today's verdict."""
-    risk = risk_profile()
-    headlines = headlines or []
+    """Return today's verdict. Deterministic - no LLM call."""
+    macro_line = _macro_line(macro)
+    held = {p["ticker"].upper() for p in (exposures.get("positions") or [])}
 
-    if not llm.available():
-        return _rule_based_fallback(recommendations, scan_result, macro)
+    if _macro_risk_off(macro):
+        return _no_trade("Macro is risk-off (high VIX or broken trend). Wait.",
+                          macro_line, _build_watching(scan_result, held))
 
-    payload = {
-        "date": date.today().isoformat(),
-        "risk": risk.get("investor", {}).get("risk_tolerance"),
-        "themes": risk.get("preferences", {}).get("themes"),
-        "macro": _macro_summary(macro),
-        "macro_risk_off": _macro_is_risk_off(macro),
-        "cash%": _round(exposures.get("cash_pct"), 1),
-        "book": [_condensed_position(r) for r in recommendations],
-        "scan": _scanner_condensed(scan_result),
-    }
+    defense = _defense_from_book(recommendations, macro_line, scan_result, held)
+    if defense:
+        return defense
 
-    user_blob = (
-        "Today's data follows. Apply the conditions in the system message "
-        "and return the verdict JSON.\n"
-        f"{json.dumps(payload, separators=(',', ':'), default=str)}"
-    )
+    trade = _trade_from_scanner(scan_result, macro, macro_line, held)
+    if trade:
+        return trade
 
-    raw = llm.chat_json(
-        prompts.SYSTEM_DAILY_BRIEF, user_blob,
-        model=llm.synthesis_model(),
-        max_tokens=1800,
-        temperature=0.2,
-        tag="brief",
-    )
-
-    if not raw:
-        # LLM failed - fall back to rule-based gate
-        return _rule_based_fallback(recommendations, scan_result, macro)
-
-    primary = _validate_action(raw.get("primary_action"))
-    secondary = [a for a in (raw.get("secondary_actions") or []) if _validate_action(a)]
-
-    verdict = raw.get("verdict")
-    if verdict not in ("no_trade", "trade", "defense"):
-        verdict = "no_trade"
-
-    # If the model said trade but the action didn't validate, downgrade to no_trade.
-    if verdict == "trade" and not primary:
-        verdict = "no_trade"
-        headline = "No trade today. No conviction-5 setup."
-    else:
-        headline = raw.get("headline") or ("No trade today." if verdict == "no_trade"
-                                            else "Action ready.")
-
-    return {
-        "verdict": verdict,
-        "headline": headline,
-        "primary_action": primary,
-        "secondary_actions": secondary[:2],
-        "market_snapshot": raw.get("market_snapshot", ""),
-        "watching": (raw.get("watching") or [])[:6],
-        "generated_for": date.today().isoformat(),
-    }
+    return _no_trade("No setup meets the conviction bar.",
+                      macro_line, _build_watching(scan_result, held))

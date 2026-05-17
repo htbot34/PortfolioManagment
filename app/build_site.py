@@ -49,14 +49,6 @@ def main() -> int:
         print(f"  {name}: {status}")
     print(f"LLM available: {llm.available()} (synthesis={llm.synthesis_model()}, routine={llm.routine_model()})")
     ping_result = None
-    if llm.available():
-        print("=== LLM ping ===")
-        llm.reset_attempts()
-        ping_result = llm.chat_json("Respond with JSON only.",
-                                     'Reply with exactly: {"ok": true, "model": "<your model id>"}',
-                                     max_tokens=50, tag="ping")
-        print(f"  ping result: {ping_result}")
-        print(f"  ping attempts: {llm.ATTEMPTS}")
     llm.reset_attempts()
 
     print("Pulling macro snapshot...")

@@ -58,6 +58,87 @@
   </div>
 </div>
 
+{% if metrics and metrics.available %}
+{% macro fmt_pct(x) %}{{ '%+.2f'|format(x * 100) }}%{% endmacro %}
+{% macro fmt_pct_abs(x) %}{{ '%.2f'|format(x * 100) }}%{% endmacro %}
+{% set spark_p = metrics.sparkline_port %}
+{% set spark_b = metrics.sparkline_bench %}
+<div class="card rounded-lg p-4 mb-6">
+  <div class="flex items-baseline justify-between mb-3">
+    <h2 class="text-lg font-semibold">Portfolio vs {{ metrics.benchmark }} (1y)</h2>
+    <div class="text-xs text-slate-500">{{ metrics.n_days }} trading days</div>
+  </div>
+
+  {% if spark_p and spark_p|length >= 2 %}
+    {% set n = spark_p|length %}
+    {% set width = 600 %}
+    {% set height = 80 %}
+    {% set p_min = spark_p|min %}
+    {% set p_max = spark_p|max %}
+    {% set b_min = spark_b|min if spark_b else 0 %}
+    {% set b_max = spark_b|max if spark_b else 0 %}
+    {% set lo = [p_min, b_min]|min %}
+    {% set hi = [p_max, b_max]|max %}
+    {% set span = (hi - lo) if (hi - lo) != 0 else 1 %}
+    <svg viewBox="0 0 {{ width }} {{ height }}" class="w-full h-20 mb-2" preserveAspectRatio="none">
+      {% set step = width / (n - 1) %}
+      <polyline fill="none" stroke="#64748b" stroke-width="1.5" stroke-dasharray="3 2"
+        points="{% for v in spark_b %}{{ '%.2f'|format(loop.index0 * step) }},{{ '%.2f'|format(height - ((v - lo) / span) * height) }} {% endfor %}" />
+      <polyline fill="none" stroke="#22c55e" stroke-width="2"
+        points="{% for v in spark_p %}{{ '%.2f'|format(loop.index0 * step) }},{{ '%.2f'|format(height - ((v - lo) / span) * height) }} {% endfor %}" />
+    </svg>
+    <div class="flex gap-4 text-xs text-slate-400 mb-3">
+      <span><span class="inline-block w-3 h-0.5 align-middle bg-emerald-500 mr-1"></span>Portfolio</span>
+      <span><span class="inline-block w-3 h-0.5 align-middle bg-slate-500 mr-1" style="border-top: 1px dashed"></span>{{ metrics.benchmark }}</span>
+    </div>
+  {% endif %}
+
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+    <div>
+      <div class="text-[10px] text-slate-500 uppercase tracking-wide">Total return ({{ metrics.period }})</div>
+      <div class="font-semibold {% if metrics.total_return_pct >= 0 %}pos{% else %}neg{% endif %}">{{ fmt_pct(metrics.total_return_pct) }}</div>
+    </div>
+    <div>
+      <div class="text-[10px] text-slate-500 uppercase tracking-wide">{{ metrics.benchmark }} return</div>
+      <div class="font-semibold {% if metrics.benchmark_total_return_pct >= 0 %}pos{% else %}neg{% endif %}">{{ fmt_pct(metrics.benchmark_total_return_pct) }}</div>
+    </div>
+    <div>
+      <div class="text-[10px] text-slate-500 uppercase tracking-wide">Outperformance</div>
+      <div class="font-semibold {% if metrics.outperformance_pct >= 0 %}pos{% else %}neg{% endif %}">{{ fmt_pct(metrics.outperformance_pct) }}</div>
+    </div>
+    <div>
+      <div class="text-[10px] text-slate-500 uppercase tracking-wide">Max drawdown</div>
+      <div class="font-semibold neg">{{ fmt_pct(metrics.max_drawdown) }}</div>
+    </div>
+    <div>
+      <div class="text-[10px] text-slate-500 uppercase tracking-wide">Ann. return</div>
+      <div class="font-semibold">{{ fmt_pct(metrics.ann_return) }}</div>
+    </div>
+    <div>
+      <div class="text-[10px] text-slate-500 uppercase tracking-wide">Ann. volatility</div>
+      <div class="font-semibold">{{ fmt_pct_abs(metrics.ann_vol) }}</div>
+    </div>
+    <div>
+      <div class="text-[10px] text-slate-500 uppercase tracking-wide">Sharpe (rf={{ '%.0f'|format(metrics.risk_free * 100) }}%)</div>
+      <div class="font-semibold">{{ '%.2f'|format(metrics.sharpe) }}</div>
+    </div>
+    <div>
+      <div class="text-[10px] text-slate-500 uppercase tracking-wide">Sortino</div>
+      <div class="font-semibold">{{ '%.2f'|format(metrics.sortino) }}</div>
+    </div>
+    <div>
+      <div class="text-[10px] text-slate-500 uppercase tracking-wide">Beta vs {{ metrics.benchmark }}</div>
+      <div class="font-semibold">{{ '%.2f'|format(metrics.beta) }}</div>
+    </div>
+    <div>
+      <div class="text-[10px] text-slate-500 uppercase tracking-wide">Alpha (ann.)</div>
+      <div class="font-semibold {% if metrics.alpha >= 0 %}pos{% else %}neg{% endif %}">{{ fmt_pct(metrics.alpha) }}</div>
+    </div>
+  </div>
+  <div class="mt-3 text-[10px] text-slate-500">Note: daily returns use current weights as a proxy - not a true backtest.</div>
+</div>
+{% endif %}
+
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
   <div class="card rounded-lg p-4">
     <h2 class="text-lg font-semibold mb-3">Sector exposure</h2>

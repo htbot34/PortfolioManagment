@@ -23,7 +23,8 @@ from app.data import macro as macro_mod
 from app.data import market_news, prices
 from app.portfolio import store
 from app.research import (
-    analyst, candidates as cands, daily_brief, llm, portfolio_review, scanner,
+    analyst, candidates as cands, daily_brief, llm, metrics as metrics_mod,
+    portfolio_review, scanner,
 )
 
 
@@ -103,6 +104,13 @@ def main() -> int:
 
     exposures = portfolio_review.compute_exposures(account)
     review_out = portfolio_review.review(exposures)
+
+    print("Computing portfolio metrics vs SPY...")
+    try:
+        metrics = metrics_mod.compute_metrics(account, benchmark="SPY", period="1y")
+    except Exception as e:
+        traceback.print_exc()
+        metrics = {"available": False, "reason": str(e)}
     weight_by_ticker = {row["ticker"]: row for row in exposures["positions"]}
 
     print("Analyzing positions...")
@@ -154,7 +162,7 @@ def main() -> int:
         recs_by_ticker=ticker_payloads, activity=activity, base="", **common,
     ))
     _write(site / "positions.html", env.get_template("positions.html").render(
-        exposures=exposures, review=review_out, base="", **common,
+        exposures=exposures, review=review_out, metrics=metrics, base="", **common,
     ))
     _write(site / "scanner.html", env.get_template("scanner.html").render(
         scan=scan_result, base="", **common,
@@ -181,6 +189,7 @@ def main() -> int:
         "scanner": scan_result,
         "exposures": exposures,
         "review": review_out,
+        "metrics": metrics,
         "brief": brief,
         "recommendations": recs,
         "candidates": cand_out,

@@ -65,7 +65,7 @@
           ${{ '%.2f'|format(p.unrealized_pl) }} ({{ '%.1f'|format(p.unrealized_pl_pct) }}%)
         </b>
       </div>
-      <div class="text-sm">Weight: <b>{{ '%.1f'|format(p.weight_pct) }}%</b></div>
+      <div class="text-sm">Weight: <b>{% if p.weight_pct is not none %}{{ '%.1f'|format(p.weight_pct) }}%{% else %}-{% endif %}</b></div>
       {% endif %}
     {% else %}
       <div class="text-sm text-slate-400">Not currently held.</div>

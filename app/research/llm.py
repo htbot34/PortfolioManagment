@@ -11,6 +11,7 @@ import time
 import httpx
 
 from app.config import settings
+from app.research.jsonparse import parse_json_loose
 
 _ENDPOINT = "https://models.github.ai/inference/chat/completions"
 _FALLBACKS = ["openai/gpt-4o-mini"]
@@ -93,7 +94,9 @@ def _call(model: str, system: str, user: str, max_tokens: int, temperature: floa
         choice = body["choices"][0]
         finish_reason = choice.get("finish_reason")
         text = choice["message"]["content"]
-        out = json.loads(text)
+        out = parse_json_loose(text)
+        if out is None:
+            raise ValueError("could not parse JSON from model output")
         usage = body.get("usage", {})
         entry.update(kind="ok", finish_reason=finish_reason,
                      input_tokens=usage.get("prompt_tokens"),

@@ -245,13 +245,51 @@ def history(ticker: str, period: str = "6mo") -> pd.DataFrame | None:
 
 _EMPTY_TECHNICALS = {
     "last": None, "sma20": None, "sma50": None, "sma200": None,
+    "sma50_series": None, "sma200_series": None,
     "above_sma50": None, "above_sma200": None,
     "stacked_uptrend": None, "stacked_downtrend": None,
+    "golden_cross_recent": None, "death_cross_recent": None,
     "high_52w": None, "low_52w": None, "pct_off_52w_high": None,
     "rsi14": None, "macd_hist": None, "macd_cross_up": None, "macd_cross_down": None,
     "bb_upper": None, "bb_lower": None, "bb_pct": None,
     "atr14": None, "atr_pct": None, "vol_ratio_20d": None, "breakout_20d": None,
 }
+
+
+def _wilder_rsi(close: "pd.Series", period: int = 14) -> "pd.Series":
+    """RSI using Wilder's smoothing (matches most charting platforms).
+
+    Initial average gain/loss is a simple mean of the first ``period`` deltas;
+    subsequent values are smoothed with ``avg = (prev*(N-1) + new) / N``.
+    """
+    delta = close.diff()
+    gains = delta.clip(lower=0)
+    losses = (-delta.clip(upper=0))
+    if len(close) < period + 1:
+        return pd.Series([None] * len(close), index=close.index)
+    avg_gain = gains.copy() * 0.0
+    avg_loss = losses.copy() * 0.0
+    avg_gain.iloc[period] = gains.iloc[1 : period + 1].mean()
+    avg_loss.iloc[period] = losses.iloc[1 : period + 1].mean()
+    for i in range(period + 1, len(close)):
+        avg_gain.iloc[i] = (avg_gain.iloc[i - 1] * (period - 1) + gains.iloc[i]) / period
+        avg_loss.iloc[i] = (avg_loss.iloc[i - 1] * (period - 1) + losses.iloc[i]) / period
+    rs = avg_gain / avg_loss.replace(0, 1e-9)
+    rsi = 100 - (100 / (1 + rs))
+    return rsi
+
+
+def _series_dump(s: "pd.Series", tail: int = 200) -> list[dict]:
+    """Convert a price/indicator series to a JSON-friendly list of points."""
+    s = s.dropna().tail(tail)
+    out = []
+    for ts, v in s.items():
+        try:
+            date_str = ts.date().isoformat() if hasattr(ts, "date") else str(ts)[:10]
+        except Exception:
+            date_str = str(ts)[:10]
+        out.append({"date": date_str, "value": float(v)})
+    return out
 
 
 def technicals(ticker: str) -> dict:
@@ -263,21 +301,32 @@ def technicals(ticker: str) -> dict:
     low = df["Low"] if "Low" in df.columns else close
     volume = df["Volume"] if "Volume" in df.columns else None
     last = float(close.iloc[-1])
-    sma20 = float(close.tail(20).mean()) if len(close) >= 20 else None
-    sma50 = float(close.tail(50).mean()) if len(close) >= 50 else None
-    sma200 = float(close.tail(200).mean()) if len(close) >= 200 else None
+    sma20_series = close.rolling(20).mean() if len(close) >= 20 else pd.Series(dtype=float)
+    sma50_series = close.rolling(50).mean() if len(close) >= 50 else pd.Series(dtype=float)
+    sma200_series = close.rolling(200).mean() if len(close) >= 200 else pd.Series(dtype=float)
+    sma20 = float(sma20_series.iloc[-1]) if not sma20_series.dropna().empty else None
+    sma50 = float(sma50_series.iloc[-1]) if not sma50_series.dropna().empty else None
+    sma200 = float(sma200_series.iloc[-1]) if not sma200_series.dropna().empty else None
     high_52w = float(close.max())
     low_52w = float(close.min())
     high_20d = float(close.tail(20).max()) if len(close) >= 20 else None
     pct_off_high = (last - high_52w) / high_52w * 100 if high_52w else None
 
-    # RSI(14)
-    delta = close.diff()
-    up = delta.clip(lower=0).rolling(14).mean()
-    down = (-delta.clip(upper=0)).rolling(14).mean()
-    rs = up / down.replace(0, 1e-9)
-    rsi = 100 - (100 / (1 + rs))
-    rsi_last = float(rsi.iloc[-1]) if not rsi.empty else None
+    # Golden / death cross detection within last 20 trading days.
+    golden_cross_recent = False
+    death_cross_recent = False
+    if not sma50_series.dropna().empty and not sma200_series.dropna().empty and len(close) > 200:
+        sig = (sma50_series - sma200_series).dropna().tail(21)
+        if len(sig) >= 2:
+            prev = sig.shift(1).dropna()
+            cur = sig.iloc[1:]
+            crosses_up = ((prev <= 0) & (cur > 0)).sum()
+            crosses_dn = ((prev >= 0) & (cur < 0)).sum()
+            golden_cross_recent = bool(crosses_up > 0)
+            death_cross_recent = bool(crosses_dn > 0)
+
+    rsi_series = _wilder_rsi(close, 14)
+    rsi_last = float(rsi_series.iloc[-1]) if not rsi_series.dropna().empty else None
 
     # MACD (12, 26, 9)
     ema12 = close.ewm(span=12, adjust=False).mean()
@@ -324,10 +373,14 @@ def technicals(ticker: str) -> dict:
         "sma20": sma20,
         "sma50": sma50,
         "sma200": sma200,
+        "sma50_series": _series_dump(sma50_series, tail=200),
+        "sma200_series": _series_dump(sma200_series, tail=200),
         "above_sma50": (last > sma50) if sma50 else None,
         "above_sma200": (last > sma200) if sma200 else None,
         "stacked_uptrend": bool(sma20 and sma50 and sma200 and last > sma20 > sma50 > sma200),
         "stacked_downtrend": bool(sma20 and sma50 and sma200 and last < sma20 < sma50 < sma200),
+        "golden_cross_recent": golden_cross_recent,
+        "death_cross_recent": death_cross_recent,
         "high_52w": high_52w,
         "low_52w": low_52w,
         "pct_off_52w_high": pct_off_high,

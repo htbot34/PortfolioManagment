@@ -13,8 +13,9 @@ in the rendered site and in data.json.
 """
 import io
 import json
-import logging
+import time as _time
 from dataclasses import dataclass, asdict
+from functools import wraps
 from pathlib import Path
 from time import time
 
@@ -22,10 +23,39 @@ import httpx
 import pandas as pd
 
 from app.config import settings
+from app.logging import get_logger
 
 _CACHE_PATH = Path(__file__).resolve().parent.parent.parent / "price_cache.json"
 
-log = logging.getLogger("prices")
+log = get_logger(__name__)
+
+
+def _retry(attempts: int = 3, backoff_s: float = 0.5):
+    """Retry decorator with linear backoff.
+
+    Only retries on exceptions (transient errors like timeouts or 5xx).
+    A ``None`` return is treated as a legitimate "no data" signal and is
+    NOT retried - that path is for things like 403/404/empty bodies where
+    retrying just wastes time.
+    Never raises; the worst case is a final ``None`` after the last attempt.
+    """
+    def deco(fn):
+        @wraps(fn)
+        def inner(*args, **kwargs):
+            last_err: Exception | None = None
+            for i in range(attempts):
+                try:
+                    return fn(*args, **kwargs)
+                except Exception as e:
+                    last_err = e
+                    log.debug("%s attempt %d/%d raised: %s", fn.__name__, i + 1, attempts, e)
+                    if i < attempts - 1:
+                        _time.sleep(backoff_s * (i + 1))
+            if last_err is not None:
+                log.warning("%s exhausted retries (%d): %s", fn.__name__, attempts, last_err)
+            return None
+        return inner
+    return deco
 
 _UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0 Safari/537.36"
 
@@ -53,69 +83,73 @@ _HISTORY_CACHE: dict[str, tuple[float, pd.DataFrame | None, str | None]] = {}
 _TTL_S = 300.0
 
 
+@_retry(attempts=3, backoff_s=0.5)
 def _try_stooq(ticker: str) -> pd.DataFrame | None:
-    try:
-        r = httpx.get(
-            f"https://stooq.com/q/d/l/?s={ticker.lower()}.us&i=d",
-            headers={"User-Agent": _UA},
-            timeout=20,
-            follow_redirects=True,
-        )
-        if r.status_code != 200 or not r.text or r.text[:50].lower().startswith("no data"):
-            return None
-        df = pd.read_csv(io.StringIO(r.text))
-        if df.empty or "Close" not in df.columns:
-            return None
-        df["Date"] = pd.to_datetime(df["Date"])
-        return df.set_index("Date").tail(252)
-    except Exception as e:
-        log.debug("stooq failed for %s: %s", ticker, e)
+    r = httpx.get(
+        f"https://stooq.com/q/d/l/?s={ticker.lower()}.us&i=d",
+        headers={"User-Agent": _UA},
+        timeout=20,
+        follow_redirects=True,
+    )
+    if r.status_code != 200 or not r.text or r.text[:50].lower().startswith("no data"):
         return None
+    df = pd.read_csv(io.StringIO(r.text))
+    if df.empty or "Close" not in df.columns:
+        return None
+    df["Date"] = pd.to_datetime(df["Date"])
+    return df.set_index("Date").tail(252)
 
 
+@_retry(attempts=3, backoff_s=0.5)
 def _try_yahoo_chart(ticker: str) -> pd.DataFrame | None:
-    try:
-        r = httpx.get(
-            f"https://query1.finance.yahoo.com/v8/finance/chart/{ticker}",
-            params={"interval": "1d", "range": "1y"},
-            headers={"User-Agent": _UA, "Accept": "application/json"},
-            timeout=20,
-            follow_redirects=True,
-        )
-        if r.status_code != 200:
-            return None
-        data = r.json()
-        result = (data.get("chart") or {}).get("result") or []
-        if not result:
-            return None
-        item = result[0]
-        ts = item.get("timestamp") or []
-        ind = ((item.get("indicators") or {}).get("quote") or [{}])[0]
-        closes = ind.get("close")
-        if not ts or not closes:
-            return None
-        df = pd.DataFrame({
-            "Date": pd.to_datetime(ts, unit="s"),
-            "Open": ind.get("open"),
-            "High": ind.get("high"),
-            "Low": ind.get("low"),
-            "Close": closes,
-            "Volume": ind.get("volume"),
-        }).dropna(subset=["Close"]).set_index("Date")
-        return df if not df.empty else None
-    except Exception as e:
-        log.debug("yahoo chart failed for %s: %s", ticker, e)
+    r = httpx.get(
+        f"https://query1.finance.yahoo.com/v8/finance/chart/{ticker}",
+        params={"interval": "1d", "range": "1y"},
+        headers={"User-Agent": _UA, "Accept": "application/json"},
+        timeout=20,
+        follow_redirects=True,
+    )
+    if r.status_code != 200:
         return None
+    data = r.json()
+    result = (data.get("chart") or {}).get("result") or []
+    if not result:
+        return None
+    item = result[0]
+    ts = item.get("timestamp") or []
+    ind = ((item.get("indicators") or {}).get("quote") or [{}])[0]
+    closes = ind.get("close")
+    if not ts or not closes:
+        return None
+    df = pd.DataFrame({
+        "Date": pd.to_datetime(ts, unit="s"),
+        "Open": ind.get("open"),
+        "High": ind.get("high"),
+        "Low": ind.get("low"),
+        "Close": closes,
+        "Volume": ind.get("volume"),
+    }).dropna(subset=["Close"]).set_index("Date")
+    return df if not df.empty else None
 
 
+@_retry(attempts=3, backoff_s=0.5)
 def _try_yfinance(ticker: str) -> pd.DataFrame | None:
+    import yfinance as yf
+    tk = yf.Ticker(ticker)
+    df = tk.history(period="1y", auto_adjust=True)
+    if df is not None and not df.empty:
+        return df
+    # Fall back to fast_info -> 2-day history for at least a current close.
     try:
-        import yfinance as yf
-        df = yf.Ticker(ticker).history(period="1y", auto_adjust=True)
-        return df if df is not None and not df.empty else None
+        fi = tk.fast_info  # type: ignore[attr-defined]
+        last = float(fi.get("last_price")) if hasattr(fi, "get") else float(fi.last_price)
+        if last:
+            tiny = tk.history(period="2d", auto_adjust=True)
+            if tiny is not None and not tiny.empty:
+                return tiny
     except Exception as e:
-        log.debug("yfinance failed for %s: %s", ticker, e)
-        return None
+        log.debug("yfinance fast_info fallback failed for %s: %s", ticker, e)
+    return None
 
 
 _SOURCES = [

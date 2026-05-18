@@ -5,6 +5,7 @@ from collections import defaultdict
 from app.config import risk_profile
 from app.data import prices
 from app.portfolio.store import Account
+from app.research import constraints as constraints_mod
 from app.research import llm, prompts
 
 
@@ -65,34 +66,32 @@ def compute_exposures(account: Account) -> dict:
 
 
 def review(exposures: dict) -> dict:
-    """Rule-based portfolio observations, optionally refined by LLM."""
+    """Rule-based portfolio observations + structured breaches, optionally refined by LLM.
+
+    The structured breaches are produced by ``app.research.constraints`` and
+    duplicated as human-readable observations / suggested changes so existing
+    templates and the LLM prompt can both consume them.
+    """
     risk = risk_profile()
-    constraints = risk.get("constraints", {})
+    breaches = constraints_mod.check_constraints(exposures, risk)
     obs: list[str] = []
     changes: list[str] = []
+    for b in breaches:
+        if b["type"] == "data":
+            obs.append(b["suggested_action"])
+            continue
+        pct = f"{b['current_pct']:.1f}%" if b.get("current_pct") is not None else ""
+        cap = f"{b['limit_pct']:.0f}% cap" if b.get("limit_pct") is not None else ""
+        sev = "BREACH" if b["severity"] == "breach" else "warn"
+        obs.append(f"[{sev}] {b['subject']} {pct} ({cap})".strip())
+        changes.append(b["suggested_action"])
 
-    max_single = constraints.get("max_single_position_pct", 25)
-    min_cash = constraints.get("min_cash_buffer_pct", 5)
-    max_sector = constraints.get("max_sector_pct", 45)
-
-    for row in exposures["positions"]:
-        w = row.get("weight_pct")
-        if w is not None and w > max_single:
-            obs.append(f"{row['ticker']} is {w:.0f}% of portfolio (cap {max_single}%)")
-            changes.append(f"Trim {row['ticker']} to bring weight under {max_single}%")
-    if exposures.get("unpriced_count"):
-        obs.append(f"{exposures['unpriced_count']} position(s) had no live price - concentration math is incomplete.")
-
-    if exposures["cash_pct"] < min_cash:
-        obs.append(f"Cash is {exposures['cash_pct']:.1f}% of portfolio (target >= {min_cash}%)")
-        changes.append("Build cash buffer for dry powder on pullbacks")
-
-    for sector, pct in exposures["sector_pct"].items():
-        if pct > max_sector:
-            obs.append(f"{sector} sector at {pct:.0f}% (cap {max_sector}%)")
-            changes.append(f"Diversify outside {sector}")
-
-    out = {"observations": obs, "suggested_changes": changes, "open_questions": []}
+    out = {
+        "observations": obs,
+        "suggested_changes": changes,
+        "open_questions": [],
+        "breaches": breaches,
+    }
 
     if llm.available():
         user_blob = (

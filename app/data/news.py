@@ -1,16 +1,48 @@
-"""Free news: yfinance (Yahoo) + Google News RSS. No API keys required."""
-from datetime import datetime
+"""Free news: yfinance (Yahoo) + Google News RSS. No API keys required.
+
+Quality filter:
+- Dedupe by normalized headline (lowercased, non-alphanumeric stripped) so the
+  same story syndicated across feeds collapses to one entry.
+- Drop press-release wire services unless the headline explicitly mentions the
+  ticker symbol (they tend to be sponsored noise without it).
+- Cap at ``limit`` after filtering.
+"""
+import re
 from urllib.parse import quote_plus
 
 import feedparser
 import httpx
 import yfinance as yf
 
+from app.logging import get_logger
+
+log = get_logger(__name__)
+
+# PR-wire / press-release feeds. Allowed through only if the ticker is in the
+# headline (then it's at least a company-issued release for THIS company).
+_DENYLIST = {"globenewswire", "pr newswire", "business wire", "accesswire",
+             "newsfile", "newsfile corp.", "businesswire", "prnewswire"}
+
+_NORM_RE = re.compile(r"[^a-z0-9]+")
+
+
+def _norm(s: str) -> str:
+    return _NORM_RE.sub("", (s or "").lower())
+
+
+def _is_denylisted(source: str, headline: str, ticker: str) -> bool:
+    if not source:
+        return False
+    if source.strip().lower() not in _DENYLIST:
+        return False
+    return ticker.upper() not in (headline or "").upper()
+
 
 def _yahoo_news(ticker: str) -> list[dict]:
     try:
         items = yf.Ticker(ticker).news or []
-    except Exception:
+    except Exception as e:
+        log.debug("yahoo .news failed for %s: %s", ticker, e)
         return []
     out = []
     for it in items:
@@ -32,7 +64,8 @@ def _google_news(ticker: str, limit: int = 10) -> list[dict]:
         r = httpx.get(url, timeout=15, headers={"User-Agent": "Mozilla/5.0"})
         r.raise_for_status()
         feed = feedparser.parse(r.text)
-    except Exception:
+    except Exception as e:
+        log.debug("google news failed for %s: %s", ticker, e)
         return []
     out = []
     for entry in feed.entries[:limit]:
@@ -46,12 +79,19 @@ def _google_news(ticker: str, limit: int = 10) -> list[dict]:
 
 
 def company_news(ticker: str, limit: int = 20) -> list[dict]:
-    """Merge Yahoo and Google News results, dedupe by headline, return up to `limit`."""
+    """Merge Yahoo + Google News, denylist PR wires, dedupe, cap at limit."""
     seen: set[str] = set()
     out: list[dict] = []
     for item in _yahoo_news(ticker) + _google_news(ticker, limit=limit):
-        key = (item.get("headline") or "").strip().lower()
+        headline = (item.get("headline") or "").strip()
+        if not headline:
+            continue
+        key = _norm(headline)
         if not key or key in seen:
+            continue
+        if _is_denylisted(item.get("source") or "", headline, ticker):
+            log.debug("dropped %s for %s (PR wire without ticker mention)",
+                       item.get("source"), ticker)
             continue
         seen.add(key)
         out.append(item)

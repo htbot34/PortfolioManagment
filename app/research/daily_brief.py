@@ -1,25 +1,22 @@
-"""Daily verdict - deterministic Python composition.
+"""Daily verdict - deterministic Python composition with a 3-signal gate.
 
-The brief is no longer produced by a separate LLM call. The synthesis call
-kept tripping Azure's jailbreak classifier and rate limits. Instead we:
+Pipeline:
+  1. Per-ticker analyst output (rule-based; LLM gated off by default).
+  2. Scanner over the broader universe.
+  3. Candidate selection (defense first, then offense).
+  4. ``app.research.conviction.evaluate`` gates every candidate. A trade
+     ONLY surfaces when technical + sector_momentum + news all pass.
+  5. Watching list built from the top scanner candidates that didn't clear
+     the gate.
 
-  1. Read each held position's per-ticker LLM analysis (which already passes
-     content filter at conviction-rated granularity).
-  2. Read the scanner buckets for high-quality setups in the broader
-     universe (textbook breakouts, oversold quality bounces).
-  3. Apply a strict deterministic gate to decide verdict:
-       defense   if any held name has conviction-5 sell or trim
-       trade     if scanner has a true breakout (vol>=1.8x AND RSI 55-68)
-                 OR an oversold bounce on a quality name (RSI<=30 near SMA200)
-       no_trade  otherwise (the default)
-  4. Build watching list from the top 3-5 scanner candidates that didn't
-     meet the trade bar.
-
-This is intentionally conservative. Most days return no_trade.
+Most days return ``no_trade`` because the 3-signal bar is intentionally
+hard to clear.
 """
 from datetime import date
 
+from app.data import news as news_mod
 from app.data import prices
+from app.research import conviction
 
 
 def _no_trade(reason: str, macro_line: str, watching: list[str]) -> dict:
@@ -82,12 +79,22 @@ def _build_watching(scan_result: dict, exclude: set[str]) -> list[str]:
 
 
 def _defense_from_book(recommendations: list[dict], macro_line: str,
-                       scan_result: dict, exclude: set[str]) -> dict | None:
-    """Return defense verdict if any held name hit conviction-5 sell or trim."""
+                       scan_result: dict, exclude: set[str],
+                       macro: dict | None = None) -> dict | None:
+    """Return a defense verdict ONLY if a held name has conviction-5 sell or
+    trim AND clears the 3-signal conviction gate (technical + bearish news +
+    sector weakness). This is intentional: per spec, exits are thesis-driven,
+    not mechanical. A position being over the 25% cap is no longer enough on
+    its own to trigger an automatic trim.
+    """
     for r in recommendations:
         if r.get("conviction", 0) != 5:
             continue
         if r.get("action") not in ("sell", "trim"):
+            continue
+        gate = conviction.evaluate(r, direction="short", macro=macro or {},
+                                    news_fetcher=news_mod.company_news)
+        if not gate["qualifies"]:
             continue
         q = r.get("quote") or {}
         t = r.get("technicals") or {}
@@ -125,6 +132,7 @@ def _defense_from_book(recommendations: list[dict], macro_line: str,
                 "invalidation": invalidation,
                 "conviction": 5,
                 "evidence": _evidence_for_defense(r, t, weight_pct),
+                "conviction_gate": gate,
             },
             "secondary_actions": [],
             "market_snapshot": macro_line,
@@ -143,25 +151,18 @@ _QUALITY_THEMES = {
 
 def _trade_from_scanner(scan_result: dict, macro: dict, macro_line: str,
                          exclude: set[str]) -> dict | None:
-    """Promote a high-quality scanner setup to a trade verdict.
+    """Promote a scanner setup to a trade verdict.
 
-    Bars (intentionally strict so most days have no trade):
+    Two-stage gate:
+      1. **Coarse pre-filter** to keep the conviction gate from churning
+         through unsuitable candidates (RSI sanity, volume confirmation,
+         not extended off 52w high, quality theme).
+      2. **3-signal conviction gate** (``conviction.evaluate``) which is
+         the binding decision: technical + sector_momentum + news must
+         all pass.
 
-      Breakout requires ALL of:
-        - 20-day breakout AND new 52w high (or within 1% of it)
-        - vol_ratio_20d >= 2.0
-        - RSI in [55, 65] (momentum without being extended)
-        - MACD histogram positive
-        - Quality theme
-
-      Oversold quality bounce requires ALL of:
-        - RSI <= 25
-        - MACD bullish cross today (positive divergence)
-        - Near SMA200 (within 6%)
-        - vol_ratio_20d >= 1.2
-        - Quality theme
-
-    Skip if macro is risk-off.
+    A scanner setup that clears the pre-filter but fails any of the three
+    signals does NOT surface. ``no_trade`` is the default outcome.
     """
     if _macro_risk_off(macro):
         return None
@@ -176,8 +177,12 @@ def _trade_from_scanner(scan_result: dict, macro: dict, macro_line: str,
         if not (55 <= rsi <= 65 and vol >= 2.0 and macd_h > 0
                 and off52 >= -2 and theme in _QUALITY_THEMES):
             continue
+        gate = conviction.evaluate(s, direction="long", macro=macro,
+                                    news_fetcher=news_mod.company_news)
+        if not gate["qualifies"]:
+            continue
         return _build_trade(s, "buy", "Quality breakout to new highs on heavy volume",
-                             macro_line, scan_result, exclude)
+                             macro_line, scan_result, exclude, gate=gate)
     for s in scan_result["buckets"].get("oversold_bounces", []):
         if s.get("held") or s["ticker"].upper() in exclude:
             continue
@@ -188,8 +193,12 @@ def _trade_from_scanner(scan_result: dict, macro: dict, macro_line: str,
         if not (rsi <= 25 and macd_h > 0 and vol >= 1.2
                 and theme in _QUALITY_THEMES):
             continue
+        gate = conviction.evaluate(s, direction="long", macro=macro,
+                                    news_fetcher=news_mod.company_news)
+        if not gate["qualifies"]:
+            continue
         return _build_trade(s, "buy", "Deep oversold quality name with bullish MACD cross",
-                             macro_line, scan_result, exclude)
+                             macro_line, scan_result, exclude, gate=gate)
     return None
 
 
@@ -260,7 +269,8 @@ def _evidence_for_defense(r: dict, t: dict, weight_pct: float | None) -> list[di
 
 
 def _build_trade(s: dict, action: str, reason: str, macro_line: str,
-                 scan_result: dict, exclude: set[str]) -> dict:
+                 scan_result: dict, exclude: set[str],
+                 gate: dict | None = None) -> dict:
     price = s.get("price")
     # Pull a fuller technicals snapshot for the stop/target sizing
     t = prices.technicals(s["ticker"])
@@ -288,6 +298,7 @@ def _build_trade(s: dict, action: str, reason: str, macro_line: str,
             "invalidation": f"Daily close below ${stop_px:.2f}" if stop_px else "structural break",
             "conviction": 5,
             "evidence": _evidence_for_entry(s, t),
+            "conviction_gate": gate,
         },
         "secondary_actions": [],
         "market_snapshot": macro_line,
@@ -307,7 +318,7 @@ def build(macro: dict, recommendations: list[dict], review: dict,
         return _no_trade("Macro is risk-off (high VIX or broken trend). Wait.",
                           macro_line, _build_watching(scan_result, held))
 
-    defense = _defense_from_book(recommendations, macro_line, scan_result, held)
+    defense = _defense_from_book(recommendations, macro_line, scan_result, held, macro=macro)
     if defense:
         return defense
 

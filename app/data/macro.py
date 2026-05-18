@@ -30,7 +30,9 @@ SECTOR_ETFS = {
 
 
 def _short(ticker: str) -> dict:
-    q = prices.quote(ticker)
+    # Indices and sector ETFs don't need fundamentals - just price and day
+    # change. fast=True skips the slow yfinance fundamentals fetch.
+    q = prices.quote(ticker, fast=True)
     return {
         "ticker": ticker,
         "price": q.price,

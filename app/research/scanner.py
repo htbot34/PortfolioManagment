@@ -18,7 +18,10 @@ from app.research import universe
 
 
 def _enrich(ticker: str) -> dict | None:
-    q = prices.quote(ticker)
+    # fast=True skips the yfinance.info fundamentals call - the scanner only
+    # needs price + technicals + theme (theme comes from the universe map).
+    # sector / pe_ratio / market_cap are not used downstream from the scan.
+    q = prices.quote(ticker, fast=True)
     t = prices.technicals(ticker)
     if not q.price or t.get("error"):
         return None

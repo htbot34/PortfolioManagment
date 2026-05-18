@@ -49,7 +49,8 @@ def _score(quote: dict, tech: dict) -> float:
 def _shortlist(held: set[str], n: int = 15) -> list[dict]:
     out = []
     for ticker in universe.all_tickers(exclude=held):
-        q = prices.quote(ticker).to_dict()
+        # Scoring uses price + technicals only - skip fundamentals for speed.
+        q = prices.quote(ticker, fast=True).to_dict()
         t = prices.technicals(ticker)
         sc = _score(q, t)
         if sc <= -99:

@@ -88,7 +88,7 @@ def _try_stooq(ticker: str) -> pd.DataFrame | None:
     r = httpx.get(
         f"https://stooq.com/q/d/l/?s={ticker.lower()}.us&i=d",
         headers={"User-Agent": _UA},
-        timeout=20,
+        timeout=8,
         follow_redirects=True,
     )
     if r.status_code != 200 or not r.text or r.text[:50].lower().startswith("no data"):
@@ -106,7 +106,7 @@ def _try_yahoo_chart(ticker: str) -> pd.DataFrame | None:
         f"https://query1.finance.yahoo.com/v8/finance/chart/{ticker}",
         params={"interval": "1d", "range": "1y"},
         headers={"User-Agent": _UA, "Accept": "application/json"},
-        timeout=20,
+        timeout=8,
         follow_redirects=True,
     )
     if r.status_code != 200:
@@ -132,24 +132,16 @@ def _try_yahoo_chart(ticker: str) -> pd.DataFrame | None:
     return df if not df.empty else None
 
 
-@_retry(attempts=3, backoff_s=0.5)
+@_retry(attempts=2, backoff_s=0.5)
 def _try_yfinance(ticker: str) -> pd.DataFrame | None:
+    """Last-resort price source. ``_try_yahoo_chart`` already hits the same
+    chart endpoint with less overhead, so this only runs when both Stooq
+    and the direct chart call returned no data. No fast_info fallback -
+    that path turned out to add latency without rescuing any tickers.
+    """
     import yfinance as yf
-    tk = yf.Ticker(ticker)
-    df = tk.history(period="1y", auto_adjust=True)
-    if df is not None and not df.empty:
-        return df
-    # Fall back to fast_info -> 2-day history for at least a current close.
-    try:
-        fi = tk.fast_info  # type: ignore[attr-defined]
-        last = float(fi.get("last_price")) if hasattr(fi, "get") else float(fi.last_price)
-        if last:
-            tiny = tk.history(period="2d", auto_adjust=True)
-            if tiny is not None and not tiny.empty:
-                return tiny
-    except Exception as e:
-        log.debug("yfinance fast_info fallback failed for %s: %s", ticker, e)
-    return None
+    df = yf.Ticker(ticker).history(period="1y", auto_adjust=True)
+    return df if df is not None and not df.empty else None
 
 
 _SOURCES = [
@@ -219,7 +211,16 @@ def _yfinance_fundamentals(ticker: str) -> dict:
     }
 
 
-def quote(ticker: str) -> Quote:
+def quote(ticker: str, fast: bool = False) -> Quote:
+    """Fetch a quote for ``ticker``.
+
+    Set ``fast=True`` to skip the yfinance fundamentals call (sector,
+    industry, market_cap, P/E). The fundamentals call hits ``Ticker.info``
+    which does Yahoo's crumb-cookie dance and is the single slowest piece
+    of the pipeline (often 5-30 seconds per ticker under throttling). The
+    scanner and macro snapshot don't need fundamentals, so they pass
+    ``fast=True`` to keep total runtime sane.
+    """
     ticker = ticker.upper()
     df, source = _history_with_source(ticker)
     price = prev_close = day_change_pct = high_52w = low_52w = None
@@ -236,7 +237,7 @@ def quote(ticker: str) -> Quote:
     else:
         error = f"No price source returned data (tried: {', '.join(s for s, _ in _SOURCES)})"
 
-    fund = _yfinance_fundamentals(ticker)
+    fund = {} if fast else _yfinance_fundamentals(ticker)
     q = Quote(
         ticker=ticker, price=price, prev_close=prev_close, day_change_pct=day_change_pct,
         market_cap=fund.get("market_cap"), pe_ratio=fund.get("pe_ratio"),
@@ -268,8 +269,8 @@ def quote(ticker: str) -> Quote:
     return q
 
 
-def quotes(tickers: list[str]) -> dict[str, Quote]:
-    return {t.upper(): quote(t) for t in tickers}
+def quotes(tickers: list[str], fast: bool = False) -> dict[str, Quote]:
+    return {t.upper(): quote(t, fast=fast) for t in tickers}
 
 
 def history(ticker: str, period: str = "6mo") -> pd.DataFrame | None:

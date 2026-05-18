@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-18 01:09 UTC",
+  "generated_at": "2026-05-18 07:49 UTC",
   "diagnostics": {
     "stooq": "no data",
     "yahoo_chart": "ok (251 rows, last close $614.23)",
@@ -10,13 +10,13 @@
     {
       "model": "openai/gpt-4o-mini",
       "tag": "portfolio_review",
-      "prompt_chars": 5595,
+      "prompt_chars": 6103,
       "status": 200,
       "kind": "ok",
       "finish_reason": "stop",
-      "input_tokens": 1743,
-      "output_tokens": 198,
-      "total_tokens": 1941
+      "input_tokens": 1893,
+      "output_tokens": 220,
+      "total_tokens": 2113
     },
     {
       "model": "openai/gpt-4o",
@@ -26,8 +26,8 @@
       "kind": "ok",
       "finish_reason": "stop",
       "input_tokens": 2087,
-      "output_tokens": 415,
-      "total_tokens": 2502
+      "output_tokens": 587,
+      "total_tokens": 2674
     }
   ],
   "macro": {
@@ -66,11 +66,11 @@
       },
       "DXY": {
         "ticker": "DX-Y.NYB",
-        "price": 99.39700317382812,
-        "day_change_pct": 0.1279405007117925,
+        "price": 99.32599639892578,
+        "day_change_pct": 0.05641156215681845,
         "high_52w": 100.51000213623047,
         "low_52w": 96.22000122070312,
-        "pct_off_52w_high": -1.1073514463702763
+        "pct_off_52w_high": -1.1779979227339936
       },
       "TNX": {
         "ticker": "^TNX",
@@ -233,6 +233,34 @@
   "headlines": [
     {
       "source": "CNBC",
+      "title": "White House touts deals on soybeans and rare earths after Trump-Xi summit, while China talks up tariff cuts",
+      "url": "https://www.cnbc.com/2026/05/18/us-china-announce-deals-after-trump-xi-summit.html",
+      "published": "Mon, 18 May 2026 02:11:08 GMT",
+      "summary": "The meeting between U.S. President Donald Trump and Chinese President Xi Jinping last week yielded new pacts, though the sides have provided differing details."
+    },
+    {
+      "source": "CNBC",
+      "title": "Samsung strike involving 47,000 workers looms as South Korea\u2019s president urges labor deal",
+      "url": "https://www.cnbc.com/2026/05/18/samsung-strike-lee-jae-myung-labor-deal.html",
+      "published": "Mon, 18 May 2026 04:26:26 GMT",
+      "summary": "South Korea\u2019s government stepped up pressure on Samsung Electronics and its union to avert a strike that officials say could cost the economy billions."
+    },
+    {
+      "source": "CNBC",
+      "title": "China's April economic data underwhelms, with retail sales growth slowing to lowest since 2022",
+      "url": "https://www.cnbc.com/2026/05/18/china-april-retail-sales-industrial-output-investment-unemployment-iran-war.html",
+      "published": "Mon, 18 May 2026 02:27:01 GMT",
+      "summary": "China's economy stumbled in April with consumption, industrial output and investment growth missing expectations."
+    },
+    {
+      "source": "CNBC",
+      "title": "South Korea market volatility nears record high after $13 billion foreign investor selloff",
+      "url": "https://www.cnbc.com/2026/05/18/s-korea-market-volatility-near-record-as-foreigners-sell-13-billion.html",
+      "published": "Mon, 18 May 2026 02:37:40 GMT",
+      "summary": "South Korea's stock market volatility surged near record highs on Monday after foreign investors dumped $13.2 billion worth of local equities last week."
+    },
+    {
+      "source": "CNBC",
       "title": "Trump warns Iran to 'get moving' or 'there won\u2019t be anything left'",
       "url": "https://www.cnbc.com/2026/05/17/trump-warns-iran-wont-be-anything-left.html",
       "published": "Sun, 17 May 2026 17:43:12 GMT",
@@ -240,38 +268,10 @@
     },
     {
       "source": "CNBC",
-      "title": "Oil rises as Iran-U.S. deadlocked peace talks fan fears of extended supply disruption",
-      "url": "https://www.cnbc.com/2026/05/18/oil-today-brent-wti-iran-trump-hormuz-iea-supply-crude-.html",
-      "published": "Mon, 18 May 2026 00:52:58 GMT",
-      "summary": "Trump's warning to Iran over the weekend signals that the impasse between Washington and Tehran over ending the war could deteriorate into resumption of armed conflict."
-    },
-    {
-      "source": "CNBC",
-      "title": "Asia-Pacific markets fall as Trump\u2019s Iran warning stokes fresh oil supply fears",
-      "url": "https://www.cnbc.com/2026/05/18/asia-pacific-markets-today-live-updates-nikkei-225-hang-seng-index-kospi-nifty-50.html",
-      "published": "Mon, 18 May 2026 00:09:26 GMT",
-      "summary": "Asia-Pacific markets fell as investors weighed renewed geopolitical tensions after Donald Trump warned Iran to \"get moving, FAST.\""
-    },
-    {
-      "source": "CNBC",
-      "title": "Berkshire's new CEO overhauls portfolio, dumping a slate of stocks",
-      "url": "https://www.cnbc.com/2026/05/16/berkshires-new-ceo-overhauls-portfolio-dumping-a-slate-of-stocks.html",
-      "published": "Sat, 16 May 2026 13:18:09 GMT",
-      "summary": "Berkshire Hathaway's equity portfolio got one of its biggest renovations ever during Greg Abel's first three months as the company's CEO."
-    },
-    {
-      "source": "CNBC",
-      "title": "Trump touted Palantir on Truth Social after buying the company's stock, records show",
-      "url": "https://www.cnbc.com/2026/05/15/trump-palantir-stock-truth-social.html",
-      "published": "Fri, 15 May 2026 20:28:29 GMT",
-      "summary": "During the first three months of the year, Trump purchased between $630,000 and $247,008 worth of Palantir stock and sold at least $1.1 million."
-    },
-    {
-      "source": "CNBC",
-      "title": "Why your 'fixed' mortgage payment keeps going up",
-      "url": "https://www.cnbc.com/2026/05/17/mortgage-escrow-shortages.html",
-      "published": "Sun, 17 May 2026 13:30:01 GMT",
-      "summary": "Rising property taxes and surging homeowners insurance costs are pushing up the amount that homeowners must pay monthly alongside their mortgage."
+      "title": "Mizuho shares slide 7% after denying decision on reported Rakuten Bank investment shift",
+      "url": "https://www.cnbc.com/2026/05/18/mizuho-shares-rakuten-bank-investment-card-yomiuri-shimbun-report.html",
+      "published": "Mon, 18 May 2026 02:54:26 GMT",
+      "summary": "Shares of Mizuho Financial Group fell over 7% Monday, after the company said it has not made decision yet on investment in Rakuten Bank."
     },
     {
       "source": "CNBC markets",
@@ -286,6 +286,13 @@
       "url": "https://www.cnbc.com/2026/05/16/for-better-or-worse-investors-are-living-through-trumps-stock-market-heres-why.html",
       "published": "Sat, 16 May 2026 17:00:41 GMT",
       "summary": "President Donald Trump has been considered the ultimate stock market president, overseeing an expansion to record highs as well as major declines."
+    },
+    {
+      "source": "CNBC markets",
+      "title": "Berkshire's new CEO overhauls portfolio, dumping a slate of stocks",
+      "url": "https://www.cnbc.com/2026/05/16/berkshires-new-ceo-overhauls-portfolio-dumping-a-slate-of-stocks.html",
+      "published": "Sat, 16 May 2026 13:18:09 GMT",
+      "summary": "Berkshire Hathaway's equity portfolio got one of its biggest renovations ever during Greg Abel's first three months as the company's CEO."
     },
     {
       "source": "CNBC markets",
@@ -312,7 +319,7 @@
       "source": "MarketWatch",
       "title": "Dow futures drop, oil prices push higher as Iran war remains stuck in stalemate",
       "url": "https://www.marketwatch.com/story/u-s-stock-futures-slip-oil-prices-push-higher-as-iran-war-remains-stuck-in-stalemate-c3a874a5?mod=mw_rss_topstories",
-      "published": "Mon, 18 May 2026 00:59:00 GMT",
+      "published": "Mon, 18 May 2026 03:00:00 GMT",
       "summary": "U.S. stock-index futures fell and crude prices rose on Sunday, after the market\u2019s rally stalled last week as oil prices rose sharply amid the impasse in the war with Iran."
     },
     {
@@ -352,86 +359,86 @@
     },
     {
       "source": "Yahoo Finance",
-      "title": "Social Security could be depleted by 2032 \u2014 and a typical retired couple stands to lose $18,400 a year",
-      "url": "https://finance.yahoo.com/economy/policy/articles/social-security-could-depleted-2032-141500893.html",
-      "published": "2026-05-16T14:15:00Z",
+      "title": "NANC Traders Beat the Crowd by 33 Points and the Difference Keeps Growing",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/nanc-traders-beat-crowd-33-171520563.html",
+      "published": "2026-05-16T17:15:20Z",
       "summary": ""
     },
     {
       "source": "Yahoo Finance",
-      "title": "Trump\u2019s More Than 3,700 Trades Astonish Wall Street Insiders",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/trump-traded-nvidia-boeing-intel-030913697.html",
-      "published": "2026-05-16T14:10:49Z",
+      "title": "AXT Turned the AI Data Center Boom Into an 8,436% 1-Year Return",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/axt-turned-ai-data-center-170002890.html",
+      "published": "2026-05-16T17:00:02Z",
       "summary": ""
     },
     {
       "source": "Yahoo Finance",
-      "title": "Is NVIDIA Corporation (NVDA) Among the Most Profitable Tech Stocks to Buy?",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/nvidia-corporation-nvda-among-most-140749769.html",
-      "published": "2026-05-16T14:07:49Z",
+      "title": "eBay Stock Hits New All-Time Highs as Ryan Cohen Declares \u2018It Needs to Be on Ozempic\u2019",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/ebay-stock-hits-time-highs-180002071.html",
+      "published": "2026-05-16T18:00:02Z",
       "summary": ""
     },
     {
       "source": "Yahoo Finance",
-      "title": "Palantir (PLTR) Must Arbitrate Claims made by Former Staffers who Started a Rival Company, Judge says",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/palantir-pltr-must-arbitrate-claims-140735493.html",
-      "published": "2026-05-16T14:07:35Z",
+      "title": "Wix.com (WIX) Gets Price Target Cut After Mixed Q1 Results",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/wix-com-wix-gets-price-180104436.html",
+      "published": "2026-05-16T18:01:04Z",
       "summary": ""
     },
     {
       "source": "Yahoo Finance",
-      "title": "InterDiInterDigital, Inc. (IDCC) Announces Financial Results for First Quarter 2026",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/interdiinterdigital-inc-idcc-announces-financial-140742613.html",
-      "published": "2026-05-16T14:07:42Z",
+      "title": "Teva Pharmaceutical (TEVA) Reports Q1 Beat, Plans Amylyx Deal",
+      "url": "https://finance.yahoo.com/sectors/healthcare/articles/teva-pharmaceutical-teva-reports-q1-180300986.html",
+      "published": "2026-05-16T18:03:00Z",
       "summary": ""
     },
     {
       "source": "Yahoo Finance",
-      "title": "Citi Maintains a Neutral Rating on PTC Inc. (PTC)",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/citi-maintains-neutral-rating-ptc-140729981.html",
-      "published": "2026-05-16T14:07:29Z",
+      "title": "What to Know About This Fund\u2019s $8 Million Sprinklr Exit Amid AI Push",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/know-fund-8-million-sprinklr-171221704.html",
+      "published": "2026-05-16T17:12:21Z",
       "summary": ""
     },
     {
       "source": "Seeking Alpha",
-      "title": "Oil surge, bond selloff rattle markets as Iran standoff drags on",
-      "url": "https://seekingalpha.com/news/4594207-oil-surge-bond-selloff-rattle-markets-as-iran-standoff-drags-on?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
-      "published": "Sun, 17 May 2026 19:31:01 -0400",
+      "title": "Winnebago declares $0.35 dividend",
+      "url": "https://seekingalpha.com/news/4594229-winnebago-declares-035-dividend?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
+      "published": "Mon, 18 May 2026 00:33:53 -0400",
       "summary": ""
     },
     {
       "source": "Seeking Alpha",
-      "title": "Goldman Sachs warns AI-fueled market rally is becoming \u2018one big trade\u2019",
-      "url": "https://seekingalpha.com/news/4594206-goldman-sachs-warns-ai-fueled-market-rally-is-becoming-one-big-trade?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
-      "published": "Sun, 17 May 2026 18:14:47 -0400",
+      "title": "Haverty Furniture declares $0.33 dividend",
+      "url": "https://seekingalpha.com/news/4594225-haverty-furniture-declares-0_33-dividend?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
+      "published": "Mon, 18 May 2026 00:32:55 -0400",
       "summary": ""
     },
     {
       "source": "Seeking Alpha",
-      "title": "Here are the major earnings before the open Monday",
-      "url": "https://seekingalpha.com/news/4594202-here-are-the-major-earnings-before-the-open-monday?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
-      "published": "Sun, 17 May 2026 18:00:15 -0400",
+      "title": "Cathay General Bancorp declares $0.38 dividend",
+      "url": "https://seekingalpha.com/news/4594228-cathay-general-bancorp-declares-038-dividend?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
+      "published": "Mon, 18 May 2026 00:32:11 -0400",
       "summary": ""
     },
     {
       "source": "Seeking Alpha",
-      "title": "Baidu Q1 preview: AI cloud growth, Kunlunxin IPO to be in focus",
-      "url": "https://seekingalpha.com/news/4594046-baidu-q1-preview-ai-cloud-growth-kunlunxin-ipo-to-be-on-focus?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
-      "published": "Sun, 17 May 2026 17:35:06 -0400",
+      "title": "Teleflex declares $0.34 dividend",
+      "url": "https://seekingalpha.com/news/4594227-teleflex-declares-034-dividend?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
+      "published": "Mon, 18 May 2026 00:29:41 -0400",
       "summary": ""
     },
     {
       "source": "Seeking Alpha",
-      "title": "Compugen Q1 2026 Earnings Preview",
-      "url": "https://seekingalpha.com/news/4593943-compugen-q1-2026-earnings-preview?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
-      "published": "Sun, 17 May 2026 17:35:00 -0400",
+      "title": "Extra Space Storage declares $1.62 dividend",
+      "url": "https://seekingalpha.com/news/4594226-extra-space-storage-declares-162-dividend?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
+      "published": "Mon, 18 May 2026 00:27:19 -0400",
       "summary": ""
     },
     {
       "source": "Seeking Alpha",
-      "title": "Agilysys Q1 2026 Earnings Preview",
-      "url": "https://seekingalpha.com/news/4593945-agilysys-q1-2026-earnings-preview?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
-      "published": "Sun, 17 May 2026 17:35:00 -0400",
+      "title": "Rayonier declares $0.26 dividend",
+      "url": "https://seekingalpha.com/news/4594222-rayonier-declares-0_26-dividend?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
+      "published": "Mon, 18 May 2026 00:25:32 -0400",
       "summary": ""
     }
   ],
@@ -2231,20 +2238,169 @@
   },
   "review": {
     "observations": [
-      "META is 64% of portfolio (cap 25%)",
-      "Communication Services sector at 75% (cap 45%)",
-      "High concentration in Communication Services with three positions (META, NBIS, NFLX)",
-      "Underperformance in positions like OKLO, IREN, FBL, and LEU indicates potential issues with selection or market timing",
-      "Cash position at 11.66% exceeds the minimum cash buffer requirement of 5%, but may be underutilized given aggressive risk profile"
+      "[BREACH] Communication Services 75.4% (45% cap)",
+      "[BREACH] META 63.8% (25% cap)",
+      "High concentration in Communication Services may expose the portfolio to sector-specific risks.",
+      "Underperformance in positions such as OKLO, IREN, FBL, and LEU indicates potential structural weaknesses in the portfolio."
     ],
     "suggested_changes": [
-      "Trim META to bring weight under 25%",
-      "Diversify outside Communication Services",
-      "Consider reallocating cash to high-conviction long-term setups in preferred themes",
-      "Review underperforming positions (OKLO, IREN, FBL, LEU) for potential exit or reallocation"
+      "Reduce Communication Services exposure below 45%",
+      "Trim META by ~7 share(s) to bring weight under 25%",
+      "Consider reallocating funds from underperforming positions to sectors aligned with investor preferences, such as AI, clean energy, or cybersecurity."
     ],
-    "open_questions": [],
+    "open_questions": [
+      "What is the investor's stance on holding underperforming positions like OKLO, IREN, FBL, and LEU?",
+      "Is there a preference for increasing exposure to preferred themes if cash is deployed?",
+      "Should we consider diversifying into new sectors to mitigate concentration risk?"
+    ],
     "_model_used": "openai/gpt-4o-mini"
+  },
+  "metrics": {
+    "available": true,
+    "benchmark": "SPY",
+    "period": "1y",
+    "risk_free": 0.04,
+    "ann_return": 0.24170384517571075,
+    "ann_vol": 0.312184919341436,
+    "sharpe": 0.5656183499464491,
+    "sortino": 0.8352627372924489,
+    "max_drawdown": -0.281286267628326,
+    "beta": 1.5836517169867548,
+    "alpha": -0.13931896947219347,
+    "total_return_pct": 0.18138027817364577,
+    "benchmark_total_return_pct": 0.2439750382445527,
+    "outperformance_pct": -0.06259476007090692,
+    "sparkline_port": [
+      0.0010487077477085993,
+      -0.004884534117716055,
+      0.023648090249076326,
+      0.08898940035465741,
+      0.1180662926462952,
+      0.12228282049058459,
+      0.1566797560554427,
+      0.20413516701461099,
+      0.17348437718235288,
+      0.16994582486540977,
+      0.17303280721495162,
+      0.18133184382077516,
+      0.15740141800108476,
+      0.2515876253206655,
+      0.27173545344430483,
+      0.28538811540267317,
+      0.23455925515644283,
+      0.2618831946385458,
+      0.23739947126349858,
+      0.26098373842964895,
+      0.2969136401024326,
+      0.34861377020312,
+      0.34439986142012025,
+      0.31279798978364437,
+      0.3067663705315795,
+      0.30120419423584943,
+      0.3131363592745884,
+      0.3041312200730617,
+      0.35998131831157965,
+      0.20702655811176673,
+      0.16807998211868957,
+      0.1284490997440757,
+      0.09680608300785898,
+      0.15290037057757,
+      0.1788382418558776,
+      0.19956446645642067,
+      0.15112302762307284,
+      0.16445301797340517,
+      0.19001748377101557,
+      0.16739561566246475,
+      0.18010746869875116,
+      0.16278954897484632,
+      0.11811256143497384,
+      0.20324277648436295,
+      0.2601717624791078,
+      0.16646656748116428,
+      0.16561056019794917,
+      0.1369249405359405,
+      0.13582486896082102,
+      0.16917544425083642,
+      0.15213483189323473,
+      0.15764516662349615,
+      0.13154893274890944,
+      0.08994005279296746,
+      -0.012705125135351936,
+      0.06409840695283942,
+      0.17400732631842586,
+      0.2679635250649406,
+      0.2541305363015933,
+      0.23682468786270539,
+      0.17183934120427913,
+      0.17473716517276716,
+      0.19406507630172465
+    ],
+    "sparkline_bench": [
+      0.0010938461217664397,
+      -0.02539553440838893,
+      -0.008094913261155967,
+      -0.0019354163420342019,
+      0.01204976943358993,
+      0.005604202324861696,
+      0.0211713511131002,
+      0.03980135121684558,
+      0.04456408603964057,
+      0.049511919060522436,
+      0.056950463017698016,
+      0.06733424595030879,
+      0.0691013071610096,
+      0.06221805779809353,
+      0.07233251360785053,
+      0.0854089514597951,
+      0.07389763083551082,
+      0.08576230207101476,
+      0.07753282796663274,
+      0.09193874749329067,
+      0.10637825587165461,
+      0.11454055227262461,
+      0.11258829014563654,
+      0.12113762872773304,
+      0.1302759534739959,
+      0.09899024926933953,
+      0.11181420578338375,
+      0.12386397521697412,
+      0.1562773198315046,
+      0.1500168509208628,
+      0.12919885041898183,
+      0.13099960319958948,
+      0.11516323000669826,
+      0.13601481936028526,
+      0.1469707426721092,
+      0.1505048650935099,
+      0.14735778485323547,
+      0.1384549929417187,
+      0.16186467637141355,
+      0.1476270092578884,
+      0.16051834891174677,
+      0.16756985068779562,
+      0.14032312886213982,
+      0.16581953254384807,
+      0.16454048550579392,
+      0.14039040928375313,
+      0.16452374243904155,
+      0.15498142700849749,
+      0.15676533400415127,
+      0.1551329363548779,
+      0.13157184629700325,
+      0.12093568474469296,
+      0.11314368745809711,
+      0.09925947367399246,
+      0.06356438525775987,
+      0.1089363499477618,
+      0.14348705488736702,
+      0.18084812980457832,
+      0.1969202412686175,
+      0.1977280172007776,
+      0.20836417875308788,
+      0.24136650953178518,
+      0.2591214532817576
+    ],
+    "n_days": 250
   },
   "brief": {
     "verdict": "defense",
@@ -4547,6 +4703,30 @@
       },
       "news": [
         {
+          "headline": "Jim Cramer Reveals He\u2019s Been A Fan Of Amazon.com (AMZN) CEO Before Anyone Else Was",
+          "url": "https://finance.yahoo.com/markets/stocks/articles/jim-cramer-reveals-fan-amazon-034052912.html",
+          "source": "Insider Monkey",
+          "published": "2026-05-18T03:40:52Z"
+        },
+        {
+          "headline": "Jim Cramer Can\u2019t Help But Share How Amazon Is Better Than Walmart (WMT)",
+          "url": "https://finance.yahoo.com/markets/stocks/articles/jim-cramer-t-help-share-034045309.html",
+          "source": "Insider Monkey",
+          "published": "2026-05-18T03:40:45Z"
+        },
+        {
+          "headline": "Another billionaire dumps mega-cap stock for AI bet",
+          "url": "https://finance.yahoo.com/markets/stocks/articles/another-billionaire-dumps-mega-cap-020300710.html",
+          "source": "TheStreet",
+          "published": "2026-05-18T02:03:00Z"
+        },
+        {
+          "headline": "U.S. Bancorp Amazon Card Deal Adds New Angle To Valuation Story",
+          "url": "https://finance.yahoo.com/markets/stocks/articles/u-bancorp-amazon-card-deal-004930203.html",
+          "source": "Simply Wall St.",
+          "published": "2026-05-18T00:49:30Z"
+        },
+        {
           "headline": "Anthony Scaramucci Says Bitcoin Poised To Follow The S-Curve Of Adoption Like Amazon, Microsoft: 'Cannot Be Devalued'",
           "url": "https://finance.yahoo.com/markets/crypto/articles/anthony-scaramucci-says-bitcoin-poised-203105744.html",
           "source": "Benzinga",
@@ -4583,40 +4763,16 @@
           "published": "2026-05-17T15:32:00Z"
         },
         {
-          "headline": "Is Amazon About to Join the $3 Trillion Club?",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/amazon-join-3-trillion-club-152700107.html",
-          "source": "Motley Fool",
-          "published": "2026-05-17T15:27:00Z"
-        },
-        {
-          "headline": "Amazon, Meta And Microsoft's AI Data Center Push Faces Strong Revolt\u2014 Seven In 10 Americans Don't Want Hubs Near Them",
-          "url": "https://finance.yahoo.com/sectors/technology/articles/amazon-meta-microsofts-ai-data-150118422.html",
-          "source": "Benzinga",
-          "published": "2026-05-17T15:01:18Z"
-        },
-        {
-          "headline": "SPYG Has Beaten SPYV by 390% Over a Decade and the Reason Matters More Than You Think",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/spyg-beaten-spyv-390-over-140518496.html",
-          "source": "24/7 Wall St.",
-          "published": "2026-05-17T14:05:18Z"
-        },
-        {
-          "headline": "Disney\u2019s Next Battle Won\u2019t Be Against Netflix",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/disney-next-battle-won-t-140002165.html",
-          "source": "Barchart",
-          "published": "2026-05-17T14:00:02Z"
+          "headline": "Jim Cramer Reveals He\u2019s Been A Fan Of Amazon.com (AMZN) CEO Before Anyone Else Was - Yahoo Finance",
+          "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxQSG9NOThyU1B0M3VJWHN1TnpKZXMxVjg2UjJ1Zk9saVZCVjJSVXJWcWNsbW1vdUtQOENrYVM1VENRZHJ2OWJkdXlQVlRGTUhILUFrZlk3QXlteTdiRzMyY21BOFB3QnR0bUNsU3BoTlVnV0lQYnItcTVXRXZ1cG1scnFLd1pJcmZCLWxEQnd3OWNjelVqbzFJc01R?oc=5",
+          "source": "Yahoo Finance",
+          "published": "Mon, 18 May 2026 03:40:00 GMT"
         },
         {
           "headline": "Amazon: Sell Before The Cash Flow Gets Worse (NASDAQ:AMZN) - Seeking Alpha",
           "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxOa3NnYjhQdHM5NmVWN0o1b2hoM3RldGVnb0xqQ2dMbG16VDM1MFR3aHRCSnNHdlpvYzZSdzVqYUJqajFrRm9la0xYeDAyMDNaRl91cjJ4MEMtLUJrTTlnS0doTFczWVlGWXlxczI2X2V1Wmc1OE01M1cxQTdxZjRteTJoT3hGSlE?oc=5",
           "source": "Seeking Alpha",
           "published": "Sat, 16 May 2026 14:00:00 GMT"
-        },
-        {
-          "headline": "Amazon earnings recap: AWS comes through big as Q1 tops expectations - Business Insider",
-          "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxQX29FVlZ3RWwwVV9UVTJENFhzS2ROTXZtWnRFTmZXbnlBYnFkS0pDaDluR2hUWFQ2ZXpYZGVBZFpGbkw3R0stMFdUcndlWGEwVnZzODVSUW1oS0NKODd6UWh0RHJMWWhQQVVreFZhb2RwMXkxTHp5bTZ3MDNqSVY3MGxISUF4QVBUV1pacmMxXy0?oc=5",
-          "source": "Business Insider",
-          "published": "Wed, 29 Apr 2026 07:00:00 GMT"
         }
       ],
       "earnings": {
@@ -7032,16 +7188,16 @@
           "published": "2026-05-14T16:13:50Z"
         },
         {
-          "headline": "Netflix Just Raised Guidance. The Market Sold It Off. We See 283% Upside - Yahoo Finance",
-          "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxPZldQaks0WXBfRWt3NnI3OTE3b2dfeEsxQW5yWjdrQl9vNHlHREdheE85ODEyUkkzOGJEZUE5U1BkdzhwWnZTYm9MOU1xa29xQ0FYLWVqZl92ZXBjcHZUSkkwS2lSeUozNXVodWREVFhtUmM2WGpwODZlenZtaVIyRDVpaVNFVXh6MWVydE1jY3NfWklfR1JDbkhrWWxoZlNJLXc?oc=5",
-          "source": "Yahoo Finance",
-          "published": "Thu, 14 May 2026 15:36:10 GMT"
+          "headline": "Mark Mahaney Weighs In on Netflix Stock After Upfront Event - TipRanks",
+          "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxNOGFuSzlLT053cHlOTDVpZk1wOVJwV2F5ZmZjOS1sRFItdVRGdDRRWGdLMm8wN1NIbkZCRnl0WVE4M0hUMkEteV81MzkyVE1HNkhqdkFSazctNnhfeDc4Q0ZWbHJzUFVmRFZIQTlpbHlHU1NmaThqc2EwVVl3YjFGT3ZOcTNPX0V0dlJGRE95dWl2UTA?oc=5",
+          "source": "TipRanks",
+          "published": "Mon, 18 May 2026 01:00:31 GMT"
         },
         {
-          "headline": "Netflix Stock (NFLX) Drops as Analyst Says Engagement Debate Far from Over - TipRanks",
-          "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxPVHlTSkZMRS1KTUx5UXVpOE1FUThrSEJERGk0cElMamFXbnIzQWRkRFc4dU1fNzQ1em5MU3NDTWV2NXQ4WGVMV3J6OWt6Vm1xUURmVzdxazM0OE5Wc0ZUOEE3NWd3X0RhcUstQUV2YmhoUXQ2enRBTmhEcFJjcVhIMGFFcWIxMDR1bzg0T2NEdHRtazg1VWMxRWdxVFdib0QtLXVkMw?oc=5",
-          "source": "TipRanks",
-          "published": "Fri, 15 May 2026 12:10:23 GMT"
+          "headline": "Citi Maintains Buy Rating on Netflix (NFLX) Stock - Yahoo Finance",
+          "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxOdGlJTXIwY0FNX016NDB3UXNmNy1nQUYta00yY2JZOUVaQnBhMFR2Y19zMWhuQlA5cVFBdGF6LWZTWGxHY0VuclBscGRXazRkUjR5Q2RpeG02bDcybkRnbVZjVnFYVHRLSkF6RTdYVHlLcHpTTlNYcEszand4cGJmckhBNy1aZnQweWx2aTBhTUVWQ2ZKVkQzOHBOYzZvUkE?oc=5",
+          "source": "Yahoo Finance",
+          "published": "Sun, 17 May 2026 16:39:11 GMT"
         }
       ],
       "earnings": {
@@ -9439,6 +9595,12 @@
           "published": "Sun, 18 Dec 2022 04:52:28 GMT"
         },
         {
+          "headline": "While the global stock market is suffering from the controversy over the artificial intelligence (AI.. - \ub9e4\uc77c\uacbd\uc81c",
+          "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE02YjdwOTNPWlRpUzZwSDlXZUJRd0VxZEpJbWFRVjYzZW9wQkktczEtNFdBUG9qNjR6NmNGeHNWZDlVT3NzbDJLR3U2SzJpYTA?oc=5",
+          "source": "\ub9e4\uc77c\uacbd\uc81c",
+          "published": "Wed, 19 Nov 2025 08:00:00 GMT"
+        },
+        {
           "headline": "Top Performing Leveraged/Inverse ETFs: 05/04/2025 - ETF Database",
           "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxNazNWYVZRVE9Ka0tjbGJialV2WVFyMGswWjdPM0U2UU5uSjcyelFNdTdjOWFfMUgzVV9nRlljTGNMTzNia0lPTzJmODFTck1VVWlkSF9NSDBXSTRvMEZwRzM3eVBILVVLMlZXYWNpSFplWHV3b2FMQkZjVVJGRVlRNWhTZUtIYW0wSUZwZQ?oc=5",
           "source": "ETF Database",
@@ -9449,12 +9611,6 @@
           "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE0xUUplQk82cnVGbDBHVlhxNUpaWVV4cXZiV0xFbEQzQkRYVVVfcm5yTndEVGpsUmVtWkRvOUZhMjNNQUg4dW1KZk9nMXpNbHl0aG04VDRlSTV1cFpLbHc?oc=5",
           "source": "ChartMill",
           "published": "Tue, 16 Apr 2024 04:58:54 GMT"
-        },
-        {
-          "headline": "Top Performing Leveraged/Inverse ETFs: 12/08/2024 - etftrends.com",
-          "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxPRnRJNHFPb1R1SHE0Y2NiWnB5MGVxNW9JSk1XQ2RkMko4ZWo0MnlJUm0wMUU5VmR6UlhnYjVXRnl1V3FCVk1kOUQ5QTR0QV9Sc0hjZDZzZFdrcUgzS1NwZzBPTkhhX28yWUxKZ0Y5MWhQVWhrQmxtdWs3TmlFNW15N0E4ZHFBMVMyLXVWTElGX2xsUHFmTXlxTW1lZU45d9IBrgFBVV95cUxOM3lkYWVVaTdVY2o4NW9sWURzVmFhdF9UWjA0RlA3NG1TSFNtZHNsVVE4VG1JOXVPemNKekZrbGpKOUVYREZUdDZtNXZNVWJzUVNBX016LTYtNWFzQmNfWEt3UjZrNEdGbW96SVZiR0hyZXBlMXJfMU9icEJRdWFVU0pfZFNGNXJmYjB1dnp6N1NQMk5rYUdnaWpuRXlPS0FfbzdLbUlnbDZUWUxydGc?oc=5",
-          "source": "etftrends.com",
-          "published": "Wed, 11 Dec 2024 08:00:00 GMT"
         },
         {
           "headline": "GraniteShares 2x Long META Daily ETF (FBL) Dividend Yield 2026 & History $FBL - MarketBeat",
@@ -10637,10 +10793,10 @@
           "published": "Fri, 15 May 2026 07:00:00 GMT"
         },
         {
-          "headline": "Centrus Reports First Quarter 2026 Results - PR Newswire",
-          "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxPbENOZUZ5VWVNT2tEbXBkb2lTSWdFbEhfdlNBR201Uk9VRDBJWkhNUlNlMWRxU0VPa2VqcDFWdjNDcUpuYmpSam9BTno1TE5xZVpwTTJ2a0tmUC01ZV92R2dUT2RhbkJNX2huNHk0NkN2anQ2SFJudjU1S2o5YWtNdTdpVmcyTFhrZlBOM1AzUVA5VEo4TlcwamRqSnRXMWc?oc=5",
-          "source": "PR Newswire",
-          "published": "Tue, 05 May 2026 07:00:00 GMT"
+          "headline": "Is Centrus Energy Corp. (LEU) A Good Stock To Buy Now? - Yahoo Finance",
+          "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxPbmk4Rlc2MTBNSW1tXzNfSVFZZlBJZEUydVZrLU54bzZmNV9BczR6bENCb2tQUzFXelZQeHJPYXN2WWlSMHNaOTZ2TnY4ZjU4dUJhLTNhdlBFa2ZjMFRIQ0t2eUN1cWlYbmFsMnZtNzZ4UnJNRGtFajY4SU9IM3FsbVlIMmZvV1JtX25NT19XWFZjdDFMdTVMOA?oc=5",
+          "source": "Yahoo Finance",
+          "published": "Thu, 14 May 2026 20:40:36 GMT"
         }
       ],
       "earnings": {
@@ -11848,10 +12004,10 @@
           "published": "Sat, 16 May 2026 09:24:13 GMT"
         },
         {
-          "headline": "Meta Stock: Big Growth, Big Discount, Big Buy - Yahoo Finance",
-          "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxNSEp3RnVUamVJcUJ4eDNkLWl5M19NcDZNRTZ2enlPSW5rV2tXLV9NQUp0eC1Mc0dGY2FTVEdiSHF4WDJCOXF0V2lhWVJ1OGhHbU8tSlR1dXBrY3duQllHUnhteURnd2xfbTVQWTJNUGtkZWxXU0xNRVA3U0ZvZVg0RGw2SzJQZjlQMk9qaGgyeTUzX3dr?oc=5",
-          "source": "Yahoo Finance",
-          "published": "Thu, 14 May 2026 13:42:21 GMT"
+          "headline": "Praxis Investment Management Inc. Has $32.29 Million Stock Holdings in Meta Platforms, Inc. $META - MarketBeat",
+          "url": "https://news.google.com/rss/articles/CBMi5wFBVV95cUxPdlpnRm1ZZFpVWGNoNDczVHZWcUVObk9Ra21kaXRxcTZaMXh6dVZkT04yNWhxZ2RTaTZQX0JTcklnbkRydHM2bm1zX1BUZHJDYTBJakxsREtKaFBuUUszWWtsaE9DSGl3NEdSd0ZaUFZCN1ZDMzRMcUZ2LUwzZlhhekc2ZW81QTZTYV9PN1p2MkFJWkV4b0JNUTNiTmpsY3pVdWU0U1dFZTA5QTVwOUhrbk9hcGlGV0J2WmhmY1p4aC01TGcwZkh1TVBPVzhoUEdlejlKNnA5VHRJaEJzZW5XUXoyWHlYUmM?oc=5",
+          "source": "MarketBeat",
+          "published": "Sun, 17 May 2026 09:14:41 GMT"
         }
       ],
       "earnings": {
@@ -11932,43 +12088,43 @@
     "candidates": [
       {
         "ticker": "NVDA",
-        "thesis": "Leader in AI and GPU compute infrastructure, benefiting from secular growth in AI adoption and data center expansion.",
-        "entry_zone": "200-220",
-        "risk": "Stop at 180; target 300",
+        "thesis": "NVIDIA is a leader in AI compute infrastructure, benefiting from secular growth in AI and machine learning applications. Strong fundamentals and recent pullback from 52-week highs provide a reasonable entry point.",
+        "entry_zone": "215-225 (near SMA50 and slightly below current price)",
+        "risk": "Stop at 190 (below SMA200), target at 300 (near all-time highs), position size 15%",
         "horizon": "long_term",
         "conviction": 5
       },
       {
         "ticker": "ASML",
-        "thesis": "Dominant supplier of EUV lithography systems critical for advanced semiconductor manufacturing; strong position in secular growth tech.",
-        "entry_zone": "1400-1450",
-        "risk": "Stop at 1300; target 2000",
+        "thesis": "ASML dominates the semiconductor lithography market, critical for advanced chip manufacturing. Secular growth in semiconductors and AI demand supports long-term upside.",
+        "entry_zone": "1450-1500 (near SMA50 and slightly below current price)",
+        "risk": "Stop at 1300 (below SMA200), target at 2000 (long-term growth potential), position size 10%",
         "horizon": "long_term",
         "conviction": 5
       },
       {
         "ticker": "NEE",
-        "thesis": "Leader in renewable energy generation and small modular reactors; positioned to benefit from clean energy transition.",
-        "entry_zone": "85-90",
-        "risk": "Stop at 80; target 130",
+        "thesis": "NextEra Energy is a leader in clean energy and renewable power generation, aligning with the client's preference for clean energy themes. Recent stabilization near SMA50 offers a favorable entry.",
+        "entry_zone": "90-93 (near SMA50 and current price)",
+        "risk": "Stop at 85 (below SMA200), target at 120 (long-term growth potential), position size 10%",
         "horizon": "long_term",
         "conviction": 5
       },
       {
-        "ticker": "AVGO",
-        "thesis": "Diversified semiconductor company with exposure to AI, 5G, and cloud infrastructure; strong cash flow and shareholder returns.",
-        "entry_zone": "390-410",
-        "risk": "Stop at 370; target 600",
+        "ticker": "ONTO",
+        "thesis": "Onto Innovation provides critical metrology and inspection tools for semiconductor manufacturing. Positioned to benefit from secular growth in advanced chip production.",
+        "entry_zone": "250-270 (near SMA50 and slightly below current price)",
+        "risk": "Stop at 220 (below SMA200), target at 400 (long-term growth potential), position size 10%",
         "horizon": "long_term",
-        "conviction": 4
+        "conviction": 5
       },
       {
-        "ticker": "GEV",
-        "thesis": "Emerging leader in clean energy infrastructure, including hydrogen and renewable energy solutions; strong growth potential.",
-        "entry_zone": "950-1000",
-        "risk": "Stop at 850; target 1500",
+        "ticker": "KLAC",
+        "thesis": "KLA Corporation specializes in process control and yield management for semiconductors, benefiting from increasing complexity in chip manufacturing driven by AI and compute demand.",
+        "entry_zone": "1700-1800 (near SMA50 and slightly below current price)",
+        "risk": "Stop at 1500 (below SMA200), target at 2400 (long-term growth potential), position size 10%",
         "horizon": "long_term",
-        "conviction": 4
+        "conviction": 5
       }
     ],
     "_model_used": "openai/gpt-4o",

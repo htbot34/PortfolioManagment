@@ -26,6 +26,20 @@
   </div>
   {% if a.thesis %}<p class="text-base text-slate-200 leading-relaxed mb-3">{{ a.thesis }}</p>{% endif %}
   {% if a.invalidation %}<div class="text-sm text-slate-400 border-t border-[#1f2a44] pt-3"><span class="text-rose-400 font-semibold">Invalidation:</span> {{ a.invalidation }}</div>{% endif %}
+  {% if a.evidence %}
+  <details class="mt-3 text-xs">
+    <summary class="cursor-pointer text-slate-400 hover:text-slate-200 select-none">Evidence ({{ a.evidence|length }})</summary>
+    <ul class="mt-2 space-y-1">
+      {% for ev in a.evidence %}
+      <li class="flex gap-2 items-baseline">
+        <span class="text-[10px] uppercase tracking-wide text-slate-500 w-16 shrink-0">{{ ev.source }}</span>
+        <span class="text-slate-300 font-medium">{{ ev.ref }}</span>
+        {% if ev.supports %}<span class="text-slate-500">- {{ ev.supports }}</span>{% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+  </details>
+  {% endif %}
 </div>
 {% endmacro %}
 

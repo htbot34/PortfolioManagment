@@ -124,6 +124,7 @@ def _defense_from_book(recommendations: list[dict], macro_line: str,
                 "thesis": thesis,
                 "invalidation": invalidation,
                 "conviction": 5,
+                "evidence": _evidence_for_defense(r, t, weight_pct),
             },
             "secondary_actions": [],
             "market_snapshot": macro_line,
@@ -192,6 +193,72 @@ def _trade_from_scanner(scan_result: dict, macro: dict, macro_line: str,
     return None
 
 
+def _evidence_for_entry(s: dict, t: dict) -> list[dict]:
+    """Citations the user can check: price level, technical signals, theme."""
+    out: list[dict] = []
+    if s.get("rsi14") is not None:
+        rsi = s["rsi14"]
+        if rsi <= 30:
+            supports = "deep oversold (mean-reversion setup)"
+        elif rsi >= 70:
+            supports = "extended (avoid chasing)"
+        else:
+            supports = "momentum in the sweet spot"
+        out.append({"source": "technical", "ref": f"RSI {rsi:.0f}", "supports": supports})
+    if s.get("macd_hist") is not None:
+        macd = s["macd_hist"]
+        out.append({
+            "source": "technical",
+            "ref": f"MACD histogram {macd:+.2f}",
+            "supports": "bullish" if macd > 0 else "bearish",
+        })
+    if s.get("vol_ratio_20d"):
+        out.append({
+            "source": "technical",
+            "ref": f"volume {s['vol_ratio_20d']:.1f}x 20d avg",
+            "supports": "confirmation" if s["vol_ratio_20d"] >= 1.5 else "weak confirmation",
+        })
+    if t.get("golden_cross_recent"):
+        out.append({"source": "technical", "ref": "golden cross within 20 days",
+                    "supports": "long-term trend turning up"})
+    if t.get("death_cross_recent"):
+        out.append({"source": "technical", "ref": "death cross within 20 days",
+                    "supports": "long-term trend rolling over"})
+    if s.get("pct_off_52w_high") is not None:
+        out.append({
+            "source": "technical",
+            "ref": f"{s['pct_off_52w_high']:.0f}% off 52-week high",
+            "supports": "drawdown context",
+        })
+    if s.get("theme"):
+        out.append({"source": "theme", "ref": s["theme"], "supports": "fits investor mandate"})
+    return out
+
+
+def _evidence_for_defense(r: dict, t: dict, weight_pct: float | None) -> list[dict]:
+    """Citations for a defensive call (trim/exit on a held position)."""
+    out: list[dict] = []
+    if weight_pct is not None:
+        out.append({
+            "source": "constraint",
+            "ref": f"weight {weight_pct:.0f}%",
+            "supports": "exceeds 25% single-position cap" if weight_pct > 25 else "approaching cap",
+        })
+    if t.get("stacked_downtrend"):
+        out.append({"source": "technical", "ref": "price < SMA20 < SMA50 < SMA200",
+                    "supports": "confirmed downtrend"})
+    if t.get("rsi14") is not None and t["rsi14"] <= 30:
+        out.append({"source": "technical", "ref": f"RSI {t['rsi14']:.0f}",
+                    "supports": "oversold (allow bounce before trimming)"})
+    if t.get("death_cross_recent"):
+        out.append({"source": "technical", "ref": "death cross within 20 days",
+                    "supports": "long-term trend rolling over"})
+    if t.get("pct_off_52w_high") is not None and t["pct_off_52w_high"] < -25:
+        out.append({"source": "technical", "ref": f"{t['pct_off_52w_high']:.0f}% off 52-week high",
+                    "supports": "structural drawdown"})
+    return out
+
+
 def _build_trade(s: dict, action: str, reason: str, macro_line: str,
                  scan_result: dict, exclude: set[str]) -> dict:
     price = s.get("price")
@@ -220,6 +287,7 @@ def _build_trade(s: dict, action: str, reason: str, macro_line: str,
             "thesis": thesis,
             "invalidation": f"Daily close below ${stop_px:.2f}" if stop_px else "structural break",
             "conviction": 5,
+            "evidence": _evidence_for_entry(s, t),
         },
         "secondary_actions": [],
         "market_snapshot": macro_line,

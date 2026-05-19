@@ -85,6 +85,25 @@
 {% endmacro %}
 
 <div class="max-w-3xl mx-auto">
+{% if intraday and intraday.alerts %}
+<div class="space-y-2 mb-4">
+  {% for alert in intraday.alerts %}
+  <div class="flex items-start gap-3 px-4 py-3 rounded border
+    {% if alert.severity == 'high' %}bg-rose-950/50 border-rose-700 text-rose-100
+    {% elif alert.severity == 'med' %}bg-amber-950/50 border-amber-700 text-amber-100
+    {% else %}bg-sky-950/40 border-sky-800 text-sky-100{% endif %}">
+    <div class="text-[10px] uppercase tracking-widest font-bold pt-0.5 w-12 shrink-0
+      {% if alert.severity == 'high' %}text-rose-300
+      {% elif alert.severity == 'med' %}text-amber-300
+      {% else %}text-sky-300{% endif %}">{{ alert.severity }}</div>
+    <div class="flex-1">
+      <div class="text-sm leading-snug">{{ alert.text }}</div>
+      <div class="text-[10px] opacity-70 mt-0.5">{{ alert.kind|replace('_',' ') }} - checked {{ intraday.age_minutes }} min ago</div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
 <div class="flex items-center justify-between mb-3">
   <div class="text-xs text-slate-500">{{ brief.generated_for }}</div>
   {% set diag = diagnostics or {} %}

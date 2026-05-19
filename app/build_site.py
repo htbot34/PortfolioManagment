@@ -44,6 +44,31 @@ def _load_yaml_list(path: Path) -> list:
 
 
 REC_HISTORY_PATH = ROOT / "rec_history.yaml"
+INTRADAY_ALERTS_PATH = ROOT / "intraday_alerts.json"
+INTRADAY_STALE_MIN = 90  # alerts older than this are not rendered
+
+
+def _load_intraday_alerts() -> dict | None:
+    """Return the alerts payload only if it was written within the staleness
+    window. Older payloads stay on disk (next intraday run overwrites) but
+    don't render on the home page.
+    """
+    if not INTRADAY_ALERTS_PATH.exists():
+        return None
+    try:
+        data = json.loads(INTRADAY_ALERTS_PATH.read_text())
+    except Exception:
+        return None
+    checked_at = data.get("checked_at") or ""
+    try:
+        ts = datetime.strptime(checked_at, "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc)
+    except Exception:
+        return None
+    age_min = (datetime.now(timezone.utc) - ts).total_seconds() / 60.0
+    if age_min > INTRADAY_STALE_MIN:
+        return None
+    data["age_minutes"] = round(age_min, 1)
+    return data
 
 
 def _recent_activity(limit: int = 8) -> list[dict]:
@@ -201,9 +226,11 @@ def main() -> int:
     env = _env()
 
     activity = _recent_activity(limit=8)
+    intraday_alerts = _load_intraday_alerts()
     _write(site / "index.html", env.get_template("index.html").render(
         brief=brief, macro=macro, exposures=exposures, scan=scan_result,
-        recs_by_ticker=ticker_payloads, activity=activity, base="", **common,
+        recs_by_ticker=ticker_payloads, activity=activity,
+        intraday=intraday_alerts, base="", **common,
     ))
     _write(site / "positions.html", env.get_template("positions.html").render(
         exposures=exposures, review=review_out, metrics=metrics, base="", **common,

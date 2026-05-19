@@ -1,0 +1,45 @@
+name: Intraday alerts
+
+on:
+  schedule:
+    # Every 30 min from 13:30 to 20:30 UTC, Mon-Fri (covers 9:30am-4:30pm ET
+    # for both EST and EDT - some runs land in pre-market or after close but
+    # that's harmless).
+    - cron: "30,0 13-20 * * 1-5"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: intraday
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install deps
+        run: pip install -r requirements.txt
+
+      - name: Run intraday checks
+        run: python -m app.intraday_check
+
+      - name: Commit alerts file if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add intraday_alerts.json 2>/dev/null || true
+          if git diff --staged --quiet; then
+            echo "No alert changes."
+          else
+            git commit -m "intraday: $(date -u +%Y-%m-%dT%H:%MZ)"
+            git push
+          fi

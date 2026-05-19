@@ -9,7 +9,10 @@
   {% else %}border-l-slate-500{% endif %}">
   <div class="flex items-baseline justify-between mb-3">
     <div class="text-xs text-slate-400 uppercase tracking-widest">{{ label }}</div>
-    <div class="text-xs text-slate-500">Conviction {{ a.conviction or 5 }}/5</div>
+    <div class="flex items-baseline gap-3">
+      {% if a.rec_id %}<span class="text-[10px] font-mono text-slate-600 select-all">#{{ a.rec_id }}</span>{% endif %}
+      <span class="text-xs text-slate-500">Conviction {{ a.conviction or 5 }}/5</span>
+    </div>
   </div>
   <div class="flex items-baseline gap-3 mb-4">
     <span class="text-3xl font-bold
@@ -22,8 +25,26 @@
     {% if a.entry %}<div><div class="text-[10px] text-slate-500 uppercase">Entry</div><div class="text-slate-100 font-semibold">{{ a.entry }}</div></div>{% endif %}
     {% if a.stop %}<div><div class="text-[10px] text-slate-500 uppercase">Stop</div><div class="text-rose-300 font-semibold">{{ a.stop }}</div></div>{% endif %}
     {% if a.target %}<div><div class="text-[10px] text-slate-500 uppercase">Target</div><div class="text-emerald-300 font-semibold">{{ a.target }}</div></div>{% endif %}
-    {% if a.size_pct %}<div><div class="text-[10px] text-slate-500 uppercase">Size</div><div class="text-slate-100 font-semibold">{{ a.size_pct }}%</div></div>{% endif %}
+    {% if a.size_pct %}<div><div class="text-[10px] text-slate-500 uppercase">Size</div><div class="text-slate-100 font-semibold">{{ '%.1f'|format(a.size_pct) }}%</div></div>{% endif %}
   </div>
+  {% if a.size and a.size.display and not a.size.rejected %}
+  <div class="text-sm text-sky-200 bg-sky-950/30 border border-sky-900/60 rounded px-3 py-2 mb-3">
+    {{ a.size.display }}
+    {% if a.size.notes %}<div class="text-[11px] text-slate-400 mt-1">{{ a.size.notes|join('; ') }}</div>{% endif %}
+  </div>
+  {% elif a.size and a.size.rejected %}
+  <div class="text-sm text-amber-300 bg-amber-950/30 border border-amber-900/60 rounded px-3 py-2 mb-3">
+    Sizing: {{ a.size.rejection_reason }}
+  </div>
+  {% endif %}
+  {% if a.unrealized_pnl_on_action is not none %}
+  <div class="text-sm mb-3">
+    Unrealized P&amp;L on this action:
+    <span class="font-semibold {% if a.unrealized_pnl_on_action >= 0 %}pos{% else %}neg{% endif %}">
+      {% if a.unrealized_pnl_on_action >= 0 %}+${{ '%.2f'|format(a.unrealized_pnl_on_action) }}{% else %}-${{ '%.2f'|format(-a.unrealized_pnl_on_action) }}{% endif %}
+    </span>
+  </div>
+  {% endif %}
   {% if a.thesis %}<p class="text-base text-slate-200 leading-relaxed mb-3">{{ a.thesis }}</p>{% endif %}
   {% if a.invalidation %}<div class="text-sm text-slate-400 border-t border-[#1f2a44] pt-3"><span class="text-rose-400 font-semibold">Invalidation:</span> {{ a.invalidation }}</div>{% endif %}
   {% if a.evidence %}

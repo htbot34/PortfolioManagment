@@ -6,11 +6,15 @@ Pipeline:
   3. Optionally refine with LLM (gated by USE_LLM_PER_TICKER env var to
      preserve GitHub Models daily quota - the deterministic brief doesn't
      need this enrichment).
+  4. Stamp a stable ``rec_id`` (sha1(date|ticker|action)[:8]) so the
+     override loop in Phase 3 can key on it.
 """
 import json
 import os
+from datetime import date
 
 from app.config import risk_profile
+from app.research.recid import make_rec_id
 from app.data import calendar, insider, news as news_mod, prices, reddit
 from app.research import llm, prompts, rules
 
@@ -77,6 +81,7 @@ def analyze_ticker(ticker: str, position_context: dict | None = None) -> dict:
 
     return {
         **base,
+        "rec_id": make_rec_id(date.today().isoformat(), ticker, base.get("action", "hold")),
         "ticker": ticker,
         "quote": bundle["quote"],
         "technicals": bundle["technicals"],

@@ -16,7 +16,9 @@ from datetime import date
 
 from app.data import news as news_mod
 from app.data import prices
-from app.research import conviction
+from app.portfolio import store
+from app.research import conviction, sizing
+from app.research.recid import make_rec_id
 
 
 def _no_trade(reason: str, macro_line: str, watching: list[str]) -> dict:
@@ -80,7 +82,8 @@ def _build_watching(scan_result: dict, exclude: set[str]) -> list[str]:
 
 def _defense_from_book(recommendations: list[dict], macro_line: str,
                        scan_result: dict, exclude: set[str],
-                       macro: dict | None = None) -> dict | None:
+                       macro: dict | None = None,
+                       account: store.Account | None = None) -> dict | None:
     """Return a defense verdict ONLY if a held name has conviction-5 sell or
     trim AND clears the 3-signal conviction gate (technical + bearish news +
     sector weakness). This is intentional: per spec, exits are thesis-driven,
@@ -118,16 +121,30 @@ def _defense_from_book(recommendations: list[dict], macro_line: str,
         else:
             short = "confirmed downtrend"
             invalidation = f"Daily close back above SMA50 (${(t.get('sma50') or 0):.2f}) on volume - reconsider exit."
+        # severity for trim sizing: a stacked downtrend + conviction-5
+        # qualifies as severely damaged -> trim 50% instead of the default 30.
+        severity = "severe" if t.get("stacked_downtrend") else "normal"
+        pos = (account.position(r["ticker"]) if account else None)
+        size = sizing.compute_size(r["action"], r["ticker"], price, pos,
+                                    account or store.load(), gate=None,
+                                    severity=severity)
+        today = date.today().isoformat()
+        rec_id = make_rec_id(today, r["ticker"], r["action"])
         return {
             "verdict": "defense",
             "headline": f"{action_word} {r['ticker']} - {short}.",
             "primary_action": {
+                "rec_id": rec_id,
                 "ticker": r["ticker"],
                 "action": r["action"],
                 "entry": f"~${price:.2f}" if price else "market",
                 "stop": stop_txt,
                 "target": target_txt,
-                "size_pct": None,
+                "size_pct": size.get("target_weight_pct"),
+                "size": size,
+                "shares": size.get("shares"),
+                "dollars": size.get("dollars"),
+                "unrealized_pnl_on_action": size.get("unrealized_pnl_on_action"),
                 "thesis": thesis,
                 "invalidation": invalidation,
                 "conviction": 5,
@@ -137,7 +154,7 @@ def _defense_from_book(recommendations: list[dict], macro_line: str,
             "secondary_actions": [],
             "market_snapshot": macro_line,
             "watching": _build_watching(scan_result, exclude),
-            "generated_for": date.today().isoformat(),
+            "generated_for": today,
         }
     return None
 
@@ -150,7 +167,8 @@ _QUALITY_THEMES = {
 
 
 def _trade_from_scanner(scan_result: dict, macro: dict, macro_line: str,
-                         exclude: set[str]) -> dict | None:
+                         exclude: set[str],
+                         account: store.Account | None = None) -> dict | None:
     """Promote a scanner setup to a trade verdict.
 
     Two-stage gate:
@@ -182,7 +200,7 @@ def _trade_from_scanner(scan_result: dict, macro: dict, macro_line: str,
         if not gate["qualifies"]:
             continue
         return _build_trade(s, "buy", "Quality breakout to new highs on heavy volume",
-                             macro_line, scan_result, exclude, gate=gate)
+                             macro_line, scan_result, exclude, gate=gate, account=account)
     for s in scan_result["buckets"].get("oversold_bounces", []):
         if s.get("held") or s["ticker"].upper() in exclude:
             continue
@@ -198,7 +216,7 @@ def _trade_from_scanner(scan_result: dict, macro: dict, macro_line: str,
         if not gate["qualifies"]:
             continue
         return _build_trade(s, "buy", "Deep oversold quality name with bullish MACD cross",
-                             macro_line, scan_result, exclude, gate=gate)
+                             macro_line, scan_result, exclude, gate=gate, account=account)
     return None
 
 
@@ -270,12 +288,12 @@ def _evidence_for_defense(r: dict, t: dict, weight_pct: float | None) -> list[di
 
 def _build_trade(s: dict, action: str, reason: str, macro_line: str,
                  scan_result: dict, exclude: set[str],
-                 gate: dict | None = None) -> dict:
+                 gate: dict | None = None,
+                 account: store.Account | None = None) -> dict:
     price = s.get("price")
     # Pull a fuller technicals snapshot for the stop/target sizing
     t = prices.technicals(s["ticker"])
     atr = t.get("atr14") or (price * 0.04 if price else None)
-    sma50 = t.get("sma50")
     risk_amount = (atr * 1.5) if atr else (price * 0.05 if price else 0)
     stop_px = price - risk_amount if price else None
     target_px = price + risk_amount * 3 if price else None  # 3:1 R:R
@@ -284,16 +302,29 @@ def _build_trade(s: dict, action: str, reason: str, macro_line: str,
         f"volume {(s.get('vol_ratio_20d') or 1):.1f}x 20-day average. "
         f"Theme: {s.get('theme') or 'growth'}. Long-term hold target."
     )
+    # Sizing: if the ticker is already held, treat as ADD; else NEW_BUY.
+    acct = account or store.load()
+    pos = acct.position(s["ticker"]) if acct else None
+    sized_action = "add" if pos else "new_buy"
+    size = sizing.compute_size(sized_action, s["ticker"], price, pos, acct, gate=gate)
+    # Publicly the action stays "buy" so the UI logic doesn't fork - the
+    # nuance (add vs new) is captured in the size.display string.
+    today = date.today().isoformat()
+    rec_id = make_rec_id(today, s["ticker"], action)
     return {
         "verdict": "trade",
         "headline": f"{action.upper()} {s['ticker']} - {reason}.",
         "primary_action": {
+            "rec_id": rec_id,
             "ticker": s["ticker"],
             "action": action,
             "entry": f"~${price:.2f}" if price else "",
             "stop": f"${stop_px:.2f}" if stop_px else "",
             "target": f"${target_px:.2f}" if target_px else "",
-            "size_pct": 5,
+            "size_pct": size.get("target_weight_pct") or 5,
+            "size": size,
+            "shares": size.get("shares"),
+            "dollars": size.get("dollars"),
             "thesis": thesis,
             "invalidation": f"Daily close below ${stop_px:.2f}" if stop_px else "structural break",
             "conviction": 5,
@@ -303,26 +334,35 @@ def _build_trade(s: dict, action: str, reason: str, macro_line: str,
         "secondary_actions": [],
         "market_snapshot": macro_line,
         "watching": _build_watching(scan_result, exclude | {s["ticker"].upper()}),
-        "generated_for": date.today().isoformat(),
+        "generated_for": today,
     }
 
 
 def build(macro: dict, recommendations: list[dict], review: dict,
           candidates: dict, exposures: dict, scan_result: dict,
-          headlines: list[dict] | None = None) -> dict:
-    """Return today's verdict. Deterministic - no LLM call."""
+          headlines: list[dict] | None = None,
+          account: store.Account | None = None) -> dict:
+    """Return today's verdict. Deterministic - no LLM call.
+
+    ``account`` is optional - when provided, recommendations get sized
+    against current cash + positions via ``app.research.sizing``. When None,
+    sizing falls back to a freshly loaded account.
+    """
     macro_line = _macro_line(macro)
     held = {p["ticker"].upper() for p in (exposures.get("positions") or [])}
+    if account is None:
+        account = store.load()
 
     if _macro_risk_off(macro):
         return _no_trade("Macro is risk-off (high VIX or broken trend). Wait.",
                           macro_line, _build_watching(scan_result, held))
 
-    defense = _defense_from_book(recommendations, macro_line, scan_result, held, macro=macro)
+    defense = _defense_from_book(recommendations, macro_line, scan_result, held,
+                                  macro=macro, account=account)
     if defense:
         return defense
 
-    trade = _trade_from_scanner(scan_result, macro, macro_line, held)
+    trade = _trade_from_scanner(scan_result, macro, macro_line, held, account=account)
     if trade:
         return trade
 

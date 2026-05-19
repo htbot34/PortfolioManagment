@@ -139,7 +139,7 @@ def main() -> int:
 
     print("Writing daily brief...")
     try:
-        brief = daily_brief.build(macro, recs, review_out, cand_out, exposures, scan_result, headlines)
+        brief = daily_brief.build(macro, recs, review_out, cand_out, exposures, scan_result, headlines, account=account)
     except Exception as e:
         traceback.print_exc()
         brief = {"headline": f"Brief generation failed: {e}",

@@ -1,0 +1,27 @@
+name: Reject rec
+description: Tell the advisor why you're passing on a recommendation.
+title: "Reject rec"
+labels: ["rec-action"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Your reason is logged to ``rec_history.yaml`` and feeds the learning
+        context. Repeated rejections on the same ticker downgrade future
+        recs on that name to *watching*.
+  - type: input
+    id: rec_id
+    attributes:
+      label: Rec ID
+      description: 8-char hex shown top-right on the recommendation card.
+      placeholder: "ab12cd34"
+    validations:
+      required: true
+  - type: textarea
+    id: reason
+    attributes:
+      label: Reason
+      description: Why you're rejecting this. Free text. Be specific - the
+        advisor reads this on future runs.
+    validations:
+      required: true

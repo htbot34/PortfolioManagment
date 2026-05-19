@@ -21,10 +21,10 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 from app.config import risk_profile, settings
 from app.data import macro as macro_mod
 from app.data import market_news, prices
-from app.portfolio import store
+from app.portfolio import rec_history, store
 from app.research import (
-    analyst, candidates as cands, daily_brief, llm, metrics as metrics_mod,
-    portfolio_review, scanner,
+    analyst, candidates as cands, daily_brief, learning, llm,
+    metrics as metrics_mod, portfolio_review, scanner,
 )
 
 
@@ -137,15 +137,28 @@ def main() -> int:
         traceback.print_exc()
         cand_out = {"candidates": [], "error": str(e)}
 
+    print("Loading user preferences from rec_history...")
+    history = rec_history.load()
+    user_prefs = learning.derive_user_preferences(history, lookback_days=30)
+    if user_prefs.get("soft_vetoes"):
+        print(f"  soft vetoes: {[v['ticker'] for v in user_prefs['soft_vetoes']]}")
+
     print("Writing daily brief...")
     try:
-        brief = daily_brief.build(macro, recs, review_out, cand_out, exposures, scan_result, headlines, account=account)
+        brief = daily_brief.build(macro, recs, review_out, cand_out, exposures, scan_result, headlines, account=account, user_preferences=user_prefs)
     except Exception as e:
         traceback.print_exc()
         brief = {"headline": f"Brief generation failed: {e}",
                  "market_pulse": "", "trade_ideas": [],
                  "portfolio_notes": [], "catalysts_this_week": []}
     print(f"  total LLM attempts so far: {len(llm.ATTEMPTS)}")
+
+    try:
+        added = rec_history.record_pending(brief)
+        if added:
+            print(f"Logged {len(added)} new pending rec(s) to rec_history.yaml")
+    except Exception as e:
+        traceback.print_exc()
 
     common = {
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),

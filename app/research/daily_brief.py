@@ -83,18 +83,22 @@ def _build_watching(scan_result: dict, exclude: set[str]) -> list[str]:
 def _defense_from_book(recommendations: list[dict], macro_line: str,
                        scan_result: dict, exclude: set[str],
                        macro: dict | None = None,
-                       account: store.Account | None = None) -> dict | None:
+                       account: store.Account | None = None,
+                       soft_veto: set[str] | None = None) -> dict | None:
     """Return a defense verdict ONLY if a held name has conviction-5 sell or
     trim AND clears the 3-signal conviction gate (technical + bearish news +
     sector weakness). This is intentional: per spec, exits are thesis-driven,
     not mechanical. A position being over the 25% cap is no longer enough on
     its own to trigger an automatic trim.
     """
+    veto = soft_veto or set()
     for r in recommendations:
         if r.get("conviction", 0) != 5:
             continue
         if r.get("action") not in ("sell", "trim"):
             continue
+        if (r.get("ticker") or "").upper() in veto:
+            continue  # soft veto: user has rejected this ticker repeatedly
         gate = conviction.evaluate(r, direction="short", macro=macro or {},
                                     news_fetcher=news_mod.company_news)
         if not gate["qualifies"]:
@@ -168,7 +172,8 @@ _QUALITY_THEMES = {
 
 def _trade_from_scanner(scan_result: dict, macro: dict, macro_line: str,
                          exclude: set[str],
-                         account: store.Account | None = None) -> dict | None:
+                         account: store.Account | None = None,
+                         soft_veto: set[str] | None = None) -> dict | None:
     """Promote a scanner setup to a trade verdict.
 
     Two-stage gate:
@@ -184,8 +189,11 @@ def _trade_from_scanner(scan_result: dict, macro: dict, macro_line: str,
     """
     if _macro_risk_off(macro):
         return None
+    veto = soft_veto or set()
     for s in scan_result["buckets"].get("breakouts", []):
         if s.get("held") or s["ticker"].upper() in exclude:
+            continue
+        if s["ticker"].upper() in veto:
             continue
         rsi = s.get("rsi14") or 0
         vol = s.get("vol_ratio_20d") or 0
@@ -203,6 +211,8 @@ def _trade_from_scanner(scan_result: dict, macro: dict, macro_line: str,
                              macro_line, scan_result, exclude, gate=gate, account=account)
     for s in scan_result["buckets"].get("oversold_bounces", []):
         if s.get("held") or s["ticker"].upper() in exclude:
+            continue
+        if s["ticker"].upper() in veto:
             continue
         rsi = s.get("rsi14") or 100
         macd_h = s.get("macd_hist") or -1
@@ -341,28 +351,39 @@ def _build_trade(s: dict, action: str, reason: str, macro_line: str,
 def build(macro: dict, recommendations: list[dict], review: dict,
           candidates: dict, exposures: dict, scan_result: dict,
           headlines: list[dict] | None = None,
-          account: store.Account | None = None) -> dict:
+          account: store.Account | None = None,
+          user_preferences: dict | None = None) -> dict:
     """Return today's verdict. Deterministic - no LLM call.
 
     ``account`` is optional - when provided, recommendations get sized
     against current cash + positions via ``app.research.sizing``. When None,
     sizing falls back to a freshly loaded account.
+
+    ``user_preferences`` is the output of
+    ``app.research.learning.derive_user_preferences`` over the last ~30 days
+    of rec_history.yaml. Tickers under soft veto (>=2 rejections by the
+    user) are demoted to the watching list instead of becoming a primary
+    action.
     """
     macro_line = _macro_line(macro)
     held = {p["ticker"].upper() for p in (exposures.get("positions") or [])}
     if account is None:
         account = store.load()
 
+    from app.research.learning import soft_veto_tickers  # local to avoid cycle
+    soft_veto = soft_veto_tickers(user_preferences or {})
+
     if _macro_risk_off(macro):
         return _no_trade("Macro is risk-off (high VIX or broken trend). Wait.",
                           macro_line, _build_watching(scan_result, held))
 
     defense = _defense_from_book(recommendations, macro_line, scan_result, held,
-                                  macro=macro, account=account)
+                                  macro=macro, account=account, soft_veto=soft_veto)
     if defense:
         return defense
 
-    trade = _trade_from_scanner(scan_result, macro, macro_line, held, account=account)
+    trade = _trade_from_scanner(scan_result, macro, macro_line, held,
+                                  account=account, soft_veto=soft_veto)
     if trade:
         return trade
 

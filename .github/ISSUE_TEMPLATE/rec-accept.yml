@@ -1,0 +1,38 @@
+name: Accept rec
+description: Confirm you executed a recommendation. The bot updates portfolio.yaml and rec_history.yaml.
+title: "Accept rec"
+labels: ["rec-action"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Confirm execution of a recommendation. Fill in your **actual** fill -
+        the bot will use the executed price/shares, not the recommended ones.
+  - type: input
+    id: rec_id
+    attributes:
+      label: Rec ID
+      description: 8-char hex shown top-right on the recommendation card.
+      placeholder: "ab12cd34"
+    validations:
+      required: true
+  - type: input
+    id: executed_price
+    attributes:
+      label: Executed price (per share)
+      placeholder: "e.g. 145.20"
+    validations:
+      required: true
+  - type: input
+    id: executed_shares
+    attributes:
+      label: Executed shares
+      description: Use a positive number; sign is inferred from the rec's action.
+      placeholder: "e.g. 3"
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      description: Optional context (slippage, partial fill, etc.).

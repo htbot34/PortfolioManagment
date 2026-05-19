@@ -1,4 +1,4 @@
-name: Process trade-log / chat issue
+name: Process trade-log / chat / rec-action issue
 
 on:
   issues:
@@ -10,7 +10,10 @@ permissions:
 
 jobs:
   process:
-    if: contains(github.event.issue.labels.*.name, 'trade-log') || contains(github.event.issue.labels.*.name, 'chat')
+    if: >
+      contains(github.event.issue.labels.*.name, 'trade-log') ||
+      contains(github.event.issue.labels.*.name, 'chat') ||
+      contains(github.event.issue.labels.*.name, 'rec-action')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -23,31 +26,41 @@ jobs:
       - name: Install deps
         run: pip install pyyaml
 
-      - name: Apply
+      - name: Apply (rec-action)
+        id: apply_rec
+        if: contains(github.event.issue.labels.*.name, 'rec-action')
+        env:
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: python -m app.portfolio.rec_action_handler
+
+      - name: Apply (trade-log / chat)
         id: apply
+        if: contains(github.event.issue.labels.*.name, 'trade-log') || contains(github.event.issue.labels.*.name, 'chat')
         env:
           ISSUE_BODY: ${{ github.event.issue.body }}
         run: python -m app.portfolio.trade_log
 
       - name: Commit changes
-        if: steps.apply.outputs.summary
+        if: steps.apply.outputs.summary || steps.apply_rec.outputs.summary
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add portfolio.yaml portfolio_history.yaml notes.yaml 2>/dev/null || true
+          git add portfolio.yaml portfolio_history.yaml notes.yaml rec_history.yaml 2>/dev/null || true
           if git diff --staged --quiet; then
             echo "No changes to commit."
           else
-            git commit -m "Trade #${{ github.event.issue.number }}: ${{ steps.apply.outputs.summary }}"
+            SUM="${{ steps.apply.outputs.summary || steps.apply_rec.outputs.summary }}"
+            git commit -m "Issue #${{ github.event.issue.number }}: $SUM"
             git push
           fi
 
       - name: Comment success and close
-        if: steps.apply.outputs.summary
+        if: steps.apply.outputs.summary || steps.apply_rec.outputs.summary
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
-          SUMMARY: ${{ steps.apply.outputs.summary }}
+          SUMMARY: ${{ steps.apply.outputs.summary || steps.apply_rec.outputs.summary }}
         run: |
           curl -sf -X POST \
             -H "Authorization: token $GH_TOKEN" \
@@ -61,11 +74,11 @@ jobs:
             -d '{"state":"closed"}'
 
       - name: Comment failure
-        if: steps.apply.outputs.error
+        if: steps.apply.outputs.error || steps.apply_rec.outputs.error
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
-          ERR: ${{ steps.apply.outputs.error }}
+          ERR: ${{ steps.apply.outputs.error || steps.apply_rec.outputs.error }}
         run: |
           curl -sf -X POST \
             -H "Authorization: token $GH_TOKEN" \

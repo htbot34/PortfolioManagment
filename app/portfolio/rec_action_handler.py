@@ -3,11 +3,15 @@
 Triggered by ``.github/workflows/process_trade.yml`` when an issue is opened
 with the ``rec-action`` label. Reads the issue body for the structured fields
 (rec_id, executed_price, executed_shares, reason, counter_action,
-counter_shares) and updates ``rec_history.yaml``.
+counter_shares).
 
-This module is intentionally Phase 3 only: accept entries flow through to
-``rec_history`` with executed_price / executed_shares; the portfolio.yaml
-mutation that follows accept is added in Phase 4.
+- Accept   -> updates ``rec_history.yaml`` AND mutates ``portfolio.yaml`` via
+              ``trade_log.apply`` (weighted-average cost basis on buys,
+              full-sell removes the position; cash adjusted by
+              executed_price * executed_shares). Trade also appended to
+              ``portfolio_history.yaml`` for the activity feed.
+- Reject   -> rec_history only (status + user_reason).
+- Counter  -> rec_history only (status + counter_proposal).
 """
 from __future__ import annotations
 
@@ -16,7 +20,7 @@ import re
 import sys
 from pathlib import Path
 
-from app.portfolio import rec_history
+from app.portfolio import rec_history, store, trade_log
 
 
 # Field labels from the issue forms; case-insensitive heading match.
@@ -87,6 +91,7 @@ def apply_from_issue(title: str, body: str) -> dict:
         shares = _f(_read_field(body, "executed_shares"))
         if price is None or shares is None:
             raise ValueError("accept requires executed_price and executed_shares")
+        # Update rec_history first so we can read the rec's ticker + action.
         entry = rec_history.update_status(
             rec_id, "accepted",
             executed_price=price, executed_shares=shares,
@@ -94,9 +99,32 @@ def apply_from_issue(title: str, body: str) -> dict:
         )
         if entry is None:
             raise ValueError(f"rec_id {rec_id} not found")
+        # Translate the rec action into a Trade and mutate portfolio.yaml.
+        rec_action = (entry.get("action") or "").lower()
+        if rec_action in ("buy", "add", "new_buy"):
+            trade_action = "BUY"
+        elif rec_action in ("trim", "sell"):
+            trade_action = "SELL"
+        else:
+            # hold / watch / unknown -> log only, no portfolio mutation.
+            summary = (
+                f"Accepted {entry.get('ticker')} {entry.get('action')} "
+                f"(no portfolio mutation for action '{rec_action}')"
+            )
+            return {"kind": kind, "rec_id": rec_id, "summary": summary, "entry": entry}
+        trade = trade_log.Trade(
+            action=trade_action, ticker=entry.get("ticker"),
+            shares=shares, price=price, amount=None,
+            trade_date=entry.get("date") or "",
+            notes=f"Accepted rec {rec_id}",
+        )
+        account = store.load()
+        account, mutate_summary = trade_log.apply(trade, account)
+        store.save(account)
+        trade_log.append_history(trade, mutate_summary)
         summary = (
             f"Accepted {entry.get('ticker')} {entry.get('action')} -> "
-            f"{shares} shares @ ${price:.2f}"
+            f"{shares:g} shares @ ${price:.2f}. {mutate_summary}"
         )
     elif kind == "reject":
         reason = _read_field(body, "reason")

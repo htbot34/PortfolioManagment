@@ -43,8 +43,19 @@ def _load_yaml_list(path: Path) -> list:
         return []
 
 
+REC_HISTORY_PATH = ROOT / "rec_history.yaml"
+
+
 def _recent_activity(limit: int = 8) -> list[dict]:
-    """Combine trades and notes into a single activity feed, newest first."""
+    """Combine trades, notes, and resolved recs into a single feed (newest-first).
+
+    Pulls from three sources:
+      - ``portfolio_history.yaml`` -- legacy trade log (BUY / SELL / DEPOSIT)
+      - ``notes.yaml``             -- free-form thoughts the user typed in chat
+      - ``rec_history.yaml``       -- only resolved recs (accepted / rejected /
+                                       counter). Pending ones are not surfaced
+                                       here; they appear as primary actions.
+    """
     activity: list[dict] = []
     for h in _load_yaml_list(HISTORY_PATH):
         activity.append({
@@ -58,6 +69,26 @@ def _recent_activity(limit: int = 8) -> list[dict]:
             "kind": "note",
             "summary": n.get("content", ""),
         })
+    for r in _load_yaml_list(REC_HISTORY_PATH):
+        status = r.get("status")
+        if status not in ("accepted", "rejected", "counter"):
+            continue
+        date_str = (r.get("resolved_at") or r.get("date") or "")[:10]
+        ticker = r.get("ticker") or ""
+        action = r.get("action") or ""
+        if status == "accepted":
+            ep = r.get("executed_price")
+            es = r.get("executed_shares")
+            tail = f"@ ${ep:.2f} x {es:g} shares" if (ep and es) else ""
+            summary = f"Accepted {action.upper()} {ticker} {tail}".strip()
+        elif status == "rejected":
+            why = (r.get("user_reason") or "").strip()
+            summary = f"Rejected {action.upper()} {ticker}" + (f": {why}" if why else "")
+        else:  # counter
+            cp = r.get("counter_proposal") or {}
+            new_act = (cp.get("action") or action).upper()
+            summary = f"Counter on {ticker}: {action.upper()} -> {new_act}"
+        activity.append({"date": date_str, "kind": "rec", "summary": summary})
     activity.sort(key=lambda r: r.get("date") or "", reverse=True)
     return activity[:limit]
 

@@ -68,7 +68,10 @@ def test_news_fetcher_invoked_only_when_news_missing():
 
     def fake_fetcher(t):
         calls.append(t)
-        return [{"headline": "Acme upgraded by analyst"}]
+        return [
+            {"headline": "Acme beats Q3 earnings"},
+            {"headline": "Acme raises full-year guidance"},
+        ]
 
     out = conviction.evaluate(payload, direction="long", macro=_macro(),
                               news_fetcher=fake_fetcher)
@@ -113,7 +116,10 @@ def test_scanner_row_uses_theme_when_sector_missing():
         "theme": "Mega cap tech",
         "rsi14": 55, "macd_hist": 0.5,
         "stacked_uptrend": True, "above_sma200": True, "breakout_20d": True,
-        "news": [{"headline": "Acme beats earnings"}],
+        "news": [
+            {"headline": "Acme beats earnings"},
+            {"headline": "Acme raises full-year guidance"},
+        ],
     }
     out = conviction.evaluate(payload, direction="long", macro=_macro())
     assert out["qualifies"] is True

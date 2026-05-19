@@ -178,68 +178,80 @@ def _is_recent(item: dict, max_days: int = 14) -> bool:
     return (datetime.now(timezone.utc) - ts) <= timedelta(days=max_days)
 
 
+# Semantic news scoring weights (Phase 1 rewrite).
+_DURABILITY_WEIGHT = {"short": 0.3, "medium": 0.7, "long": 1.0}
+_DIRECTION_SIGN = {"bullish": 1, "bearish": -1, "neutral": 0}
+
+
+def _classification_weight(c: dict) -> float:
+    return (c.get("magnitude") or 0) * _DURABILITY_WEIGHT.get(c.get("durability"), 0.7)
+
+
 def news_signal(
     ticker: str,
-    news_items: Iterable[dict] | None,
-    filings_summary: str | None,
+    classifications: Iterable[dict] | None,
     direction: str,
 ) -> dict:
-    """Pass if there's recent supportive news/filing and no contradicting major
-    headline, in the direction of the trade.
+    """Score recent semantic news classifications for ``direction``.
 
-    Supportive = bullish vocabulary for ``direction='long'``, bearish for
-    ``direction='short'``. A trade is rejected when contradictory hits outnumber
-    supportive hits OR are at least half as many (mixed tape kills conviction).
-    Empty news returns ``pass=False`` - we don't recommend without a catalyst.
+    ``classifications`` is the output of
+    ``app.research.news_classifier.classify_news_items`` - each carries
+    ``direction``, ``magnitude`` (1-5), ``durability`` (short/medium/long),
+    ``one_line_summary``, and ``published``.
+
+    Net score = sum over the last 14 days of
+    ``direction_sign * magnitude * durability_weight`` where the durability
+    weights are short=0.3, medium=0.7, long=1.0.
+
+    LONG passes when net >= 3 AND at least one item has magnitude >= 3 AND
+    no bearish item with magnitude >= 4 appeared in the last 7 days.
+    SHORT passes when net <= -3 AND at least one item has magnitude >= 3.
+    ``evidence_refs`` lists the top 3 items by |magnitude * durability_weight|.
     """
-    bull_hits: list[dict] = []
-    bear_hits: list[dict] = []
-    for item in (news_items or []):
-        if not _is_recent(item):
-            continue
-        headline = item.get("headline") or item.get("title") or ""
-        toks = _tokens(headline)
-        bull = bool(toks & _BULL_TERMS)
-        bear = bool(toks & _BEAR_TERMS)
-        if bull and not bear:
-            bull_hits.append(item)
-        elif bear and not bull:
-            bear_hits.append(item)
-        # bull-and-bear in the same headline (e.g. "beats but warns") is
-        # intentionally dropped from both buckets.
-
-    if filings_summary:
-        fs = filings_summary.lower()
-        if any(term in fs for term in _BULL_TERMS):
-            bull_hits.append({"headline": "filing: bullish language", "source": "EDGAR"})
-        if any(term in fs for term in _BEAR_TERMS):
-            bear_hits.append({"headline": "filing: bearish language", "source": "EDGAR"})
-
-    if direction == "long":
-        supportive, against = bull_hits, bear_hits
-        verb = "bullish"
-    elif direction == "short":
-        supportive, against = bear_hits, bull_hits
-        verb = "bearish"
-    else:
+    if direction not in ("long", "short"):
         raise ValueError(f"direction must be 'long' or 'short', got {direction!r}")
 
-    if not supportive:
-        return {"pass": False, "reason": f"no recent {verb} catalyst", "evidence_refs": []}
-    if against and len(against) * 2 >= len(supportive):
-        return {
-            "pass": False,
-            "reason": f"mixed tape: {len(supportive)} {verb} vs {len(against)} contradicting",
-            "evidence_refs": [],
-        }
-    refs = [it.get("headline") or it.get("title") or "" for it in supportive[:3]]
-    return {
-        "pass": True,
-        "reason": f"{len(supportive)} recent {verb} catalyst(s)" + (
-            f", {len(against)} contradicting" if against else ""
-        ),
-        "evidence_refs": refs,
-    }
+    recent_14 = [c for c in (classifications or []) if _is_recent(c, 14)]
+    if not recent_14:
+        return {"pass": False, "reason": "no recent classified news", "evidence_refs": []}
+
+    net = 0.0
+    for c in recent_14:
+        sign = _DIRECTION_SIGN.get(c.get("direction"), 0)
+        net += sign * (c.get("magnitude") or 0) * _DURABILITY_WEIGHT.get(c.get("durability"), 0.7)
+
+    has_mag3 = any((c.get("magnitude") or 0) >= 3 for c in recent_14)
+    top = sorted(recent_14, key=_classification_weight, reverse=True)[:3]
+    refs = [c.get("one_line_summary") or c.get("headline") or "" for c in top]
+
+    if direction == "long":
+        recent_7 = [c for c in recent_14 if _is_recent(c, 7)]
+        major_bear = any(c.get("direction") == "bearish" and (c.get("magnitude") or 0) >= 4
+                          for c in recent_7)
+        if net >= 3 and has_mag3 and not major_bear:
+            return {"pass": True,
+                    "reason": f"net news score {net:.1f} (bullish, {len(recent_14)} items)",
+                    "evidence_refs": refs}
+        why = []
+        if net < 3:
+            why.append(f"net score {net:.1f} < 3")
+        if not has_mag3:
+            why.append("no item magnitude >= 3")
+        if major_bear:
+            why.append("major bearish item (magnitude >= 4) in last 7 days")
+        return {"pass": False, "reason": "; ".join(why), "evidence_refs": []}
+
+    # short
+    if net <= -3 and has_mag3:
+        return {"pass": True,
+                "reason": f"net news score {net:.1f} (bearish, {len(recent_14)} items)",
+                "evidence_refs": refs}
+    why = []
+    if net > -3:
+        why.append(f"net score {net:.1f} > -3")
+    if not has_mag3:
+        why.append("no item magnitude >= 3")
+    return {"pass": False, "reason": "; ".join(why), "evidence_refs": []}
 
 
 # ---------------------------------------------------------------------------

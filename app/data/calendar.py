@@ -2,8 +2,72 @@
 
 Returns empty/None on any failure so the brief still renders.
 """
-from datetime import date, datetime
+import json
+from datetime import date, datetime, timezone
 from typing import Any
+
+from app.config import settings
+
+_EARNINGS_CACHE = settings.cache_dir / "earnings.json"
+_EARNINGS_TTL_S = 24 * 3600  # earnings dates are stable enough for a day
+
+
+def _earnings_cache_get(ticker: str):
+    """Return (hit: bool, value: date|None). value is None for 'no date known'."""
+    if not _EARNINGS_CACHE.exists():
+        return False, None
+    try:
+        cache = json.loads(_EARNINGS_CACHE.read_text())
+        entry = cache.get(ticker.upper())
+    except Exception:
+        return False, None
+    if not entry:
+        return False, None
+    fetched = entry.get("fetched_at", 0)
+    if (datetime.now(timezone.utc).timestamp() - fetched) > _EARNINGS_TTL_S:
+        return False, None
+    d = entry.get("date")
+    if not d:
+        return True, None
+    try:
+        return True, date.fromisoformat(d)
+    except ValueError:
+        return True, None
+
+
+def _earnings_cache_put(ticker: str, value: date | None) -> None:
+    try:
+        cache = {}
+        if _EARNINGS_CACHE.exists():
+            cache = json.loads(_EARNINGS_CACHE.read_text())
+        cache[ticker.upper()] = {
+            "date": value.isoformat() if value else None,
+            "fetched_at": datetime.now(timezone.utc).timestamp(),
+        }
+        _EARNINGS_CACHE.parent.mkdir(parents=True, exist_ok=True)
+        _EARNINGS_CACHE.write_text(json.dumps(cache))
+    except Exception:
+        pass
+
+
+def next_earnings_date(ticker: str) -> date | None:
+    """Return the next earnings date as a ``date``, or None if unknown.
+
+    Cached on disk for 24h (the cache stores a None result too, so we don't
+    re-hit yfinance every build for tickers with no scheduled date).
+    """
+    hit, value = _earnings_cache_get(ticker)
+    if hit:
+        return value
+    ed = earnings_date(ticker)
+    result: date | None = None
+    if ed and ed.get("date"):
+        try:
+            result = date.fromisoformat(ed["date"])
+        except (ValueError, TypeError):
+            result = None
+    _earnings_cache_put(ticker, result)
+    return result
 
 
 def _to_date(v: Any) -> str | None:

@@ -59,52 +59,69 @@ def test_technical_invalid_direction_raises():
 
 
 # ---------------------------------------------------------------------------
-# news_signal
+# news_signal -- now consumes semantic classifications, not raw headlines
 # ---------------------------------------------------------------------------
 
-def test_news_long_bullish_catalysts_pass():
-    items = [
-        {"headline": "Acme beats Q3 earnings and raises guidance"},
-        {"headline": "Acme expands partnership with Globex"},
+def _cls(direction, magnitude, durability="medium", summary="x", published=None):
+    return {
+        "direction": direction, "magnitude": magnitude, "durability": durability,
+        "one_line_summary": summary, "headline": summary, "published": published,
+    }
+
+
+def test_news_long_bullish_classifications_pass():
+    classifications = [
+        _cls("bullish", 3, "long", "Beat and raised guidance"),
+        _cls("bullish", 3, "medium", "Expanded partnership"),
     ]
-    out = signals.news_signal("ACME", items, None, "long")
+    out = signals.news_signal("ACME", classifications, "long")
     assert out["pass"] is True
     assert len(out["evidence_refs"]) >= 1
 
 
-def test_news_long_mixed_tape_fails():
-    items = [
-        {"headline": "Acme beats earnings"},
-        {"headline": "Acme faces investigation and lawsuit"},
-    ]
-    out = signals.news_signal("ACME", items, None, "long")
+def test_news_long_net_below_three_fails():
+    # One medium bullish mag 3 => 3 * 0.7 = 2.1 < 3.
+    out = signals.news_signal("ACME", [_cls("bullish", 3, "medium")], "long")
     assert out["pass"] is False
-    assert "mixed" in out["reason"].lower()
+    assert "< 3" in out["reason"]
+
+
+def test_news_long_major_bearish_blocks():
+    classifications = [
+        _cls("bullish", 5, "long"),     # +5.0
+        _cls("bullish", 3, "long"),     # +3.0  -> net 8.0, well above 3
+        _cls("bearish", 4, "short"),    # a magnitude-4 bearish item
+    ]
+    out = signals.news_signal("ACME", classifications, "long")
+    assert out["pass"] is False
+    assert "bearish" in out["reason"]
 
 
 def test_news_long_empty_fails():
-    assert signals.news_signal("ACME", [], None, "long")["pass"] is False
+    assert signals.news_signal("ACME", [], "long")["pass"] is False
+
+
+def test_news_long_requires_a_magnitude_3_item():
+    # Lots of tiny bullish items can clear net 3 but lack a real catalyst.
+    classifications = [_cls("bullish", 2, "long") for _ in range(3)]  # 3 * 2.0 = 6.0
+    out = signals.news_signal("ACME", classifications, "long")
+    assert out["pass"] is False
+    assert "magnitude" in out["reason"]
 
 
 def test_news_short_bearish_passes():
-    items = [
-        {"headline": "Acme misses revenue, cuts guidance"},
-        {"headline": "Analyst downgrades Acme to underperform"},
+    classifications = [
+        _cls("bearish", 3, "long", "Missed and cut guidance"),
+        _cls("bearish", 3, "medium", "Analyst downgrade"),
     ]
-    out = signals.news_signal("ACME", items, None, "short")
-    assert out["pass"] is True
-
-
-def test_news_filings_summary_contributes():
-    items = [{"headline": "Some neutral coverage"}]
-    out = signals.news_signal("ACME", items, "Revenue growth exceeded expectations.", "long")
+    out = signals.news_signal("ACME", classifications, "short")
     assert out["pass"] is True
 
 
 def test_news_old_items_dropped():
-    # Item dated more than 14 days ago should not count.
-    items = [{"headline": "Acme beats earnings", "published": "2020-01-01"}]
-    out = signals.news_signal("ACME", items, None, "long")
+    # Item dated more than 14 days ago should not count toward the score.
+    classifications = [_cls("bullish", 5, "long", published="2020-01-01")]
+    out = signals.news_signal("ACME", classifications, "long")
     assert out["pass"] is False
 
 

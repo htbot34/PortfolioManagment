@@ -100,7 +100,8 @@ def _defense_from_book(recommendations: list[dict], macro_line: str,
         if (r.get("ticker") or "").upper() in veto:
             continue  # soft veto: user has rejected this ticker repeatedly
         gate = conviction.evaluate(r, direction="short", macro=macro or {},
-                                    news_fetcher=news_mod.company_news)
+                                    news_fetcher=news_mod.company_news,
+                                    action=r.get("action"))
         if not gate["qualifies"]:
             continue
         q = r.get("quote") or {}
@@ -204,7 +205,8 @@ def _trade_from_scanner(scan_result: dict, macro: dict, macro_line: str,
                 and off52 >= -2 and theme in _QUALITY_THEMES):
             continue
         gate = conviction.evaluate(s, direction="long", macro=macro,
-                                    news_fetcher=news_mod.company_news)
+                                    news_fetcher=news_mod.company_news,
+                                    action="buy")
         if not gate["qualifies"]:
             continue
         return _build_trade(s, "buy", "Quality breakout to new highs on heavy volume",
@@ -222,7 +224,8 @@ def _trade_from_scanner(scan_result: dict, macro: dict, macro_line: str,
                 and theme in _QUALITY_THEMES):
             continue
         gate = conviction.evaluate(s, direction="long", macro=macro,
-                                    news_fetcher=news_mod.company_news)
+                                    news_fetcher=news_mod.company_news,
+                                    action="buy")
         if not gate["qualifies"]:
             continue
         return _build_trade(s, "buy", "Deep oversold quality name with bullish MACD cross",

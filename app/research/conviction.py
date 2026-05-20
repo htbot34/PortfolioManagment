@@ -99,6 +99,8 @@ def evaluate(
     portfolio=None,
     prices_provider: Callable | None = None,
     allow_insider_promotion: bool = True,
+    fundamentals: dict | None = None,
+    sector_comparables: list[dict] | None = None,
 ) -> dict:
     """Run the conviction gate against ``ticker_payload`` for ``direction``.
 
@@ -179,6 +181,35 @@ def evaluate(
         elif decision == "annotate":
             result["correlation_annotation"] = reason
 
+    # Valuation overlay. Attaches a `valuation` block; for a long buy/add an
+    # "extreme" sector valuation downgrades the rec (unless promoted by a
+    # score-3 insider cluster), a "cheap" valuation flags a sizing tailwind;
+    # for a short a "cheap" valuation just annotates "verify thesis".
+    is_long_entry = direction == "long" and (action or "").lower() in (
+        "buy", "add", "new_buy")
+    if is_long_entry or direction == "short":
+        val = _valuation_assess(ticker, fundamentals, sector_comparables)
+        if val is not None:
+            result["valuation"] = val
+            tier = val.get("tier")
+            if is_long_entry and tier == "extreme":
+                insider = out_signals.get("insider") or {}
+                override = promoted_by_insider and insider.get("score") == 3
+                if not override and result["qualifies"]:
+                    result["qualifies"] = False
+                    pct = val.get("percentile_in_sector")
+                    result["valuation_block"] = (
+                        f"valuation extreme ({pct:.0f}th pct in sector)"
+                        if pct is not None else "valuation extreme")
+                elif override:
+                    result["valuation_override"] = (
+                        "extreme valuation overridden by a score-3 insider cluster")
+            elif is_long_entry and tier == "cheap":
+                result["valuation_tailwind"] = True
+            elif direction == "short" and tier == "cheap":
+                result["valuation_annotation"] = (
+                    "selling at attractive valuation - verify thesis")
+
     # Earnings-window hard block: only for opening/adding to a long.
     if result["qualifies"] and direction == "long" and (action or "").lower() in (
             "buy", "add", "new_buy"):
@@ -187,6 +218,27 @@ def evaluate(
             result["qualifies"] = False
             result["earnings_block"] = block
     return result
+
+
+def _valuation_assess(ticker: str, fundamentals: dict | None,
+                      sector_comparables: list[dict] | None) -> dict | None:
+    """Build the valuation block. Fetches fundamentals + comparables lazily
+    when not supplied. Returns None if nothing usable could be computed."""
+    from app.research import valuation as val_mod
+
+    if fundamentals is None:
+        try:
+            from app.data.fundamentals import get_fundamentals
+            fundamentals = get_fundamentals(ticker)
+        except Exception:
+            return None
+    if sector_comparables is None:
+        sector = (fundamentals or {}).get("sector")
+        try:
+            sector_comparables = val_mod.build_sector_comparables(sector)
+        except Exception:
+            sector_comparables = []
+    return val_mod.valuation_score(ticker, fundamentals or {}, sector_comparables or [])
 
 
 def _correlation_assess(ticker: str, action: str | None, portfolio,

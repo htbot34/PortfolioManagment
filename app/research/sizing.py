@@ -125,9 +125,9 @@ def _size_new_buy(
     ticker: str, price: float, account: Account, pv: float, gate: dict | None,
     regime: str | None = None,
 ) -> dict:
-    # risk_off downgrades the whole conviction tier: 3%->2% default, 5%->3%
-    # for a score-3 setup.
-    high_conv = _conviction_score(gate) >= 3
+    # A score-3 technical setup OR a "cheap" valuation tailwind earns the
+    # high-conviction tier. risk_off then downgrades that tier one notch.
+    high_conv = _conviction_score(gate) >= 3 or bool((gate or {}).get("valuation_tailwind"))
     if regime == "risk_off":
         target_pct = 3.0 if high_conv else 2.0
     else:

@@ -22,9 +22,11 @@ from app.config import risk_profile, settings
 from app.data import macro as macro_mod
 from app.data import market_news, prices
 from app.portfolio import rec_history, store
+from app.data import fundamentals as fundamentals_mod
 from app.research import (
     analyst, candidates as cands, correlation, daily_brief, learning, llm,
     metrics as metrics_mod, portfolio_review, regime as regime_mod, scanner,
+    valuation,
 )
 
 
@@ -224,6 +226,13 @@ def main() -> int:
         except Exception:
             traceback.print_exc()
             rec["correlation_to_book"] = {"available": False}
+        try:
+            f = fundamentals_mod.get_fundamentals(p.ticker)
+            comps = valuation.build_sector_comparables(f.get("sector"))
+            rec["valuation"] = valuation.valuation_score(p.ticker, f, comps)
+        except Exception:
+            traceback.print_exc()
+            rec["valuation"] = {"tier": "unknown"}
         recs.append(rec)
         ticker_payloads[p.ticker] = rec
 

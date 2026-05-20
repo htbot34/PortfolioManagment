@@ -125,6 +125,21 @@
 </div>
 {% endif %}
 
+{% if payload.valuation and payload.valuation.tier and payload.valuation.tier != 'unknown' %}
+<div class="card rounded-lg p-4 mb-6">
+  <h3 class="text-sm font-semibold mb-2">Valuation (sector-relative)</h3>
+  {% set v = payload.valuation %}
+  {% set tcolor = {'cheap':'emerald','fair':'slate','expensive':'amber','extreme':'rose'}.get(v.tier,'slate') %}
+  <div class="text-sm">
+    <span class="font-semibold text-{{ tcolor }}-300">{{ v.tier|upper }}</span>
+    {% if v.percentile_in_sector is not none %}
+    <span class="text-slate-400"> - {{ '%.0f'|format(v.percentile_in_sector) }}th percentile in sector</span>
+    {% endif %}
+  </div>
+  {% if v.summary %}<div class="text-xs text-slate-500 mt-1">{{ v.summary }}</div>{% endif %}
+</div>
+{% endif %}
+
 {% if payload.insider_cluster %}
 <div class="card rounded-lg p-4 mb-6">
   <h3 class="text-sm font-semibold mb-2">Insider activity (Form 4, last 30d)</h3>

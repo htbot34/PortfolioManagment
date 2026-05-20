@@ -206,7 +206,7 @@ def _trade_from_scanner(scan_result: dict, macro: dict, macro_line: str,
             continue
         gate = conviction.evaluate(s, direction="long", macro=macro,
                                     news_fetcher=news_mod.company_news,
-                                    action="buy")
+                                    action="new_buy", portfolio=account)
         if not gate["qualifies"]:
             continue
         return _build_trade(s, "buy", "Quality breakout to new highs on heavy volume",
@@ -225,7 +225,7 @@ def _trade_from_scanner(scan_result: dict, macro: dict, macro_line: str,
             continue
         gate = conviction.evaluate(s, direction="long", macro=macro,
                                     news_fetcher=news_mod.company_news,
-                                    action="buy")
+                                    action="new_buy", portfolio=account)
         if not gate["qualifies"]:
             continue
         return _build_trade(s, "buy", "Deep oversold quality name with bullish MACD cross",

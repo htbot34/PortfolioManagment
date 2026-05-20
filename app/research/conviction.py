@@ -96,6 +96,8 @@ def evaluate(
     news_fetcher: Callable[[str], list[dict]] | None = None,
     action: str | None = None,
     insider_fetcher: Callable[[str], list[dict]] | None = None,
+    portfolio=None,
+    prices_provider: Callable | None = None,
 ) -> dict:
     """Run the conviction gate against ``ticker_payload`` for ``direction``.
 
@@ -160,13 +162,67 @@ def evaluate(
     result = _result(qualifies, out_signals)
     result["promoted_by_insider"] = promoted_by_insider
 
+    # Correlation gate (longs only). Attaches a `correlation` block; for a
+    # NEW BUY a high avg correlation to the top-5 holdings downgrades the
+    # rec, for an ADD it only annotates (leaning into a known cluster is the
+    # user's call).
+    if direction == "long" and portfolio is not None and (action or "").lower() in (
+            "buy", "add", "new_buy"):
+        corr_info, decision, reason = _correlation_assess(
+            ticker, action, portfolio, prices_provider)
+        result["correlation"] = corr_info
+        if decision == "block" and result["qualifies"]:
+            result["qualifies"] = False
+            result["correlation_block"] = reason
+        elif decision == "annotate":
+            result["correlation_annotation"] = reason
+
     # Earnings-window hard block: only for opening/adding to a long.
-    if qualifies and direction == "long" and (action or "").lower() in ("buy", "add", "new_buy"):
+    if result["qualifies"] and direction == "long" and (action or "").lower() in (
+            "buy", "add", "new_buy"):
         block = _earnings_block(ticker)
         if block:
             result["qualifies"] = False
             result["earnings_block"] = block
     return result
+
+
+def _correlation_assess(ticker: str, action: str | None, portfolio,
+                        prices_provider) -> tuple[dict, str, str | None]:
+    """Assess a candidate's correlation to the book.
+
+    Returns ``(correlation_dict, decision, reason)`` where decision is one of
+    ``block`` (new buy, avg corr to top-5 > 0.7), ``annotate`` (add into a
+    tight cluster), or ``ok``.
+    """
+    from app.research import correlation as corr_mod
+
+    held = {p.ticker.upper() for p in getattr(portfolio, "positions", [])}
+    is_add = ticker.upper() in held
+    cand = corr_mod.candidate_correlation_to_book(ticker, portfolio, prices_provider)
+    info: dict = {"candidate_to_book": cand, "is_add": is_add}
+
+    if not cand.get("available"):
+        return info, "ok", None
+
+    if not is_add:
+        avg = cand.get("avg_corr_to_top5")
+        if avg is not None and avg > 0.7:
+            return info, "block", (
+                f"high correlation to existing top holdings (avg {avg:.2f})"
+            )
+        return info, "ok", None
+
+    # ADD: check if the existing position sits in a tight cluster.
+    matrix = corr_mod.compute_position_correlations(portfolio, prices_provider)
+    row = (matrix.get("matrix") or {}).get(ticker.upper(), {})
+    tight = [t for t, c in row.items() if t != ticker.upper() and c > 0.8]
+    info["position_matrix_row"] = row
+    if len(tight) >= 2:
+        return info, "annotate", (
+            f"adding into a tight cluster (corr > 0.8 with {', '.join(sorted(tight))})"
+        )
+    return info, "ok", None
 
 
 def _earnings_block(ticker: str) -> str | None:

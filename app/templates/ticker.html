@@ -103,6 +103,28 @@
   </div>
 </div>
 
+{% if payload.correlation_to_book and payload.correlation_to_book.available %}
+<div class="card rounded-lg p-4 mb-6">
+  <h3 class="text-sm font-semibold mb-2">Correlation to your book (90d)</h3>
+  {% set cb = payload.correlation_to_book %}
+  <div class="text-sm text-slate-300 mb-2">
+    Avg correlation to top 5 holdings:
+    <span class="font-semibold {% if cb.avg_corr_to_top5 is not none and cb.avg_corr_to_top5 > 0.7 %}neg{% endif %}">
+      {% if cb.avg_corr_to_top5 is not none %}{{ '%.2f'|format(cb.avg_corr_to_top5) }}{% else %}-{% endif %}
+    </span>
+  </div>
+  {% set ranked = cb.all_correlations.items()|list|sort(attribute='1', reverse=true) %}
+  <ul class="text-sm space-y-1">
+  {% for tk, c in ranked[:3] %}
+    <li class="flex justify-between">
+      <span class="text-slate-400">{{ tk }}</span>
+      <span class="{% if c > 0.7 %}neg{% else %}text-slate-300{% endif %}">{{ '%.2f'|format(c) }}</span>
+    </li>
+  {% endfor %}
+  </ul>
+</div>
+{% endif %}
+
 {% if payload.insider_cluster %}
 <div class="card rounded-lg p-4 mb-6">
   <h3 class="text-sm font-semibold mb-2">Insider activity (Form 4, last 30d)</h3>

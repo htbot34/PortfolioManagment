@@ -23,7 +23,7 @@ from app.data import macro as macro_mod
 from app.data import market_news, prices
 from app.portfolio import rec_history, store
 from app.research import (
-    analyst, candidates as cands, daily_brief, learning, llm,
+    analyst, candidates as cands, correlation, daily_brief, learning, llm,
     metrics as metrics_mod, portfolio_review, scanner,
 )
 
@@ -183,6 +183,12 @@ def main() -> int:
                    "key_catalysts": [], "key_risks": [], "suggested_action_detail": "",
                    "quote": {}, "technicals": {}, "news": [], "earnings": None,
                    "consensus": None, "analyst_recs": [], "position": {}}
+        try:
+            rec["correlation_to_book"] = correlation.candidate_correlation_to_book(
+                p.ticker, account)
+        except Exception:
+            traceback.print_exc()
+            rec["correlation_to_book"] = {"available": False}
         recs.append(rec)
         ticker_payloads[p.ticker] = rec
 

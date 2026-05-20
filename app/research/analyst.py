@@ -16,7 +16,7 @@ from datetime import date
 from app.config import risk_profile
 from app.research.recid import make_rec_id
 from app.data import calendar, insider, news as news_mod, prices, reddit
-from app.research import llm, prompts, rules
+from app.research import insider_signal, llm, prompts, rules
 
 
 def gather(ticker: str, position_context: dict | None = None) -> dict:
@@ -28,6 +28,8 @@ def gather(ticker: str, position_context: dict | None = None) -> dict:
     consensus = calendar.consensus(ticker)
     recs = calendar.analyst_recs(ticker, limit=5)
     form4 = insider.recent_form4(ticker, days=30)
+    insider_txns = insider.recent_form4_transactions(ticker, days=30)
+    insider_cluster = insider_signal.insider_cluster_score(ticker, insider_txns)
     social = reddit.attention(ticker)
     return {
         "ticker": ticker,
@@ -38,6 +40,8 @@ def gather(ticker: str, position_context: dict | None = None) -> dict:
         "consensus": consensus,
         "analyst_recs": recs,
         "insider_form4": form4,
+        "insider_transactions": insider_txns,
+        "insider_cluster": insider_cluster,
         "social_attention": social,
         "position": position_context or {},
     }
@@ -90,6 +94,8 @@ def analyze_ticker(ticker: str, position_context: dict | None = None) -> dict:
         "consensus": bundle["consensus"],
         "analyst_recs": bundle["analyst_recs"],
         "insider_form4": bundle["insider_form4"],
+        "insider_transactions": bundle["insider_transactions"],
+        "insider_cluster": bundle["insider_cluster"],
         "social_attention": bundle["social_attention"],
         "position": bundle["position"],
     }

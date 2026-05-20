@@ -1,22 +1,23 @@
-"""Three-signal conviction gate orchestrator.
+"""Conviction gate orchestrator.
 
-``evaluate()`` runs technical -> sector -> news in that order so the cheap
-checks short-circuit before we burn a news fetch + classification on a
-candidate that already failed elsewhere. A recommendation ``qualifies`` only
-if all three pass.
+``evaluate()`` runs the technical signal first (a hard prerequisite - it can
+never be substituted), then sector_momentum and news. A recommendation
+``qualifies`` via one of two paths:
 
-Phase 1 additions:
-  - the news signal now consumes semantic LLM classifications
-    (``app.research.news_classifier``) instead of keyword matching.
-  - an earnings-window hard block: opening or adding to a LONG within 3 US
-    trading days of the company's next earnings report does not qualify.
+  PRIMARY PATH       all three primary signals (technical, sector, news) pass.
+  INSIDER PROMOTION  exactly two of the three pass, technical is one of them,
+                     and the insider cluster score for the direction is >= 2.
+                     The failing signal must be sector or news, never technical.
+
+Phase 1 added: semantic LLM news classification and the earnings-window
+hard block. Phase 2 added: the insider-promotion path.
 """
 from __future__ import annotations
 
 from datetime import date, timedelta
 from typing import Callable
 
-from app.research import news_classifier, signals
+from app.research import insider_signal, news_classifier, signals
 
 
 def _extract_sector(payload: dict) -> str:
@@ -59,33 +60,59 @@ def _trading_days_until(target: date) -> int:
     return days
 
 
+def _insider_signal(ticker: str, direction: str, payload: dict,
+                    fetcher: Callable[[str], list[dict]] | None) -> dict:
+    """Compute the insider cluster signal for ``direction``.
+
+    Transactions come from ``payload['insider_transactions']`` if present,
+    else from ``fetcher`` if given, else from ``insider.recent_form4_transactions``.
+    """
+    txns = payload.get("insider_transactions")
+    if txns is None:
+        if fetcher is not None:
+            try:
+                txns = fetcher(ticker)
+            except Exception:
+                txns = []
+        else:
+            try:
+                from app.data import insider
+                txns = insider.recent_form4_transactions(ticker)
+            except Exception:
+                txns = []
+    txns = txns or []
+    if direction == "long":
+        sc = insider_signal.insider_cluster_score(ticker, txns)
+    else:
+        sc = insider_signal.insider_cluster_score_short(ticker, txns)
+    sc["pass"] = sc.get("score", 0) >= 2
+    return sc
+
+
 def evaluate(
     ticker_payload: dict,
     direction: str,
     macro: dict,
     news_fetcher: Callable[[str], list[dict]] | None = None,
     action: str | None = None,
+    insider_fetcher: Callable[[str], list[dict]] | None = None,
 ) -> dict:
-    """Run all three signals against ``ticker_payload`` for ``direction``.
-
-    ``news_fetcher`` is called lazily and only if technical + sector pass,
-    saving HTTP roundtrips on candidates that already failed.
-
-    ``action`` (buy / add / trim / sell) drives the earnings-window block:
-    opening or adding to a LONG within 3 trading days of earnings does not
-    qualify. Trims and sells are never blocked by the earnings window.
+    """Run the conviction gate against ``ticker_payload`` for ``direction``.
 
     Returns::
 
         {
           "qualifies": bool,
-          "signals": {"technical": ..., "sector_momentum": ..., "news": ...},
-          "summary": "technical=PASS sector=PASS news=fail",
-          "earnings_block": "<reason>"   # only present when the block fired
+          "signals": {"technical": ..., "sector_momentum": ..., "news": ...,
+                       "insider": ...},   # insider only present if evaluated
+          "summary": "technical=PASS sector_momentum=PASS news=fail",
+          "promoted_by_insider": bool,
+          "earnings_block": "<reason>"   # only when the earnings block fired
         }
 
-    The ``signals`` dict only contains keys for signals that were actually
-    evaluated - if technical fails first, sector_momentum and news are absent.
+    Technical is evaluated first and short-circuits the whole gate on failure
+    (it can never be substituted). When technical passes, both sector and news
+    are always evaluated so the 2-of-3 promotion path can be assessed.
     """
     if direction not in ("long", "short"):
         raise ValueError(f"direction must be 'long' or 'short', got {direction!r}")
@@ -95,19 +122,20 @@ def evaluate(
     tech = signals.technical_signal(ticker_payload, direction)
     out_signals["technical"] = tech
     if not tech["pass"]:
-        return _result(False, out_signals)
+        # Technical is a hard prerequisite - no path qualifies without it.
+        result = _result(False, out_signals)
+        result["promoted_by_insider"] = False
+        return result
 
     sector = _extract_sector(ticker_payload)
     sec = signals.sector_momentum_signal(sector, macro, direction)
     out_signals["sector_momentum"] = sec
-    if not sec["pass"]:
-        return _result(False, out_signals)
 
     news_items = ticker_payload.get("news")
     if news_items is None and news_fetcher is not None:
-        ticker = ticker_payload.get("ticker") or ""
+        tk = ticker_payload.get("ticker") or ""
         try:
-            news_items = news_fetcher(ticker) if ticker else []
+            news_items = news_fetcher(tk) if tk else []
         except Exception:
             news_items = []
     ticker = ticker_payload.get("ticker", "")
@@ -117,8 +145,20 @@ def evaluate(
     nws = signals.news_signal(ticker, classifications, direction)
     out_signals["news"] = nws
 
-    qualifies = tech["pass"] and sec["pass"] and nws["pass"]
+    primary_pass = sum(1 for s in (tech, sec, nws) if s["pass"])
+    qualifies = primary_pass == 3
+    promoted_by_insider = False
+
+    # Insider-promotion path: exactly 2 of 3, technical must be one of them.
+    if not qualifies and primary_pass == 2 and tech["pass"]:
+        insider = _insider_signal(ticker, direction, ticker_payload, insider_fetcher)
+        out_signals["insider"] = insider
+        if insider.get("score", 0) >= 2:
+            qualifies = True
+            promoted_by_insider = True
+
     result = _result(qualifies, out_signals)
+    result["promoted_by_insider"] = promoted_by_insider
 
     # Earnings-window hard block: only for opening/adding to a long.
     if qualifies and direction == "long" and (action or "").lower() in ("buy", "add", "new_buy"):
@@ -148,11 +188,15 @@ def _earnings_block(ticker: str) -> str | None:
 
 def _result(qualifies: bool, sigs: dict[str, dict]) -> dict:
     parts = []
-    for name in ("technical", "sector_momentum", "news"):
+    for name in ("technical", "sector_momentum", "news", "insider"):
         if name in sigs:
             parts.append(f"{name}={'PASS' if sigs[name]['pass'] else 'fail'}")
-    return {
+    out = {
         "qualifies": qualifies,
         "signals": sigs,
         "summary": " ".join(parts),
     }
+    if "insider" in sigs and qualifies:
+        out["annotation"] = "promoted on insider cluster"
+    return out
+

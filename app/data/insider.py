@@ -1,21 +1,33 @@
-"""SEC Form 4 insider transaction tracking via EDGAR.
+"""SEC Form 4 insider transaction tracking via EDGAR. Free, no key.
 
-For each ticker we count Form 4 filings in the last 30 days and surface
-the most recent ones with a link. Free, no key.
+Two levels of detail:
 
-Heavy parsing of the underlying XBRL transactions is intentionally skipped
-to keep the build fast - the count plus links is enough to flag clusters
-of activity for the analyst to look at.
+- ``recent_form4(ticker, days)``  -- lightweight: counts Form 4 filings in
+  the window. Kept for the per-ticker payload's quick "is there activity"
+  flag.
+- ``recent_form4_transactions(ticker, days)`` -- parses each Form 4's
+  ownership XML into individual transactions: filer_name, role,
+  transaction_date, transaction_code (P=purchase, S=sale, A=award, ...),
+  acquired_disposed, shares, price, total_value, and is_planned_10b5_1.
+
+Parsed transactions are cached on disk by accession number (Form 4 filings
+are immutable once filed) so repeated builds don't re-fetch.
 """
+import json
+import xml.etree.ElementTree as ET
 from datetime import date, timedelta
 
 import httpx
 
 from app.config import settings
 from app.data.filings import _ticker_to_cik
+from app.logging import get_logger
+
+log = get_logger(__name__)
 
 _TIMEOUT = 20.0
 _HEADERS = {"User-Agent": "PortfolioAdvisor research", "Accept-Encoding": "gzip, deflate"}
+_FORM4_CACHE = settings.cache_dir / "form4"
 
 
 def _headers() -> dict:
@@ -23,7 +35,7 @@ def _headers() -> dict:
 
 
 def recent_form4(ticker: str, days: int = 30) -> dict:
-    """Return summary of Form 4 filings in the lookback window."""
+    """Return a summary of Form 4 filings in the lookback window (count only)."""
     try:
         mapping = _ticker_to_cik()
     except Exception:
@@ -56,17 +68,163 @@ def recent_form4(ticker: str, days: int = 30) -> dict:
             continue
         if d < cutoff:
             continue
-        accession = accessions[i]
         filings.append({
             "form": form,
             "filed": filed_dates[i],
             "url": f"https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK={cik}&type=4&dateb=&owner=include&count=10",
-            "accession": accession,
+            "accession": accessions[i],
         })
         if len(filings) >= 20:
             break
-    return {
-        "count": len(filings),
-        "filings": filings,
-        "lookback_days": days,
-    }
+    return {"count": len(filings), "filings": filings, "lookback_days": days}
+
+
+# ---------------------------------------------------------------------------
+# Form 4 XML parsing
+# ---------------------------------------------------------------------------
+
+def _parse_float(el) -> float | None:
+    if el is None or not el.text:
+        return None
+    try:
+        return float(el.text.strip())
+    except ValueError:
+        return None
+
+
+def _parse_form4_xml(xml_text: str) -> list[dict]:
+    """Parse a Form 4 ownership XML document into transaction dicts."""
+    try:
+        root = ET.fromstring(xml_text)
+    except ET.ParseError:
+        return []
+
+    name_el = root.find(".//reportingOwner/reportingOwnerId/rptOwnerName")
+    owner = (name_el.text or "").strip() if (name_el is not None and name_el.text) else ""
+    title_el = root.find(".//reportingOwner/reportingOwnerRelationship/officerTitle")
+    role = (title_el.text or "").strip() if (title_el is not None and title_el.text) else ""
+
+    # 10b5-1 detection from footnote text (free, deterministic heuristic).
+    planned = False
+    for fn in root.findall(".//footnotes/footnote"):
+        txt = (fn.text or "").lower()
+        if "10b5-1" in txt or "10b5–1" in txt or "rule 10b5" in txt:
+            planned = True
+            break
+
+    out: list[dict] = []
+    for t in root.findall(".//nonDerivativeTable/nonDerivativeTransaction"):
+        code_el = t.find("transactionCoding/transactionCode")
+        code = (code_el.text or "").strip() if (code_el is not None and code_el.text) else ""
+        date_el = t.find("transactionDate/value")
+        tdate = (date_el.text or "").strip() if (date_el is not None and date_el.text) else ""
+        shares = _parse_float(t.find("transactionAmounts/transactionShares/value"))
+        price = _parse_float(t.find("transactionAmounts/transactionPricePerShare/value"))
+        ad_el = t.find("transactionAmounts/transactionAcquiredDisposedCode/value")
+        ad = (ad_el.text or "").strip() if (ad_el is not None and ad_el.text) else ""
+        out.append({
+            "filer_name": owner,
+            "role": role,
+            "transaction_date": tdate,
+            "transaction_code": code,
+            "acquired_disposed": ad,
+            "shares": shares,
+            "price": price,
+            "total_value": round((shares or 0.0) * (price or 0.0), 2),
+            "is_planned_10b5_1": planned,
+        })
+    return out
+
+
+def _form4_transactions_cached(cik_int: str, accession: str, primary_doc: str) -> list[dict]:
+    """Fetch + parse one Form 4's transactions, cached on disk by accession."""
+    _FORM4_CACHE.mkdir(parents=True, exist_ok=True)
+    cache_file = _FORM4_CACHE / f"{accession}.json"
+    if cache_file.exists():
+        try:
+            return json.loads(cache_file.read_text())
+        except Exception:
+            pass
+    acc_nodash = accession.replace("-", "")
+    candidates: list[str] = []
+    if primary_doc and primary_doc.lower().endswith(".xml"):
+        candidates.append(primary_doc)
+    candidates.append(f"{accession}.xml")
+    txns: list[dict] = []
+    for doc in candidates:
+        url = f"https://www.sec.gov/Archives/edgar/data/{cik_int}/{acc_nodash}/{doc}"
+        try:
+            r = httpx.get(url, headers=_headers(), timeout=_TIMEOUT)
+        except Exception as e:
+            log.debug("form4 fetch failed %s: %s", url, e)
+            continue
+        if r.status_code == 200 and "<ownershipDocument" in r.text:
+            txns = _parse_form4_xml(r.text)
+            break
+    try:
+        cache_file.write_text(json.dumps(txns))
+    except Exception:
+        pass
+    return txns
+
+
+def recent_form4_transactions(ticker: str, days: int = 30,
+                              max_filings: int = 40) -> list[dict]:
+    """Return parsed Form 4 transactions for ``ticker`` within ``days``.
+
+    Each dict has: filer_name, role, transaction_date, transaction_code,
+    acquired_disposed, shares, price, total_value, is_planned_10b5_1.
+    Transactions are filtered so their ``transaction_date`` falls within the
+    window (a filing dated inside the window can report an older trade).
+    """
+    try:
+        mapping = _ticker_to_cik()
+    except Exception:
+        return []
+    cik = mapping.get(ticker.upper())
+    if not cik:
+        return []
+    try:
+        r = httpx.get(
+            f"https://data.sec.gov/submissions/CIK{cik}.json",
+            headers=_headers(), timeout=_TIMEOUT,
+        )
+        r.raise_for_status()
+        sub = r.json()
+    except Exception as e:
+        log.warning("form4 submissions fetch failed for %s: %s", ticker, e)
+        return []
+    recent = sub.get("filings", {}).get("recent", {})
+    forms = recent.get("form", [])
+    filed = recent.get("filingDate", [])
+    accs = recent.get("accessionNumber", [])
+    primary = recent.get("primaryDocument", [])
+    cutoff = date.today() - timedelta(days=days)
+    cik_int = str(int(cik))
+
+    collected: list[dict] = []
+    seen = 0
+    for i, form in enumerate(forms):
+        if form not in ("4", "4/A"):
+            continue
+        try:
+            d = date.fromisoformat(filed[i])
+        except Exception:
+            continue
+        if d < cutoff:
+            continue
+        seen += 1
+        if seen > max_filings:
+            break
+        doc = primary[i] if i < len(primary) else ""
+        collected.extend(_form4_transactions_cached(cik_int, accs[i], doc))
+
+    result: list[dict] = []
+    for t in collected:
+        td = t.get("transaction_date")
+        try:
+            if td and date.fromisoformat(td) >= cutoff:
+                result.append(t)
+        except Exception:
+            result.append(t)  # keep unparseable dates rather than silently drop
+    return result

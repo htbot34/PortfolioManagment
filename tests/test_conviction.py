@@ -19,6 +19,9 @@ def _strong_long_payload(**overrides) -> dict:
             {"headline": "Acme beats Q3 earnings"},
             {"headline": "Acme raises full-year guidance"},
         ],
+        # Empty list keeps the insider-promotion path from hitting the network
+        # in tests that land on the 2-of-3 branch.
+        "insider_transactions": [],
     }
     base.update(overrides)
     return base
@@ -33,15 +36,19 @@ def test_clean_buy_passes_all_three():
     assert "news=PASS" in out["summary"]
 
 
-def test_buy_fails_on_sector_short_circuits_before_news():
+def test_buy_fails_on_sector_without_insider_does_not_qualify():
+    # Technical + news pass, sector fails. With no insider cluster the
+    # 2-of-3 promotion path does not fire, so the rec does not qualify.
     out = conviction.evaluate(
         _strong_long_payload(),
         direction="long",
         macro=_macro(r5=-1, r20=-2),
     )
     assert out["qualifies"] is False
-    assert "news" not in out["signals"]  # short-circuited
+    assert out["promoted_by_insider"] is False
     assert out["signals"]["sector_momentum"]["pass"] is False
+    # News IS now evaluated even when sector fails (needed for 2-of-3).
+    assert "news" in out["signals"]
 
 
 def test_buy_fails_on_technical_short_circuits_before_sector():

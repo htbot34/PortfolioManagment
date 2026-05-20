@@ -46,6 +46,14 @@
   </div>
   {% endif %}
   {% if a.thesis %}<p class="text-base text-slate-200 leading-relaxed mb-3">{{ a.thesis }}</p>{% endif %}
+  {% if a.conviction_gate and a.conviction_gate.promoted_by_insider and a.conviction_gate.signals.insider %}
+  {% set ins = a.conviction_gate.signals.insider %}
+  <div class="text-sm text-emerald-200 bg-emerald-950/40 border border-emerald-900/60 rounded px-3 py-2 mb-3">
+    Promoted on insider cluster:
+    {{ ins.distinct_buyers if ins.distinct_buyers is not none else ins.distinct_sellers }} insiders,
+    ${{ '{:,.0f}'.format(ins.total_dollars or 0) }} last 30d (score {{ ins.score }}/3)
+  </div>
+  {% endif %}
   {% if a.invalidation %}<div class="text-sm text-slate-400 border-t border-[#1f2a44] pt-3"><span class="text-rose-400 font-semibold">Invalidation:</span> {{ a.invalidation }}</div>{% endif %}
   {% if a.evidence %}
   <details class="mt-3 text-xs">

@@ -103,6 +103,23 @@
   </div>
 </div>
 
+{% if payload.insider_cluster %}
+<div class="card rounded-lg p-4 mb-6">
+  <h3 class="text-sm font-semibold mb-2">Insider activity (Form 4, last 30d)</h3>
+  {% set ic = payload.insider_cluster %}
+  <div class="text-sm">
+    <span class="font-semibold {% if ic.score >= 2 %}pos{% else %}text-slate-300{% endif %}">
+      Cluster score {{ ic.score }}/3
+    </span>
+    <span class="text-slate-400">
+      - {{ ic.distinct_buyers }} distinct buyer(s),
+      ${{ '{:,.0f}'.format(ic.total_dollars) }} of open-market purchases
+    </span>
+  </div>
+  {% if ic.summary %}<div class="text-xs text-slate-500 mt-1">{{ ic.summary }}</div>{% endif %}
+</div>
+{% endif %}
+
 {% if payload.analyst_recs %}
 <div class="card rounded-lg p-4 mb-6">
   <h3 class="text-sm font-semibold mb-2">Recent analyst actions</h3>

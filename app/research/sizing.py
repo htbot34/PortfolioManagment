@@ -94,8 +94,10 @@ def compute_size(
     gate: dict | None = None,
     severity: str = "normal",
     current_prices: dict[str, float] | None = None,
+    regime: str | None = None,
 ) -> dict:
-    """See module docstring."""
+    """See module docstring. ``regime`` (risk_on/risk_off/chop/breakdown)
+    downgrades new-buy sizing one tier in risk_off."""
     out = _empty()
     if current_price is None or current_price <= 0:
         return _reject(out, "no current price")
@@ -105,7 +107,7 @@ def compute_size(
 
     act = action.lower()
     if act in ("buy", "new_buy"):
-        return _size_new_buy(ticker, current_price, account, portfolio_value, gate)
+        return _size_new_buy(ticker, current_price, account, portfolio_value, gate, regime)
     if act == "add":
         return _size_add(ticker, current_price, position, account, portfolio_value, gate)
     if act == "trim":
@@ -120,9 +122,16 @@ def compute_size(
 # ---------------------------------------------------------------------------
 
 def _size_new_buy(
-    ticker: str, price: float, account: Account, pv: float, gate: dict | None
+    ticker: str, price: float, account: Account, pv: float, gate: dict | None,
+    regime: str | None = None,
 ) -> dict:
-    target_pct = 5.0 if _conviction_score(gate) >= 3 else 3.0
+    # risk_off downgrades the whole conviction tier: 3%->2% default, 5%->3%
+    # for a score-3 setup.
+    high_conv = _conviction_score(gate) >= 3
+    if regime == "risk_off":
+        target_pct = 3.0 if high_conv else 2.0
+    else:
+        target_pct = 5.0 if high_conv else 3.0
     target_dollars = pv * target_pct / 100
     notes: list[str] = []
     downsized = False

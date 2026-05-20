@@ -174,7 +174,8 @@ _QUALITY_THEMES = {
 def _trade_from_scanner(scan_result: dict, macro: dict, macro_line: str,
                          exclude: set[str],
                          account: store.Account | None = None,
-                         soft_veto: set[str] | None = None) -> dict | None:
+                         soft_veto: set[str] | None = None,
+                         regime: dict | None = None) -> dict | None:
     """Promote a scanner setup to a trade verdict.
 
     Two-stage gate:
@@ -185,11 +186,19 @@ def _trade_from_scanner(scan_result: dict, macro: dict, macro_line: str,
          the binding decision: technical + sector_momentum + news must
          all pass.
 
+    Regime gating:
+      - breakdown: no new buys at all (defense only).
+      - chop:      the insider 2-of-3 promotion path is disabled.
+
     A scanner setup that clears the pre-filter but fails any of the three
     signals does NOT surface. ``no_trade`` is the default outcome.
     """
     if _macro_risk_off(macro):
         return None
+    regime_name = (regime or {}).get("regime")
+    if regime_name == "breakdown":
+        return None  # defense only in a breakdown
+    allow_promo = regime_name != "chop"
     veto = soft_veto or set()
     for s in scan_result["buckets"].get("breakouts", []):
         if s.get("held") or s["ticker"].upper() in exclude:
@@ -206,11 +215,13 @@ def _trade_from_scanner(scan_result: dict, macro: dict, macro_line: str,
             continue
         gate = conviction.evaluate(s, direction="long", macro=macro,
                                     news_fetcher=news_mod.company_news,
-                                    action="new_buy", portfolio=account)
+                                    action="new_buy", portfolio=account,
+                                    allow_insider_promotion=allow_promo)
         if not gate["qualifies"]:
             continue
         return _build_trade(s, "buy", "Quality breakout to new highs on heavy volume",
-                             macro_line, scan_result, exclude, gate=gate, account=account)
+                             macro_line, scan_result, exclude, gate=gate, account=account,
+                             regime_name=regime_name)
     for s in scan_result["buckets"].get("oversold_bounces", []):
         if s.get("held") or s["ticker"].upper() in exclude:
             continue
@@ -225,11 +236,13 @@ def _trade_from_scanner(scan_result: dict, macro: dict, macro_line: str,
             continue
         gate = conviction.evaluate(s, direction="long", macro=macro,
                                     news_fetcher=news_mod.company_news,
-                                    action="new_buy", portfolio=account)
+                                    action="new_buy", portfolio=account,
+                                    allow_insider_promotion=allow_promo)
         if not gate["qualifies"]:
             continue
         return _build_trade(s, "buy", "Deep oversold quality name with bullish MACD cross",
-                             macro_line, scan_result, exclude, gate=gate, account=account)
+                             macro_line, scan_result, exclude, gate=gate, account=account,
+                             regime_name=regime_name)
     return None
 
 
@@ -302,7 +315,8 @@ def _evidence_for_defense(r: dict, t: dict, weight_pct: float | None) -> list[di
 def _build_trade(s: dict, action: str, reason: str, macro_line: str,
                  scan_result: dict, exclude: set[str],
                  gate: dict | None = None,
-                 account: store.Account | None = None) -> dict:
+                 account: store.Account | None = None,
+                 regime_name: str | None = None) -> dict:
     price = s.get("price")
     # Pull a fuller technicals snapshot for the stop/target sizing
     t = prices.technicals(s["ticker"])
@@ -319,7 +333,8 @@ def _build_trade(s: dict, action: str, reason: str, macro_line: str,
     acct = account or store.load()
     pos = acct.position(s["ticker"]) if acct else None
     sized_action = "add" if pos else "new_buy"
-    size = sizing.compute_size(sized_action, s["ticker"], price, pos, acct, gate=gate)
+    size = sizing.compute_size(sized_action, s["ticker"], price, pos, acct,
+                                gate=gate, regime=regime_name)
     # Publicly the action stays "buy" so the UI logic doesn't fork - the
     # nuance (add vs new) is captured in the size.display string.
     today = date.today().isoformat()
@@ -351,11 +366,22 @@ def _build_trade(s: dict, action: str, reason: str, macro_line: str,
     }
 
 
+def _regime_banner(regime: dict | None) -> str | None:
+    """A one-line banner string for the gated regimes, else None."""
+    name = (regime or {}).get("regime")
+    if name == "breakdown":
+        return "Breakdown regime - defense only. New buys are suppressed."
+    if name == "chop":
+        return "Chop regime - gate tightened, insider promotion disabled."
+    return None
+
+
 def build(macro: dict, recommendations: list[dict], review: dict,
           candidates: dict, exposures: dict, scan_result: dict,
           headlines: list[dict] | None = None,
           account: store.Account | None = None,
-          user_preferences: dict | None = None) -> dict:
+          user_preferences: dict | None = None,
+          regime: dict | None = None) -> dict:
     """Return today's verdict. Deterministic - no LLM call.
 
     ``account`` is optional - when provided, recommendations get sized
@@ -367,6 +393,10 @@ def build(macro: dict, recommendations: list[dict], review: dict,
     of rec_history.yaml. Tickers under soft veto (>=2 rejections by the
     user) are demoted to the watching list instead of becoming a primary
     action.
+
+    ``regime`` is the ``app.research.regime.detect_regime`` output. It gates
+    behavior: breakdown suppresses all new buys (defense only); chop disables
+    the insider 2-of-3 promotion; risk_off downgrades new-buy sizing.
     """
     macro_line = _macro_line(macro)
     held = {p["ticker"].upper() for p in (exposures.get("positions") or [])}
@@ -375,20 +405,28 @@ def build(macro: dict, recommendations: list[dict], review: dict,
 
     from app.research.learning import soft_veto_tickers  # local to avoid cycle
     soft_veto = soft_veto_tickers(user_preferences or {})
+    banner = _regime_banner(regime)
+
+    def _stamp(verdict: dict) -> dict:
+        if banner:
+            verdict["regime_banner"] = banner
+        if regime:
+            verdict["regime"] = regime
+        return verdict
 
     if _macro_risk_off(macro):
-        return _no_trade("Macro is risk-off (high VIX or broken trend). Wait.",
-                          macro_line, _build_watching(scan_result, held))
+        return _stamp(_no_trade("Macro is risk-off (high VIX or broken trend). Wait.",
+                                 macro_line, _build_watching(scan_result, held)))
 
     defense = _defense_from_book(recommendations, macro_line, scan_result, held,
                                   macro=macro, account=account, soft_veto=soft_veto)
     if defense:
-        return defense
+        return _stamp(defense)
 
     trade = _trade_from_scanner(scan_result, macro, macro_line, held,
-                                  account=account, soft_veto=soft_veto)
+                                  account=account, soft_veto=soft_veto, regime=regime)
     if trade:
-        return trade
+        return _stamp(trade)
 
-    return _no_trade("No setup meets the conviction bar.",
-                      macro_line, _build_watching(scan_result, held))
+    return _stamp(_no_trade("No setup meets the conviction bar.",
+                            macro_line, _build_watching(scan_result, held)))

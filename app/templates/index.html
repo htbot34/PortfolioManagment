@@ -133,6 +133,39 @@
   {% endif %}
 </div>
 
+{% if regime %}
+{% set rcolor = {'risk_on': 'emerald', 'risk_off': 'amber', 'chop': 'slate', 'breakdown': 'rose'}.get(regime.regime, 'slate') %}
+<div class="card rounded-lg p-3 mb-3 border-l-4 border-l-{{ rcolor }}-500">
+  <div class="flex items-baseline justify-between">
+    <div class="text-sm">
+      <span class="text-slate-400 uppercase tracking-widest text-xs">Market Regime</span>
+      <span class="font-bold text-{{ rcolor }}-300 ml-2">{{ regime.regime|replace('_','-')|upper }}</span>
+      <span class="text-xs text-slate-500 ml-1">confidence {{ regime.confidence }}/3</span>
+    </div>
+  </div>
+  <div class="text-xs text-slate-400 mt-1">{{ regime.summary }}</div>
+  {% if regime.factors %}
+  <details class="mt-2 text-xs">
+    <summary class="cursor-pointer text-slate-500 hover:text-slate-300 select-none">Regime factors</summary>
+    <ul class="mt-1 space-y-0.5 text-slate-400">
+      {% for k, v in regime.factors.items() if k != 'scores' %}
+      <li>{{ k|replace('_',' ') }}: <span class="text-slate-300">{{ v }}</span></li>
+      {% endfor %}
+      {% if regime.factors.scores %}
+      <li>regime scores: <span class="text-slate-300">{{ regime.factors.scores }}</span></li>
+      {% endif %}
+    </ul>
+  </details>
+  {% endif %}
+</div>
+{% endif %}
+
+{% if brief.regime_banner %}
+<div class="px-4 py-2 mb-3 rounded bg-rose-950/50 border border-rose-700 text-rose-100 text-sm font-semibold">
+  {{ brief.regime_banner }}
+</div>
+{% endif %}
+
 {% if brief.verdict == 'no_trade' %}
   <div class="card rounded-lg p-10 mb-4 text-center">
     <div class="text-5xl font-bold text-slate-300 mb-3">No trade today</div>

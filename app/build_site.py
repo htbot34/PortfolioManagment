@@ -24,7 +24,7 @@ from app.data import market_news, prices
 from app.portfolio import rec_history, store
 from app.research import (
     analyst, candidates as cands, correlation, daily_brief, learning, llm,
-    metrics as metrics_mod, portfolio_review, scanner,
+    metrics as metrics_mod, portfolio_review, regime as regime_mod, scanner,
 )
 
 
@@ -44,6 +44,30 @@ def _load_yaml_list(path: Path) -> list:
 
 
 REC_HISTORY_PATH = ROOT / "rec_history.yaml"
+REGIME_HISTORY_PATH = ROOT / "regime_history.json"
+
+
+def _append_regime_history(regime: dict, breadth: dict) -> None:
+    """Append today's regime + breadth to regime_history.json (last 90 days)."""
+    history = []
+    if REGIME_HISTORY_PATH.exists():
+        try:
+            history = json.loads(REGIME_HISTORY_PATH.read_text()) or []
+        except Exception:
+            history = []
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    history = [h for h in history if h.get("date") != today]
+    history.append({
+        "date": today,
+        "regime": regime.get("regime"),
+        "confidence": regime.get("confidence"),
+        "breadth_pct": (breadth or {}).get("pct_above_sma50"),
+    })
+    history = history[-90:]
+    try:
+        REGIME_HISTORY_PATH.write_text(json.dumps(history, indent=0))
+    except Exception:
+        pass
 INTRADAY_ALERTS_PATH = ROOT / "intraday_alerts.json"
 INTRADAY_STALE_MIN = 90  # alerts older than this are not rendered
 
@@ -146,6 +170,17 @@ def main() -> int:
     print("Pulling macro snapshot...")
     macro = macro_mod.snapshot()
 
+    print("Detecting market regime...")
+    try:
+        regime_macro, regime_breadth = regime_mod.gather_regime_inputs()
+        regime = regime_mod.detect_regime(regime_macro, regime_breadth)
+        print(f"  regime: {regime['regime']} (confidence {regime['confidence']}/3)")
+        _append_regime_history(regime, regime_breadth)
+    except Exception as e:
+        traceback.print_exc()
+        regime = {"regime": "chop", "confidence": 1, "factors": {},
+                  "summary": f"regime detection failed: {e}"}
+
     print("Pulling market headlines...")
     headlines = market_news.top_headlines()
     print(f"  collected {len(headlines)} headlines from {len({h['source'] for h in headlines})} sources")
@@ -207,7 +242,7 @@ def main() -> int:
 
     print("Writing daily brief...")
     try:
-        brief = daily_brief.build(macro, recs, review_out, cand_out, exposures, scan_result, headlines, account=account, user_preferences=user_prefs)
+        brief = daily_brief.build(macro, recs, review_out, cand_out, exposures, scan_result, headlines, account=account, user_preferences=user_prefs, regime=regime)
     except Exception as e:
         traceback.print_exc()
         brief = {"headline": f"Brief generation failed: {e}",
@@ -235,7 +270,7 @@ def main() -> int:
     intraday_alerts = _load_intraday_alerts()
     _write(site / "index.html", env.get_template("index.html").render(
         brief=brief, macro=macro, exposures=exposures, scan=scan_result,
-        recs_by_ticker=ticker_payloads, activity=activity,
+        recs_by_ticker=ticker_payloads, activity=activity, regime=regime,
         intraday=intraday_alerts, base="", **common,
     ))
     _write(site / "positions.html", env.get_template("positions.html").render(
@@ -262,6 +297,7 @@ def main() -> int:
         "llm_ping_result": ping_result,
         "llm_attempts": list(llm.ATTEMPTS),
         "macro": macro,
+        "regime": regime,
         "headlines": headlines,
         "scanner": scan_result,
         "exposures": exposures,

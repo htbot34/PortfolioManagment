@@ -98,6 +98,7 @@ def evaluate(
     insider_fetcher: Callable[[str], list[dict]] | None = None,
     portfolio=None,
     prices_provider: Callable | None = None,
+    allow_insider_promotion: bool = True,
 ) -> dict:
     """Run the conviction gate against ``ticker_payload`` for ``direction``.
 
@@ -152,7 +153,8 @@ def evaluate(
     promoted_by_insider = False
 
     # Insider-promotion path: exactly 2 of 3, technical must be one of them.
-    if not qualifies and primary_pass == 2 and tech["pass"]:
+    # Disabled in chop regime (the gate is tightened to require 3-of-3).
+    if not qualifies and primary_pass == 2 and tech["pass"] and allow_insider_promotion:
         insider = _insider_signal(ticker, direction, ticker_payload, insider_fetcher)
         out_signals["insider"] = insider
         if insider.get("score", 0) >= 2:

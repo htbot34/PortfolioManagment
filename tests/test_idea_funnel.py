@@ -124,6 +124,38 @@ def test_headline_ignores_short_tickers_and_held():
     assert hits == {"NVDA": "NVDA and AMD lead the rally"}
 
 
+# --- queue verdicts ----------------------------------------------------------
+
+def test_pass_verdict_drops_idea():
+    out = _merge(
+        scan_buckets={"breakouts": [{"ticker": "NVDA", "price": 100}]},
+        queue_verdicts={"NVDA": "pass"})
+    assert out == []
+
+
+def test_interested_verdict_boosts_score():
+    base = _merge(scan_buckets={"momentum_continuation": [{"ticker": "NVDA", "price": 100}]})
+    boosted = _merge(
+        scan_buckets={"momentum_continuation": [{"ticker": "NVDA", "price": 100}]},
+        queue_verdicts={"NVDA": "interested"})
+    assert boosted[0]["score"] > base[0]["score"]
+    assert boosted[0]["verdict"] == "interested"
+
+
+def test_watching_verdict_carried_without_score_change():
+    base = _merge(scan_buckets={"momentum_continuation": [{"ticker": "NVDA", "price": 100}]})
+    watch = _merge(
+        scan_buckets={"momentum_continuation": [{"ticker": "NVDA", "price": 100}]},
+        queue_verdicts={"NVDA": "watching"})
+    assert watch[0]["score"] == base[0]["score"]
+    assert watch[0]["verdict"] == "watching"
+
+
+def test_no_verdict_defaults_to_open():
+    out = _merge(scan_buckets={"breakouts": [{"ticker": "NVDA", "price": 100}]})
+    assert out[0]["verdict"] == "open"
+
+
 # --- swing plan attachment --------------------------------------------------
 
 def test_breakout_idea_gets_a_swing_plan():

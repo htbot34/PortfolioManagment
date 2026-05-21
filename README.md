@@ -15,7 +15,18 @@ A GitHub Action refreshes every weekday at 22:00 UTC and after every change to
   optionally refined by GitHub Models (free LLM via the workflow token)
 - Reviews concentration / sector tilt / cash buffer against the risk profile
 - Proposes new-position candidates that match the investor's themes
+- Runs an **idea funnel**: merges momentum, theme fit, news/social and insider
+  cluster buying into one confluence-ranked list, with an ATR-based swing-trade
+  plan (entry / stop / target / hold window) on each idea
 - Renders to plain HTML at the repo root and serves via GitHub Pages
+
+## Reacting to ideas
+
+Each idea on the candidates page has a **Give a verdict / discuss** link that
+opens a prefilled issue. Pick `interested`, `watching`, or `pass`; the verdict
+is recorded to `idea_queue.yaml` and feeds back into ranking on the next build
+(`pass` drops the idea, `interested` boosts it). Verdicts never change
+`portfolio.yaml` -- they are research metadata only.
 
 **Advice only. No order placement. Not financial advice.**
 

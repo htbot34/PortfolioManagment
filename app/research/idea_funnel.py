@@ -17,6 +17,7 @@ import re
 import time
 
 from app.data import insider
+from app.portfolio import idea_queue
 from app.research import insider_signal, swing_plan, universe
 
 SOURCE_META = {
@@ -72,11 +73,22 @@ def _why(source_list: list[dict], n: int) -> str:
     return f"{joined} -- {n} signals aligned"
 
 
+# a verdict of "interested" lifts an idea's score by this multiplier
+_INTERESTED_BOOST = 1.25
+
+
 def merge_sources(*, screen_results: list[dict], scan_buckets: dict,
                   top_movers_up: list[dict], headlines: list[dict],
                   insider_scores: dict[str, dict], held: set[str],
-                  universe_tickers: set[str]) -> list[dict]:
-    """Pure merge + score step. No network I/O -- all inputs are pre-gathered."""
+                  universe_tickers: set[str],
+                  queue_verdicts: dict[str, str] | None = None) -> list[dict]:
+    """Pure merge + score step. No network I/O -- all inputs are pre-gathered.
+
+    ``queue_verdicts`` maps ticker -> the user's verdict from the idea queue:
+    ``pass`` drops the idea, ``interested`` boosts its score, ``watching`` is
+    carried through as an annotation.
+    """
+    queue_verdicts = {k.upper(): v for k, v in (queue_verdicts or {}).items()}
     held = {t.upper() for t in (held or set())}
     ideas: dict[str, dict] = {}
 
@@ -174,6 +186,9 @@ def merge_sources(*, screen_results: list[dict], scan_buckets: dict,
         srcs = idea["sources"]
         if not srcs:
             continue
+        verdict = queue_verdicts.get(t, "open")
+        if verdict == "pass":
+            continue
         n = len(srcs)
         base = sum(s["points"] for s in srcs.values())
         confluence = 1.0 + 0.3 * (n - 1)
@@ -186,16 +201,20 @@ def merge_sources(*, screen_results: list[dict], scan_buckets: dict,
             idea.get("price"), idea.get("tech"),
             [srcs.get("momentum", {}).get("detail", "")],
         )
+        score = base * confluence
+        if verdict == "interested":
+            score *= _INTERESTED_BOOST
         out.append({
             "ticker": t,
             "theme": idea.get("theme") or universe.theme_of(t),
             "price": idea.get("price"),
             "day_change_pct": idea.get("day_change_pct"),
-            "score": round(base * confluence, 2),
+            "score": round(score, 2),
             "source_count": n,
             "sources": source_list,
             "why": _why(source_list, n),
             "swing_plan": plan,
+            "verdict": verdict,
         })
     out.sort(key=lambda x: (x["score"], x["source_count"]), reverse=True)
     for i, idea in enumerate(out, 1):
@@ -225,12 +244,14 @@ def scan_insider_clusters(tickers: list[str], *, lookback_days: int = 30,
 
 
 def build(scan_result: dict, screen_results: list[dict], headlines: list[dict],
-          account, *, insider_scan: bool = True, limit: int = 40) -> dict:
+          account, *, insider_scan: bool = True, limit: int = 40,
+          queue_path=None) -> dict:
     """Assemble the ranked idea funnel for the build.
 
     ``scan_result`` is the scanner output, ``screen_results`` is the candidates
     screen, ``account`` supplies the held set. ``insider_scan`` toggles the one
-    network-bound source.
+    network-bound source. The persistent idea queue is loaded for verdicts,
+    then synced with today's ranking.
     """
     held = {p.ticker.upper() for p in account.positions}
     universe_tickers = set(universe.all_tickers())
@@ -241,6 +262,7 @@ def build(scan_result: dict, screen_results: list[dict], headlines: list[dict],
                 if universe.theme_of(t) != _ETF_THEME]
         insider_scores = scan_insider_clusters(pool)
 
+    queue = idea_queue.load(queue_path)
     ideas = merge_sources(
         screen_results=screen_results,
         scan_buckets=(scan_result or {}).get("buckets", {}),
@@ -249,6 +271,7 @@ def build(scan_result: dict, screen_results: list[dict], headlines: list[dict],
         insider_scores=insider_scores,
         held=held,
         universe_tickers=universe_tickers,
+        queue_verdicts=idea_queue.verdict_map(queue),
     )
 
     source_counts = {k: 0 for k in SOURCE_META}
@@ -257,6 +280,12 @@ def build(scan_result: dict, screen_results: list[dict], headlines: list[dict],
             source_counts[s["source"]] += 1
 
     shown = ideas[:limit]
+    queue = idea_queue.sync_from_funnel(shown, queue, path=queue_path)
+    shown_tickers = {i["ticker"] for i in shown}
+    watching = [e for e in queue
+                if e.get("verdict") == "watching"
+                and e.get("ticker") not in shown_tickers]
+
     return {
         "ideas": shown,
         "total_ideas": len(ideas),
@@ -264,4 +293,7 @@ def build(scan_result: dict, screen_results: list[dict], headlines: list[dict],
         "insider_scanned": len(insider_scores),
         "swing_plans": sum(1 for i in shown if i.get("swing_plan")),
         "confluence": [i for i in shown if i["source_count"] >= 2],
+        "verdicts": {v: sum(1 for i in shown if i.get("verdict") == v)
+                     for v in ("interested", "watching")},
+        "watching_offlist": watching,
     }

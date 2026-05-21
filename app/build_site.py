@@ -259,7 +259,7 @@ def main() -> int:
         traceback.print_exc()
         funnel = {"ideas": [], "total_ideas": 0, "source_counts": {},
                   "insider_scanned": 0, "swing_plans": 0, "confluence": [],
-                  "error": str(e)}
+                  "verdicts": {}, "watching_offlist": [], "error": str(e)}
 
     print("Loading user preferences from rec_history...")
     history = rec_history.load()
@@ -289,6 +289,7 @@ def main() -> int:
         "risk": risk_profile(),
         "flags": {"has_llm": llm.available()},
         "diagnostics": diag,
+        "repo": os.getenv("GITHUB_REPOSITORY", "htbot34/PortfolioManagment"),
     }
 
     env = _env()

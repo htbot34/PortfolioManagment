@@ -12,6 +12,10 @@
   'theme': 'bg-sky-900 text-sky-200',
   'news': 'bg-amber-900 text-amber-200',
   'insider': 'bg-fuchsia-900 text-fuchsia-200'} %}
+{% set verdict_color = {
+  'interested': 'bg-emerald-700 text-emerald-100',
+  'watching': 'bg-sky-700 text-sky-100',
+  'pass': 'bg-slate-700 text-slate-300'} %}
 <div class="card rounded-lg overflow-hidden mb-6">
   <div class="px-4 py-3 border-b border-[#1f2a44] flex items-center justify-between flex-wrap gap-2">
     <h2 class="text-sm font-semibold text-slate-300 uppercase tracking-wide">Idea funnel - {{ funnel.total_ideas }} ranked</h2>
@@ -29,7 +33,10 @@
           <span class="text-lg font-semibold">{{ idea.ticker }}</span>
           {% if idea.price %}<span class="text-xs text-slate-400">${{ '%.2f'|format(idea.price) }}</span>{% endif %}
         </div>
-        <span class="text-xs px-2 py-0.5 rounded bg-slate-700 text-slate-200">score {{ '%.1f'|format(idea.score) }}</span>
+        <div class="flex items-center gap-1">
+          {% if idea.verdict and idea.verdict != 'open' %}<span class="text-xs px-2 py-0.5 rounded {{ verdict_color.get(idea.verdict, 'bg-slate-700 text-slate-200') }}">{{ idea.verdict }}</span>{% endif %}
+          <span class="text-xs px-2 py-0.5 rounded bg-slate-700 text-slate-200">score {{ '%.1f'|format(idea.score) }}</span>
+        </div>
       </div>
       <div class="text-xs text-slate-400 mb-2">{{ idea.theme or '-' }} &middot; {{ idea.why }}</div>
       <div class="flex flex-wrap gap-1">
@@ -46,10 +53,29 @@
         <div><div class="text-slate-500">Hold</div><div class="text-slate-200">{{ sp.hold_window }}</div></div>
       </div>
       {% endif %}
+      <div class="mt-2 text-xs">
+        <a class="text-sky-400 hover:underline" target="_blank" rel="noopener"
+           href="https://github.com/{{ repo }}/issues/new?template=idea-action.yml&amp;title=Idea+{{ idea.ticker }}&amp;ticker={{ idea.ticker }}">Give a verdict / discuss &rarr;</a>
+        {% if idea.verdict and idea.verdict != 'open' and idea.user_note %}<span class="text-slate-500"> &middot; you noted: {{ idea.user_note }}</span>{% endif %}
+      </div>
     </div>
   {% endfor %}
   </div>
 </div>
+
+{% if funnel.watching_offlist %}
+<div class="card rounded-lg p-4 mb-6">
+  <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wide mb-2">Still watching ({{ funnel.watching_offlist|length }})</h2>
+  <p class="text-xs text-slate-500 mb-3">Names you flagged as watching that did not score onto today's funnel.</p>
+  <div class="flex flex-wrap gap-2">
+  {% for w in funnel.watching_offlist %}
+    <a class="text-xs px-2 py-1 rounded border border-[#1f2a44] hover:bg-slate-800" target="_blank" rel="noopener"
+       href="https://github.com/{{ repo }}/issues/new?template=idea-action.yml&amp;title=Idea+{{ w.ticker }}&amp;ticker={{ w.ticker }}"
+       title="{{ w.user_note or '' }}">{{ w.ticker }}</a>
+  {% endfor %}
+  </div>
+</div>
+{% endif %}
 {% elif funnel and funnel.error %}
 <div class="card rounded-lg p-4 text-sm text-amber-300 mb-4">Idea funnel failed: {{ funnel.error }}</div>
 {% endif %}

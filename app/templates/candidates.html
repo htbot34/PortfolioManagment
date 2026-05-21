@@ -37,6 +37,15 @@
         <span class="text-xs px-2 py-0.5 rounded {{ src_color.get(s.source, 'bg-slate-700 text-slate-200') }}" title="{{ s.detail }}">{{ s.label }}: {{ s.detail }}</span>
       {% endfor %}
       </div>
+      {% if idea.swing_plan %}
+      {% set sp = idea.swing_plan %}
+      <div class="mt-2 pt-2 border-t border-[#1f2a44] grid grid-cols-4 gap-1 text-xs">
+        <div><div class="text-slate-500">Entry</div><div class="text-slate-200">{{ sp.entry_zone }}</div></div>
+        <div><div class="text-slate-500">Stop</div><div class="text-rose-300">${{ '%.2f'|format(sp.stop) }} <span class="text-slate-500">({{ '%+.1f'|format(sp.stop_pct) }}%)</span></div></div>
+        <div><div class="text-slate-500">Target</div><div class="text-emerald-300">${{ '%.2f'|format(sp.target) }} <span class="text-slate-500">({{ '%+.1f'|format(sp.target_pct) }}%)</span></div></div>
+        <div><div class="text-slate-500">Hold</div><div class="text-slate-200">{{ sp.hold_window }}</div></div>
+      </div>
+      {% endif %}
     </div>
   {% endfor %}
   </div>

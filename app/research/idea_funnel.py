@@ -17,7 +17,7 @@ import re
 import time
 
 from app.data import insider
-from app.research import insider_signal, universe
+from app.research import insider_signal, swing_plan, universe
 
 SOURCE_META = {
     "momentum": "Momentum",
@@ -38,6 +38,10 @@ _BUCKET_POINTS = {
 
 # A top-mover only counts as a news/social catalyst above this day-move.
 _MOVER_MIN_PCT = 4.0
+
+# Technical fields lifted off scanner rows so a swing plan can be built.
+_TECH_FIELDS = ("atr14", "atr_pct", "sma20", "sma50", "sma200", "high_52w",
+                "rsi14", "pct_off_52w_high")
 
 _ETF_THEME = "Sector / index ETFs"
 _TOKEN_RE = re.compile(r"\b[A-Z]{3,5}\b")
@@ -76,12 +80,14 @@ def merge_sources(*, screen_results: list[dict], scan_buckets: dict,
     held = {t.upper() for t in (held or set())}
     ideas: dict[str, dict] = {}
 
-    def _idea(ticker: str, price=None, theme=None, day_change_pct=None) -> dict:
+    def _idea(ticker: str, price=None, theme=None, day_change_pct=None,
+              tech=None) -> dict:
         t = ticker.upper()
         it = ideas.get(t)
         if it is None:
             it = {"ticker": t, "theme": theme, "price": price,
-                  "day_change_pct": day_change_pct, "sources": {}}
+                  "day_change_pct": day_change_pct, "tech": dict(tech or {}),
+                  "sources": {}}
             ideas[t] = it
             return it
         if it.get("price") is None and price is not None:
@@ -90,6 +96,9 @@ def merge_sources(*, screen_results: list[dict], scan_buckets: dict,
             it["theme"] = theme
         if it.get("day_change_pct") is None and day_change_pct is not None:
             it["day_change_pct"] = day_change_pct
+        for k, v in (tech or {}).items():
+            if v is not None and it["tech"].get(k) is None:
+                it["tech"][k] = v
         return it
 
     def _add(idea: dict, source: str, points: float, detail: str) -> None:
@@ -110,7 +119,8 @@ def merge_sources(*, screen_results: list[dict], scan_buckets: dict,
             if not t or t in held:
                 continue
             _idea(t, price=r.get("price"), theme=r.get("theme"),
-                  day_change_pct=r.get("day_change_pct"))
+                  day_change_pct=r.get("day_change_pct"),
+                  tech={k: r.get(k) for k in _TECH_FIELDS})
             detail = label
             if bucket == "breakouts" and r.get("vol_ratio_20d"):
                 detail = f"{label} on {r['vol_ratio_20d']:.1f}x volume"
@@ -129,7 +139,8 @@ def merge_sources(*, screen_results: list[dict], scan_buckets: dict,
         sc = s.get("score") or 0
         if sc <= 0:
             continue
-        idea = _idea(t, price=s.get("price"))
+        idea = _idea(t, price=s.get("price"),
+                     tech={k: s.get(k) for k in _TECH_FIELDS})
         _add(idea, "theme", min(3.0, sc * 0.6), f"theme-screen fitness {sc:+.1f}")
 
     # --- news / social: big up-day movers from the scanner.
@@ -138,7 +149,8 @@ def merge_sources(*, screen_results: list[dict], scan_buckets: dict,
         dc = r.get("day_change_pct")
         if not t or t in held or dc is None or dc < _MOVER_MIN_PCT:
             continue
-        idea = _idea(t, price=r.get("price"), theme=r.get("theme"), day_change_pct=dc)
+        idea = _idea(t, price=r.get("price"), theme=r.get("theme"),
+                     day_change_pct=dc, tech={k: r.get(k) for k in _TECH_FIELDS})
         _add(idea, "news", min(3.0, dc / 4.0), f"up {dc:.1f}% today on heavy interest")
 
     # --- news / social: named in a market headline.
@@ -170,6 +182,10 @@ def merge_sources(*, screen_results: list[dict], scan_buckets: dict,
              "detail": srcs[key]["detail"], "points": srcs[key]["points"]}
             for key in ("momentum", "theme", "news", "insider") if key in srcs
         ]
+        plan = swing_plan.build(
+            idea.get("price"), idea.get("tech"),
+            [srcs.get("momentum", {}).get("detail", "")],
+        )
         out.append({
             "ticker": t,
             "theme": idea.get("theme") or universe.theme_of(t),
@@ -179,6 +195,7 @@ def merge_sources(*, screen_results: list[dict], scan_buckets: dict,
             "source_count": n,
             "sources": source_list,
             "why": _why(source_list, n),
+            "swing_plan": plan,
         })
     out.sort(key=lambda x: (x["score"], x["source_count"]), reverse=True)
     for i, idea in enumerate(out, 1):
@@ -239,10 +256,12 @@ def build(scan_result: dict, screen_results: list[dict], headlines: list[dict],
         for s in idea["sources"]:
             source_counts[s["source"]] += 1
 
+    shown = ideas[:limit]
     return {
-        "ideas": ideas[:limit],
+        "ideas": shown,
         "total_ideas": len(ideas),
         "source_counts": source_counts,
         "insider_scanned": len(insider_scores),
-        "confluence": [i for i in ideas[:limit] if i["source_count"] >= 2],
+        "swing_plans": sum(1 for i in shown if i.get("swing_plan")),
+        "confluence": [i for i in shown if i["source_count"] >= 2],
     }

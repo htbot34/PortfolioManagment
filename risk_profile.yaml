@@ -7,8 +7,8 @@ investor:
 style:
   allowed:
     - long_term  # 6 months to multi-year hold
+    - swing      # multi-week tactical trade with a defined entry / stop / target
   disallowed:
-    - swing
     - day_trade
     - scalp
 

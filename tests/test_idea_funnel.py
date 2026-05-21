@@ -124,6 +124,21 @@ def test_headline_ignores_short_tickers_and_held():
     assert hits == {"NVDA": "NVDA and AMD lead the rally"}
 
 
+# --- swing plan attachment --------------------------------------------------
+
+def test_breakout_idea_gets_a_swing_plan():
+    out = _merge(scan_buckets={"breakouts": [
+        {"ticker": "NVDA", "price": 100.0, "vol_ratio_20d": 1.8, "atr14": 3.0}]})
+    plan = out[0]["swing_plan"]
+    assert plan is not None
+    assert plan["stop"] < plan["target"]
+
+
+def test_idea_without_atr_has_no_swing_plan():
+    out = _merge(insider_scores={"COIN": {"score": 2, "summary": "cluster"}})
+    assert out[0]["swing_plan"] is None
+
+
 def test_why_summary_phrasing():
     assert idea_funnel._why([{"label": "Momentum"}], 1) == "Momentum signal"
     three = [{"label": "Momentum"}, {"label": "Theme fit"}, {"label": "Insider buying"}]

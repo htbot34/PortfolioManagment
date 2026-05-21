@@ -252,12 +252,14 @@ def main() -> int:
             account, insider_scan=insider_on,
         )
         print(f"  {funnel['total_ideas']} ranked ideas "
-              f"({len(funnel['confluence'])} multi-signal); "
+              f"({len(funnel['confluence'])} multi-signal, "
+              f"{funnel['swing_plans']} with swing plans); "
               f"insider clusters found: {funnel['insider_scanned']}")
     except Exception as e:
         traceback.print_exc()
         funnel = {"ideas": [], "total_ideas": 0, "source_counts": {},
-                  "insider_scanned": 0, "confluence": [], "error": str(e)}
+                  "insider_scanned": 0, "swing_plans": 0, "confluence": [],
+                  "error": str(e)}
 
     print("Loading user preferences from rec_history...")
     history = rec_history.load()

@@ -10,6 +10,7 @@ Outputs:
   .nojekyll               disables Jekyll
 """
 import json
+import os
 import sys
 import traceback
 from datetime import datetime, timezone
@@ -24,9 +25,9 @@ from app.data import market_news, prices
 from app.portfolio import rec_history, store
 from app.data import fundamentals as fundamentals_mod
 from app.research import (
-    analyst, candidates as cands, correlation, daily_brief, learning, llm,
-    metrics as metrics_mod, portfolio_review, regime as regime_mod, scanner,
-    valuation,
+    analyst, candidates as cands, correlation, daily_brief, idea_funnel,
+    learning, llm, metrics as metrics_mod, portfolio_review,
+    regime as regime_mod, scanner, valuation,
 )
 
 
@@ -243,6 +244,23 @@ def main() -> int:
         traceback.print_exc()
         cand_out = {"candidates": [], "error": str(e)}
 
+    print("Building idea funnel...")
+    try:
+        insider_on = os.getenv("IDEA_FUNNEL_INSIDER", "1").lower() not in ("0", "false", "")
+        funnel = idea_funnel.build(
+            scan_result, cand_out.get("screen_results", []), headlines,
+            account, insider_scan=insider_on,
+        )
+        print(f"  {funnel['total_ideas']} ranked ideas "
+              f"({len(funnel['confluence'])} multi-signal, "
+              f"{funnel['swing_plans']} with swing plans); "
+              f"insider clusters found: {funnel['insider_scanned']}")
+    except Exception as e:
+        traceback.print_exc()
+        funnel = {"ideas": [], "total_ideas": 0, "source_counts": {},
+                  "insider_scanned": 0, "swing_plans": 0, "confluence": [],
+                  "verdicts": {}, "watching_offlist": [], "error": str(e)}
+
     print("Loading user preferences from rec_history...")
     history = rec_history.load()
     user_prefs = learning.derive_user_preferences(history, lookback_days=30)
@@ -271,6 +289,7 @@ def main() -> int:
         "risk": risk_profile(),
         "flags": {"has_llm": llm.available()},
         "diagnostics": diag,
+        "repo": os.getenv("GITHUB_REPOSITORY", "htbot34/PortfolioManagment"),
     }
 
     env = _env()
@@ -292,7 +311,7 @@ def main() -> int:
         recs=recs, base="", **common,
     ))
     _write(site / "candidates.html", env.get_template("candidates.html").render(
-        candidates=cand_out, base="", **common,
+        candidates=cand_out, funnel=funnel, base="", **common,
     ))
     tpl_ticker = env.get_template("ticker.html")
     for ticker, payload in ticker_payloads.items():
@@ -315,6 +334,7 @@ def main() -> int:
         "brief": brief,
         "recommendations": recs,
         "candidates": cand_out,
+        "idea_funnel": funnel,
     }
     (site / "data.json").write_text(json.dumps(data_dump, default=str, indent=2))
     (site / ".nojekyll").write_text("")

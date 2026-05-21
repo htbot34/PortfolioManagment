@@ -6,6 +6,81 @@
 
 {% if candidates.error %}<div class="card rounded-lg p-4 text-sm text-amber-300 mb-4">{{ candidates.error }}</div>{% endif %}
 
+{% if funnel and funnel.ideas %}
+{% set src_color = {
+  'momentum': 'bg-emerald-900 text-emerald-200',
+  'theme': 'bg-sky-900 text-sky-200',
+  'news': 'bg-amber-900 text-amber-200',
+  'insider': 'bg-fuchsia-900 text-fuchsia-200'} %}
+{% set verdict_color = {
+  'interested': 'bg-emerald-700 text-emerald-100',
+  'watching': 'bg-sky-700 text-sky-100',
+  'pass': 'bg-slate-700 text-slate-300'} %}
+<div class="card rounded-lg overflow-hidden mb-6">
+  <div class="px-4 py-3 border-b border-[#1f2a44] flex items-center justify-between flex-wrap gap-2">
+    <h2 class="text-sm font-semibold text-slate-300 uppercase tracking-wide">Idea funnel - {{ funnel.total_ideas }} ranked</h2>
+    <div class="flex gap-3 text-xs text-slate-400">
+      {% for key, n in funnel.source_counts.items() %}<span>{{ key }}: {{ n }}</span>{% endfor %}
+    </div>
+  </div>
+  <p class="px-4 pt-3 text-xs text-slate-400">Every name screened by four signals - momentum, theme fit, news/social and insider buying. Names hit by more than one signal rank highest (confluence).</p>
+  <div class="p-4 grid grid-cols-1 md:grid-cols-2 gap-3">
+  {% for idea in funnel.ideas %}
+    <div class="rounded-lg border border-[#1f2a44] p-3{% if idea.source_count >= 2 %} ring-1 ring-emerald-700/50{% endif %}">
+      <div class="flex items-center justify-between mb-1">
+        <div class="flex items-baseline gap-2">
+          <span class="text-slate-500 text-xs">#{{ idea.rank }}</span>
+          <span class="text-lg font-semibold">{{ idea.ticker }}</span>
+          {% if idea.price %}<span class="text-xs text-slate-400">${{ '%.2f'|format(idea.price) }}</span>{% endif %}
+        </div>
+        <div class="flex items-center gap-1">
+          {% if idea.verdict and idea.verdict != 'open' %}<span class="text-xs px-2 py-0.5 rounded {{ verdict_color.get(idea.verdict, 'bg-slate-700 text-slate-200') }}">{{ idea.verdict }}</span>{% endif %}
+          <span class="text-xs px-2 py-0.5 rounded bg-slate-700 text-slate-200">score {{ '%.1f'|format(idea.score) }}</span>
+        </div>
+      </div>
+      <div class="text-xs text-slate-400 mb-2">{{ idea.theme or '-' }} &middot; {{ idea.why }}</div>
+      <div class="flex flex-wrap gap-1">
+      {% for s in idea.sources %}
+        <span class="text-xs px-2 py-0.5 rounded {{ src_color.get(s.source, 'bg-slate-700 text-slate-200') }}" title="{{ s.detail }}">{{ s.label }}: {{ s.detail }}</span>
+      {% endfor %}
+      </div>
+      {% if idea.swing_plan %}
+      {% set sp = idea.swing_plan %}
+      <div class="mt-2 pt-2 border-t border-[#1f2a44] grid grid-cols-4 gap-1 text-xs">
+        <div><div class="text-slate-500">Entry</div><div class="text-slate-200">{{ sp.entry_zone }}</div></div>
+        <div><div class="text-slate-500">Stop</div><div class="text-rose-300">${{ '%.2f'|format(sp.stop) }} <span class="text-slate-500">({{ '%+.1f'|format(sp.stop_pct) }}%)</span></div></div>
+        <div><div class="text-slate-500">Target</div><div class="text-emerald-300">${{ '%.2f'|format(sp.target) }} <span class="text-slate-500">({{ '%+.1f'|format(sp.target_pct) }}%)</span></div></div>
+        <div><div class="text-slate-500">Hold</div><div class="text-slate-200">{{ sp.hold_window }}</div></div>
+      </div>
+      {% endif %}
+      <div class="mt-2 text-xs">
+        <a class="text-sky-400 hover:underline" target="_blank" rel="noopener"
+           href="https://github.com/{{ repo }}/issues/new?template=idea-action.yml&amp;title=Idea+{{ idea.ticker }}&amp;ticker={{ idea.ticker }}">Give a verdict / discuss &rarr;</a>
+        {% if idea.verdict and idea.verdict != 'open' and idea.user_note %}<span class="text-slate-500"> &middot; you noted: {{ idea.user_note }}</span>{% endif %}
+      </div>
+    </div>
+  {% endfor %}
+  </div>
+</div>
+
+{% if funnel.watching_offlist %}
+<div class="card rounded-lg p-4 mb-6">
+  <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wide mb-2">Still watching ({{ funnel.watching_offlist|length }})</h2>
+  <p class="text-xs text-slate-500 mb-3">Names you flagged as watching that did not score onto today's funnel.</p>
+  <div class="flex flex-wrap gap-2">
+  {% for w in funnel.watching_offlist %}
+    <a class="text-xs px-2 py-1 rounded border border-[#1f2a44] hover:bg-slate-800" target="_blank" rel="noopener"
+       href="https://github.com/{{ repo }}/issues/new?template=idea-action.yml&amp;title=Idea+{{ w.ticker }}&amp;ticker={{ w.ticker }}"
+       title="{{ w.user_note or '' }}">{{ w.ticker }}</a>
+  {% endfor %}
+  </div>
+</div>
+{% endif %}
+{% elif funnel and funnel.error %}
+<div class="card rounded-lg p-4 text-sm text-amber-300 mb-4">Idea funnel failed: {{ funnel.error }}</div>
+{% endif %}
+
+<h2 class="text-lg font-semibold mb-2">Analyst picks</h2>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
 {% for c in candidates.candidates %}
   <div class="card rounded-lg p-4">

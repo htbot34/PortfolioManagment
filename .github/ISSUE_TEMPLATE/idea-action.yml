@@ -1,0 +1,43 @@
+name: Idea verdict - react to a funnel idea
+description: Tell the advisor what you think of an idea from the funnel.
+title: "Idea"
+labels: ["idea-action"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Give a verdict on an idea from the **idea funnel** (candidates page).
+        Your verdict is recorded to ``idea_queue.yaml`` and feeds back into
+        ranking on the next build:
+
+        - **interested** - boosts the idea so it stays near the top
+        - **watching** - keeps it on your radar; surfaced even if it drops off
+        - **pass** - drops the idea from the funnel
+
+        This never changes ``portfolio.yaml`` - it is research metadata only.
+  - type: input
+    id: ticker
+    attributes:
+      label: Ticker
+      description: The ticker shown on the idea card.
+      placeholder: "PLTR"
+    validations:
+      required: true
+  - type: dropdown
+    id: verdict
+    attributes:
+      label: Verdict
+      options:
+        - interested
+        - watching
+        - pass
+    validations:
+      required: true
+  - type: textarea
+    id: note
+    attributes:
+      label: Note
+      description: Optional - what you like, what you're waiting for, why you're
+        passing. The advisor keeps this alongside the idea.
+    validations:
+      required: false

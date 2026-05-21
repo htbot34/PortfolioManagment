@@ -1,0 +1,248 @@
+"""Unified idea funnel -- merges four idea sources into one ranked list.
+
+Sources:
+  momentum  -- mechanical breakout / momentum / pullback setups (scanner buckets)
+  theme     -- theme-universe fitness score (the candidates screen)
+  news      -- a name spiking on a big up-day, or named in a market headline
+  insider   -- open-market insider cluster buying (SEC Form 4)
+
+An idea hit by multiple sources ranks higher (confluence). Held names are
+excluded. The momentum / theme / news sources do no network I/O -- they consume
+data already gathered earlier in the build. Insider scanning is the one network
+step; it is bounded by a time budget and degrades to empty on failure.
+"""
+from __future__ import annotations
+
+import re
+import time
+
+from app.data import insider
+from app.research import insider_signal, universe
+
+SOURCE_META = {
+    "momentum": "Momentum",
+    "theme": "Theme fit",
+    "news": "News / social",
+    "insider": "Insider buying",
+}
+
+# bucket name -> (points, human label). Buckets not listed do not feed the funnel.
+_BUCKET_POINTS = {
+    "breakouts": (3.0, "20-day breakout"),
+    "momentum_continuation": (2.5, "momentum continuation"),
+    "new_52w_highs": (2.0, "fresh 52-week high"),
+    "pullbacks_to_support": (2.0, "pullback to SMA50 support"),
+    "oversold_bounces": (1.5, "oversold bounce setup"),
+    "macd_bullish_cross": (1.0, "MACD bullish cross"),
+}
+
+# A top-mover only counts as a news/social catalyst above this day-move.
+_MOVER_MIN_PCT = 4.0
+
+_ETF_THEME = "Sector / index ETFs"
+_TOKEN_RE = re.compile(r"\b[A-Z]{3,5}\b")
+
+
+def _match_headlines(headlines: list[dict], universe_tickers: set[str],
+                     held: set[str]) -> dict[str, str]:
+    """Map universe tickers to the first market headline that names them.
+
+    Only 3-5 letter all-alpha tickers are matched (1-2 letter symbols like
+    ``S`` or ``AI`` produce too many false positives against ordinary words).
+    """
+    uni = {t for t in universe_tickers if t.isalpha() and 3 <= len(t) <= 5}
+    out: dict[str, str] = {}
+    for h in headlines or []:
+        title = h.get("title") or ""
+        for tok in set(_TOKEN_RE.findall(title)):
+            if tok in uni and tok not in held and tok not in out:
+                out[tok] = title
+    return out
+
+
+def _why(source_list: list[dict], n: int) -> str:
+    labels = [s["label"] for s in source_list]
+    if n == 1:
+        return f"{labels[0]} signal"
+    joined = ", ".join(labels[:-1]) + " & " + labels[-1]
+    return f"{joined} -- {n} signals aligned"
+
+
+def merge_sources(*, screen_results: list[dict], scan_buckets: dict,
+                  top_movers_up: list[dict], headlines: list[dict],
+                  insider_scores: dict[str, dict], held: set[str],
+                  universe_tickers: set[str]) -> list[dict]:
+    """Pure merge + score step. No network I/O -- all inputs are pre-gathered."""
+    held = {t.upper() for t in (held or set())}
+    ideas: dict[str, dict] = {}
+
+    def _idea(ticker: str, price=None, theme=None, day_change_pct=None) -> dict:
+        t = ticker.upper()
+        it = ideas.get(t)
+        if it is None:
+            it = {"ticker": t, "theme": theme, "price": price,
+                  "day_change_pct": day_change_pct, "sources": {}}
+            ideas[t] = it
+            return it
+        if it.get("price") is None and price is not None:
+            it["price"] = price
+        if not it.get("theme") and theme:
+            it["theme"] = theme
+        if it.get("day_change_pct") is None and day_change_pct is not None:
+            it["day_change_pct"] = day_change_pct
+        return it
+
+    def _add(idea: dict, source: str, points: float, detail: str) -> None:
+        prev = idea["sources"].get(source)
+        if prev is None or points > prev["points"]:
+            idea["sources"][source] = {"points": round(points, 2), "detail": detail}
+
+    # --- momentum: a name can hit several buckets; keep the strongest, with a
+    #     small capped bonus for additional setups, and list them all. ---
+    momentum_hits: dict[str, list[tuple[float, str]]] = {}
+    for bucket, rows in (scan_buckets or {}).items():
+        meta = _BUCKET_POINTS.get(bucket)
+        if not meta:
+            continue
+        pts, label = meta
+        for r in rows or []:
+            t = (r.get("ticker") or "").upper()
+            if not t or t in held:
+                continue
+            _idea(t, price=r.get("price"), theme=r.get("theme"),
+                  day_change_pct=r.get("day_change_pct"))
+            detail = label
+            if bucket == "breakouts" and r.get("vol_ratio_20d"):
+                detail = f"{label} on {r['vol_ratio_20d']:.1f}x volume"
+            momentum_hits.setdefault(t, []).append((pts, detail))
+    for t, hits in momentum_hits.items():
+        hits.sort(reverse=True)
+        bonus = min(1.0, 0.5 * (len(hits) - 1))
+        detail = ", ".join(lbl for _, lbl in hits)
+        _add(ideas[t], "momentum", hits[0][0] + bonus, detail)
+
+    # --- theme fit: screen score is roughly -5..+5; only positive fits feed in.
+    for s in screen_results or []:
+        t = (s.get("ticker") or "").upper()
+        if not t or t in held:
+            continue
+        sc = s.get("score") or 0
+        if sc <= 0:
+            continue
+        idea = _idea(t, price=s.get("price"))
+        _add(idea, "theme", min(3.0, sc * 0.6), f"theme-screen fitness {sc:+.1f}")
+
+    # --- news / social: big up-day movers from the scanner.
+    for r in top_movers_up or []:
+        t = (r.get("ticker") or "").upper()
+        dc = r.get("day_change_pct")
+        if not t or t in held or dc is None or dc < _MOVER_MIN_PCT:
+            continue
+        idea = _idea(t, price=r.get("price"), theme=r.get("theme"), day_change_pct=dc)
+        _add(idea, "news", min(3.0, dc / 4.0), f"up {dc:.1f}% today on heavy interest")
+
+    # --- news / social: named in a market headline.
+    for t, title in _match_headlines(headlines, universe_tickers, held).items():
+        idea = _idea(t)
+        _add(idea, "news", 1.5, f'named in headline: "{title}"')
+
+    # --- insider: open-market cluster buying.
+    for t, cs in (insider_scores or {}).items():
+        t = t.upper()
+        if t in held:
+            continue
+        score = cs.get("score") or 0
+        if score < 1:
+            continue
+        idea = _idea(t)
+        _add(idea, "insider", score * 1.5, cs.get("summary") or f"insider cluster {score}/3")
+
+    out: list[dict] = []
+    for t, idea in ideas.items():
+        srcs = idea["sources"]
+        if not srcs:
+            continue
+        n = len(srcs)
+        base = sum(s["points"] for s in srcs.values())
+        confluence = 1.0 + 0.3 * (n - 1)
+        source_list = [
+            {"source": key, "label": SOURCE_META[key],
+             "detail": srcs[key]["detail"], "points": srcs[key]["points"]}
+            for key in ("momentum", "theme", "news", "insider") if key in srcs
+        ]
+        out.append({
+            "ticker": t,
+            "theme": idea.get("theme") or universe.theme_of(t),
+            "price": idea.get("price"),
+            "day_change_pct": idea.get("day_change_pct"),
+            "score": round(base * confluence, 2),
+            "source_count": n,
+            "sources": source_list,
+            "why": _why(source_list, n),
+        })
+    out.sort(key=lambda x: (x["score"], x["source_count"]), reverse=True)
+    for i, idea in enumerate(out, 1):
+        idea["rank"] = i
+    return out
+
+
+def scan_insider_clusters(tickers: list[str], *, lookback_days: int = 30,
+                          time_budget_s: float = 240.0) -> dict[str, dict]:
+    """Scan Form 4 buying across ``tickers``. Bounded by a wall-clock budget so
+    a slow SEC endpoint can never blow up the build. Returns only names with a
+    cluster score >= 1.
+    """
+    out: dict[str, dict] = {}
+    start = time.monotonic()
+    for t in tickers:
+        if time.monotonic() - start > time_budget_s:
+            break
+        try:
+            txns = insider.recent_form4_transactions(t, days=lookback_days)
+            cs = insider_signal.insider_cluster_score(t, txns, lookback_days=lookback_days)
+        except Exception:
+            continue
+        if (cs.get("score") or 0) >= 1:
+            out[t] = cs
+    return out
+
+
+def build(scan_result: dict, screen_results: list[dict], headlines: list[dict],
+          account, *, insider_scan: bool = True, limit: int = 40) -> dict:
+    """Assemble the ranked idea funnel for the build.
+
+    ``scan_result`` is the scanner output, ``screen_results`` is the candidates
+    screen, ``account`` supplies the held set. ``insider_scan`` toggles the one
+    network-bound source.
+    """
+    held = {p.ticker.upper() for p in account.positions}
+    universe_tickers = set(universe.all_tickers())
+
+    insider_scores: dict[str, dict] = {}
+    if insider_scan:
+        pool = [t for t in universe.all_tickers(exclude=held)
+                if universe.theme_of(t) != _ETF_THEME]
+        insider_scores = scan_insider_clusters(pool)
+
+    ideas = merge_sources(
+        screen_results=screen_results,
+        scan_buckets=(scan_result or {}).get("buckets", {}),
+        top_movers_up=(scan_result or {}).get("top_movers_up", []),
+        headlines=headlines,
+        insider_scores=insider_scores,
+        held=held,
+        universe_tickers=universe_tickers,
+    )
+
+    source_counts = {k: 0 for k in SOURCE_META}
+    for idea in ideas:
+        for s in idea["sources"]:
+            source_counts[s["source"]] += 1
+
+    return {
+        "ideas": ideas[:limit],
+        "total_ideas": len(ideas),
+        "source_counts": source_counts,
+        "insider_scanned": len(insider_scores),
+        "confluence": [i for i in ideas[:limit] if i["source_count"] >= 2],
+    }

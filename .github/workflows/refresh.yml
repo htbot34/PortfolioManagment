@@ -55,7 +55,24 @@ jobs:
           git add index.html positions.html scanner.html recommendations.html candidates.html data.json ticker .nojekyll price_cache.json rec_history.yaml idea_queue.yaml intraday_alerts.json news_classification_cache.json regime_history.json fundamentals_cache.json 2>/dev/null || true
           if git diff --staged --quiet; then
             echo "No site changes."
-          else
-            git commit -m "Refresh site $(date -u +%Y-%m-%dT%H:%MZ)"
-            git push
+            exit 0
           fi
+          git commit -m "Refresh site $(date -u +%Y-%m-%dT%H:%MZ)"
+          # The build takes several minutes; other workflows (intraday,
+          # process_trade) may push to main meanwhile. Rebase and retry so a
+          # concurrent push does not silently discard the rebuilt site.
+          for attempt in 1 2 3 4 5; do
+            if git push; then
+              echo "Pushed on attempt $attempt."
+              exit 0
+            fi
+            echo "Push rejected (attempt $attempt) - rebasing on latest main..."
+            git pull --rebase --autostash origin main || {
+              echo "Rebase failed - aborting."
+              git rebase --abort 2>/dev/null || true
+              exit 1
+            }
+            sleep $((attempt * 3))
+          done
+          echo "Push still failing after retries."
+          exit 1

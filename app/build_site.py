@@ -25,8 +25,8 @@ from app.data import market_news, prices
 from app.portfolio import rec_history, store
 from app.data import fundamentals as fundamentals_mod
 from app.research import (
-    analyst, candidates as cands, correlation, daily_brief, idea_funnel,
-    learning, llm, metrics as metrics_mod, portfolio_review,
+    analyst, candidates as cands, correlation, daily_brief, gate_telemetry,
+    idea_funnel, learning, llm, metrics as metrics_mod, portfolio_review,
     regime as regime_mod, scanner, valuation,
 )
 
@@ -283,6 +283,16 @@ def main() -> int:
             print(f"Logged {len(added)} new pending rec(s) to rec_history.yaml")
     except Exception as e:
         traceback.print_exc()
+
+    if brief.get("telemetry"):
+        try:
+            gate_telemetry.persist(brief["telemetry"])
+            tel = brief["telemetry"]
+            print(f"Gate telemetry: {tel['candidates_evaluated']} evaluated, "
+                  f"{tel['cleared_primary'] + tel['cleared_insider_promotion']} cleared, "
+                  f"{len(tel['near_miss'])} near-miss")
+        except Exception:
+            traceback.print_exc()
 
     common = {
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),

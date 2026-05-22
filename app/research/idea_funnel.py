@@ -297,3 +297,102 @@ def build(scan_result: dict, screen_results: list[dict], headlines: list[dict],
                      for v in ("interested", "watching")},
         "watching_offlist": watching,
     }
+
+
+# ---------------------------------------------------------------------------
+# Independence-weighted confluence
+#
+# The raw funnel score rewards any multi-signal idea equally. But two signals
+# that key off the same thing (momentum + theme both ride sector strength)
+# are weaker corroboration than two genuinely independent ones (news + insider
+# buying). These multipliers re-weight a confluence idea's score by HOW
+# independent its signals are, so the today page surfaces the most genuinely
+# corroborated ideas first.
+# ---------------------------------------------------------------------------
+
+_PAIR_MULTIPLIER = {
+    frozenset({"momentum", "theme"}): 0.7,    # both key off sector strength
+    frozenset({"momentum", "news"}): 1.0,
+    frozenset({"momentum", "insider"}): 1.2,  # orthogonal
+    frozenset({"pullback", "news"}): 1.15,
+    frozenset({"pullback", "insider"}): 1.25,
+    frozenset({"news", "insider"}): 1.3,      # genuinely independent
+    frozenset({"theme", "news"}): 1.0,
+    frozenset({"theme", "insider"}): 1.0,
+}
+
+_KIND_LABEL = {
+    "momentum": "momentum", "pullback": "pullback", "theme": "theme fit",
+    "news": "news", "insider": "insider buying",
+}
+
+
+def _momentum_kind(detail: str) -> str:
+    """Classify a momentum source as ``pullback`` (buys weakness) or
+    ``momentum`` (buys strength) from its strongest bucket label."""
+    primary = (detail or "").split(",")[0].lower()
+    if "pullback" in primary or "oversold" in primary:
+        return "pullback"
+    return "momentum"
+
+
+def _idea_kinds(idea: dict) -> list[str]:
+    """The independence kinds present on an idea (momentum splits into
+    momentum / pullback; the other sources map straight through)."""
+    kinds: list[str] = []
+    for s in idea.get("sources") or []:
+        src = s.get("source")
+        if src == "momentum":
+            kinds.append(_momentum_kind(s.get("detail") or ""))
+        elif src:
+            kinds.append(src)
+    return kinds
+
+
+def _independence_multiplier(kinds: list[str]) -> float:
+    """The independence multiplier for a set of signal kinds. For 2 kinds it
+    is that pair's weight; for 3+ it is the max pairwise weight. Unknown pairs
+    default to 1.0 (neutral)."""
+    uniq = sorted(set(kinds))
+    if len(uniq) < 2:
+        return 1.0
+    best = 1.0
+    seen = False
+    for i in range(len(uniq)):
+        for j in range(i + 1, len(uniq)):
+            m = _PAIR_MULTIPLIER.get(frozenset({uniq[i], uniq[j]}), 1.0)
+            best = m if not seen else max(best, m)
+            seen = True
+    return best
+
+
+def _confluence_label(kinds: list[str]) -> str:
+    parts = [_KIND_LABEL.get(k, k) for k in kinds]
+    joined = " + ".join(parts)
+    joined = joined[:1].upper() + joined[1:]
+    return f"{joined} -- {len(kinds)} independent signals"
+
+
+def top_independent_confluence(funnel: dict, n: int = 3) -> list[dict]:
+    """Return the top ``n`` multi-signal funnel ideas, re-ranked by an
+    independence-weighted confluence score. Single-signal ideas are excluded.
+
+    Each returned idea is a copy of the funnel idea with three added fields:
+    ``confluence_multiplier``, ``confluence_score`` (raw score x multiplier)
+    and ``confluence_label``. The existing ``swing_plan`` is carried through.
+    """
+    ideas = (funnel or {}).get("ideas") or []
+    scored: list[dict] = []
+    for idea in ideas:
+        if len(idea.get("sources") or []) < 2:
+            continue
+        kinds = _idea_kinds(idea)
+        mult = _independence_multiplier(kinds)
+        out = dict(idea)
+        out["confluence_multiplier"] = mult
+        out["confluence_score"] = round((idea.get("score") or 0.0) * mult, 2)
+        out["confluence_label"] = _confluence_label(kinds)
+        scored.append(out)
+    scored.sort(key=lambda x: (x["confluence_score"], x.get("source_count", 0)),
+                reverse=True)
+    return scored[:n]

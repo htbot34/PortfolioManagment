@@ -176,3 +176,69 @@ def test_why_summary_phrasing():
     three = [{"label": "Momentum"}, {"label": "Theme fit"}, {"label": "Insider buying"}]
     assert idea_funnel._why(three, 3) == \
         "Momentum, Theme fit & Insider buying -- 3 signals aligned"
+
+
+# --- independence-weighted confluence ---------------------------------------
+
+def _ci(ticker, sources, score, swing_plan=None):
+    """A funnel idea: sources is a list of (source, detail) pairs."""
+    srcs = [{"source": s, "label": s, "detail": d, "points": 1.0}
+            for s, d in sources]
+    return {"ticker": ticker, "score": score, "source_count": len(srcs),
+            "sources": srcs, "swing_plan": swing_plan}
+
+
+def _cfunnel(*ideas):
+    return {"ideas": list(ideas)}
+
+
+def test_confluence_momentum_theme_ranks_below_momentum_insider():
+    mt = _ci("MT", [("momentum", "20-day breakout"), ("theme", "theme fit")], 10.0)
+    mi = _ci("MI", [("momentum", "20-day breakout"), ("insider", "cluster")], 10.0)
+    top = idea_funnel.top_independent_confluence(_cfunnel(mt, mi), n=2)
+    by = {i["ticker"]: i for i in top}
+    assert by["MT"]["confluence_multiplier"] == 0.7
+    assert by["MI"]["confluence_multiplier"] == 1.2
+    assert by["MT"]["confluence_score"] < by["MI"]["confluence_score"]
+
+
+def test_confluence_three_sources_use_max_pairwise_multiplier():
+    idea = _ci("X", [("momentum", "breakout"), ("news", "up 8%"),
+                     ("insider", "cluster")], 10.0)
+    top = idea_funnel.top_independent_confluence(_cfunnel(idea), n=3)
+    # pairs: momentum+news 1.0, momentum+insider 1.2, news+insider 1.3 -> 1.3
+    assert top[0]["confluence_multiplier"] == 1.3
+
+
+def test_confluence_pullback_classified_from_momentum_detail():
+    pn = _ci("PN", [("momentum", "pullback to SMA50 support"),
+                    ("news", "up 8%")], 10.0)
+    mn = _ci("MN", [("momentum", "20-day breakout"), ("news", "up 8%")], 10.0)
+    top = idea_funnel.top_independent_confluence(_cfunnel(pn, mn), n=2)
+    by = {i["ticker"]: i for i in top}
+    assert by["PN"]["confluence_multiplier"] == 1.15
+    assert by["MN"]["confluence_multiplier"] == 1.0
+    assert "pullback" in by["PN"]["confluence_label"].lower()
+
+
+def test_confluence_respects_n_and_skips_single_signal():
+    single = _ci("S", [("momentum", "breakout")], 99.0)
+    multi = [_ci(f"M{i}", [("news", "x"), ("insider", "y")], 10.0 + i)
+             for i in range(5)]
+    top = idea_funnel.top_independent_confluence(_cfunnel(single, *multi), n=3)
+    assert len(top) == 3
+    assert all(i["ticker"] != "S" for i in top)
+    assert top[0]["ticker"] == "M4"  # highest raw score, equal multiplier
+
+
+def test_confluence_empty_when_no_multi_signal_ideas():
+    f = _cfunnel(_ci("A", [("momentum", "breakout")], 5.0),
+                 _ci("B", [("theme", "fit")], 4.0))
+    assert idea_funnel.top_independent_confluence(f, n=3) == []
+
+
+def test_confluence_label_format():
+    idea = _ci("X", [("momentum", "breakout"), ("insider", "cluster")], 10.0)
+    top = idea_funnel.top_independent_confluence(_cfunnel(idea), n=1)
+    assert top[0]["confluence_label"] == \
+        "Momentum + insider buying -- 2 independent signals"

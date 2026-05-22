@@ -225,6 +225,34 @@
 </div>
 {% endif %}
 
+{% if brief.high_confluence %}
+<div class="rounded-lg border border-[#1f2a44]/60 p-4 mb-4">
+  <div class="text-xs text-slate-500 uppercase tracking-widest mb-1">Highest-confluence ideas (not recommendations)</div>
+  <div class="text-[11px] text-slate-600 mb-3">The funnel's most independently corroborated ideas. They did not clear the conviction bar - watchlist context, not advice.</div>
+  <div class="space-y-3">
+  {% for idea in brief.high_confluence %}
+    <div class="border-l-2 border-l-slate-700 pl-3">
+      <div class="flex items-baseline gap-2 flex-wrap">
+        <a href="ticker/{{ idea.ticker }}.html" class="text-sm font-semibold text-slate-300 tlink">{{ idea.ticker }}</a>
+        <span class="text-[11px] text-slate-500">{{ idea.confluence_label }}</span>
+      </div>
+      {% if idea.swing_plan %}
+      {% set sp = idea.swing_plan %}
+      <div class="grid grid-cols-4 gap-1 text-[11px] mt-1 mb-1">
+        <div><div class="text-slate-600">Entry</div><div class="text-slate-400">{{ sp.entry_zone }}</div></div>
+        <div><div class="text-slate-600">Stop</div><div class="text-slate-400">${{ '%.2f'|format(sp.stop) }}</div></div>
+        <div><div class="text-slate-600">Target</div><div class="text-slate-400">${{ '%.2f'|format(sp.target) }}</div></div>
+        <div><div class="text-slate-600">Hold</div><div class="text-slate-400">{{ sp.hold_window }}</div></div>
+      </div>
+      {% endif %}
+      <a class="text-[11px] text-sky-500/70 hover:underline" target="_blank" rel="noopener"
+         href="https://github.com/{{ repo }}/issues/new?template=idea-action.yml&amp;title=Idea+{{ idea.ticker }}&amp;ticker={{ idea.ticker }}">Give a verdict &rarr;</a>
+    </div>
+  {% endfor %}
+  </div>
+</div>
+{% endif %}
+
 <!-- ============== Chat panel ============== -->
 <div class="card rounded-lg p-5 mb-4">
   <div class="flex items-baseline justify-between mb-3">

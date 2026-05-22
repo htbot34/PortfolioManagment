@@ -17,7 +17,7 @@ from datetime import date
 from app.data import news as news_mod
 from app.data import prices
 from app.portfolio import store
-from app.research import conviction, gate_telemetry, sizing
+from app.research import conviction, gate_telemetry, idea_funnel, sizing
 from app.research.recid import make_rec_id
 
 
@@ -422,7 +422,8 @@ def build(macro: dict, recommendations: list[dict], review: dict,
           headlines: list[dict] | None = None,
           account: store.Account | None = None,
           user_preferences: dict | None = None,
-          regime: dict | None = None) -> dict:
+          regime: dict | None = None,
+          funnel: dict | None = None) -> dict:
     """Return today's verdict. Deterministic - no LLM call.
 
     ``account`` is optional - when provided, recommendations get sized
@@ -487,4 +488,12 @@ def build(macro: dict, recommendations: list[dict], review: dict,
     verdict["telemetry"] = telem
     verdict["telemetry_30d"] = gate_telemetry.rollup(
         gate_telemetry.merged_history(telem))
+
+    # On a no-trade day, surface the funnel's highest-confluence ideas. These
+    # are NOT recommendations - they did not clear the conviction gate - but
+    # they tell the user what is worth watching.
+    if verdict.get("verdict") == "no_trade" and funnel is not None:
+        verdict["high_confluence"] = idea_funnel.top_independent_confluence(
+            funnel, n=3)
+
     return verdict

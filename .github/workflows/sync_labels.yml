@@ -1,0 +1,99 @@
+name: Sync repository labels
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/labels.yml
+      - .github/ISSUE_TEMPLATE/**
+      - .github/workflows/sync_labels.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install deps
+        run: pip install pyyaml
+
+      - name: Reconcile labels with .github/labels.yml
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          python <<'PY'
+          import json, os, sys, urllib.parse, urllib.request, urllib.error
+          import yaml
+
+          token = os.environ["GH_TOKEN"]
+          repo = os.environ["REPO"]
+          api = f"https://api.github.com/repos/{repo}/labels"
+
+          def req(method, url, payload=None):
+              data = json.dumps(payload).encode() if payload is not None else None
+              r = urllib.request.Request(url, data=data, method=method)
+              r.add_header("Authorization", f"token {token}")
+              r.add_header("Accept", "application/vnd.github+json")
+              if data is not None:
+                  r.add_header("Content-Type", "application/json")
+              try:
+                  with urllib.request.urlopen(r) as resp:
+                      body = resp.read().decode() or "{}"
+                      return resp.status, json.loads(body) if body.strip() else {}
+              except urllib.error.HTTPError as e:
+                  return e.code, json.loads(e.read().decode() or "{}")
+
+          existing = {}
+          page = 1
+          while True:
+              status, body = req("GET", f"{api}?per_page=100&page={page}")
+              if status != 200:
+                  sys.exit(f"List labels failed: {status} {body}")
+              if not body:
+                  break
+              for lab in body:
+                  existing[lab["name"]] = lab
+              if len(body) < 100:
+                  break
+              page += 1
+
+          with open(".github/labels.yml") as fh:
+              desired = yaml.safe_load(fh) or []
+
+          created = updated = unchanged = 0
+          for entry in desired:
+              name = entry["name"]
+              color = entry["color"].lstrip("#").lower()
+              description = entry.get("description", "") or ""
+              if name not in existing:
+                  status, body = req("POST", api, {"name": name, "color": color, "description": description})
+                  if status >= 300:
+                      sys.exit(f"Create {name} failed: {status} {body}")
+                  print(f"created: {name}")
+                  created += 1
+                  continue
+              cur = existing[name]
+              if cur.get("color", "").lower() == color and (cur.get("description") or "") == description:
+                  print(f"unchanged: {name}")
+                  unchanged += 1
+                  continue
+              url = f"{api}/{urllib.parse.quote(name)}"
+              status, body = req("PATCH", url, {"new_name": name, "color": color, "description": description})
+              if status >= 300:
+                  sys.exit(f"Update {name} failed: {status} {body}")
+              print(f"updated: {name}")
+              updated += 1
+
+          print(f"summary: created={created} updated={updated} unchanged={unchanged}")
+          PY

@@ -1,0 +1,26 @@
+# Source of truth for repository labels.
+#
+# Issue templates in .github/ISSUE_TEMPLATE/ declare these labels under their
+# `labels:` field. GitHub only attaches a label to a new issue if the label
+# already exists on the repo; missing labels are silently dropped. The
+# .github/workflows/sync_labels.yml workflow reconciles the repo with this
+# file so the labels are guaranteed to exist.
+#
+# tests/test_issue_template_labels.py asserts every label referenced by an
+# issue template has a definition here.
+
+- name: chat
+  color: 1f6feb
+  description: Chat panel message from the dashboard.
+
+- name: trade-log
+  color: 8957e5
+  description: Manual trade log entry.
+
+- name: rec-action
+  color: 2da44e
+  description: Accept / reject / counter on a recommendation.
+
+- name: idea-action
+  color: bf8700
+  description: Verdict on a candidate idea.

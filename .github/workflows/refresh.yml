@@ -52,7 +52,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html positions.html scanner.html recommendations.html candidates.html data.json ticker .nojekyll price_cache.json rec_history.yaml idea_queue.yaml intraday_alerts.json news_classification_cache.json regime_history.json fundamentals_cache.json gate_telemetry.yaml form4_cache.json 2>/dev/null || true
+          git add index.html positions.html scanner.html recommendations.html candidates.html data.json ticker .nojekyll price_cache.json rec_history.yaml idea_queue.yaml intraday_alerts.json news_classification_cache.json regime_history.json fundamentals_cache.json gate_telemetry.yaml form4_cache.json portfolio.yaml 2>/dev/null || true
           if git diff --staged --quiet; then
             echo "No site changes."
             exit 0

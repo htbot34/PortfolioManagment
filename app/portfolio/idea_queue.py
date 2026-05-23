@@ -81,6 +81,7 @@ def _bare_entry(ticker: str) -> dict:
         "last_rank": None,
         "last_score": None,
         "last_why": None,
+        "swing_plan": None,
         "verdict": "open",
         "verdict_at": None,
         "user_note": None,
@@ -117,6 +118,9 @@ def sync_from_funnel(ideas: list[dict], queue: list[dict] | None = None,
         entry["last_rank"] = idea.get("rank")
         entry["last_score"] = idea.get("score")
         entry["last_why"] = idea.get("why")
+        # Carry the latest swing plan so the intraday check can reconcile it
+        # against today's price without re-running the funnel.
+        entry["swing_plan"] = idea.get("swing_plan")
     save(queue, path)
     return queue
 

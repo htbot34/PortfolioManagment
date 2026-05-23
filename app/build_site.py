@@ -145,6 +145,19 @@ def _recent_activity(limit: int = 8) -> list[dict]:
     return activity[:limit]
 
 
+def recompute_total_value(account, exposures: dict,
+                          path: Path | None = None) -> tuple[float, bool]:
+    """Set ``account.total_value`` from live market values + cash and persist
+    when it changed. Returns ``(new_total, changed)``."""
+    new_total = round((exposures.get("total_market_value") or 0.0)
+                      + (account.cash or 0.0), 2)
+    if abs(new_total - (account.total_value or 0.0)) > 0.01:
+        account.total_value = new_total
+        store.save(account, path=path)
+        return new_total, True
+    return new_total, False
+
+
 def _env() -> Environment:
     return Environment(
         loader=FileSystemLoader(Path(__file__).parent / "templates"),
@@ -198,6 +211,15 @@ def main() -> int:
 
     exposures = portfolio_review.compute_exposures(account)
     review_out = portfolio_review.review(exposures)
+
+    # Auto-recompute account.total_value from live position values + cash, so
+    # the dashboard's headline number stays current without manual edits.
+    try:
+        new_total, changed = recompute_total_value(account, exposures)
+        if changed:
+            print(f"  account.total_value -> ${new_total:,.2f}")
+    except Exception:
+        traceback.print_exc()
 
     print("Computing portfolio metrics vs SPY...")
     try:

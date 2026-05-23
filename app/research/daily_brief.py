@@ -17,8 +17,30 @@ from datetime import date
 from app.data import news as news_mod
 from app.data import prices
 from app.portfolio import store
-from app.research import conviction, sizing
+from app.research import conviction, gate_telemetry, idea_funnel, sizing
 from app.research.recid import make_rec_id
+
+
+def _gate_entry(ticker: str, gate: dict | None = None,
+                pre_block: str | None = None) -> dict:
+    """Build one telemetry entry for ``gate_telemetry.record``.
+
+    ``pre_block`` is set for candidates dropped before the conviction gate
+    ran (regime suppression, soft veto); otherwise ``gate`` carries the
+    ``conviction.evaluate`` result.
+    """
+    if pre_block:
+        return {"ticker": ticker.upper(), "pre_block": pre_block}
+    gate = gate or {}
+    return {
+        "ticker": ticker.upper(),
+        "pre_block": None,
+        "qualifies": bool(gate.get("qualifies")),
+        "promoted_by_insider": bool(gate.get("promoted_by_insider")),
+        "earnings_block": gate.get("earnings_block"),
+        "reasons": gate.get("reasons") or {},
+        "insider_score": int(gate.get("insider_score", 0) or 0),
+    }
 
 
 def _no_trade(reason: str, macro_line: str, watching: list[str]) -> dict:
@@ -84,7 +106,8 @@ def _defense_from_book(recommendations: list[dict], macro_line: str,
                        scan_result: dict, exclude: set[str],
                        macro: dict | None = None,
                        account: store.Account | None = None,
-                       soft_veto: set[str] | None = None) -> dict | None:
+                       soft_veto: set[str] | None = None,
+                       gate_log: list | None = None) -> dict | None:
     """Return a defense verdict ONLY if a held name has conviction-5 sell or
     trim AND clears the 3-signal conviction gate (technical + bearish news +
     sector weakness). This is intentional: per spec, exits are thesis-driven,
@@ -92,16 +115,21 @@ def _defense_from_book(recommendations: list[dict], macro_line: str,
     its own to trigger an automatic trim.
     """
     veto = soft_veto or set()
+    log = gate_log if gate_log is not None else []
     for r in recommendations:
         if r.get("conviction", 0) != 5:
             continue
         if r.get("action") not in ("sell", "trim"):
             continue
-        if (r.get("ticker") or "").upper() in veto:
-            continue  # soft veto: user has rejected this ticker repeatedly
+        ticker = (r.get("ticker") or "").upper()
+        if ticker in veto:
+            # soft veto: user has rejected this ticker repeatedly
+            log.append(_gate_entry(ticker, pre_block="soft_veto"))
+            continue
         gate = conviction.evaluate(r, direction="short", macro=macro or {},
                                     news_fetcher=news_mod.company_news,
                                     action=r.get("action"))
+        log.append(_gate_entry(ticker, gate))
         if not gate["qualifies"]:
             continue
         q = r.get("quote") or {}
@@ -175,7 +203,8 @@ def _trade_from_scanner(scan_result: dict, macro: dict, macro_line: str,
                          exclude: set[str],
                          account: store.Account | None = None,
                          soft_veto: set[str] | None = None,
-                         regime: dict | None = None) -> dict | None:
+                         regime: dict | None = None,
+                         gate_log: list | None = None) -> dict | None:
     """Promote a scanner setup to a trade verdict.
 
     Two-stage gate:
@@ -196,14 +225,16 @@ def _trade_from_scanner(scan_result: dict, macro: dict, macro_line: str,
     if _macro_risk_off(macro):
         return None
     regime_name = (regime or {}).get("regime")
-    if regime_name == "breakdown":
-        return None  # defense only in a breakdown
+    breakdown = regime_name == "breakdown"  # defense only in a breakdown
     allow_promo = regime_name != "chop"
     veto = soft_veto or set()
+    log = gate_log if gate_log is not None else []
     for s in scan_result["buckets"].get("breakouts", []):
-        if s.get("held") or s["ticker"].upper() in exclude:
+        ticker = s["ticker"].upper()
+        if s.get("held") or ticker in exclude:
             continue
-        if s["ticker"].upper() in veto:
+        if ticker in veto:
+            log.append(_gate_entry(ticker, pre_block="soft_veto"))
             continue
         rsi = s.get("rsi14") or 0
         vol = s.get("vol_ratio_20d") or 0
@@ -213,19 +244,25 @@ def _trade_from_scanner(scan_result: dict, macro: dict, macro_line: str,
         if not (55 <= rsi <= 65 and vol >= 2.0 and macd_h > 0
                 and off52 >= -2 and theme in _QUALITY_THEMES):
             continue
+        if breakdown:
+            log.append(_gate_entry(ticker, pre_block="regime"))
+            continue
         gate = conviction.evaluate(s, direction="long", macro=macro,
                                     news_fetcher=news_mod.company_news,
                                     action="new_buy", portfolio=account,
                                     allow_insider_promotion=allow_promo)
+        log.append(_gate_entry(ticker, gate))
         if not gate["qualifies"]:
             continue
         return _build_trade(s, "buy", "Quality breakout to new highs on heavy volume",
                              macro_line, scan_result, exclude, gate=gate, account=account,
                              regime_name=regime_name)
     for s in scan_result["buckets"].get("oversold_bounces", []):
-        if s.get("held") or s["ticker"].upper() in exclude:
+        ticker = s["ticker"].upper()
+        if s.get("held") or ticker in exclude:
             continue
-        if s["ticker"].upper() in veto:
+        if ticker in veto:
+            log.append(_gate_entry(ticker, pre_block="soft_veto"))
             continue
         rsi = s.get("rsi14") or 100
         macd_h = s.get("macd_hist") or -1
@@ -234,10 +271,14 @@ def _trade_from_scanner(scan_result: dict, macro: dict, macro_line: str,
         if not (rsi <= 25 and macd_h > 0 and vol >= 1.2
                 and theme in _QUALITY_THEMES):
             continue
+        if breakdown:
+            log.append(_gate_entry(ticker, pre_block="regime"))
+            continue
         gate = conviction.evaluate(s, direction="long", macro=macro,
                                     news_fetcher=news_mod.company_news,
                                     action="new_buy", portfolio=account,
                                     allow_insider_promotion=allow_promo)
+        log.append(_gate_entry(ticker, gate))
         if not gate["qualifies"]:
             continue
         return _build_trade(s, "buy", "Deep oversold quality name with bullish MACD cross",
@@ -381,7 +422,8 @@ def build(macro: dict, recommendations: list[dict], review: dict,
           headlines: list[dict] | None = None,
           account: store.Account | None = None,
           user_preferences: dict | None = None,
-          regime: dict | None = None) -> dict:
+          regime: dict | None = None,
+          funnel: dict | None = None) -> dict:
     """Return today's verdict. Deterministic - no LLM call.
 
     ``account`` is optional - when provided, recommendations get sized
@@ -414,19 +456,44 @@ def build(macro: dict, recommendations: list[dict], review: dict,
             verdict["regime"] = regime
         return verdict
 
+    gate_log: list = []
+
     if _macro_risk_off(macro):
-        return _stamp(_no_trade("Macro is risk-off (high VIX or broken trend). Wait.",
-                                 macro_line, _build_watching(scan_result, held)))
+        verdict = _stamp(_no_trade(
+            "Macro is risk-off (high VIX or broken trend). Wait.",
+            macro_line, _build_watching(scan_result, held)))
+    else:
+        defense = _defense_from_book(recommendations, macro_line, scan_result,
+                                      held, macro=macro, account=account,
+                                      soft_veto=soft_veto, gate_log=gate_log)
+        if defense:
+            verdict = _stamp(defense)
+        else:
+            trade = _trade_from_scanner(scan_result, macro, macro_line, held,
+                                          account=account, soft_veto=soft_veto,
+                                          regime=regime, gate_log=gate_log)
+            if trade:
+                verdict = _stamp(trade)
+            else:
+                verdict = _stamp(_no_trade(
+                    "No setup meets the conviction bar.",
+                    macro_line, _build_watching(scan_result, held)))
 
-    defense = _defense_from_book(recommendations, macro_line, scan_result, held,
-                                  macro=macro, account=account, soft_veto=soft_veto)
-    if defense:
-        return _stamp(defense)
+    # Gate telemetry: record why candidates did / did not clear, so a
+    # no-trade verdict is explainable. The brief carries today's record and
+    # the 30-day rollup; build_site.py persists the record to disk.
+    today_str = date.today().isoformat()
+    telem = gate_telemetry.record(
+        [{"ticker": e.get("ticker", "")} for e in gate_log], gate_log, today_str)
+    verdict["telemetry"] = telem
+    verdict["telemetry_30d"] = gate_telemetry.rollup(
+        gate_telemetry.merged_history(telem))
 
-    trade = _trade_from_scanner(scan_result, macro, macro_line, held,
-                                  account=account, soft_veto=soft_veto, regime=regime)
-    if trade:
-        return _stamp(trade)
+    # On a no-trade day, surface the funnel's highest-confluence ideas. These
+    # are NOT recommendations - they did not clear the conviction gate - but
+    # they tell the user what is worth watching.
+    if verdict.get("verdict") == "no_trade" and funnel is not None:
+        verdict["high_confluence"] = idea_funnel.top_independent_confluence(
+            funnel, n=3)
 
-    return _stamp(_no_trade("No setup meets the conviction bar.",
-                            macro_line, _build_watching(scan_result, held)))
+    return verdict

@@ -301,10 +301,19 @@ def _result(qualifies: bool, sigs: dict[str, dict]) -> dict:
     for name in ("technical", "sector_momentum", "news", "insider"):
         if name in sigs:
             parts.append(f"{name}={'PASS' if sigs[name]['pass'] else 'fail'}")
+    # `reasons` is a flat per-signal pass/fail map for telemetry. Signals that
+    # were never evaluated (technical short-circuit) read False - they did not
+    # pass. `insider_score` is 0 unless the 2-of-3 promotion path ran.
+    reasons = {
+        name: bool(sigs.get(name, {}).get("pass", False))
+        for name in ("technical", "sector_momentum", "news")
+    }
     out = {
         "qualifies": qualifies,
         "signals": sigs,
         "summary": " ".join(parts),
+        "reasons": reasons,
+        "insider_score": int(sigs.get("insider", {}).get("score", 0) or 0),
     }
     if "insider" in sigs and qualifies:
         out["annotation"] = "promoted on insider cluster"

@@ -22,11 +22,11 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 from app.config import risk_profile, settings
 from app.data import macro as macro_mod
 from app.data import market_news, prices
-from app.portfolio import rec_history, store
+from app.portfolio import idea_queue, rec_history, store
 from app.data import fundamentals as fundamentals_mod
 from app.research import (
-    analyst, candidates as cands, correlation, daily_brief, idea_funnel,
-    learning, llm, metrics as metrics_mod, portfolio_review,
+    analyst, candidates as cands, correlation, daily_brief, gate_telemetry,
+    idea_funnel, learning, llm, metrics as metrics_mod, portfolio_review,
     regime as regime_mod, scanner, valuation,
 )
 
@@ -145,6 +145,19 @@ def _recent_activity(limit: int = 8) -> list[dict]:
     return activity[:limit]
 
 
+def recompute_total_value(account, exposures: dict,
+                          path: Path | None = None) -> tuple[float, bool]:
+    """Set ``account.total_value`` from live market values + cash and persist
+    when it changed. Returns ``(new_total, changed)``."""
+    new_total = round((exposures.get("total_market_value") or 0.0)
+                      + (account.cash or 0.0), 2)
+    if abs(new_total - (account.total_value or 0.0)) > 0.01:
+        account.total_value = new_total
+        store.save(account, path=path)
+        return new_total, True
+    return new_total, False
+
+
 def _env() -> Environment:
     return Environment(
         loader=FileSystemLoader(Path(__file__).parent / "templates"),
@@ -198,6 +211,15 @@ def main() -> int:
 
     exposures = portfolio_review.compute_exposures(account)
     review_out = portfolio_review.review(exposures)
+
+    # Auto-recompute account.total_value from live position values + cash, so
+    # the dashboard's headline number stays current without manual edits.
+    try:
+        new_total, changed = recompute_total_value(account, exposures)
+        if changed:
+            print(f"  account.total_value -> ${new_total:,.2f}")
+    except Exception:
+        traceback.print_exc()
 
     print("Computing portfolio metrics vs SPY...")
     try:
@@ -261,6 +283,23 @@ def main() -> int:
                   "insider_scanned": 0, "swing_plans": 0, "confluence": [],
                   "verdicts": {}, "watching_offlist": [], "error": str(e)}
 
+    # Age the idea queue: drop stale `open` entries, recycle 90-day `pass`
+    # verdicts back to open. Runs after the funnel's own upsert so today's
+    # tickers already have a refreshed last_seen.
+    prune_stats = {"dropped_open": 0, "expired_pass": 0}
+    try:
+        from datetime import date as _date
+        funnel_tickers = {(i.get("ticker") or "").upper()
+                          for i in funnel.get("ideas", [])}
+        queue = idea_queue.load()
+        pruned, prune_stats = idea_queue.prune(queue, funnel_tickers, _date.today())
+        if prune_stats["dropped_open"] or prune_stats["expired_pass"]:
+            idea_queue.save(pruned)
+        print(f"  idea queue prune: dropped {prune_stats['dropped_open']} open, "
+              f"reset {prune_stats['expired_pass']} pass -> open")
+    except Exception:
+        traceback.print_exc()
+
     print("Loading user preferences from rec_history...")
     history = rec_history.load()
     user_prefs = learning.derive_user_preferences(history, lookback_days=30)
@@ -269,7 +308,7 @@ def main() -> int:
 
     print("Writing daily brief...")
     try:
-        brief = daily_brief.build(macro, recs, review_out, cand_out, exposures, scan_result, headlines, account=account, user_preferences=user_prefs, regime=regime)
+        brief = daily_brief.build(macro, recs, review_out, cand_out, exposures, scan_result, headlines, account=account, user_preferences=user_prefs, regime=regime, funnel=funnel)
     except Exception as e:
         traceback.print_exc()
         brief = {"headline": f"Brief generation failed: {e}",
@@ -283,6 +322,16 @@ def main() -> int:
             print(f"Logged {len(added)} new pending rec(s) to rec_history.yaml")
     except Exception as e:
         traceback.print_exc()
+
+    if brief.get("telemetry"):
+        try:
+            gate_telemetry.persist(brief["telemetry"])
+            tel = brief["telemetry"]
+            print(f"Gate telemetry: {tel['candidates_evaluated']} evaluated, "
+                  f"{tel['cleared_primary'] + tel['cleared_insider_promotion']} cleared, "
+                  f"{len(tel['near_miss'])} near-miss")
+        except Exception:
+            traceback.print_exc()
 
     common = {
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
@@ -335,6 +384,7 @@ def main() -> int:
         "recommendations": recs,
         "candidates": cand_out,
         "idea_funnel": funnel,
+        "idea_queue": {"prune_stats": prune_stats},
     }
     (site / "data.json").write_text(json.dumps(data_dump, default=str, indent=2))
     (site / ".nojekyll").write_text("")

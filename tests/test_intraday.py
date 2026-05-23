@@ -213,3 +213,70 @@ class _StoreStub:
         self._a = account
     def load(self):
         return self._a
+
+
+# ---------------------------------------------------------------------------
+# Plan reconciliation (Phase 5)
+# ---------------------------------------------------------------------------
+
+def _plan_entry(ticker, verdict="open", **plan_over):
+    plan = {"entry_low": 30.0, "entry_high": 32.0, "stop": 28.0,
+            "target": 38.0, "hold_window": "3-6 weeks"}
+    plan.update(plan_over)
+    return {"ticker": ticker, "verdict": verdict, "swing_plan": plan}
+
+
+def test_plan_in_entry_zone_fires_watchlist_alert(monkeypatch, patch_quote):
+    monkeypatch.setattr(intraday_check.idea_queue, "load",
+                          lambda: [_plan_entry("PLTR")])
+    patch_quote["PLTR"] = _q(price=31.0)
+    fired: dict = {}
+    alerts = intraday_check.check_plan_reconciliation(fired, "2026-05-22")
+    assert len(alerts) == 1
+    assert alerts[0]["kind"] == "watchlist_entry"
+    assert "PLTR in entry zone" in alerts[0]["text"]
+    assert "target $38.00" in alerts[0]["text"]
+    assert fired == {"PLTR|38.0": "2026-05-22"}
+
+
+def test_plan_dedupes_within_same_utc_day(monkeypatch, patch_quote):
+    monkeypatch.setattr(intraday_check.idea_queue, "load",
+                          lambda: [_plan_entry("PLTR", verdict="interested")])
+    patch_quote["PLTR"] = _q(price=31.0)
+    fired = {"PLTR|38.0": "2026-05-22"}
+    assert intraday_check.check_plan_reconciliation(fired, "2026-05-22") == []
+
+
+def test_plan_without_entry_zone_is_skipped(monkeypatch, patch_quote):
+    bad = _plan_entry("PLTR")
+    bad["swing_plan"].pop("entry_low")
+    monkeypatch.setattr(intraday_check.idea_queue, "load", lambda: [bad])
+    patch_quote["PLTR"] = _q(price=31.0)
+    fired: dict = {}
+    assert intraday_check.check_plan_reconciliation(fired, "2026-05-22") == []
+    assert fired == {}
+
+
+def test_plan_pass_verdict_is_skipped(monkeypatch, patch_quote):
+    monkeypatch.setattr(intraday_check.idea_queue, "load",
+                          lambda: [_plan_entry("PLTR", verdict="pass")])
+    patch_quote["PLTR"] = _q(price=31.0)
+    fired: dict = {}
+    assert intraday_check.check_plan_reconciliation(fired, "2026-05-22") == []
+
+
+def test_plan_price_outside_zone_is_skipped(monkeypatch, patch_quote):
+    monkeypatch.setattr(intraday_check.idea_queue, "load",
+                          lambda: [_plan_entry("PLTR")])
+    patch_quote["PLTR"] = _q(price=29.0)  # below entry_low 30
+    fired: dict = {}
+    assert intraday_check.check_plan_reconciliation(fired, "2026-05-22") == []
+
+
+def test_plan_fires_for_watching_verdict(monkeypatch, patch_quote):
+    monkeypatch.setattr(intraday_check.idea_queue, "load",
+                          lambda: [_plan_entry("PLTR", verdict="watching")])
+    patch_quote["PLTR"] = _q(price=31.0)
+    fired: dict = {}
+    alerts = intraday_check.check_plan_reconciliation(fired, "2026-05-22")
+    assert len(alerts) == 1

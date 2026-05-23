@@ -36,7 +36,7 @@ from pathlib import Path
 
 from app.data import prices
 from app.logging import get_logger
-from app.portfolio import store
+from app.portfolio import idea_queue, store
 
 log = get_logger(__name__)
 
@@ -157,6 +157,67 @@ def check_watchlist(data_json_path: Path | None = None) -> list[dict]:
     return out
 
 
+def check_plan_reconciliation(fired_plans: dict, today_utc: str,
+                              queue: list[dict] | None = None) -> list[dict]:
+    """Alert when a queued idea's swing-plan entry zone is hit today.
+
+    Considers idea_queue entries with verdict in (open, interested, watching)
+    that carry a swing_plan with both entry_low and entry_high. Dedup: a
+    (ticker, target) key fires at most once per UTC day. ``fired_plans`` is
+    mutated to record new fires.
+    """
+    queue = queue if queue is not None else idea_queue.load()
+    out: list[dict] = []
+    for entry in queue or []:
+        if entry.get("verdict") not in ("open", "interested", "watching"):
+            continue
+        plan = entry.get("swing_plan") or {}
+        entry_low = plan.get("entry_low")
+        entry_high = plan.get("entry_high")
+        target = plan.get("target")
+        if entry_low is None or entry_high is None or target is None:
+            continue
+        ticker = (entry.get("ticker") or "").upper()
+        if not ticker:
+            continue
+        key = f"{ticker}|{round(float(target), 2)}"
+        if fired_plans.get(key) == today_utc:
+            continue
+        try:
+            q = prices.quote(ticker, fast=True)
+        except Exception:
+            continue
+        if q.price is None:
+            continue
+        if not (float(entry_low) <= q.price <= float(entry_high)):
+            continue
+        stop = plan.get("stop")
+        hold = plan.get("hold_window") or ""
+        stop_txt = f"${float(stop):.2f}" if stop is not None else "n/a"
+        out.append({
+            "severity": "med", "kind": "watchlist_entry",
+            "text": (
+                f"{ticker} in entry zone ${float(entry_low):.2f}-"
+                f"${float(entry_high):.2f} (plan: stop {stop_txt}, "
+                f"target ${float(target):.2f}, hold {hold})"
+            ),
+        })
+        fired_plans[key] = today_utc
+    return out
+
+
+def _load_fired_plans(today_utc: str) -> dict:
+    """Read fired_plans from the existing alerts file, filtered to today."""
+    if not ALERTS_PATH.exists():
+        return {}
+    try:
+        data = json.loads(ALERTS_PATH.read_text())
+    except Exception:
+        return {}
+    fp = data.get("fired_plans") or {}
+    return {k: v for k, v in fp.items() if v == today_utc}
+
+
 # ---------------------------------------------------------------------------
 # Orchestration
 # ---------------------------------------------------------------------------
@@ -164,6 +225,8 @@ def check_watchlist(data_json_path: Path | None = None) -> list[dict]:
 def run() -> dict:
     """Run all checks and return the payload that will be written to disk."""
     alerts: list[dict] = []
+    today_utc = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    fired_plans = _load_fired_plans(today_utc)
     try:
         alerts.extend(check_macro())
     except Exception:
@@ -176,9 +239,14 @@ def run() -> dict:
         alerts.extend(check_watchlist())
     except Exception:
         log.exception("intraday watchlist check failed")
+    try:
+        alerts.extend(check_plan_reconciliation(fired_plans, today_utc))
+    except Exception:
+        log.exception("intraday plan reconciliation failed")
     return {
         "checked_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "alerts": alerts,
+        "fired_plans": fired_plans,
     }
 
 

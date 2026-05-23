@@ -121,6 +121,61 @@ def sync_from_funnel(ideas: list[dict], queue: list[dict] | None = None,
     return queue
 
 
+def _days_ago(date_str: str | None, today: date) -> int | None:
+    """Calendar-day distance from ``date_str`` (date or ISO timestamp) to
+    ``today``. Returns None when the string is missing or unparseable."""
+    if not date_str:
+        return None
+    try:
+        d = date.fromisoformat(str(date_str)[:10])
+    except Exception:
+        return None
+    return (today - d).days
+
+
+def prune(queue: list[dict], todays_funnel_tickers: set[str],
+          today: date) -> tuple[list[dict], dict]:
+    """Age the queue so it doesn't accumulate forever.
+
+    Rules:
+      - ``open`` with ``last_seen`` older than 14 days AND not in today's
+        funnel  -> dropped.
+      - ``pass`` with ``verdict_at`` older than 90 days -> reset to ``open``
+        with ``verdict_at=None`` (so the funnel can re-promote it). The
+        ``user_note`` is left untouched.
+      - ``interested`` / ``watching`` -> never auto-expire.
+
+    Returns the pruned queue and stats: ``{"dropped_open", "expired_pass"}``.
+    """
+    funnel = {(t or "").upper() for t in (todays_funnel_tickers or set())}
+    out: list[dict] = []
+    dropped_open = 0
+    expired_pass = 0
+    for entry in queue or []:
+        ticker = (entry.get("ticker") or "").upper()
+        verdict = entry.get("verdict") or "open"
+        if verdict == "open":
+            age = _days_ago(entry.get("last_seen"), today)
+            if age is not None and age > 14 and ticker not in funnel:
+                dropped_open += 1
+                continue
+            out.append(entry)
+        elif verdict == "pass":
+            age = _days_ago(entry.get("verdict_at"), today)
+            if age is not None and age > 90:
+                e = dict(entry)
+                e["verdict"] = "open"
+                e["verdict_at"] = None
+                out.append(e)
+                expired_pass += 1
+            else:
+                out.append(entry)
+        else:
+            # interested / watching - never auto-expire
+            out.append(entry)
+    return out, {"dropped_open": dropped_open, "expired_pass": expired_pass}
+
+
 def set_verdict(ticker: str, verdict: str, note: str | None = None,
                 path: Path | None = None) -> dict:
     """Record a user verdict on an idea. Creates the entry if the ticker is not

@@ -15,7 +15,8 @@ are immutable once filed) so repeated builds don't re-fetch.
 """
 import json
 import xml.etree.ElementTree as ET
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta, timezone
+from pathlib import Path
 
 import httpx
 
@@ -29,13 +30,87 @@ _TIMEOUT = 20.0
 _HEADERS = {"User-Agent": "PortfolioAdvisor research", "Accept-Encoding": "gzip, deflate"}
 _FORM4_CACHE = settings.cache_dir / "form4"
 
+# 24h disk cache over the two EDGAR-bound entry points. EDGAR is frequently
+# slow during market hours; without this, the idea funnel's wall-clock budget
+# expires and the insider signal silently drops to empty - closing the 2-of-3
+# promotion path exactly when it would be most useful.
+_CACHE_PATH = Path(__file__).resolve().parent.parent.parent / "form4_cache.json"
+_CACHE_TTL_S = 24 * 3600
+
 
 def _headers() -> dict:
     return {**_HEADERS, "User-Agent": settings.sec_user_agent}
 
 
+def _load_cache() -> dict:
+    """Load the form 4 cache. Missing or malformed file -> empty dict."""
+    if not _CACHE_PATH.exists():
+        return {}
+    try:
+        data = json.loads(_CACHE_PATH.read_text())
+    except Exception:
+        return {}
+    return data if isinstance(data, dict) else {}
+
+
+def _save_cache(cache: dict) -> None:
+    try:
+        _CACHE_PATH.write_text(json.dumps(cache))
+    except Exception:
+        pass
+
+
+def _entry_age_s(entry: dict) -> float | None:
+    """Age in seconds of a cache entry, or None if its timestamp is unusable."""
+    try:
+        dt = datetime.fromisoformat(entry.get("fetched_at") or "")
+    except Exception:
+        return None
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+    return (datetime.now(timezone.utc) - dt).total_seconds()
+
+
+def _cached(key: str, fetcher):
+    """Disk-cache wrapper. ``fetcher`` returns ``(data, ok)`` where ``ok`` is
+    False on a genuine fetch failure (network/parse) - distinct from a valid
+    empty result. A fresh entry (< 24h) is served without calling ``fetcher``;
+    on a fetch failure a stale entry is served if one exists.
+    """
+    cache = _load_cache()
+    entry = cache.get(key)
+    if not (isinstance(entry, dict) and "data" in entry):
+        entry = None
+    elif _entry_age_s(entry) is not None and _entry_age_s(entry) < _CACHE_TTL_S:
+        return entry["data"]
+    data, ok = fetcher()
+    if ok:
+        cache[key] = {"fetched_at": datetime.now(timezone.utc).isoformat(),
+                      "data": data}
+        _save_cache(cache)
+        return data
+    if entry is not None:
+        log.warning("form4 cache: stale-served %s (live fetch failed)", key)
+        return entry["data"]
+    return data
+
+
 def recent_form4(ticker: str, days: int = 30) -> dict:
-    """Return a summary of Form 4 filings in the lookback window (count only)."""
+    """Return a summary of Form 4 filings in the lookback window (count only).
+
+    24h disk-cached; a fetch failure serves a stale entry when one exists.
+    """
+    key = f"{ticker.upper()}|{days}|recent_form4"
+
+    def _fetch():
+        result = _recent_form4_uncached(ticker, days)
+        return result, not bool(result.get("error"))
+
+    return _cached(key, _fetch)
+
+
+def _recent_form4_uncached(ticker: str, days: int = 30) -> dict:
+    """Live Form 4 filing-count fetch (no cache)."""
     try:
         mapping = _ticker_to_cik()
     except Exception:
@@ -176,14 +251,30 @@ def recent_form4_transactions(ticker: str, days: int = 30,
     acquired_disposed, shares, price, total_value, is_planned_10b5_1.
     Transactions are filtered so their ``transaction_date`` falls within the
     window (a filing dated inside the window can report an older trade).
+
+    24h disk-cached; a fetch failure serves a stale entry when one exists.
+    """
+    key = f"{ticker.upper()}|{days}|recent_form4_transactions"
+    return _cached(key, lambda: _recent_form4_transactions_uncached(
+        ticker, days, max_filings))
+
+
+def _recent_form4_transactions_uncached(ticker: str, days: int = 30,
+                                        max_filings: int = 40
+                                        ) -> tuple[list[dict], bool]:
+    """Live Form 4 transaction fetch (no cache).
+
+    Returns ``(transactions, ok)``. ``ok`` is False only on a genuine fetch
+    failure (CIK lookup or submissions request) - a ticker that simply is not
+    in the CIK index is a valid empty result and is cacheable.
     """
     try:
         mapping = _ticker_to_cik()
     except Exception:
-        return []
+        return [], False
     cik = mapping.get(ticker.upper())
     if not cik:
-        return []
+        return [], True
     try:
         r = httpx.get(
             f"https://data.sec.gov/submissions/CIK{cik}.json",
@@ -193,7 +284,7 @@ def recent_form4_transactions(ticker: str, days: int = 30,
         sub = r.json()
     except Exception as e:
         log.warning("form4 submissions fetch failed for %s: %s", ticker, e)
-        return []
+        return [], False
     recent = sub.get("filings", {}).get("recent", {})
     forms = recent.get("form", [])
     filed = recent.get("filingDate", [])
@@ -227,4 +318,4 @@ def recent_form4_transactions(ticker: str, days: int = 30,
                 result.append(t)
         except Exception:
             result.append(t)  # keep unparseable dates rather than silently drop
-    return result
+    return result, True

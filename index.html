@@ -19,7 +19,7 @@
 <body class="min-h-screen">
   <nav class="px-6 py-3 border-b border-[#1f2a44] flex items-center gap-4">
     <a href="index.html" class="text-sm font-semibold text-slate-200">Portfolio Advisor</a>
-    <div class="ml-auto text-[10px] text-slate-500">2026-05-22 15:27 UTC</div>
+    <div class="ml-auto text-[10px] text-slate-500">2026-05-28 17:10 UTC</div>
   </nav>
   <main class="p-6 max-w-7xl mx-auto">
     
@@ -29,7 +29,7 @@
 <div class="max-w-3xl mx-auto">
 
 <div class="flex items-center justify-between mb-3">
-  <div class="text-xs text-slate-500">2026-05-22</div>
+  <div class="text-xs text-slate-500">2026-05-28</div>
   
   
   
@@ -43,10 +43,10 @@
     <div class="text-sm">
       <span class="text-slate-400 uppercase tracking-widest text-xs">Market Regime</span>
       <span class="font-bold text-emerald-300 ml-2">RISK-ON</span>
-      <span class="text-xs text-slate-500 ml-1">confidence 3/3</span>
+      <span class="text-xs text-slate-500 ml-1">confidence 2/3</span>
     </div>
   </div>
-  <div class="text-xs text-slate-400 mt-1">Risk-on - trend up, participation broad (VIX 16.7, breadth 66%) [confidence 3/3]</div>
+  <div class="text-xs text-slate-400 mt-1">Risk-on - trend up, participation broad (VIX 16.0, breadth 64%) [confidence 2/3]</div>
   
   <details class="mt-2 text-xs">
     <summary class="cursor-pointer text-slate-500 hover:text-slate-300 select-none">Regime factors</summary>
@@ -58,18 +58,18 @@
       
       <li>spy stacked up: <span class="text-slate-300">True</span></li>
       
-      <li>vix level: <span class="text-slate-300">16.65999984741211</span></li>
+      <li>vix level: <span class="text-slate-300">16.0</span></li>
       
-      <li>vix change 5d pct: <span class="text-slate-300">-9.603908998669928</span></li>
+      <li>vix change 5d pct: <span class="text-slate-300">-4.534607508967441</span></li>
       
-      <li>hyg ief trend: <span class="text-slate-300">rising</span></li>
+      <li>hyg ief trend: <span class="text-slate-300">flat</span></li>
       
-      <li>breadth pct: <span class="text-slate-300">66.0</span></li>
+      <li>breadth pct: <span class="text-slate-300">64.0</span></li>
       
       <li>spy range bound 10d: <span class="text-slate-300">False</span></li>
       
       
-      <li>regime scores: <span class="text-slate-300">{&#39;risk_on&#39;: 1.0, &#39;risk_off&#39;: 0.0, &#39;chop&#39;: 0.0, &#39;breakdown&#39;: 0.0}</span></li>
+      <li>regime scores: <span class="text-slate-300">{&#39;risk_on&#39;: 0.75, &#39;risk_off&#39;: 0.0, &#39;chop&#39;: 0.0, &#39;breakdown&#39;: 0.0}</span></li>
       
     </ul>
   </details>
@@ -84,10 +84,26 @@
     <div class="text-5xl font-bold text-slate-300 mb-3">No trade today</div>
     <div class="text-sm text-slate-400 max-w-xl mx-auto">No setup meets the conviction bar.</div>
   </div>
+  
+  
+  
+  <div class="text-xs text-slate-500 text-center mb-4 space-y-0.5">
+    <div class="uppercase tracking-widest text-[10px] text-slate-600">Gate status</div>
+    
+    
+    <div>Evaluated 2 candidates today. Closest miss:
+      <span class="text-slate-400 font-semibold">LEU</span>
+      (passed technical + sector momentum, failed news, insider score 0).</div>
+    
+    
+    <div>30-day: 0 cleared, 1 reached 2-of-3, top blocker = technical (50.0%).</div>
+    
+  </div>
+  
 
 
 
-<div class="text-center text-xs text-slate-400 mb-4">SPX +0.57%, VIX 16.7, Healthcare leads +1.0%.</div>
+<div class="text-center text-xs text-slate-400 mb-4">SPX +0.40%, VIX 16.0, Tech leads +1.2%.</div>
 
 
 
@@ -95,17 +111,81 @@
   <div class="text-xs text-slate-400 uppercase tracking-widest mb-2">Watching</div>
   <ul class="text-sm space-y-1">
   
-    <li class="text-slate-300">- XLE - watching for pullback entry</li>
+    <li class="text-slate-300">- XLI - watching for pullback entry</li>
   
-    <li class="text-slate-300">- COST - watching for pullback entry</li>
-  
-    <li class="text-slate-300">- REGN - watching for reversal confirmation</li>
+    <li class="text-slate-300">- XBI - watching for pullback entry</li>
   
     <li class="text-slate-300">- ONTO - watching SMA50 hold</li>
   
-    <li class="text-slate-300">- URA - watching SMA50 hold</li>
+    <li class="text-slate-300">- CCJ - watching SMA50 hold</li>
+  
+    <li class="text-slate-300">- FSLR - fresh 52w high, waiting for retest</li>
   
   </ul>
+</div>
+
+
+
+<div class="rounded-lg border border-[#1f2a44]/60 p-4 mb-4">
+  <div class="text-xs text-slate-500 uppercase tracking-widest mb-1">Highest-confluence ideas (not recommendations)</div>
+  <div class="text-[11px] text-slate-600 mb-3">The funnel's most independently corroborated ideas. They did not clear the conviction bar - watchlist context, not advice.</div>
+  <div class="space-y-3">
+  
+    <div class="border-l-2 border-l-slate-700 pl-3">
+      <div class="flex items-baseline gap-2 flex-wrap">
+        <a href="ticker/ARM.html" class="text-sm font-semibold text-slate-300 tlink">ARM</a>
+        <span class="text-[11px] text-slate-500">Momentum + news -- 2 independent signals</span>
+      </div>
+      
+      
+      <div class="grid grid-cols-4 gap-1 text-[11px] mt-1 mb-1">
+        <div><div class="text-slate-600">Entry</div><div class="text-slate-400">$335.10 - $353.00</div></div>
+        <div><div class="text-slate-600">Stop</div><div class="text-slate-400">$301.53</div></div>
+        <div><div class="text-slate-600">Target</div><div class="text-slate-400">$429.09</div></div>
+        <div><div class="text-slate-600">Hold</div><div class="text-slate-400">2-3 weeks</div></div>
+      </div>
+      
+      <a class="text-[11px] text-sky-500/70 hover:underline" target="_blank" rel="noopener"
+         href="https://github.com/htbot34/PortfolioManagment/issues/new?template=idea-action.yml&amp;title=Idea+ARM&amp;ticker=ARM">Give a verdict &rarr;</a>
+    </div>
+  
+    <div class="border-l-2 border-l-slate-700 pl-3">
+      <div class="flex items-baseline gap-2 flex-wrap">
+        <a href="ticker/ONTO.html" class="text-sm font-semibold text-slate-300 tlink">ONTO</a>
+        <span class="text-[11px] text-slate-500">Pullback + theme fit -- 2 independent signals</span>
+      </div>
+      
+      
+      <div class="grid grid-cols-4 gap-1 text-[11px] mt-1 mb-1">
+        <div><div class="text-slate-600">Entry</div><div class="text-slate-400">$250.75 - $265.51</div></div>
+        <div><div class="text-slate-600">Stop</div><div class="text-slate-400">$228.62</div></div>
+        <div><div class="text-slate-600">Target</div><div class="text-slate-400">$317.15</div></div>
+        <div><div class="text-slate-600">Hold</div><div class="text-slate-400">2-3 weeks</div></div>
+      </div>
+      
+      <a class="text-[11px] text-sky-500/70 hover:underline" target="_blank" rel="noopener"
+         href="https://github.com/htbot34/PortfolioManagment/issues/new?template=idea-action.yml&amp;title=Idea+ONTO&amp;ticker=ONTO">Give a verdict &rarr;</a>
+    </div>
+  
+    <div class="border-l-2 border-l-slate-700 pl-3">
+      <div class="flex items-baseline gap-2 flex-wrap">
+        <a href="ticker/GEV.html" class="text-sm font-semibold text-slate-300 tlink">GEV</a>
+        <span class="text-[11px] text-slate-500">Pullback + theme fit -- 2 independent signals</span>
+      </div>
+      
+      
+      <div class="grid grid-cols-4 gap-1 text-[11px] mt-1 mb-1">
+        <div><div class="text-slate-600">Entry</div><div class="text-slate-400">$972.43 - $1016.94</div></div>
+        <div><div class="text-slate-600">Stop</div><div class="text-slate-400">$905.66</div></div>
+        <div><div class="text-slate-600">Target</div><div class="text-slate-400">$1172.73</div></div>
+        <div><div class="text-slate-600">Hold</div><div class="text-slate-400">2-3 weeks</div></div>
+      </div>
+      
+      <a class="text-[11px] text-sky-500/70 hover:underline" target="_blank" rel="noopener"
+         href="https://github.com/htbot34/PortfolioManagment/issues/new?template=idea-action.yml&amp;title=Idea+GEV&amp;ticker=GEV">Give a verdict &rarr;</a>
+    </div>
+  
+  </div>
 </div>
 
 
@@ -117,7 +197,15 @@
   </div>
 
   
-  <div class="text-xs text-slate-500 mb-3">No activity yet. Tell me what you did or what you're watching.</div>
+  <div class="mb-4 space-y-1 max-h-44 overflow-y-auto pr-2">
+    
+    <div class="text-xs flex gap-2 items-baseline">
+      <span class="text-slate-500 font-mono">2026-05-23</span>
+      <span class="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-emerald-900/60 text-emerald-200">trade</span>
+      <span class="text-slate-300 leading-snug">DEPOSIT $1.00 (cash now $1,235.91)</span>
+    </div>
+    
+  </div>
   
 
   <textarea id="chat-input"

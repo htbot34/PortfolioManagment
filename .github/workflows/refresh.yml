@@ -52,7 +52,13 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html positions.html scanner.html recommendations.html candidates.html data.json ticker .nojekyll price_cache.json rec_history.yaml idea_queue.yaml intraday_alerts.json news_classification_cache.json regime_history.json fundamentals_cache.json gate_telemetry.yaml form4_cache.json portfolio.yaml 2>/dev/null || true
+          # Stage each path on its own: `git add a b c` is atomic, so a single
+          # missing pathspec (e.g. gate_telemetry.yaml / form4_cache.json, which
+          # are only written when their data paths succeed) makes the whole add
+          # a no-op and silently discards the rebuilt site.
+          for path in index.html positions.html scanner.html recommendations.html candidates.html data.json ticker .nojekyll price_cache.json rec_history.yaml idea_queue.yaml intraday_alerts.json news_classification_cache.json regime_history.json fundamentals_cache.json gate_telemetry.yaml form4_cache.json portfolio.yaml; do
+            git add "$path" 2>/dev/null || true
+          done
           if git diff --staged --quiet; then
             echo "No site changes."
             exit 0

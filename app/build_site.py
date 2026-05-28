@@ -176,7 +176,11 @@ def main() -> int:
     (site / "ticker").mkdir(exist_ok=True)
 
     print("=== Price source diagnostics ===")
-    diag = prices.diagnose("META")
+    try:
+        diag = prices.diagnose("META")
+    except Exception:
+        traceback.print_exc()
+        diag = {}
     for name, status in diag.items():
         print(f"  {name}: {status}")
     print(f"LLM available: {llm.available()} (synthesis={llm.synthesis_model()}, routine={llm.routine_model()})")
@@ -184,7 +188,11 @@ def main() -> int:
     llm.reset_attempts()
 
     print("Pulling macro snapshot...")
-    macro = macro_mod.snapshot()
+    try:
+        macro = macro_mod.snapshot()
+    except Exception:
+        traceback.print_exc()
+        macro = {"indices": {}, "sectors": {}, "leaders": [], "laggards": []}
 
     print("Detecting market regime...")
     try:
@@ -198,14 +206,30 @@ def main() -> int:
                   "summary": f"regime detection failed: {e}"}
 
     print("Pulling market headlines...")
-    headlines = market_news.top_headlines()
+    try:
+        headlines = market_news.top_headlines()
+    except Exception:
+        traceback.print_exc()
+        headlines = []
     print(f"  collected {len(headlines)} headlines from {len({h['source'] for h in headlines})} sources")
 
     account = store.load()
     held_set = {p.ticker.upper() for p in account.positions}
 
     print("Running market scanner across universe...")
-    scan_result = scanner.scan(held=held_set)
+    try:
+        scan_result = scanner.scan(held=held_set)
+    except Exception:
+        traceback.print_exc()
+        scan_result = {
+            "universe_size": 0,
+            "buckets": {
+                "breakouts": [], "momentum_continuation": [], "oversold_bounces": [],
+                "pullbacks_to_support": [], "macd_bullish_cross": [], "macd_bearish_cross": [],
+                "new_52w_highs": [], "rsi_extreme_overbought": [],
+            },
+            "top_movers_up": [], "top_movers_down": [],
+        }
     print(f"  scanned {scan_result['universe_size']} names; buckets: " +
           ", ".join(f"{k}={len(v)}" for k, v in scan_result["buckets"].items() if v))
 

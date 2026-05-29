@@ -16,3 +16,21 @@
     - sector_momentum
     failed: news
     insider_score: 0
+- date: '2026-05-29'
+  candidates_evaluated: 2
+  cleared_primary: 0
+  cleared_insider_promotion: 0
+  blocked_by:
+    technical: 1
+    sector_momentum: 0
+    news: 1
+    earnings_window: 0
+    regime: 0
+    soft_veto: 0
+  near_miss:
+  - ticker: LEU
+    passed:
+    - technical
+    - sector_momentum
+    failed: news
+    insider_score: 0

@@ -398,3 +398,134 @@ def test_tracker_only_calls_read_only_telemetry_api(monkeypatch, tmp_path):
         today=date(2026, 7, 1),
         history_fn=_make_history_fn(_frames_default()),
     )
+
+
+# ---------- frozen-realized + entry-tolerance regression tests -------------
+
+
+def test_realized_horizons_frozen_when_window_rolls_past_miss_date(tmp_path):
+    """Once a horizon is realized, later runs must never overwrite it -- even
+    if the price window has rolled forward so the miss date is no longer in
+    it. Without freezing, _close_on_or_after silently re-anchors entry to the
+    first row of the new window (months too late) and rewrites the realized
+    return with a meaningless one, still flagged "realized".
+    """
+    tel = tmp_path / "gate_telemetry.yaml"
+    ledger = tmp_path / "shadow_ledger.yaml"
+    calib = tmp_path / "shadow_calibration.yaml"
+    _write_telemetry(tel, _telemetry_one(miss_date="2026-01-05"))
+
+    # Window 1: covers the miss date + comfortably past the 20-day horizon.
+    idx1 = _bday_index("2026-01-05", 40)
+    leu1 = _frame(idx1, [100.0 + i for i in range(40)])
+    spy1 = _frame(idx1, [500.0 + 0.5 * i for i in range(40)])
+    shadow_tracker.update(
+        telemetry_path=tel, ledger_path=ledger, calibration_path=calib,
+        today=date(2026, 3, 1),
+        history_fn=_make_history_fn({"LEU": leu1, "SPY": spy1}),
+    )
+    first = shadow_tracker.load_ledger(ledger)[0]
+    captured_entry = first["entry_price"]
+    captured_bench_entry = first["benchmark_entry_price"]
+    captured_h20 = dict(first["horizons"]["20"])
+    assert captured_h20["status"] == "realized"
+
+    # Window 2: rolled six months forward; nothing in it reaches the miss date.
+    idx2 = _bday_index("2026-07-01", 40)
+    leu2 = _frame(idx2, [200.0 + i for i in range(40)])
+    spy2 = _frame(idx2, [600.0 + 0.5 * i for i in range(40)])
+    shadow_tracker.update(
+        telemetry_path=tel, ledger_path=ledger, calibration_path=calib,
+        today=date(2026, 8, 1),
+        history_fn=_make_history_fn({"LEU": leu2, "SPY": spy2}),
+    )
+    second = shadow_tracker.load_ledger(ledger)[0]
+    # Entry prices must be frozen from the first run.
+    assert second["entry_price"] == captured_entry
+    assert second["benchmark_entry_price"] == captured_bench_entry
+    # Realized horizons must be identical, byte-for-byte.
+    for h in (5, 10, 20):
+        assert second["horizons"][str(h)]["status"] == "realized"
+    assert second["horizons"]["20"]["forward_return"] == captured_h20["forward_return"]
+    assert second["horizons"]["20"]["excess_return"] == captured_h20["excess_return"]
+    assert second["horizons"]["20"]["exit_price"] == captured_h20["exit_price"]
+
+
+def test_near_miss_outside_entry_tolerance_stays_unanchored(tmp_path):
+    """A telemetry row whose first available trading close is far past the
+    miss date (e.g. an old backfill against a window that no longer covers
+    it) must NOT anchor to that close. Entry stays null and all horizons
+    stay pending - treat as unrecoverable rather than guessing.
+    """
+    tel = tmp_path / "gate_telemetry.yaml"
+    ledger = tmp_path / "shadow_ledger.yaml"
+    calib = tmp_path / "shadow_calibration.yaml"
+    # Miss date is over a year before any available price data.
+    _write_telemetry(tel, _telemetry_one(miss_date="2025-01-05"))
+    idx = _bday_index("2026-05-01", 40)
+    leu = _frame(idx, [100.0 + i for i in range(40)])
+    spy = _frame(idx, [500.0 + 0.5 * i for i in range(40)])
+    shadow_tracker.update(
+        telemetry_path=tel, ledger_path=ledger, calibration_path=calib,
+        today=date(2026, 7, 1),
+        history_fn=_make_history_fn({"LEU": leu, "SPY": spy}),
+    )
+    rec = shadow_tracker.load_ledger(ledger)[0]
+    assert rec["entry_price"] is None
+    assert rec["benchmark_entry_price"] is None
+    for h in (5, 10, 20):
+        assert rec["horizons"][str(h)]["status"] == "pending"
+        assert rec["horizons"][str(h)]["forward_return"] is None
+
+
+def test_entry_tolerance_still_allows_friday_to_monday_roll(tmp_path):
+    """The tolerance must be loose enough to roll a Fri/holiday miss date to
+    the next trading day - otherwise we'd refuse to anchor most records.
+    """
+    tel = tmp_path / "gate_telemetry.yaml"
+    ledger = tmp_path / "shadow_ledger.yaml"
+    calib = tmp_path / "shadow_calibration.yaml"
+    # 2026-05-09 is a Saturday; first trading day after is Mon 2026-05-11.
+    _write_telemetry(tel, _telemetry_one(miss_date="2026-05-09"))
+    shadow_tracker.update(
+        telemetry_path=tel, ledger_path=ledger, calibration_path=calib,
+        today=date(2026, 7, 1),
+        history_fn=_make_history_fn(_frames_default()),
+    )
+    rec = shadow_tracker.load_ledger(ledger)[0]
+    assert rec["entry_price"] is not None
+    assert rec["horizons"]["5"]["status"] == "realized"
+
+
+def test_tz_aware_price_series_is_handled(tmp_path):
+    """A tz-aware DatetimeIndex used to raise inside _normalize_index and
+    silently route the whole run into safe_update's except clause. The
+    tracker must normalize tz-aware indexes correctly.
+    """
+    tel = tmp_path / "gate_telemetry.yaml"
+    ledger = tmp_path / "shadow_ledger.yaml"
+    calib = tmp_path / "shadow_calibration.yaml"
+    _write_telemetry(tel, _telemetry_one())
+    tz_idx = _INDEX.tz_localize("UTC")
+    frames = {
+        "LEU": pd.DataFrame({"Close": _LEU_PRICES}, index=tz_idx),
+        "SPY": pd.DataFrame({"Close": _SPY_PRICES}, index=tz_idx),
+    }
+    shadow_tracker.update(
+        telemetry_path=tel, ledger_path=ledger, calibration_path=calib,
+        today=date(2026, 7, 1),
+        history_fn=_make_history_fn(frames),
+    )
+    rec = shadow_tracker.load_ledger(ledger)[0]
+    assert rec["entry_price"] is not None
+    assert rec["horizons"]["5"]["status"] == "realized"
+
+
+def test_no_datetime_utcnow_deprecation_in_tracker():
+    """_today() must use timezone-aware now() to avoid the Py3.12+ deprecation
+    warning that was leaking from every test in the suite.
+    """
+    import warnings
+    with warnings.catch_warnings():
+        warnings.simplefilter("error", DeprecationWarning)
+        shadow_tracker._today()

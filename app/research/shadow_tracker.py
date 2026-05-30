@@ -19,7 +19,7 @@ the horizon, and RIGHT when it did not.
 """
 from __future__ import annotations
 
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Callable, Iterable
 
@@ -40,11 +40,18 @@ HORIZONS = (5, 10, 20)
 BENCHMARK = "SPY"
 DIRECTION = "long"
 
+# How far past the miss date the first available trading close is allowed to
+# be before we refuse to anchor (treat the row as unrecoverable). 7 calendar
+# days covers a Fri/holiday miss rolling to the next trading day; anything
+# further out almost certainly means the price window has rolled past the
+# miss date and the first row is months too late.
+ENTRY_TOLERANCE_DAYS = 7
+
 HistoryFn = Callable[[str], "pd.DataFrame | None"]
 
 
 def _today() -> date:
-    return datetime.utcnow().date()
+    return datetime.now(timezone.utc).date()
 
 
 def _to_date(s) -> date | None:
@@ -61,21 +68,32 @@ def _to_date(s) -> date | None:
 
 
 def _normalize_index(df: "pd.DataFrame") -> "pd.DataFrame":
-    """Return a copy with a tz-naive DatetimeIndex sorted ascending."""
+    """Return a copy with a tz-naive DatetimeIndex sorted ascending.
+
+    ``tz_localize(None)`` raises on an already-tz-aware index in some pandas
+    builds, so we branch on the existing tz and use ``tz_convert(None)`` to
+    strip it. A tz-naive index passes through untouched.
+    """
     if df is None or df.empty:
         return df
     idx = pd.to_datetime(df.index)
-    try:
-        idx = idx.tz_localize(None)
-    except (TypeError, AttributeError):
-        pass
+    if getattr(idx, "tz", None) is not None:
+        idx = idx.tz_convert(None)
     out = df.copy()
     out.index = idx
     return out.sort_index()
 
 
-def _close_on_or_after(df: "pd.DataFrame", target: date) -> tuple[date | None, float | None]:
-    """First trading-day close at or after ``target``. ``(None, None)`` if none."""
+def _close_on_or_after(
+    df: "pd.DataFrame", target: date, max_calendar_days: int | None = None,
+) -> tuple[date | None, float | None]:
+    """First trading-day close at or after ``target``. ``(None, None)`` if none.
+
+    When ``max_calendar_days`` is set, the located trading day must be within
+    that many calendar days of ``target`` -- otherwise ``(None, None)`` is
+    returned. This guards against silently anchoring to the start of a rolled-
+    forward price window when the original miss date is no longer in it.
+    """
     if df is None or df.empty or "Close" not in df.columns:
         return None, None
     ts = pd.Timestamp(target)
@@ -84,6 +102,9 @@ def _close_on_or_after(df: "pd.DataFrame", target: date) -> tuple[date | None, f
         return None, None
     row = sub.iloc[0]
     d = row.name.date() if hasattr(row.name, "date") else None
+    if max_calendar_days is not None and d is not None:
+        if (d - target).days > max_calendar_days:
+            return None, None
     try:
         return d, float(row["Close"])
     except Exception:
@@ -194,12 +215,17 @@ def _update_record(
 ) -> dict:
     """Fill in entry + horizon prices/returns for one record, in place.
 
-    Rules:
-      * Entry price = first close on or after the miss date.
-      * A horizon stays "pending" until BOTH the ticker and the benchmark
-        have a close N trading days past the entry row.
-      * If price data is missing entirely, the record stays pending without
-        crashing.
+    Idempotency rules (this is what protects realized values from being
+    silently rewritten as the price window rolls forward):
+      * Entry prices are FROZEN once set: a non-null ``entry_price`` /
+        ``benchmark_entry_price`` is never overwritten on a later run.
+      * Realized horizons are FROZEN: once a horizon has ``status="realized"``
+        it is skipped on every subsequent run.
+      * The entry trading day is only accepted if it lies within
+        ``ENTRY_TOLERANCE_DAYS`` of the miss date. Outside the tolerance the
+        record stays unanchored (entry stays null, all horizons stay pending)
+        instead of guessing.
+      * If price data is missing, the record stays pending without crashing.
     """
     miss_date = _to_date(record.get("miss_date"))
     if miss_date is None:
@@ -208,22 +234,34 @@ def _update_record(
     ticker_df = _normalize_index(ticker_df) if ticker_df is not None else None
     bench_df = _normalize_index(bench_df) if bench_df is not None else None
 
-    entry_date, entry_price = _close_on_or_after(ticker_df, miss_date)
-    _, bench_entry_price = _close_on_or_after(bench_df, miss_date)
-    if entry_price is not None:
-        record["entry_price"] = entry_price
-    if bench_entry_price is not None:
-        record["benchmark_entry_price"] = bench_entry_price
+    entry_date, entry_price_now = _close_on_or_after(
+        ticker_df, miss_date, max_calendar_days=ENTRY_TOLERANCE_DAYS)
+    bench_entry_date, bench_entry_now = _close_on_or_after(
+        bench_df, miss_date, max_calendar_days=ENTRY_TOLERANCE_DAYS)
 
-    anchor = entry_date or miss_date
+    # Freeze entry prices: only fill in nulls.
+    if record.get("entry_price") is None and entry_price_now is not None:
+        record["entry_price"] = entry_price_now
+    if record.get("benchmark_entry_price") is None and bench_entry_now is not None:
+        record["benchmark_entry_price"] = bench_entry_now
+
+    entry_price = record.get("entry_price")
+    bench_entry_price = record.get("benchmark_entry_price")
+    # A horizon can only be realized when the current window actually contains
+    # the entry row; otherwise we can't safely step forward N trading days.
+    has_anchor = entry_date is not None and bench_entry_date is not None
+
     horizons = record.setdefault("horizons", {})
     for h in HORIZONS:
         slot = horizons.setdefault(str(h), _empty_horizon())
-        if entry_price is None or bench_entry_price is None:
+        # Freeze realized horizons.
+        if slot.get("status") == "realized":
+            continue
+        if not has_anchor or entry_price is None or bench_entry_price is None:
             slot["status"] = "pending"
             continue
-        exit_date, exit_price = _close_n_trading_days_after(ticker_df, anchor, h)
-        _, bench_exit_price = _close_n_trading_days_after(bench_df, anchor, h)
+        exit_date, exit_price = _close_n_trading_days_after(ticker_df, entry_date, h)
+        _, bench_exit_price = _close_n_trading_days_after(bench_df, bench_entry_date, h)
         if exit_price is None or bench_exit_price is None:
             slot["status"] = "pending"
             slot["exit_date"] = None

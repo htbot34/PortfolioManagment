@@ -40,6 +40,19 @@ days return `no_trade`. See `gate_telemetry.yaml` for what was evaluated and
 why nothing cleared on a given day; the no-trade card on the dashboard
 surfaces the closest miss and a 30-day rollup.
 
+### Shadow tracker (measurement only)
+
+`shadow_ledger.yaml` and `shadow_calibration.yaml` are accumulated evidence
+for whether the gate is well-calibrated. The daily refresh records every
+near-miss (2-of-3 signals passed) as a "shadow position" and tracks its
+realized forward return vs SPY at 5, 10, and 20 trading days. The rollup
+groups results by the signal that did the rejecting -- e.g. when `news`
+blocks a near-miss, did acting anyway have paid off?
+
+These files are read-only output. Nothing in the build consumes them, no
+threshold is tuned from them, and the conviction gate is unchanged. They
+are data for inspection, not a feedback loop.
+
 ## Editing your portfolio
 
 Edit `portfolio.yaml` and push. The workflow auto-refreshes within ~2 minutes.

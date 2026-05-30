@@ -27,7 +27,7 @@ from app.data import fundamentals as fundamentals_mod
 from app.research import (
     analyst, candidates as cands, correlation, daily_brief, gate_telemetry,
     idea_funnel, learning, llm, metrics as metrics_mod, portfolio_review,
-    regime as regime_mod, scanner, valuation,
+    regime as regime_mod, scanner, shadow_tracker, valuation,
 )
 
 
@@ -356,6 +356,13 @@ def main() -> int:
                   f"{len(tel['near_miss'])} near-miss")
         except Exception:
             traceback.print_exc()
+
+    # Shadow tracker: measurement-only. Wrapped so a price-data outage
+    # cannot break the daily refresh.
+    rollup = shadow_tracker.safe_update()
+    if rollup:
+        print(f"Shadow tracker: {rollup.get('total_records', 0)} near-miss records "
+              f"across {len(rollup.get('by_failed_signal') or {})} failed-signal groups")
 
     common = {
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),

@@ -192,10 +192,25 @@ def _defense_from_book(recommendations: list[dict], macro_line: str,
     return None
 
 
-_QUALITY_THEMES = {
-    "Mega cap tech", "Semiconductors", "AI infra / data",
-    "Cloud / SaaS", "Cybersecurity", "Quality compounders",
-    "SMR / nuclear / clean energy",
+# Buckets the gate considers for long entries. Order matters: the first
+# scanner row of each ticker found across these buckets is the payload used
+# for the conviction gate, so list highest-quality setup types first.
+_BULLISH_BUCKETS = (
+    "breakouts",
+    "momentum_continuation",
+    "new_52w_highs",
+    "macd_bullish_cross",
+    "pullbacks_to_support",
+    "oversold_bounces",
+)
+
+_SETUP_LABELS = {
+    "breakouts": "20-day breakout on volume",
+    "momentum_continuation": "Momentum continuation in an established uptrend",
+    "new_52w_highs": "Breaking to new 52-week highs",
+    "macd_bullish_cross": "Bullish MACD cross with momentum",
+    "pullbacks_to_support": "Pullback to support in uptrend",
+    "oversold_bounces": "Deep oversold bounce with MACD turn",
 }
 
 
@@ -204,45 +219,68 @@ def _trade_from_scanner(scan_result: dict, macro: dict, macro_line: str,
                          account: store.Account | None = None,
                          soft_veto: set[str] | None = None,
                          regime: dict | None = None,
-                         gate_log: list | None = None) -> dict | None:
-    """Promote a scanner setup to a trade verdict.
+                         gate_log: list | None = None,
+                         funnel: dict | None = None) -> dict | None:
+    """Promote a setup to a trade verdict via the conviction gate.
 
-    Two-stage gate:
-      1. **Coarse pre-filter** to keep the conviction gate from churning
-         through unsuitable candidates (RSI sanity, volume confirmation,
-         not extended off 52w high, quality theme).
-      2. **3-signal conviction gate** (``conviction.evaluate``) which is
-         the binding decision: technical + sector_momentum + news must
-         all pass.
+    Candidates are drawn from every bullish scanner bucket (breakouts,
+    momentum continuation, new 52-week highs, MACD cross-ups, pullbacks,
+    oversold bounces) and ordered by the idea funnel's confluence score
+    (multi-source confirmation) when available, then by bucket priority.
+
+    A **light pre-filter** (volume above average + MACD histogram positive)
+    blocks only obvious noise so the conviction gate is not flooded with
+    LLM-classified news calls. The binding decision is still the 3-signal
+    conviction gate (technical + sector_momentum + news), with the same
+    insider 2-of-3 promotion path as before.
 
     Regime gating:
-      - breakdown: no new buys at all (defense only).
-      - chop:      the insider 2-of-3 promotion path is disabled.
-
-    A scanner setup that clears the pre-filter but fails any of the three
-    signals does NOT surface. ``no_trade`` is the default outcome.
+      - breakdown: no new buys (defense only).
+      - chop:      insider 2-of-3 promotion path disabled.
     """
     if _macro_risk_off(macro):
         return None
     regime_name = (regime or {}).get("regime")
-    breakdown = regime_name == "breakdown"  # defense only in a breakdown
+    breakdown = regime_name == "breakdown"
     allow_promo = regime_name != "chop"
     veto = soft_veto or set()
     log = gate_log if gate_log is not None else []
-    for s in scan_result["buckets"].get("breakouts", []):
-        ticker = s["ticker"].upper()
+
+    # 1. Collect the first scanner row for each ticker across bullish buckets.
+    setups: dict[str, tuple[str, dict]] = {}
+    for bucket in _BULLISH_BUCKETS:
+        for s in scan_result.get("buckets", {}).get(bucket, []) or []:
+            t = (s.get("ticker") or "").upper()
+            if t and t not in setups:
+                setups[t] = (bucket, s)
+
+    # 2. Order: funnel-confluence tickers first (highest points first), then
+    #    any remaining setups in canonical (bucket, position) order.
+    ordered: list[tuple[str, str, dict]] = []
+    used: set[str] = set()
+    for idea in (funnel or {}).get("confluence") or []:
+        t = (idea.get("ticker") or "").upper()
+        if t in setups and t not in used:
+            bucket, s = setups[t]
+            ordered.append((t, bucket, s))
+            used.add(t)
+    for bucket in _BULLISH_BUCKETS:
+        for s in scan_result.get("buckets", {}).get(bucket, []) or []:
+            t = (s.get("ticker") or "").upper()
+            if t and t not in used and t in setups:
+                ordered.append((t, bucket, s))
+                used.add(t)
+
+    # 3. Evaluate each candidate through the conviction gate.
+    for ticker, bucket, s in ordered:
         if s.get("held") or ticker in exclude:
             continue
         if ticker in veto:
             log.append(_gate_entry(ticker, pre_block="soft_veto"))
             continue
-        rsi = s.get("rsi14") or 0
         vol = s.get("vol_ratio_20d") or 0
         macd_h = s.get("macd_hist") or 0
-        off52 = s.get("pct_off_52w_high") or -100
-        theme = s.get("theme") or ""
-        if not (55 <= rsi <= 65 and vol >= 2.0 and macd_h > 0
-                and off52 >= -2 and theme in _QUALITY_THEMES):
+        if not (vol >= 1.2 and macd_h > 0):
             continue
         if breakdown:
             log.append(_gate_entry(ticker, pre_block="regime"))
@@ -254,35 +292,9 @@ def _trade_from_scanner(scan_result: dict, macro: dict, macro_line: str,
         log.append(_gate_entry(ticker, gate))
         if not gate["qualifies"]:
             continue
-        return _build_trade(s, "buy", "Quality breakout to new highs on heavy volume",
-                             macro_line, scan_result, exclude, gate=gate, account=account,
-                             regime_name=regime_name)
-    for s in scan_result["buckets"].get("oversold_bounces", []):
-        ticker = s["ticker"].upper()
-        if s.get("held") or ticker in exclude:
-            continue
-        if ticker in veto:
-            log.append(_gate_entry(ticker, pre_block="soft_veto"))
-            continue
-        rsi = s.get("rsi14") or 100
-        macd_h = s.get("macd_hist") or -1
-        vol = s.get("vol_ratio_20d") or 0
-        theme = s.get("theme") or ""
-        if not (rsi <= 25 and macd_h > 0 and vol >= 1.2
-                and theme in _QUALITY_THEMES):
-            continue
-        if breakdown:
-            log.append(_gate_entry(ticker, pre_block="regime"))
-            continue
-        gate = conviction.evaluate(s, direction="long", macro=macro,
-                                    news_fetcher=news_mod.company_news,
-                                    action="new_buy", portfolio=account,
-                                    allow_insider_promotion=allow_promo)
-        log.append(_gate_entry(ticker, gate))
-        if not gate["qualifies"]:
-            continue
-        return _build_trade(s, "buy", "Deep oversold quality name with bullish MACD cross",
-                             macro_line, scan_result, exclude, gate=gate, account=account,
+        label = _SETUP_LABELS.get(bucket, "Setup cleared the conviction gate")
+        return _build_trade(s, "buy", label, macro_line, scan_result,
+                             exclude, gate=gate, account=account,
                              regime_name=regime_name)
     return None
 
@@ -471,7 +483,8 @@ def build(macro: dict, recommendations: list[dict], review: dict,
         else:
             trade = _trade_from_scanner(scan_result, macro, macro_line, held,
                                           account=account, soft_veto=soft_veto,
-                                          regime=regime, gate_log=gate_log)
+                                          regime=regime, gate_log=gate_log,
+                                          funnel=funnel)
             if trade:
                 verdict = _stamp(trade)
             else:

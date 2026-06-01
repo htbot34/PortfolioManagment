@@ -48,6 +48,58 @@ jobs:
           SEC_USER_AGENT: PortfolioAdvisor ${{ github.repository_owner }}@users.noreply.github.com
         run: python -m app.build_site
 
+      - name: Notify on new recommendations
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DASHBOARD_URL: https://htbot34.github.io/PortfolioManagment/
+        run: |
+          if [ ! -s .new_recs.json ] || [ "$(jq 'length' .new_recs.json)" = "0" ]; then
+            echo "No new recs to notify."
+            exit 0
+          fi
+          count=$(jq 'length' .new_recs.json)
+          echo "Opening $count issue(s) for new rec(s)..."
+          for i in $(seq 0 $((count - 1))); do
+            rec=$(jq ".[$i]" .new_recs.json)
+            ticker=$(echo "$rec" | jq -r '.ticker // "?"')
+            action=$(echo "$rec" | jq -r '.action // "?"' | tr '[:lower:]' '[:upper:]')
+            slot=$(echo "$rec"  | jq -r '._slot // "primary"')
+            rec_id=$(echo "$rec" | jq -r '.rec_id // ""')
+            title="[REC] $action $ticker -- $slot"
+            body_file=$(mktemp)
+            {
+              echo "**Action**: $action $ticker"
+              echo
+              size_display=$(echo "$rec" | jq -r '.size.display // ""')
+              [ -n "$size_display" ] && echo "**Size**: $size_display" && echo
+              entry=$(echo "$rec" | jq -r '.entry // ""')
+              [ -n "$entry" ] && echo "**Entry**: $entry"
+              stop=$(echo "$rec" | jq -r '.stop // ""')
+              [ -n "$stop" ] && echo "**Stop**: $stop"
+              target=$(echo "$rec" | jq -r '.target // ""')
+              [ -n "$target" ] && echo "**Target**: $target"
+              conviction=$(echo "$rec" | jq -r '.conviction // ""')
+              [ -n "$conviction" ] && echo "**Conviction**: $conviction/5"
+              thesis=$(echo "$rec" | jq -r '.thesis // ""')
+              if [ -n "$thesis" ]; then echo; echo "**Thesis**: $thesis"; fi
+              invalidation=$(echo "$rec" | jq -r '.invalidation // ""')
+              [ -n "$invalidation" ] && echo "**Invalidation**: $invalidation"
+              evidence=$(echo "$rec" | jq -r '.evidence // [] | if type=="array" then map("- " + .) | join("\n") else "" end')
+              if [ -n "$evidence" ]; then echo; echo "**Evidence**:"; echo "$evidence"; fi
+              echo
+              echo "[Dashboard]($DASHBOARD_URL) · [Recommendations](${DASHBOARD_URL}recommendations.html) · [data.json](${DASHBOARD_URL}data.json)"
+              echo
+              echo "_rec_id: \`$rec_id\`_"
+            } > "$body_file"
+            # Retry without the label if it hasn't been provisioned yet by
+            # sync_labels.yml -- gh refuses to create the issue at all when a
+            # passed label is missing, so the fallback ensures we still notify.
+            gh issue create --title "$title" --body-file "$body_file" --label recommendation \
+              || gh issue create --title "$title" --body-file "$body_file" \
+              || echo "Failed to create issue for $ticker; continuing."
+          done
+
       - name: Commit built site
         run: |
           git config user.name "github-actions[bot]"

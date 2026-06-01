@@ -22,6 +22,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 from app.config import risk_profile, settings
 from app.data import macro as macro_mod
 from app.data import market_news, prices
+from app import notify
 from app.portfolio import idea_queue, rec_history, store
 from app.data import fundamentals as fundamentals_mod
 from app.research import (
@@ -345,6 +346,14 @@ def main() -> int:
         if added:
             print(f"Logged {len(added)} new pending rec(s) to rec_history.yaml")
     except Exception as e:
+        added = []
+        traceback.print_exc()
+
+    try:
+        payload = notify.write_sidecar(brief, added)
+        if payload:
+            print(f"Wrote {len(payload)} rec(s) to .new_recs.json for notification")
+    except Exception:
         traceback.print_exc()
 
     if brief.get("telemetry"):

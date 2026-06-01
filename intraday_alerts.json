@@ -1,56 +1,100 @@
 {
-  "checked_at": "2026-05-29T21:23:21Z",
+  "checked_at": "2026-06-01T18:36:58Z",
   "alerts": [
     {
-      "severity": "med",
+      "severity": "high",
+      "kind": "position_break",
+      "text": "FBL gapped down -8.0% today"
+    },
+    {
+      "severity": "low",
       "kind": "watchlist_entry",
-      "text": "IWM in entry zone $290.25-$294.07 (plan: stop $283.08, target $310.32, hold 2-3 weeks)"
+      "text": "MSFT at $460.87 - within buy zone of yesterday's breakout setup ($450.24)"
+    },
+    {
+      "severity": "low",
+      "kind": "watchlist_entry",
+      "text": "AVGO at $460.60 - within buy zone of yesterday's breakout setup ($446.77)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "BEAM in entry zone $31.98-$33.47 (plan: stop $29.20, target $39.78, hold 2-3 weeks)"
+      "text": "GEV in entry zone $931.80-$974.63 (plan: stop $867.56, target $1124.52, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "XLC in entry zone $114.36-$115.82 (plan: stop $112.17, target $120.93, hold 2-3 weeks)"
+      "text": "LUNR in entry zone $37.54-$41.89 (plan: stop $29.38, target $60.39, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "TEM in entry zone $50.30-$52.27 (plan: stop $46.61, target $60.63, hold 2-3 weeks)"
+      "text": "MU in entry zone $993.45-$1044.55 (plan: stop $897.62, target $1261.76, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "ONTO in entry zone $243.39-$257.63 (plan: stop $222.03, target $307.47, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "BEAM in entry zone $31.05-$32.49 (plan: stop $28.35, target $38.61, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "ETN in entry zone $397.13-$407.72 (plan: stop $377.26, target $452.76, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "XBI in entry zone $133.23-$135.84 (plan: stop $128.34, target $146.92, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "DIA in entry zone $507.94-$511.78 (plan: stop $500.73, target $528.12, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "QBTS in entry zone $28.94-$31.16 (plan: stop $24.79, target $40.57, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "AFRM in entry zone $70.85-$74.18 (plan: stop $64.61, target $88.33, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "NOW in entry zone $129.42-$135.26 (plan: stop $118.48, target $160.06, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "ESTC in entry zone $63.69-$66.38 (plan: stop $58.65, target $77.80, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "S in entry zone $17.23-$17.99 (plan: stop $15.80, target $21.23, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
-    "TSM|478.23": "2026-05-29",
-    "ARM|442.35": "2026-05-29",
-    "GEV|1143.99": "2026-05-29",
-    "ABNB|151.31": "2026-05-29",
-    "AVGO|506.54": "2026-05-29",
-    "MU|1225.97": "2026-05-29",
-    "AMAT|531.56": "2026-05-29",
-    "ONTO|315.14": "2026-05-29",
-    "TT|498.54": "2026-05-29",
-    "XLI|183.83": "2026-05-29",
-    "XBI|148.77": "2026-05-29",
-    "DIA|527.88": "2026-05-29",
-    "QBTS|40.57": "2026-05-29",
-    "BITQ|33.07": "2026-05-29",
-    "WULF|31.74": "2026-05-29",
-    "XLE|61.14": "2026-05-29",
-    "CIFR|30.95": "2026-05-29",
-    "ASML|1875.54": "2026-05-29",
-    "NET|269.56": "2026-05-29",
-    "FSLR|367.13": "2026-05-29",
-    "AFRM|88.33": "2026-05-29",
-    "PLTR|177.16": "2026-05-29",
-    "LUNR|60.39": "2026-05-29",
-    "NOW|146.1": "2026-05-29",
-    "SOFI|21.18": "2026-05-29",
-    "IWM|310.32": "2026-05-29",
-    "BEAM|39.78": "2026-05-29",
-    "XLC|120.93": "2026-05-29",
-    "TEM|60.63": "2026-05-29"
+    "GEV|1124.52": "2026-06-01",
+    "LUNR|60.39": "2026-06-01",
+    "MU|1261.76": "2026-06-01",
+    "ONTO|307.47": "2026-06-01",
+    "BEAM|38.61": "2026-06-01",
+    "ETN|452.76": "2026-06-01",
+    "XBI|146.92": "2026-06-01",
+    "DIA|528.12": "2026-06-01",
+    "QBTS|40.57": "2026-06-01",
+    "AFRM|88.33": "2026-06-01",
+    "NOW|160.06": "2026-06-01",
+    "ESTC|77.8": "2026-06-01",
+    "S|21.23": "2026-06-01"
   }
 }

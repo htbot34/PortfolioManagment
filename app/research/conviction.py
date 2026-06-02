@@ -17,7 +17,8 @@ from __future__ import annotations
 from datetime import date, timedelta
 from typing import Callable
 
-from app.research import insider_signal, news_classifier, signals
+from app.config import risk_profile
+from app.research import insider_signal, news_classifier, signals, trump_signal
 
 
 def _extract_sector(payload: dict) -> str:
@@ -106,6 +107,23 @@ def _insider_signal(ticker: str, direction: str, payload: dict,
     return sc
 
 
+def _gate_config() -> dict:
+    """Read the gate knobs from risk_profile.yaml, falling back to defaults
+    so the gate stays usable on a partially-populated config."""
+    try:
+        cfg = (risk_profile() or {}).get("gate") or {}
+    except Exception:
+        cfg = {}
+    return {
+        "trump_signal_enabled": bool(cfg.get("trump_signal_enabled", True)),
+        "trump_ttl_days": int(cfg.get("trump_ttl_days", 30)),
+        "trump_min_confidence": float(cfg.get("trump_min_confidence", 0.6)),
+        "trump_confluence_min": int(cfg.get("trump_confluence_min", 2)),
+        "trump_solo_with_technical": bool(cfg.get("trump_solo_with_technical", False)),
+        "trump_attack_vetoes_longs": bool(cfg.get("trump_attack_vetoes_longs", True)),
+    }
+
+
 def evaluate(
     ticker_payload: dict,
     direction: str,
@@ -118,6 +136,7 @@ def evaluate(
     allow_insider_promotion: bool = True,
     fundamentals: dict | None = None,
     sector_comparables: list[dict] | None = None,
+    gate_config: dict | None = None,
 ) -> dict:
     """Run the conviction gate against ``ticker_payload`` for ``direction``.
 
@@ -167,21 +186,92 @@ def evaluate(
     nws = signals.news_signal(ticker, classifications, direction)
     out_signals["news"] = nws
 
-    primary_pass = sum(1 for s in (tech, sec, nws) if s["pass"])
-    qualifies = primary_pass == 3
+    # Trump-mention signal. Either pre-computed by the caller (test
+    # injection or batched in build_site) and attached to the payload as
+    # `trump_signal_result`, or computed on the fly here.
+    cfg = gate_config if gate_config is not None else _gate_config()
+    trump_finding = None
+    if cfg["trump_signal_enabled"]:
+        trump_finding = ticker_payload.get("trump_signal_result")
+        if trump_finding is None:
+            try:
+                trump_finding = trump_signal.evaluate(
+                    ticker, classifications,
+                    ttl_days=cfg["trump_ttl_days"],
+                    min_confidence=cfg["trump_min_confidence"],
+                )
+            except Exception:
+                trump_finding = None
+    # Stash on the payload so trump_signal_eval can read it without
+    # re-running. A disabled signal stays neutral by virtue of an empty
+    # finding.
+    ticker_payload["trump_signal_result"] = trump_finding or {
+        "mention": False, "valence": "none", "confidence": 0.0,
+        "as_of": None, "source": "", "summary": "", "manual": False,
+        "low_confidence_seen": [],
+    }
+    trump = signals.trump_signal_eval(ticker_payload, direction)
+    out_signals["trump"] = trump
+
+    # ---- Qualification math --------------------------------------------
+    # Technical is already a hard prerequisite at this point. The new rule
+    # is a "confluence of confirmations" over (sector, news, trump):
+    #   confirmations >= trump_confluence_min => qualifies.
+    # Default trump_confluence_min=2. When trump.pass is False (the
+    # neutral case), this requires BOTH sector AND news -- byte-for-byte
+    # identical to the prior 3-of-3 rule. A Trump pass can substitute
+    # for one of sector/news.
+    sec_pass = bool(sec["pass"])
+    news_pass = bool(nws["pass"])
+    trump_pass = bool(trump.get("pass"))
+    confirmations = sum((sec_pass, news_pass, trump_pass))
+    qualifies = confirmations >= cfg["trump_confluence_min"]
+    # Optional: technical + trump alone (off by default).
+    if (not qualifies and trump_pass and cfg["trump_solo_with_technical"]):
+        qualifies = True
     promoted_by_insider = False
 
-    # Insider-promotion path: exactly 2 of 3, technical must be one of them.
-    # Disabled in chop regime (the gate is tightened to require 3-of-3).
-    if not qualifies and primary_pass == 2 and tech["pass"] and allow_insider_promotion:
+    # Insider-promotion path: exactly 1 confirmation (tech + one of
+    # sector/news/trump), technical is already verified, insider score
+    # >= 2. Same conservative spirit as the old 2-of-3 path -- one full
+    # primary still must agree, then an orthogonal Form-4 cluster
+    # rescues it.
+    if (not qualifies and confirmations == 1 and tech["pass"]
+            and allow_insider_promotion):
         insider = _insider_signal(ticker, direction, ticker_payload, insider_fetcher)
         out_signals["insider"] = insider
-        if insider.get("score", 0) >= 2:
+        if insider.get("score", 0) >= 2 and insider.get("data_available", True):
             qualifies = True
             promoted_by_insider = True
 
     result = _result(qualifies, out_signals)
     result["promoted_by_insider"] = promoted_by_insider
+
+    # Trump-attack veto on new long entries / endorsement veto on new
+    # shorts. We surface the avoid flag regardless of qualifies (so
+    # holders see the exit annotation); the veto only flips qualifies
+    # when the action is opening/adding to a position.
+    if trump.get("avoid") and cfg["trump_attack_vetoes_longs"]:
+        is_entry = (action or "").lower() in ("buy", "add", "new_buy",
+                                              "sell", "short", "new_short")
+        if direction == "long":
+            held = ticker_payload.get("position") or {}
+            is_held = bool(held)
+            if is_entry and not is_held and result["qualifies"]:
+                result["qualifies"] = False
+                result["trump_block"] = (
+                    f"Presidential attack -- {trump.get('reason', '')} "
+                    f"[{trump.get('source', '')}]")
+            elif is_held:
+                result["trump_exit_flag"] = (
+                    f"Presidential attack -- {trump.get('reason', '')} "
+                    f"[{trump.get('source', '')}]")
+        elif direction == "short":
+            if is_entry and result["qualifies"]:
+                result["qualifies"] = False
+                result["trump_block"] = (
+                    f"Endorsement vetoes new short -- "
+                    f"{trump.get('reason', '')} [{trump.get('source', '')}]")
 
     # Correlation gate (longs only). Attaches a `correlation` block; for a
     # NEW BUY a high avg correlation to the top-5 holdings downgrades the
@@ -315,15 +405,15 @@ def _earnings_block(ticker: str) -> str | None:
 
 def _result(qualifies: bool, sigs: dict[str, dict]) -> dict:
     parts = []
-    for name in ("technical", "sector_momentum", "news", "insider"):
+    for name in ("technical", "sector_momentum", "news", "trump", "insider"):
         if name in sigs:
             parts.append(f"{name}={'PASS' if sigs[name]['pass'] else 'fail'}")
     # `reasons` is a flat per-signal pass/fail map for telemetry. Signals that
     # were never evaluated (technical short-circuit) read False - they did not
-    # pass. `insider_score` is 0 unless the 2-of-3 promotion path ran.
+    # pass. `insider_score` is 0 unless the 1-confirmation promotion path ran.
     reasons = {
         name: bool(sigs.get(name, {}).get("pass", False))
-        for name in ("technical", "sector_momentum", "news")
+        for name in ("technical", "sector_momentum", "news", "trump")
     }
     out = {
         "qualifies": qualifies,

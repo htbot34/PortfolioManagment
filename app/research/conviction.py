@@ -66,26 +66,43 @@ def _insider_signal(ticker: str, direction: str, payload: dict,
 
     Transactions come from ``payload['insider_transactions']`` if present,
     else from ``fetcher`` if given, else from ``insider.recent_form4_transactions``.
+
+    A fetch failure (CIK 403, EDGAR outage, ...) is propagated as
+    ``data_available=False`` on the result so the 2-of-3 promotion path
+    cannot silently fail-as-zero — it can fail loudly instead.
     """
     txns = payload.get("insider_transactions")
+    fetch_error: str | None = None
+    fetch_failed = False
     if txns is None:
         if fetcher is not None:
             try:
                 txns = fetcher(ticker)
-            except Exception:
+            except Exception as e:
                 txns = []
+                fetch_failed = True
+                fetch_error = f"{type(e).__name__}: {e}"
         else:
             try:
                 from app.data import insider
                 txns = insider.recent_form4_transactions(ticker)
-            except Exception:
+                err = insider.LAST_FETCH_ERRORS.get(ticker.upper())
+                if err:
+                    fetch_failed = True
+                    fetch_error = err
+            except Exception as e:
                 txns = []
+                fetch_failed = True
+                fetch_error = f"{type(e).__name__}: {e}"
     txns = txns or []
+    kwargs = {"data_available": not fetch_failed, "error": fetch_error}
     if direction == "long":
-        sc = insider_signal.insider_cluster_score(ticker, txns)
+        sc = insider_signal.insider_cluster_score(ticker, txns, **kwargs)
     else:
-        sc = insider_signal.insider_cluster_score_short(ticker, txns)
-    sc["pass"] = sc.get("score", 0) >= 2
+        sc = insider_signal.insider_cluster_score_short(ticker, txns, **kwargs)
+    # An unavailable signal cannot pass -- the gate must NOT promote on
+    # data we don't have.
+    sc["pass"] = sc.get("score", 0) >= 2 and sc.get("data_available", True)
     return sc
 
 

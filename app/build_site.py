@@ -20,6 +20,7 @@ import yaml
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from app.config import risk_profile, settings
+from app.data import insider as insider_mod
 from app.data import macro as macro_mod
 from app.data import market_news, prices
 from app import notify
@@ -373,11 +374,18 @@ def main() -> int:
         print(f"Shadow tracker: {rollup.get('total_records', 0)} near-miss records "
               f"across {len(rollup.get('by_failed_signal') or {})} failed-signal groups")
 
+    insider_diag = insider_mod.diagnostics()
+    if insider_diag.get("cik_index_error") or insider_diag.get("tickers_unavailable"):
+        print(f"Insider data unavailable: "
+              f"cik_index={insider_diag.get('cik_index_error')!r}, "
+              f"affected_tickers={insider_diag.get('tickers_unavailable')}")
+
     common = {
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
         "risk": risk_profile(),
         "flags": {"has_llm": llm.available()},
         "diagnostics": diag,
+        "insider_diagnostics": insider_diag,
         "repo": os.getenv("GITHUB_REPOSITORY", "htbot34/PortfolioManagment"),
     }
 
@@ -411,6 +419,7 @@ def main() -> int:
     data_dump = {
         "generated_at": common["generated_at"],
         "diagnostics": diag,
+        "insider_diagnostics": insider_diag,
         "llm_ping_result": ping_result,
         "llm_attempts": list(llm.ATTEMPTS),
         "macro": macro,

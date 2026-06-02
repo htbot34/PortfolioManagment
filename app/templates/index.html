@@ -139,9 +139,17 @@
   {% set diag = diagnostics or {} %}
   {% set live_ns = namespace(any=false) %}
   {% for v in diag.values() %}{% if v and v.startswith('ok') %}{% set live_ns.any = true %}{% endif %}{% endfor %}
-  {% if not live_ns.any %}
-    <div class="text-[10px] text-amber-300 bg-amber-900/40 px-2 py-0.5 rounded">Prices stale (using cache)</div>
-  {% endif %}
+  <div class="flex gap-2">
+    {% if not live_ns.any %}
+      <div class="text-[10px] text-amber-300 bg-amber-900/40 px-2 py-0.5 rounded">Prices stale (using cache)</div>
+    {% endif %}
+    {% set ins_diag = insider_diagnostics or {} %}
+    {% if ins_diag.cik_index_error %}
+      <div class="text-[10px] text-rose-200 bg-rose-900/40 px-2 py-0.5 rounded" title="{{ ins_diag.cik_index_error }}">Insider data unavailable</div>
+    {% elif ins_diag.tickers_unavailable %}
+      <div class="text-[10px] text-amber-300 bg-amber-900/40 px-2 py-0.5 rounded" title="{{ ins_diag.tickers_unavailable }} ticker(s) failed to fetch insider data">Insider data partial</div>
+    {% endif %}
+  </div>
 </div>
 
 {% if regime %}

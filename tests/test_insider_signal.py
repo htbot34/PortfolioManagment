@@ -187,3 +187,67 @@ def test_full_three_of_three_does_not_need_insider():
     assert out["qualifies"] is True
     assert out["promoted_by_insider"] is False
     assert "insider" not in out["signals"]
+
+
+# ---------------------------------------------------------------------------
+# Loud-failure semantics: data_available=False must NOT score as 0-confirmed
+# ---------------------------------------------------------------------------
+
+def test_unavailable_signal_does_not_pass_even_with_cluster_buys():
+    """When the data layer reports a fetch failure, the score must NOT
+    promote the gate -- even if a stub list of buys was passed in. The
+    safety valve must not fire on data we don't trust."""
+    txns = [_txn("Alice", value=600_000), _txn("Bob", value=600_000),
+            _txn("Carol", value=600_000), _txn("Dave", value=600_000)]
+    out = insider_signal.insider_cluster_score(
+        "CO", txns, data_available=False, error="cik lookup failed")
+    assert out["score"] == 0
+    assert out["data_available"] is False
+    assert "unavailable" in out["summary"]
+    assert out.get("error") == "cik lookup failed"
+
+
+def test_available_signal_clustered_buys_still_score_2_plus():
+    """Sanity check: with data_available=True (the default), a real
+    cluster still tiers up exactly as before the loud-failure plumbing."""
+    txns = [_txn("Alice", value=600_000), _txn("Bob", value=600_000)]
+    out = insider_signal.insider_cluster_score("CO", txns)
+    assert out["score"] >= 2
+    assert out["data_available"] is True
+
+
+def test_conviction_insider_signal_marks_unavailable_on_fetch_error():
+    """The promotion-path insider fetcher must surface a fetch failure
+    as data_available=False so 2-of-3 cannot quietly promote on zeros."""
+    def _explode(_ticker):
+        raise RuntimeError("simulated SEC outage")
+    out = conviction._insider_signal(
+        "CO", "long", payload={}, fetcher=_explode)
+    assert out["data_available"] is False
+    assert out["score"] == 0
+    assert out["pass"] is False
+    assert "RuntimeError" in (out.get("error") or "")
+
+
+def test_promotion_path_does_not_fire_when_insider_unavailable():
+    """End-to-end: when the conviction gate would otherwise promote via
+    insider 2-of-3, an unavailable insider signal must NOT rescue it.
+    This is the regression guard for the silent-failure bug from the
+    audit."""
+    # Build a 2-of-3 payload WITHOUT pre-supplying insider_transactions,
+    # so the gate routes through the fetcher path and surfaces the
+    # failure.
+    payload = _tech_news_pass_sector_fail_payload([])
+    payload.pop("insider_transactions")
+    def _explode(_ticker):
+        raise RuntimeError("SEC index unreachable")
+    out = conviction.evaluate(
+        payload, direction="long",
+        macro={"sectors": {}},  # force sector_momentum fail
+        insider_fetcher=_explode,
+    )
+    assert out["qualifies"] is False
+    assert out["promoted_by_insider"] is False
+    # The insider signal IS reported (so telemetry sees it) but doesn't pass.
+    assert "insider" in out["signals"]
+    assert out["signals"]["insider"]["data_available"] is False

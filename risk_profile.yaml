@@ -26,3 +26,32 @@ preferences:
   avoid:
     - tobacco
     - private prisons
+
+# Conviction-gate knobs. See app/research/conviction.py.
+#
+# The Trump-mention signal (app/research/trump_signal.py) is a fourth
+# primary alongside sector_momentum and news. Technical is unchanged --
+# it remains a hard prerequisite the gate cannot reach without.
+#
+# Invariant: when no qualifying Trump mention exists for a ticker, the
+# gate's qualification math is byte-for-byte the current 3-of-3 rule.
+# A test in tests/test_conviction_trump_neutrality.py enforces this.
+gate:
+  # Kill switch for the entire Trump signal. When False, the gate
+  # behaves exactly as it did before this feature was introduced.
+  trump_signal_enabled: true
+  # A Trump mention older than this is not a signal.
+  trump_ttl_days: 30
+  # In-TTL mentions below this confidence are logged but do NOT pass.
+  trump_min_confidence: 0.6
+  # Number of (sector, news, trump) confirmations required ON TOP OF a
+  # technical pass. Default 2 preserves today's "3-of-3 primaries"
+  # behavior for tickers with no Trump mention.
+  trump_confluence_min: 2
+  # When True, `technical PASS + trump PASS` alone qualifies (no third
+  # confirmation). OFF by default -- turn on deliberately.
+  trump_solo_with_technical: false
+  # A Trump attack vetoes a NEW long entry even if the rest of the
+  # primaries clear. An existing holding receives an exit annotation
+  # instead of an auto-trim.
+  trump_attack_vetoes_longs: true

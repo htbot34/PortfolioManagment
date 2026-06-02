@@ -264,6 +264,89 @@ def _normalize_sector(sector: str) -> str:
     return sector.strip().lower()
 
 
+def trump_signal_eval(ticker_payload: dict, direction: str) -> dict:
+    """Score a Trump-mention signal in the direction of the trade.
+
+    Pulls the precomputed finding off the payload at
+    ``trump_signal_result`` (set by ``conviction.evaluate`` so the
+    detector is invoked at most once per evaluation). When no finding
+    is attached, returns a neutral fail with ``valence='none'``.
+
+    Long direction:
+      ``endorse`` within TTL & above confidence -> pass.
+      ``attack`` -> fail and set ``avoid=True`` for the gate to act on.
+      Anything else (no mention, neutral) -> neutral fail (no avoid).
+
+    Short direction (mirror):
+      ``attack`` -> pass.
+      ``endorse`` -> fail + avoid.
+    """
+    if direction not in ("long", "short"):
+        raise ValueError(f"direction must be 'long' or 'short', got {direction!r}")
+    finding = (ticker_payload.get("trump_signal_result")
+               if isinstance(ticker_payload, dict) else None) or {}
+    valence = finding.get("valence") or "none"
+    mention = bool(finding.get("mention"))
+
+    if not mention:
+        return {
+            "pass": False, "valence": "none", "avoid": False,
+            "reason": "no qualifying Trump mention",
+            "confidence": float(finding.get("confidence") or 0.0),
+            "source": finding.get("source") or "",
+            "as_of": finding.get("as_of"),
+            "manual": bool(finding.get("manual")),
+        }
+
+    if direction == "long":
+        if valence == "endorse":
+            return {
+                "pass": True, "valence": "endorse", "avoid": False,
+                "reason": f"endorsement on {finding.get('as_of')}: "
+                          f"{finding.get('summary', '')}",
+                "confidence": float(finding.get("confidence") or 0.0),
+                "source": finding.get("source") or "",
+                "as_of": finding.get("as_of"),
+                "manual": bool(finding.get("manual")),
+            }
+        if valence == "attack":
+            return {
+                "pass": False, "valence": "attack", "avoid": True,
+                "reason": f"Presidential attack on {finding.get('as_of')}: "
+                          f"{finding.get('summary', '')}",
+                "confidence": float(finding.get("confidence") or 0.0),
+                "source": finding.get("source") or "",
+                "as_of": finding.get("as_of"),
+                "manual": bool(finding.get("manual")),
+            }
+    else:  # short
+        if valence == "attack":
+            return {
+                "pass": True, "valence": "attack", "avoid": False,
+                "reason": f"Presidential attack on {finding.get('as_of')}: "
+                          f"{finding.get('summary', '')}",
+                "confidence": float(finding.get("confidence") or 0.0),
+                "source": finding.get("source") or "",
+                "as_of": finding.get("as_of"),
+                "manual": bool(finding.get("manual")),
+            }
+        if valence == "endorse":
+            return {
+                "pass": False, "valence": "endorse", "avoid": True,
+                "reason": f"Endorsement vetoes new short on "
+                          f"{finding.get('as_of')}: "
+                          f"{finding.get('summary', '')}",
+                "confidence": float(finding.get("confidence") or 0.0),
+                "source": finding.get("source") or "",
+                "as_of": finding.get("as_of"),
+                "manual": bool(finding.get("manual")),
+            }
+    # Unknown valence: don't pass, don't veto.
+    return {"pass": False, "valence": "none", "avoid": False,
+            "reason": "no qualifying Trump mention",
+            "confidence": 0.0, "source": "", "as_of": None, "manual": False}
+
+
 def sector_momentum_signal(sector: str, macro: dict, direction: str) -> dict:
     """Pass if the sector ETF's 5d AND 20d returns align with direction.
 

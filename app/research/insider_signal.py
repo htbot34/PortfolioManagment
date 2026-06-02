@@ -51,8 +51,19 @@ def _aggregate(txns: list[dict]) -> tuple[set[str], float]:
 
 
 def insider_cluster_score(ticker: str, insider_transactions: list[dict],
-                          lookback_days: int = 30) -> dict:
-    """Bull-case insider cluster score from open-market purchases ("P")."""
+                          lookback_days: int = 30,
+                          data_available: bool | None = None,
+                          error: str | None = None) -> dict:
+    """Bull-case insider cluster score from open-market purchases ("P").
+
+    ``data_available`` distinguishes "fetched cleanly, no qualifying buyers"
+    (``True`` -> genuine 0) from "couldn't fetch at all" (``False`` -> the
+    score is unknown, and the gate must NOT treat it as a confirmed-zero).
+    ``None`` (the default) means the caller did not specify; we infer
+    ``True`` because the historical contract is "you pass me what you got."
+    """
+    if data_available is None:
+        data_available = True
     cutoff = date.today() - timedelta(days=lookback_days)
     buys = [t for t in (insider_transactions or [])
             if t.get("transaction_code") == "P"
@@ -63,24 +74,38 @@ def insider_cluster_score(ticker: str, insider_transactions: list[dict],
     csuite_1m = any(_is_csuite(t.get("role")) and (t.get("total_value") or 0) >= 1_000_000
                     for t in buys)
 
-    score = _tier(n, total, csuite_1m)
-    summary = _summary(n, total, score, "buyer", csuite_1m)
-    return {
+    score = _tier(n, total, csuite_1m) if data_available else 0
+    if not data_available:
+        summary = f"insider data unavailable ({error})" if error \
+            else "insider data unavailable"
+    else:
+        summary = _summary(n, total, score, "buyer", csuite_1m)
+    out = {
         "score": score,
         "distinct_buyers": n,
         "total_dollars": round(total, 2),
         "summary": summary,
+        "data_available": data_available,
     }
+    if not data_available and error:
+        out["error"] = error
+    return out
 
 
 def insider_cluster_score_short(ticker: str, insider_transactions: list[dict],
-                                lookback_days: int = 30) -> dict:
+                                lookback_days: int = 30,
+                                data_available: bool | None = None,
+                                error: str | None = None) -> dict:
     """Bear-case insider cluster score from open-market sales ("S").
 
     Scheduled 10b5-1 sales are excluded -- they're pre-planned and carry no
     informational signal. Filer role is not weighted for sells (sales are
     often diversification, not a bearish call), so there's no C-suite tier-3.
+
+    See :func:`insider_cluster_score` for the ``data_available`` semantics.
     """
+    if data_available is None:
+        data_available = True
     cutoff = date.today() - timedelta(days=lookback_days)
     sells = [t for t in (insider_transactions or [])
              if t.get("transaction_code") == "S"
@@ -89,14 +114,22 @@ def insider_cluster_score_short(ticker: str, insider_transactions: list[dict],
     sellers, total = _aggregate(sells)
     n = len(sellers)
 
-    score = _tier(n, total, csuite_1m=False)
-    summary = _summary(n, total, score, "seller", False)
-    return {
+    score = _tier(n, total, csuite_1m=False) if data_available else 0
+    if not data_available:
+        summary = f"insider data unavailable ({error})" if error \
+            else "insider data unavailable"
+    else:
+        summary = _summary(n, total, score, "seller", False)
+    out = {
         "score": score,
         "distinct_sellers": n,
         "total_dollars": round(total, 2),
         "summary": summary,
+        "data_available": data_available,
     }
+    if not data_available and error:
+        out["error"] = error
+    return out
 
 
 def _tier(n: int, total: float, csuite_1m: bool) -> int:

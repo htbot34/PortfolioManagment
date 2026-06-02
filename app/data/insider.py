@@ -21,7 +21,8 @@ from pathlib import Path
 import httpx
 
 from app.config import settings
-from app.data.filings import _ticker_to_cik
+from app.data import filings
+from app.data.filings import CIKLookupError, _ticker_to_cik
 from app.logging import get_logger
 
 log = get_logger(__name__)
@@ -29,6 +30,12 @@ log = get_logger(__name__)
 _TIMEOUT = 20.0
 _HEADERS = {"User-Agent": "PortfolioAdvisor research", "Accept-Encoding": "gzip, deflate"}
 _FORM4_CACHE = settings.cache_dir / "form4"
+
+# Per-ticker error reason from the most recent fetch. ``None`` means the
+# last attempt succeeded (or no attempt has happened). Callers can read
+# this to render a loud "insider data unavailable: <reason>" diagnostic
+# instead of silently treating a fetch failure as score 0.
+LAST_FETCH_ERRORS: dict[str, str] = {}
 
 # 24h disk cache over the two EDGAR-bound entry points. EDGAR is frequently
 # slow during market hours; without this, the idea funnel's wall-clock budget
@@ -113,11 +120,23 @@ def _recent_form4_uncached(ticker: str, days: int = 30) -> dict:
     """Live Form 4 filing-count fetch (no cache)."""
     try:
         mapping = _ticker_to_cik()
-    except Exception:
-        return {"count": 0, "filings": [], "error": "cik lookup failed"}
+    except CIKLookupError as e:
+        LAST_FETCH_ERRORS[ticker.upper()] = str(e)
+        return {"count": 0, "filings": [], "error": str(e),
+                 "data_available": False}
+    except Exception as e:
+        msg = f"cik lookup failed: {type(e).__name__}: {e}"
+        LAST_FETCH_ERRORS[ticker.upper()] = msg
+        return {"count": 0, "filings": [], "error": msg,
+                 "data_available": False}
     cik = mapping.get(ticker.upper())
     if not cik:
-        return {"count": 0, "filings": [], "error": "ticker not in CIK index"}
+        # Legitimately not in the index (e.g. ETFs, foreign issuers).
+        # NOT a data-availability problem.
+        LAST_FETCH_ERRORS.pop(ticker.upper(), None)
+        return {"count": 0, "filings": [],
+                 "error": "ticker not in CIK index",
+                 "data_available": True}
     try:
         r = httpx.get(
             f"https://data.sec.gov/submissions/CIK{cik}.json",
@@ -267,13 +286,25 @@ def _recent_form4_transactions_uncached(ticker: str, days: int = 30,
     Returns ``(transactions, ok)``. ``ok`` is False only on a genuine fetch
     failure (CIK lookup or submissions request) - a ticker that simply is not
     in the CIK index is a valid empty result and is cacheable.
+
+    On failure, records the reason in :data:`LAST_FETCH_ERRORS` so callers
+    can render a loud "insider data unavailable: <reason>" diagnostic
+    instead of treating the empty list as a genuine score-0.
     """
     try:
         mapping = _ticker_to_cik()
-    except Exception:
+    except CIKLookupError as e:
+        LAST_FETCH_ERRORS[ticker.upper()] = str(e)
+        return [], False
+    except Exception as e:
+        LAST_FETCH_ERRORS[ticker.upper()] = (
+            f"cik lookup failed: {type(e).__name__}: {e}")
         return [], False
     cik = mapping.get(ticker.upper())
     if not cik:
+        # Legitimately absent from the index (ETFs, foreign issuers, ...).
+        # Not a data-availability problem.
+        LAST_FETCH_ERRORS.pop(ticker.upper(), None)
         return [], True
     try:
         r = httpx.get(
@@ -283,8 +314,12 @@ def _recent_form4_transactions_uncached(ticker: str, days: int = 30,
         r.raise_for_status()
         sub = r.json()
     except Exception as e:
+        msg = f"submissions fetch failed: {type(e).__name__}: {e}"
         log.warning("form4 submissions fetch failed for %s: %s", ticker, e)
+        LAST_FETCH_ERRORS[ticker.upper()] = msg
         return [], False
+    # Success - clear any stale error for this ticker.
+    LAST_FETCH_ERRORS.pop(ticker.upper(), None)
     recent = sub.get("filings", {}).get("recent", {})
     forms = recent.get("form", [])
     filed = recent.get("filingDate", [])
@@ -319,3 +354,27 @@ def _recent_form4_transactions_uncached(ticker: str, days: int = 30,
         except Exception:
             result.append(t)  # keep unparseable dates rather than silently drop
     return result, True
+
+
+def diagnostics() -> dict:
+    """Snapshot of the SEC fetch state.
+
+    ``cik_index_error`` is the most recent CIK-index fetch failure
+    (``None`` if the index resolved cleanly on the last attempt).
+    ``ticker_errors`` is a dict of {ticker: reason} from the most recent
+    insider lookup per ticker (empty if everything went OK).
+
+    Used by ``build_site.py`` to surface "insider data unavailable" on
+    the today page instead of letting a fetch failure silently masquerade
+    as score 0.
+    """
+    return {
+        "cik_index_error": filings.LAST_CIK_ERROR,
+        "ticker_errors": dict(LAST_FETCH_ERRORS),
+        "tickers_unavailable": len(LAST_FETCH_ERRORS),
+    }
+
+
+def reset_diagnostics() -> None:
+    """Clear the per-ticker error record. Used between builds (and tests)."""
+    LAST_FETCH_ERRORS.clear()

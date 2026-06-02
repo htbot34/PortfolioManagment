@@ -32,14 +32,32 @@ def _gate_entry(ticker: str, gate: dict | None = None,
     if pre_block:
         return {"ticker": ticker.upper(), "pre_block": pre_block}
     gate = gate or {}
+    sigs = gate.get("signals") or {}
+    trump_sig = sigs.get("trump") or {}
+    reasons = gate.get("reasons") or {}
+    # A "Trump promotion" is a qualification that would NOT have happened
+    # under the old 3-of-3 rule: tech + trump + one of (sector, news) and
+    # NOT both of sector+news passing. (When sector + news both passed,
+    # Trump is just extra confluence, not a substitution.)
+    sector_news_pass = bool(reasons.get("sector_momentum")) and bool(reasons.get("news"))
+    trump_promoted = (bool(gate.get("qualifies"))
+                       and bool(reasons.get("trump"))
+                       and not sector_news_pass)
     return {
         "ticker": ticker.upper(),
         "pre_block": None,
         "qualifies": bool(gate.get("qualifies")),
         "promoted_by_insider": bool(gate.get("promoted_by_insider")),
         "earnings_block": gate.get("earnings_block"),
-        "reasons": gate.get("reasons") or {},
+        "trump_block": gate.get("trump_block"),
+        "reasons": reasons,
         "insider_score": int(gate.get("insider_score", 0) or 0),
+        "trump_mention": bool(trump_sig.get("valence") in ("endorse", "attack")
+                               or trump_sig.get("pass")),
+        "trump_valence": trump_sig.get("valence", "none"),
+        "trump_as_of": trump_sig.get("as_of"),
+        "trump_source": trump_sig.get("source"),
+        "trump_promoted": trump_promoted,
     }
 
 

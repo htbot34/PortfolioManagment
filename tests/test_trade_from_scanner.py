@@ -182,3 +182,56 @@ def test_held_and_excluded_tickers_skipped():
     assert out["primary_action"]["ticker"] == "OK"
     # Only OK should reach the gate.
     assert ev.call_count == 1
+
+
+def test_scanner_row_propagates_above_sma_to_technical_signal():
+    """Regression guard for the scanner -> gate hand-off.
+
+    scanner._enrich must include `above_sma200` (and `above_sma50`) on the
+    row it emits; without it, the technical signal's
+    `breakout_20d AND above_sma200` route silently dies and breakouts that
+    haven't yet stacked SMA20<SMA50<SMA200 can never earn the trend point.
+    """
+    from unittest.mock import patch
+    from app.research import scanner, signals
+    from app.data.prices import Quote
+
+    fake_quote = Quote(
+        ticker="MDB", price=400.0, prev_close=395.0, day_change_pct=1.27,
+        market_cap=None, pe_ratio=None,
+        high_52w=420.0, low_52w=180.0,
+        sector="Technology", industry=None, source="test",
+    )
+    fake_tech = {
+        "sma20": 380.0, "sma50": 360.0, "sma200": 320.0,
+        "above_sma50": True, "above_sma200": True,
+        "stacked_uptrend": False,  # SMA hierarchy not yet tight enough
+        "stacked_downtrend": False,
+        "breakout_20d": True,
+        "rsi14": 72.0,  # high RSI: OUTSIDE 40-65 momentum band, so no RSI point
+        "macd_hist": 4.0, "macd_cross_up": False, "macd_cross_down": False,
+        "bb_pct": None, "bb_upper": None, "bb_lower": None,
+        "atr14": 8.0, "atr_pct": 2.0, "vol_ratio_20d": 1.5,
+        "high_52w": 420.0, "low_52w": 180.0, "pct_off_52w_high": -4.76,
+    }
+
+    with patch.object(scanner.prices, "quote", return_value=fake_quote), \
+         patch.object(scanner.prices, "technicals", return_value=fake_tech):
+        row = scanner._enrich("MDB")
+
+    # (a) the row literally carries the key
+    assert "above_sma200" in row, "scanner row must propagate above_sma200"
+    assert "above_sma50" in row, "scanner row must propagate above_sma50"
+    assert row["above_sma200"] is True
+    assert row["above_sma50"] is True
+
+    # (b) the technical signal can earn its trend point via the breakout route
+    # (this fails before the fix: row["above_sma200"] is missing, the
+    # `breakout_20d AND above_sma200` branch returns False, score lands at 1)
+    out = signals.technical_signal(row, direction="long")
+    assert out["score"] >= 2, (
+        f"breakout above SMA200 should score the trend point + MACD point "
+        f"(got score={out['score']}, reason={out['reason']!r})"
+    )
+    assert out["pass"] is True
+    assert "trend up / breakout above SMA200" in out["reason"]

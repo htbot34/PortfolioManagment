@@ -30,10 +30,15 @@ def _strong_long_payload(**overrides) -> dict:
 def test_clean_buy_passes_all_three():
     out = conviction.evaluate(_strong_long_payload(), direction="long", macro=_macro())
     assert out["qualifies"] is True
-    assert set(out["signals"]) == {"technical", "sector_momentum", "news"}
+    # Trump signal is always evaluated (neutral fail when no mention).
+    # Neutrality is verified separately in test_conviction_trump_neutrality.
+    assert {"technical", "sector_momentum", "news", "trump"}.issubset(out["signals"])
     assert "technical=PASS" in out["summary"]
     assert "sector_momentum=PASS" in out["summary"]
     assert "news=PASS" in out["summary"]
+    # No Trump mention -> trump signal is a neutral fail, not a confirmation.
+    assert out["signals"]["trump"]["pass"] is False
+    assert out["signals"]["trump"]["valence"] == "none"
 
 
 def test_buy_fails_on_sector_without_insider_does_not_qualify():

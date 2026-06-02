@@ -30,9 +30,11 @@ def test_record_shape():
     assert rec["candidates_evaluated"] == 2
     assert rec["cleared_primary"] == 1
     assert rec["cleared_insider_promotion"] == 0
+    # Trump joined the primary signal set; trump_block tracks
+    # attack-veto entry blocks distinctly from the trump-signal block.
     assert set(rec["blocked_by"]) == {
-        "technical", "sector_momentum", "news",
-        "earnings_window", "regime", "soft_veto"}
+        "technical", "sector_momentum", "news", "trump",
+        "earnings_window", "regime", "soft_veto", "trump_block"}
     assert rec["blocked_by"]["news"] == 1
     assert isinstance(rec["near_miss"], list)
     assert rec["near_miss"][0]["ticker"] == "BBB"

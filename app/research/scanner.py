@@ -36,6 +36,8 @@ def _enrich(ticker: str) -> dict | None:
         "sma20": t.get("sma20"),
         "sma50": t.get("sma50"),
         "sma200": t.get("sma200"),
+        "above_sma50": t.get("above_sma50"),
+        "above_sma200": t.get("above_sma200"),
         "rsi14": t.get("rsi14"),
         "macd_hist": t.get("macd_hist"),
         "macd_cross_up": t.get("macd_cross_up"),

@@ -167,6 +167,42 @@ def _shadow_key(ticker: str, miss_date: str) -> tuple[str, str]:
     return (ticker.upper(), str(miss_date)[:10])
 
 
+def _iter_trump_firings(history: list[dict]) -> Iterable[dict]:
+    """Yield one record per Trump-mention firing across the telemetry history.
+
+    Each firing becomes a shadow-ledger row with ``kind='trump'`` and a
+    ``valence`` field so the aggregator can group by endorse vs attack
+    -- the thesis ("endorsed names outperform, attacked names
+    underperform") becomes measurable per-side rather than a single
+    blended hit-rate.
+    """
+    for row in history or []:
+        if not isinstance(row, dict):
+            continue
+        signal_date = _to_date(row.get("date"))
+        if signal_date is None:
+            continue
+        firings = ((row.get("trump") or {}).get("firings") or [])
+        for f in firings:
+            if not isinstance(f, dict):
+                continue
+            ticker = (f.get("ticker") or "").upper()
+            valence = (f.get("valence") or "").lower()
+            if not ticker or valence not in ("endorse", "attack"):
+                continue
+            yield {
+                "ticker": ticker,
+                "miss_date": signal_date.isoformat(),
+                "kind": "trump",
+                "valence": valence,
+                "failed_signal": f"trump_{valence}",
+                "passed_signals": [],
+                "insider_score": 0,
+                "qualified_on_signal": bool(f.get("qualifies")),
+                "source": f.get("source") or "",
+            }
+
+
 def _iter_near_misses(history: list[dict]) -> Iterable[dict]:
     """Yield ``(ticker, miss_date, failed, passed, insider_score)`` for each
     near-miss across the telemetry history. Skips malformed rows."""
@@ -193,13 +229,29 @@ def _iter_near_misses(history: list[dict]) -> Iterable[dict]:
 
 
 def _new_record(near_miss: dict) -> dict:
+    """Build a fresh ledger row from a near-miss or trump firing.
+
+    For a Trump firing, ``direction`` flips to "short" when the valence is
+    "attack" -- the hypothesis is that the attacked name should underperform,
+    so the success criterion mirrors a short setup (negative excess return
+    counts as a hit).
+    """
+    kind = near_miss.get("kind") or "near_miss"
+    valence = near_miss.get("valence")
+    if kind == "trump" and valence == "attack":
+        rec_direction = "short"
+    else:
+        rec_direction = DIRECTION
     return {
         "ticker": near_miss["ticker"],
         "miss_date": near_miss["miss_date"],
-        "direction": DIRECTION,
+        "direction": rec_direction,
+        "kind": kind,
+        "valence": valence,
         "failed_signal": near_miss["failed_signal"],
         "passed_signals": near_miss["passed_signals"],
-        "insider_score": near_miss["insider_score"],
+        "insider_score": near_miss.get("insider_score", 0),
+        "source": near_miss.get("source"),
         "entry_price": None,
         "benchmark_entry_price": None,
         "horizons": {str(h): _empty_horizon() for h in HORIZONS},
@@ -319,10 +371,12 @@ def save_calibration(rollup: dict, path: Path | None = None) -> None:
         log.warning("shadow_tracker: failed to save calibration to %s", p)
 
 
-def _merge_records(existing: list[dict], near_misses: Iterable[dict]) -> list[dict]:
-    """Idempotently fold telemetry near-misses into the existing ledger.
+def _merge_records(existing: list[dict],
+                    incoming: Iterable[dict]) -> list[dict]:
+    """Idempotently fold telemetry rows (near-misses + Trump firings)
+    into the existing ledger.
 
-    Rows are keyed by ``(ticker, miss_date)``. New near-misses become new
+    Rows are keyed by ``(ticker, miss_date)``. New entries become new
     rows; already-tracked rows are left untouched here (their horizons are
     refreshed in ``_update_record``). Static metadata on existing rows
     (failed_signal, passed_signals, insider_score) is updated if telemetry
@@ -333,13 +387,19 @@ def _merge_records(existing: list[dict], near_misses: Iterable[dict]) -> list[di
         for r in existing
         if r.get("ticker") and r.get("miss_date")
     }
-    for nm in near_misses:
+    for nm in incoming:
         key = _shadow_key(nm["ticker"], nm["miss_date"])
         if key in by_key:
             rec = by_key[key]
             rec["failed_signal"] = nm["failed_signal"]
             rec["passed_signals"] = nm["passed_signals"]
-            rec["insider_score"] = nm["insider_score"]
+            rec["insider_score"] = nm.get("insider_score", rec.get("insider_score", 0))
+            # Trump fields are sticky once set so a stale telemetry row
+            # cannot accidentally erase the valence on a realized record.
+            if nm.get("kind") == "trump":
+                rec.setdefault("kind", "trump")
+                rec.setdefault("valence", nm.get("valence"))
+                rec.setdefault("source", nm.get("source"))
         else:
             by_key[key] = _new_record(nm)
     out = list(by_key.values())
@@ -398,6 +458,21 @@ def _aggregate(records: list[dict]) -> dict:
         "count": len(records),
         "horizons": {str(h): _slot(groups.get("all", []), h) for h in HORIZONS},
     }
+    trump_records = [r for r in records if r.get("kind") == "trump"]
+    trump = {
+        "count": len(trump_records),
+        "by_valence": {
+            v: {
+                "count": sum(1 for r in trump_records if r.get("valence") == v),
+                "horizons": {
+                    str(h): _slot([r for r in trump_records
+                                   if r.get("valence") == v], h)
+                    for h in HORIZONS
+                },
+            }
+            for v in ("endorse", "attack")
+        },
+    }
     return {
         "generated_at": _today().isoformat(),
         "horizons": list(HORIZONS),
@@ -406,6 +481,7 @@ def _aggregate(records: list[dict]) -> dict:
         "total_records": len(records),
         "by_failed_signal": by_failed_signal,
         "overall": overall,
+        "trump": trump,
     }
 
 
@@ -430,9 +506,15 @@ def update(
 
     history = gate_telemetry.load(telemetry_path)
     near_misses = list(_iter_near_misses(history))
+    trump_firings = list(_iter_trump_firings(history))
 
     existing = load_ledger(ledger_path)
+    # Near-misses + Trump firings share the same (ticker, miss_date)
+    # keying; a row may legitimately be both (e.g. a near-miss that also
+    # had a Trump mention that didn't quite qualify), in which case the
+    # Trump fields decorate the existing row.
     records = _merge_records(existing, near_misses)
+    records = _merge_records(records, trump_firings)
 
     history_cache: dict[str, "pd.DataFrame | None"] = {}
 
@@ -459,9 +541,15 @@ def update(
 
 def safe_update(*args, **kwargs) -> dict | None:
     """``update()`` wrapped so a price-data outage or any other failure can
-    never break the daily refresh. Returns None on failure."""
+    never break the daily refresh. Returns None on failure.
+
+    The exception is logged with traceback info so an outage is visible
+    in the workflow log rather than silently producing no output (which
+    is how the shadow ledger ended up missing entirely in prior builds).
+    """
     try:
         return update(*args, **kwargs)
     except Exception as e:
-        log.warning("shadow_tracker: update failed: %s", e)
+        log.warning("shadow_tracker: update failed (%s): %s",
+                     type(e).__name__, e, exc_info=True)
         return None

@@ -7,6 +7,7 @@ by accession number.
 import io
 import json
 import re
+import time
 from pathlib import Path
 
 import httpx
@@ -25,6 +26,16 @@ _FILING_URL = "https://www.sec.gov/Archives/edgar/data/{cik_int}/{acc_nodash}/{p
 _CACHE = settings.cache_dir / "filings"
 _CACHE.mkdir(exist_ok=True)
 
+# CIK index lives at the repo root so GitHub Actions commits it back and it
+# survives across containers. The old `.cache/filings/ticker_cik.json`
+# location is gitignored and was re-fetched on every cold start, which is
+# how a single SEC 403 turned every insider lookup into a silent score-0.
+_CIK_CACHE_PATH = Path(__file__).resolve().parent.parent.parent / "ticker_cik_cache.json"
+
+# Last CIK-fetch failure reason, for diagnostics. None when the most recent
+# resolution attempt succeeded (or no attempt has happened yet).
+LAST_CIK_ERROR: str | None = None
+
 # Tags whose content is iXBRL plumbing or page chrome - dropped before extraction.
 _DROP_TAGS = ("script", "style", "noscript", "iframe")
 _DROP_NS_PREFIXES = ("ix:",)
@@ -34,20 +45,95 @@ _DROP_NS_PREFIXES = ("ix:",)
 _EXTRACTION_VERSION = "v2"
 
 
+class CIKLookupError(RuntimeError):
+    """Raised when the ticker->CIK mapping is unavailable.
+
+    Distinct from "ticker isn't in the SEC index" -- this signals that the
+    whole index is gone (live fetch failed AND no usable cache), so EVERY
+    insider lookup will return empty for reasons that have nothing to do
+    with the actual filings.
+    """
+
+
 def _headers() -> dict:
     return {"User-Agent": settings.sec_user_agent, "Accept-Encoding": "gzip, deflate"}
 
 
+def _cik_cache_path() -> Path:
+    """Resolve at call time so tests can monkeypatch ``_CIK_CACHE_PATH``."""
+    return _CIK_CACHE_PATH
+
+
+def _read_cik_cache(path: Path) -> tuple[dict[str, str] | None, float | None]:
+    """Return (mapping, age_seconds). Either may be None on miss."""
+    if not path.exists():
+        return None, None
+    try:
+        raw = json.loads(path.read_text())
+    except Exception:
+        return None, None
+    # Two on-disk formats are accepted:
+    #   {"fetched_at": <unix-ts>, "mapping": {...}}   (new)
+    #   {"AAA": "0000001234", ...}                    (legacy)
+    if isinstance(raw, dict) and "mapping" in raw and isinstance(raw["mapping"], dict):
+        fetched = raw.get("fetched_at")
+        age = (time.time() - float(fetched)) if isinstance(fetched, (int, float)) else None
+        return raw["mapping"], age
+    if isinstance(raw, dict):
+        return raw, None  # legacy format: treat as ageless
+    return None, None
+
+
+def _write_cik_cache(path: Path, mapping: dict[str, str]) -> None:
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(
+            {"fetched_at": time.time(), "mapping": mapping},
+            separators=(",", ":"),
+        ))
+    except Exception as e:
+        log.warning("could not persist CIK index to %s: %s", path, e)
+
+
 def _ticker_to_cik() -> dict[str, str]:
-    cache = _CACHE / "ticker_cik.json"
-    if cache.exists():
-        return json.loads(cache.read_text())
-    r = httpx.get(_TICKER_CIK_URL, headers=_headers(), timeout=20)
-    r.raise_for_status()
-    rows = r.json()
-    mapping = {row["ticker"].upper(): str(row["cik_str"]).zfill(10) for row in rows.values()}
-    cache.write_text(json.dumps(mapping))
-    return mapping
+    """Return the ticker -> CIK mapping.
+
+    Persists to the repo-root ``ticker_cik_cache.json`` so the GitHub
+    Actions workflow commits it back and the next run starts warm. The
+    live SEC fetch only fires when the cache is older than
+    ``settings.cik_cache_ttl_days`` (default 7) or missing entirely.
+
+    Raises ``CIKLookupError`` only when there is no live response AND no
+    usable cache -- in that case callers can render a loud "insider data
+    unavailable: <reason>" diagnostic instead of silently scoring 0.
+    """
+    global LAST_CIK_ERROR
+    path = _cik_cache_path()
+    mapping, age_s = _read_cik_cache(path)
+    ttl_s = settings.cik_cache_ttl_days * 24 * 3600
+    if mapping and (age_s is None or age_s < ttl_s):
+        LAST_CIK_ERROR = None
+        return mapping
+    # Cache is stale or absent. Try a live refresh; fall back to whatever
+    # cache we have if the network fails (stale is better than missing).
+    try:
+        r = httpx.get(_TICKER_CIK_URL, headers=_headers(), timeout=20)
+        r.raise_for_status()
+        rows = r.json()
+        fresh = {
+            row["ticker"].upper(): str(row["cik_str"]).zfill(10)
+            for row in rows.values()
+        }
+    except Exception as e:
+        LAST_CIK_ERROR = f"CIK index fetch failed: {type(e).__name__}: {e}"
+        log.warning("%s", LAST_CIK_ERROR)
+        if mapping:
+            log.warning("serving stale CIK cache (age=%.0fs)", age_s or 0)
+            return mapping
+        raise CIKLookupError(LAST_CIK_ERROR) from e
+    _write_cik_cache(path, fresh)
+    LAST_CIK_ERROR = None
+    return fresh
 
 
 def recent_filings(ticker: str, forms: tuple[str, ...] = ("10-K", "10-Q", "8-K"),

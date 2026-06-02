@@ -17,9 +17,10 @@ TELEMETRY_PATH = ROOT / "gate_telemetry.yaml"
 MAX_DATES = 30
 MAX_NEAR_MISS = 5
 
-_PRIMARY_SIGNALS = ("technical", "sector_momentum", "news")
-_BLOCK_KEYS = ("technical", "sector_momentum", "news",
-               "earnings_window", "regime", "soft_veto")
+_PRIMARY_SIGNALS = ("technical", "sector_momentum", "news", "trump")
+_BLOCK_KEYS = ("technical", "sector_momentum", "news", "trump",
+               "earnings_window", "regime", "soft_veto",
+               "trump_block")
 
 
 def _blank_blocked_by() -> dict:
@@ -31,20 +32,35 @@ def record(candidates: list, gate_evals: list, date_str: str) -> dict:
 
     ``candidates`` is the list of candidates considered (used for the count).
     ``gate_evals`` is a parallel list of per-candidate dicts, each either a
-    pre-gate block or a conviction-gate result::
+    pre-gate block or a conviction-gate result. The shape is::
 
         {"ticker": str,
          "pre_block": "regime" | "soft_veto" | None,
          "qualifies": bool,
          "promoted_by_insider": bool,
          "earnings_block": str | None,
-         "reasons": {"technical": bool, "sector_momentum": bool, "news": bool},
-         "insider_score": int}
+         "trump_block": str | None,    # Trump-attack veto on entry
+         "reasons": {"technical": bool, "sector_momentum": bool,
+                      "news": bool, "trump": bool},
+         "insider_score": int,
+         "trump_mention": bool,
+         "trump_valence": "endorse" | "attack" | "none",
+         "trump_promoted": bool}       # qualified because trump substituted
+
+    The new Trump-related fields are surfaced so today's brief can show
+    "N candidates carried a Trump mention; M cleared via Trump
+    substitution; K were vetoed by an attack" without spelunking.
     """
     blocked_by = _blank_blocked_by()
     cleared_primary = 0
     cleared_insider = 0
     near_miss: list[dict] = []
+    trump_mentions = 0
+    trump_endorsements = 0
+    trump_attacks = 0
+    trump_promotions = 0
+    trump_vetoes = 0
+    trump_firings: list[dict] = []
 
     for ev in gate_evals or []:
         pre = ev.get("pre_block")
@@ -53,6 +69,27 @@ def record(candidates: list, gate_evals: list, date_str: str) -> dict:
             continue
         reasons = ev.get("reasons") or {}
         passed = [s for s in _PRIMARY_SIGNALS if reasons.get(s)]
+        # Trump telemetry (independent of qualification outcome).
+        if ev.get("trump_mention"):
+            trump_mentions += 1
+            valence = ev.get("trump_valence")
+            if valence == "endorse":
+                trump_endorsements += 1
+            elif valence == "attack":
+                trump_attacks += 1
+            trump_firings.append({
+                "ticker": ev.get("ticker", ""),
+                "valence": valence,
+                "as_of": ev.get("trump_as_of"),
+                "source": ev.get("trump_source"),
+                "qualifies": bool(ev.get("qualifies")),
+            })
+        if ev.get("trump_promoted"):
+            trump_promotions += 1
+        if ev.get("trump_block"):
+            blocked_by["trump_block"] += 1
+            trump_vetoes += 1
+            continue
         if ev.get("qualifies"):
             if ev.get("promoted_by_insider"):
                 cleared_insider += 1
@@ -60,20 +97,31 @@ def record(candidates: list, gate_evals: list, date_str: str) -> dict:
                 cleared_primary += 1
             continue
         # Did not qualify - attribute a single primary block reason.
-        if ev.get("earnings_block") and len(passed) == 3:
+        # Earnings block only fires when all 3 of (tech, sector, news)
+        # passed, so it remains a "passed 3" check (Trump is not part of
+        # the earnings-window precondition).
+        primary3_passed = sum(1 for s in ("technical", "sector_momentum", "news")
+                              if reasons.get(s))
+        if ev.get("earnings_block") and primary3_passed == 3:
             blocked_by["earnings_window"] += 1
         else:
             for s in _PRIMARY_SIGNALS:
                 if not reasons.get(s):
                     blocked_by[s] += 1
                     break
-        # Near-miss: exactly 2-of-3 passed and no insider promotion.
-        if len(passed) == 2:
-            failed = next(s for s in _PRIMARY_SIGNALS if s not in passed)
+        # Near-miss: tech + exactly one of (sector, news, trump). Under
+        # the new confluence rule the threshold is 2 of those three, so
+        # one short is the near-miss. 3-of-4 (tech + all three other
+        # primaries) actually CLEARED -- it only ends up here when an
+        # overlay (earnings, valuation, correlation, trump_block)
+        # vetoed it, which already attributes its own blocker above.
+        if len(passed) == 2 and reasons.get("technical"):
+            failed_list = [s for s in ("sector_momentum", "news", "trump")
+                            if not reasons.get(s)]
             near_miss.append({
                 "ticker": ev.get("ticker", ""),
                 "passed": passed,
-                "failed": failed,
+                "failed": failed_list[0] if failed_list else None,
                 "insider_score": int(ev.get("insider_score", 0) or 0),
             })
 
@@ -87,6 +135,14 @@ def record(candidates: list, gate_evals: list, date_str: str) -> dict:
         "cleared_insider_promotion": cleared_insider,
         "blocked_by": blocked_by,
         "near_miss": near_miss,
+        "trump": {
+            "mentions": trump_mentions,
+            "endorsements": trump_endorsements,
+            "attacks": trump_attacks,
+            "promotions": trump_promotions,
+            "vetoes": trump_vetoes,
+            "firings": trump_firings,
+        },
     }
 
 

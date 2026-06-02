@@ -529,3 +529,95 @@ def test_no_datetime_utcnow_deprecation_in_tracker():
     with warnings.catch_warnings():
         warnings.simplefilter("error", DeprecationWarning)
         shadow_tracker._today()
+
+
+# ---------------------------------------------------------------------------
+# Trump-firing shadow tracking
+# ---------------------------------------------------------------------------
+
+def test_trump_firings_are_iterated(tmp_path):
+    """Telemetry rows carrying `trump.firings` produce shadow-ledger
+    rows tagged kind=trump with the right valence and direction."""
+    import yaml
+    from datetime import date, timedelta
+    from app.research import shadow_tracker
+    tel = [{
+        "date": (date.today() - timedelta(days=10)).isoformat(),
+        "candidates_evaluated": 1,
+        "cleared_primary": 1,
+        "cleared_insider_promotion": 0,
+        "blocked_by": {},
+        "near_miss": [],
+        "trump": {
+            "mentions": 2, "endorsements": 1, "attacks": 1,
+            "promotions": 1, "vetoes": 0,
+            "firings": [
+                {"ticker": "GOOD", "valence": "endorse",
+                 "as_of": (date.today() - timedelta(days=10)).isoformat(),
+                 "source": "WH statement", "qualifies": True},
+                {"ticker": "BAD", "valence": "attack",
+                 "as_of": (date.today() - timedelta(days=10)).isoformat(),
+                 "source": "Truth Social", "qualifies": False},
+            ],
+        },
+    }]
+    tel_path = tmp_path / "gate_telemetry.yaml"
+    tel_path.write_text(yaml.safe_dump(tel))
+
+    firings = list(shadow_tracker._iter_trump_firings(tel))
+    assert len(firings) == 2
+    good = next(f for f in firings if f["ticker"] == "GOOD")
+    bad = next(f for f in firings if f["ticker"] == "BAD")
+    assert good["valence"] == "endorse"
+    assert bad["valence"] == "attack"
+    assert good["failed_signal"] == "trump_endorse"
+    assert bad["failed_signal"] == "trump_attack"
+
+
+def test_attack_record_direction_is_short():
+    """A trump-attack shadow record uses direction=short so the
+    hit-rate aggregator counts NEGATIVE excess returns as wins
+    (the thesis being 'attacked names underperform')."""
+    from app.research import shadow_tracker
+    rec = shadow_tracker._new_record({
+        "ticker": "ATK", "miss_date": "2026-06-01",
+        "kind": "trump", "valence": "attack",
+        "failed_signal": "trump_attack",
+        "passed_signals": [], "insider_score": 0,
+    })
+    assert rec["direction"] == "short"
+    assert rec["kind"] == "trump"
+    assert rec["valence"] == "attack"
+
+
+def test_endorse_record_direction_is_long():
+    from app.research import shadow_tracker
+    rec = shadow_tracker._new_record({
+        "ticker": "EDR", "miss_date": "2026-06-01",
+        "kind": "trump", "valence": "endorse",
+        "failed_signal": "trump_endorse",
+        "passed_signals": [], "insider_score": 0,
+    })
+    assert rec["direction"] == "long"
+    assert rec["kind"] == "trump"
+    assert rec["valence"] == "endorse"
+
+
+def test_aggregate_buckets_trump_by_valence():
+    """The aggregator's `trump` section groups records by valence."""
+    from app.research import shadow_tracker
+    records = [
+        {"ticker": "A", "miss_date": "2026-06-01", "kind": "trump",
+         "valence": "endorse", "failed_signal": "trump_endorse",
+         "direction": "long", "horizons": {}},
+        {"ticker": "B", "miss_date": "2026-06-01", "kind": "trump",
+         "valence": "endorse", "failed_signal": "trump_endorse",
+         "direction": "long", "horizons": {}},
+        {"ticker": "C", "miss_date": "2026-06-01", "kind": "trump",
+         "valence": "attack", "failed_signal": "trump_attack",
+         "direction": "short", "horizons": {}},
+    ]
+    rollup = shadow_tracker._aggregate(records)
+    assert rollup["trump"]["count"] == 3
+    assert rollup["trump"]["by_valence"]["endorse"]["count"] == 2
+    assert rollup["trump"]["by_valence"]["attack"]["count"] == 1

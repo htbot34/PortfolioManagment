@@ -54,6 +54,21 @@
     ${{ '{:,.0f}'.format(ins.total_dollars or 0) }} last 30d (score {{ ins.score }}/3)
   </div>
   {% endif %}
+  {% if a.conviction_gate and a.conviction_gate.signals.trump and a.conviction_gate.signals.trump.valence in ('endorse', 'attack') %}
+  {% set tr = a.conviction_gate.signals.trump %}
+  <div class="text-sm rounded px-3 py-2 mb-3
+    {% if tr.valence == 'endorse' %}text-emerald-200 bg-emerald-950/40 border border-emerald-900/60
+    {% else %}text-rose-200 bg-rose-950/40 border border-rose-900/60{% endif %}">
+    Presidential {{ tr.valence }} ({{ '%.0f'|format((tr.confidence or 0) * 100) }}% confidence
+    {% if tr.manual %}, manual override{% endif %}{% if tr.as_of %} - {{ tr.as_of }}{% endif %})
+    {% if tr.source %}<div class="text-[11px] text-slate-400 mt-1">{{ tr.source|truncate(140) }}</div>{% endif %}
+  </div>
+  {% endif %}
+  {% if a.conviction_gate and a.conviction_gate.trump_exit_flag %}
+  <div class="text-sm text-rose-200 bg-rose-950/40 border border-rose-900/60 rounded px-3 py-2 mb-3">
+    {{ a.conviction_gate.trump_exit_flag }}
+  </div>
+  {% endif %}
   {% if a.conviction_gate and a.conviction_gate.correlation and a.conviction_gate.correlation.candidate_to_book and a.conviction_gate.correlation.candidate_to_book.avg_corr_to_top5 is not none %}
   {% set avgc = a.conviction_gate.correlation.candidate_to_book.avg_corr_to_top5 %}
   <div class="text-sm text-slate-400 mb-3">
@@ -222,6 +237,33 @@
 <div class="text-center text-xs text-slate-400 mb-4">{{ brief.market_snapshot }}</div>
 {% endif %}
 
+{# Presidential-mention firings. Every qualifying mention is eyeballable
+   here with headline, valence, date, and source link. The block is hidden
+   when no firings exist so a neutral day stays uncluttered. #}
+{% if brief.telemetry and brief.telemetry.trump and brief.telemetry.trump.firings %}
+<div class="card rounded-lg p-4 mb-4 border border-amber-900/40">
+  <div class="text-xs text-amber-300 uppercase tracking-widest mb-2">Presidential mentions today</div>
+  <ul class="text-sm space-y-2">
+  {% for f in brief.telemetry.trump.firings %}
+    <li class="flex items-start gap-2">
+      <span class="text-[10px] uppercase font-bold mt-0.5
+        {% if f.valence == 'endorse' %}text-emerald-300{% elif f.valence == 'attack' %}text-rose-300{% else %}text-slate-400{% endif %}">
+        {{ f.valence }}
+      </span>
+      <span class="flex-1 text-slate-200">
+        <a href="ticker/{{ f.ticker }}.html" class="font-semibold tlink">{{ f.ticker }}</a>
+        {% if f.as_of %}<span class="text-[10px] text-slate-500 ml-1">{{ f.as_of }}</span>{% endif %}
+        {% if f.source %}<div class="text-xs text-slate-400 mt-0.5">{{ f.source|truncate(140) }}</div>{% endif %}
+        <div class="text-[10px] text-slate-500 mt-0.5">
+          {% if f.qualifies %}Cleared the gate{% else %}Did not clear the gate{% endif %}
+        </div>
+      </span>
+    </li>
+  {% endfor %}
+  </ul>
+</div>
+{% endif %}
+
 {% if brief.watching %}
 <div class="card rounded-lg p-4 mb-4">
   <div class="text-xs text-slate-400 uppercase tracking-widest mb-2">Watching</div>
@@ -231,6 +273,36 @@
   {% endfor %}
   </ul>
 </div>
+{% endif %}
+
+{# Trump shadow track record. Hidden until we have at least one realized
+   horizon -- "0 of 0" hit-rate is misleading noise. #}
+{% if brief.shadow_calibration and brief.shadow_calibration.trump %}
+{% set sc = brief.shadow_calibration.trump %}
+{% set has_realized = false %}
+{% for v in ('endorse', 'attack') %}
+  {% set h20 = sc.by_valence[v].horizons['20'] %}
+  {% if h20.n_realized and h20.n_realized > 0 %}{% set has_realized = true %}{% endif %}
+{% endfor %}
+{% if has_realized %}
+<div class="rounded-lg border border-[#1f2a44]/60 p-4 mb-4">
+  <div class="text-xs text-slate-500 uppercase tracking-widest mb-1">Presidential-mention track record (shadow)</div>
+  <div class="text-[11px] text-slate-600 mb-3">Forward returns vs SPY at 20 trading days. Endorsements track as longs; attacks track as shorts.</div>
+  <div class="grid grid-cols-2 gap-4 text-xs">
+    {% for v in ('endorse', 'attack') %}
+    {% set h20 = sc.by_valence[v].horizons['20'] %}
+    <div>
+      <div class="text-slate-400 uppercase tracking-wide text-[10px] mb-1">{{ v }}</div>
+      <div class="text-slate-300">N realized: <span class="font-mono">{{ h20.n_realized or 0 }}</span></div>
+      {% if h20.hit_rate is not none %}
+      <div class="text-slate-300">Hit rate: <span class="font-mono">{{ '%.0f%%'|format((h20.hit_rate or 0) * 100) }}</span></div>
+      <div class="text-slate-300">Avg excess: <span class="font-mono">{{ '%+.1f%%'|format((h20.avg_excess_return or 0) * 100) }}</span></div>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
 {% endif %}
 
 {% if brief.high_confluence %}

@@ -373,6 +373,9 @@ def main() -> int:
     if rollup:
         print(f"Shadow tracker: {rollup.get('total_records', 0)} near-miss records "
               f"across {len(rollup.get('by_failed_signal') or {})} failed-signal groups")
+        # Make the Trump section of the rollup available to the
+        # today-page template once enough samples exist.
+        brief["shadow_calibration"] = {"trump": rollup.get("trump")}
 
     insider_diag = insider_mod.diagnostics()
     if insider_diag.get("cik_index_error") or insider_diag.get("tickers_unavailable"):

@@ -1,0 +1,24 @@
+# Manual Trump-mention overrides.
+#
+# Each entry seeds or overrides a Trump-mention detection for a single
+# ticker. Used by app.research.trump_signal. Manual entries are treated
+# as confidence 1.0 and take precedence over news-derived detections.
+#
+# Schema:
+#   - ticker:  ticker symbol (uppercase)
+#     valence: "endorse" | "attack"
+#     as_of:   date the statement was made (YYYY-MM-DD)
+#     source:  optional URL or attribution string
+#     note:    optional one-line summary that will be rendered on the today page
+#
+# Entries older than `trump_ttl_days` (default 30) are ignored. Remove
+# stale entries to keep the list tidy.
+#
+# Example (commented out -- delete the leading '# ' to activate):
+# - ticker: ACME
+#   valence: endorse
+#   as_of: 2026-06-01
+#   source: https://example.com/news/article
+#   note: "President praised ACME on White House lawn (placeholder example)."
+
+[]

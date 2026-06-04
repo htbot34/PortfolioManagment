@@ -146,6 +146,16 @@ confirmation is trump. Either keeps #1/#2 intact and closes #3.
 
 ### Finding 2 — Insider unavailability is observable for *today* but not recorded in the durable telemetry — `[fail-closed-hidden]`
 
+> **✅ RESOLVED — Phase A, commit `df13706`.** `conviction.evaluate` now emits an
+> `insider_status ∈ {scored, zero, unavailable, not_evaluated}`, threaded through
+> `daily_brief._gate_entry` into `gate_telemetry.record` (per-day tally + per-near-miss
+> field) and `rollup` (`insider_unavailable_days`). A near-miss with insider
+> *unreachable* now serializes distinctly from a genuine score-0 in
+> `gate_telemetry.yaml`, and the no-trade card surfaces it. Tests:
+> `test_gate_telemetry.py::test_insider_unavailable_serializes_distinctly_from_zero`,
+> `test_conviction.py::test_status_insider_unavailable_propagates`. Gate bar unchanged
+> (truth table identical, 0 neutrality divergences).
+
 **Evidence — the code fix is real and good.** A CIK/EDGAR failure now propagates
 as `data_available=False` rather than a silent zero:
 - `filings.py:119-136` — `_ticker_to_cik()` raises `CIKLookupError` when there's
@@ -226,6 +236,19 @@ is the right behavior — do **not** paper over it.
 ---
 
 ### Finding 4 — News-fetch failure is indistinguishable from "no news" and is surfaced nowhere — `[fail-closed-hidden]`
+
+> **✅ RESOLVED — Phase A, commit `df13706`.** The dual-feed boundary in `news.py`
+> now reports a status: `_yahoo_news`/`_google_news` return `(items, ok)`, and the
+> new `company_news_with_status` returns `(items, status)` with
+> `status ∈ {ok, empty, outage}` — a both-feeds-down outage is no longer coalesced
+> into an empty list. `conviction.evaluate` records `news_status ∈ {ok, empty, outage,
+> unknown}` (the gate fetches via `company_news_with_status`), threaded into
+> `gate_telemetry` (per-day tally, per-near-miss field, `news_outage_days` in the
+> rollup) and surfaced on the no-trade card. `company_news` keeps its list contract
+> for `analyst.py`. Tests:
+> `test_news_filter.py::test_status_outage_when_both_feeds_fail`,
+> `test_gate_telemetry.py::test_news_outage_serializes_distinctly_from_empty`,
+> `test_conviction.py::test_status_news_outage_from_status_fetcher`.
 
 **Evidence.** `news.py:44-46` (`_yahoo_news`) and `news.py:67-69`
 (`_google_news`) both `except Exception → return []`, logged only at
@@ -406,6 +429,7 @@ instrumentation fixes even though neither lowers the bar.
    future loosening.*
 2. Finding 2 + 4 — thread `data_available` / `news_fetch_failed` into
    `gate_telemetry.yaml`. *Makes the fail-closed states auditable in history.*
+   **✅ DONE — Phase A, commit `df13706`.**
 3. Finding 3 — fix `SEC_USER_AGENT` (operational).
 4. Finding 9 — correct the stale docstring.
 

@@ -13,14 +13,14 @@
   benchmark_entry_price: 754.5999755859375
   horizons:
     '5':
-      status: pending
-      exit_date: null
-      exit_price: null
-      benchmark_exit_price: null
-      forward_return: null
-      benchmark_forward_return: null
-      excess_return: null
-      hit: null
+      status: realized
+      exit_date: '2026-06-04'
+      exit_price: 182.64999389648438
+      benchmark_exit_price: 756.27001953125
+      forward_return: -0.01515158371431625
+      benchmark_forward_return: 0.002213151337588809
+      excess_return: -0.01736473505190506
+      hit: false
     '10':
       status: pending
       exit_date: null
@@ -177,8 +177,8 @@
   - sector_momentum
   insider_score: 0
   source: null
-  entry_price: null
-  benchmark_entry_price: null
+  entry_price: 408.4800109863281
+  benchmark_entry_price: 756.27001953125
   horizons:
     '5':
       status: pending
@@ -219,8 +219,8 @@
   - news
   insider_score: 0
   source: null
-  entry_price: null
-  benchmark_entry_price: null
+  entry_price: 24.815000534057617
+  benchmark_entry_price: 756.27001953125
   horizons:
     '5':
       status: pending
@@ -261,8 +261,8 @@
   - news
   insider_score: 0
   source: null
-  entry_price: null
-  benchmark_entry_price: null
+  entry_price: 1080.4150390625
+  benchmark_entry_price: 756.27001953125
   horizons:
     '5':
       status: pending

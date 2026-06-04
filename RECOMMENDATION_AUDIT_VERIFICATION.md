@@ -92,6 +92,17 @@ enforced by `tests/test_conviction_trump_neutrality.py` (in the passing suite).
 
 ### Finding 1 — Insider promotion now fires on a *Trump-only* confirmation (sector AND news both failing) — `[conviction-loosening]` (latent)
 
+> **✅ RESOLVED — Phase C, commit `42b9c7d`.** The promotion guard is now
+> `confirmations == 1 and (sec_pass or news_pass) and tech["pass"] and insider>=2`
+> (`conviction.py`), so a Trump mention alone can no longer open the insider-promotion
+> tier. Trump still counts as a peer in the ≥2 confluence path (substitution paths #1/#2
+> intact), but **no qualifying path now has both sector and news failing.** Truth-table
+> replay confirms path #3 dropped, every insider-promotion row matches the original
+> design, and neutrality holds (0 divergences); the bar tightened by exactly one
+> combination. Tests:
+> `test_conviction_trump_neutrality.py::test_trump_plus_insider_cannot_promote_when_sector_and_news_fail`
+> (+ the two "still promotes on sector/news + insider" guards).
+
 **Evidence.** `conviction.py:239-245`:
 
 ```python
@@ -397,6 +408,10 @@ process), but means `LAST_FETCH_ERRORS` is process-cumulative if ever reused.
 
 ### Finding 9 — `conviction.py` module docstring is stale and misleading — `[cosmetic]`
 
+> **✅ RESOLVED — Phase C, commit `42b9c7d`.** The module docstring was rewritten to
+> describe the actual two-path design (≥2 confluence PRIMARY path incl. Trump; insider
+> PROMOTION requiring a fundamental surviving primary) and the deny-only overlays.
+
 **Evidence.** `conviction.py:1-14` still describes the **pre-Trump** gate:
 
 > `INSIDER PROMOTION  exactly two of the three pass, technical is one of them
@@ -428,11 +443,13 @@ confirmation must be sector or news).
   **visibly** (today-page badge), which is the correct direction. **Above bar,
   honestly.**
 
-**Latent below-bar risk (not active today):** Finding 1's path #3
-(`technical + trump + insider`, sector and news both failing) is genuinely below
-the old conviction bar and would activate **silently** the moment SEC access is
-restored and one headline trips `trump_mention`. It is the one place the bar has
-been quietly lowered; it is masked only by the insider outage.
+**Latent below-bar risk — CLOSED (Phase C, `42b9c7d`).** Finding 1's path #3
+(`technical + trump + insider`, sector and news both failing) was genuinely below the
+old conviction bar and would have activated silently once SEC access was restored. The
+promotion tier now requires a fundamental surviving primary (sector or news), so the
+trapdoor is shut: a rec can no longer clear with both sector and news failing. Verified
+by truth-table replay (path #3 → `qualifies=False`) with neutrality still at 0
+divergences and the bar tightened, not loosened.
 
 **Hidden fail-closed gaps (real, but not a loosening):** insider availability
 (Finding 2) and news-fetch failure (Finding 4) are both invisible in the durable
@@ -443,7 +460,7 @@ instrumentation fixes even though neither lowers the bar.
 **Priority of the proposed (un-applied) fixes:**
 1. Finding 1 — close path #3 (require sector|news for insider promotion, or
    demand insider score 3 on a trump-only confirmation). *Prevents a silent
-   future loosening.*
+   future loosening.* **✅ DONE — Phase C, commit `42b9c7d`** (required sector|news).
 2. Finding 2 + 4 — thread `data_available` / `news_fetch_failed` into
    `gate_telemetry.yaml`. *Makes the fail-closed states auditable in history.*
    **✅ DONE — Phase A, commit `df13706`.**

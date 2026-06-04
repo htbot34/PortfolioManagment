@@ -19,7 +19,7 @@ from pathlib import Path
 import yaml
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
-from app.config import risk_profile, settings
+from app.config import risk_profile, settings, sec_user_agent_is_placeholder
 from app.data import insider as insider_mod
 from app.data import macro as macro_mod
 from app.data import market_news, prices
@@ -160,6 +160,31 @@ def recompute_total_value(account, exposures: dict,
     return new_total, False
 
 
+def _warn_if_placeholder_ua() -> bool:
+    """Loudly warn at startup when SEC_USER_AGENT is not a real contact.
+
+    Returns True if a warning was emitted. SEC EDGAR 403s placeholder /
+    non-deliverable User-Agents, which makes the insider signal unavailable
+    (recorded loudly in telemetry, never a silent zero - see filings.py).
+    We do NOT invent an address: the owner must supply a real monitored
+    contact via the SEC_USER_AGENT secret/env.
+    """
+    if not sec_user_agent_is_placeholder():
+        return False
+    bar = "!" * 64
+    print(bar)
+    print("WARNING: SEC_USER_AGENT is a placeholder / non-deliverable contact.")
+    print(f"  current value: {settings.sec_user_agent!r}")
+    print("  SEC EDGAR will 403 this, so the insider-cluster signal will be")
+    print("  UNAVAILABLE (data_available=False, surfaced in gate telemetry and")
+    print("  the today page - not a silent score-0).")
+    print("  TODO(owner): set the SEC_USER_AGENT secret/env to a REAL monitored")
+    print("  'Name email@domain' per SEC fair-access policy (see .env.example).")
+    print("  Do not use an example.com or @users.noreply.github.com address.")
+    print(bar)
+    return True
+
+
 def _env() -> Environment:
     return Environment(
         loader=FileSystemLoader(Path(__file__).parent / "templates"),
@@ -176,6 +201,8 @@ def main() -> int:
     site = settings.site_dir
     site.mkdir(exist_ok=True)
     (site / "ticker").mkdir(exist_ok=True)
+
+    _warn_if_placeholder_ua()
 
     print("=== Price source diagnostics ===")
     try:

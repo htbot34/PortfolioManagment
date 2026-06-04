@@ -45,7 +45,13 @@ jobs:
           GITHUB_MODEL_ROUTINE: openai/gpt-4o-mini
           GITHUB_MODEL_SYNTHESIS: openai/gpt-4o
           LLM_MIN_GAP_S: "12"
-          SEC_USER_AGENT: PortfolioAdvisor ${{ github.repository_owner }}@users.noreply.github.com
+          # TODO(owner): set the SEC_USER_AGENT repo secret to a REAL monitored
+          # contact in SEC's required "Name email@domain" form. The
+          # @users.noreply.github.com fallback below is non-deliverable and
+          # SEC's CDN tends to 403 it, which makes the insider signal
+          # unavailable (now surfaced loudly in telemetry, not a silent zero).
+          # Secrets > Actions > New repository secret > SEC_USER_AGENT.
+          SEC_USER_AGENT: ${{ secrets.SEC_USER_AGENT || format('PortfolioAdvisor {0}@users.noreply.github.com', github.repository_owner) }}
         run: python -m app.build_site
 
       - name: Notify on new recommendations

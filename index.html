@@ -19,7 +19,7 @@
 <body class="min-h-screen">
   <nav class="px-6 py-3 border-b border-[#1f2a44] flex items-center gap-4">
     <a href="index.html" class="text-sm font-semibold text-slate-200">Portfolio Advisor</a>
-    <div class="ml-auto text-[10px] text-slate-500">2026-06-03 17:35 UTC</div>
+    <div class="ml-auto text-[10px] text-slate-500">2026-06-04 10:35 UTC</div>
   </nav>
   <main class="p-6 max-w-7xl mx-auto">
     
@@ -29,7 +29,7 @@
 <div class="max-w-3xl mx-auto">
 
 <div class="flex items-center justify-between mb-3">
-  <div class="text-xs text-slate-500">2026-06-03</div>
+  <div class="text-xs text-slate-500">2026-06-04</div>
   
   
   
@@ -37,8 +37,7 @@
     
     
     
-      <div class="text-[10px] text-rose-200 bg-rose-900/40 px-2 py-0.5 rounded" title="CIK index fetch failed: HTTPStatusError: Client error &#39;403 Forbidden&#39; for url &#39;https://www.sec.gov/files/company_tickers.json&#39;
-For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403">Insider data unavailable</div>
+      <div class="text-[10px] text-rose-200 bg-rose-900/40 px-2 py-0.5 rounded" title="CIK index fetch failed: HTTPStatusError: HTTP 403 -- SEC likely rejected the User-Agent; set SEC_USER_AGENT to a real monitored &#39;Name email@domain&#39; (current UA looks like a placeholder) | body: &lt;!DOCTYPE html PUBLIC &#34;-//W3C//DTD XHTML 1.0 Transitional//EN&#34; &#34;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&#34;&gt; &lt;html xmlns=&#34;http://www.w3.org/1999/xh">Insider data unavailable</div>
     
   </div>
 </div>
@@ -53,7 +52,7 @@ For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/St
       <span class="text-xs text-slate-500 ml-1">confidence 1/3</span>
     </div>
   </div>
-  <div class="text-xs text-slate-400 mt-1">Risk-on - trend up, participation broad (VIX 16.1, breadth 50%) [confidence 1/3]</div>
+  <div class="text-xs text-slate-400 mt-1">Risk-on - trend up, participation broad (VIX 16.3, breadth 54%) [confidence 1/3]</div>
   
   <details class="mt-2 text-xs">
     <summary class="cursor-pointer text-slate-500 hover:text-slate-300 select-none">Regime factors</summary>
@@ -65,13 +64,13 @@ For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/St
       
       <li>spy stacked up: <span class="text-slate-300">True</span></li>
       
-      <li>vix level: <span class="text-slate-300">16.09000015258789</span></li>
+      <li>vix level: <span class="text-slate-300">16.309999465942383</span></li>
       
-      <li>vix change 5d pct: <span class="text-slate-300">-1.227751698582263</span></li>
+      <li>vix change 5d pct: <span class="text-slate-300">3.6213450007167705</span></li>
       
       <li>hyg ief trend: <span class="text-slate-300">flat</span></li>
       
-      <li>breadth pct: <span class="text-slate-300">50.0</span></li>
+      <li>breadth pct: <span class="text-slate-300">54.0</span></li>
       
       <li>spy range bound 10d: <span class="text-slate-300">False</span></li>
       
@@ -97,17 +96,29 @@ For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/St
   <div class="text-xs text-slate-500 text-center mb-4 space-y-0.5">
     <div class="uppercase tracking-widest text-[10px] text-slate-600">Gate status</div>
     
-    <div>Evaluated 4 candidates. None reached 2-of-3.</div>
+    
+    <div>Evaluated 6 candidates today. Closest miss:
+      <span class="text-slate-400 font-semibold">AVGO</span>
+      (passed technical + sector momentum, failed news,
+      insider data unavailable).</div>
     
     
-    <div>30-day: 0 cleared, 4 reached 2-of-3, top blocker = technical (75.0%).</div>
+    
+    
+    
+    <div class="text-amber-400/80">Data gaps today: insider data unavailable for 3 candidates.
+      <span class="text-slate-600">(a closed gate here may reflect missing data, not a weak tape)</span>
+    </div>
+    
+    
+    <div>30-day: 0 cleared, 7 reached 2-of-3, top blocker = technical (65.4%). Data gaps on 1 insider / 0 news day(s).</div>
     
   </div>
   
 
 
 
-<div class="text-center text-xs text-slate-400 mb-4">SPX -0.45%, VIX 16.1, Energy leads +1.8%.</div>
+<div class="text-center text-xs text-slate-400 mb-4">SPX -0.74%, VIX 16.3, Energy leads +1.3%.</div>
 
 
 
@@ -118,15 +129,15 @@ For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/St
   <div class="text-xs text-slate-400 uppercase tracking-widest mb-2">Watching</div>
   <ul class="text-sm space-y-1">
   
+    <li class="text-slate-300">- URI - watching for clean breakout</li>
+  
     <li class="text-slate-300">- XLI - watching for pullback entry</li>
   
     <li class="text-slate-300">- IWM - watching for pullback entry</li>
   
-    <li class="text-slate-300">- CCJ - watching SMA50 hold</li>
+    <li class="text-slate-300">- BWXT - watching for reversal confirmation</li>
   
     <li class="text-slate-300">- URA - watching SMA50 hold</li>
-  
-    <li class="text-slate-300">- MRVL - fresh 52w high, waiting for retest</li>
   
   </ul>
 </div>
@@ -154,38 +165,20 @@ For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/St
   
     <div class="border-l-2 border-l-slate-700 pl-3">
       <div class="flex items-baseline gap-2 flex-wrap">
-        <a href="ticker/CCJ.html" class="text-sm font-semibold text-slate-300 tlink">CCJ</a>
-        <span class="text-[11px] text-slate-500">Pullback + theme fit -- 2 independent signals</span>
+        <a href="ticker/URI.html" class="text-sm font-semibold text-slate-300 tlink">URI</a>
+        <span class="text-[11px] text-slate-500">Momentum + news -- 2 independent signals</span>
       </div>
       
       
       <div class="grid grid-cols-4 gap-1 text-[11px] mt-1 mb-1">
-        <div><div class="text-slate-600">Entry</div><div class="text-slate-400">$108.68 - $113.74</div></div>
-        <div><div class="text-slate-600">Stop</div><div class="text-slate-400">$101.10</div></div>
-        <div><div class="text-slate-600">Target</div><div class="text-slate-400">$131.43</div></div>
+        <div><div class="text-slate-600">Entry</div><div class="text-slate-400">$1047.39 - $1071.89</div></div>
+        <div><div class="text-slate-600">Stop</div><div class="text-slate-400">$1001.46</div></div>
+        <div><div class="text-slate-600">Target</div><div class="text-slate-400">$1176.00</div></div>
         <div><div class="text-slate-600">Hold</div><div class="text-slate-400">2-3 weeks</div></div>
       </div>
       
       <a class="text-[11px] text-sky-500/70 hover:underline" target="_blank" rel="noopener"
-         href="https://github.com/htbot34/PortfolioManagment/issues/new?template=idea-action.yml&amp;title=Idea+CCJ&amp;ticker=CCJ">Give a verdict &rarr;</a>
-    </div>
-  
-    <div class="border-l-2 border-l-slate-700 pl-3">
-      <div class="flex items-baseline gap-2 flex-wrap">
-        <a href="ticker/ROKU.html" class="text-sm font-semibold text-slate-300 tlink">ROKU</a>
-        <span class="text-[11px] text-slate-500">Pullback + theme fit -- 2 independent signals</span>
-      </div>
-      
-      
-      <div class="grid grid-cols-4 gap-1 text-[11px] mt-1 mb-1">
-        <div><div class="text-slate-600">Entry</div><div class="text-slate-400">$116.71 - $121.12</div></div>
-        <div><div class="text-slate-600">Stop</div><div class="text-slate-400">$110.10</div></div>
-        <div><div class="text-slate-600">Target</div><div class="text-slate-400">$136.54</div></div>
-        <div><div class="text-slate-600">Hold</div><div class="text-slate-400">2-3 weeks</div></div>
-      </div>
-      
-      <a class="text-[11px] text-sky-500/70 hover:underline" target="_blank" rel="noopener"
-         href="https://github.com/htbot34/PortfolioManagment/issues/new?template=idea-action.yml&amp;title=Idea+ROKU&amp;ticker=ROKU">Give a verdict &rarr;</a>
+         href="https://github.com/htbot34/PortfolioManagment/issues/new?template=idea-action.yml&amp;title=Idea+URI&amp;ticker=URI">Give a verdict &rarr;</a>
     </div>
   
     <div class="border-l-2 border-l-slate-700 pl-3">
@@ -196,14 +189,32 @@ For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/St
       
       
       <div class="grid grid-cols-4 gap-1 text-[11px] mt-1 mb-1">
-        <div><div class="text-slate-600">Entry</div><div class="text-slate-400">$351.49 - $361.00</div></div>
-        <div><div class="text-slate-600">Stop</div><div class="text-slate-400">$337.22</div></div>
-        <div><div class="text-slate-600">Target</div><div class="text-slate-400">$394.29</div></div>
+        <div><div class="text-slate-600">Entry</div><div class="text-slate-400">$351.35 - $360.90</div></div>
+        <div><div class="text-slate-600">Stop</div><div class="text-slate-400">$337.03</div></div>
+        <div><div class="text-slate-600">Target</div><div class="text-slate-400">$394.32</div></div>
         <div><div class="text-slate-600">Hold</div><div class="text-slate-400">2-3 weeks</div></div>
       </div>
       
       <a class="text-[11px] text-sky-500/70 hover:underline" target="_blank" rel="noopener"
          href="https://github.com/htbot34/PortfolioManagment/issues/new?template=idea-action.yml&amp;title=Idea+GOOGL&amp;ticker=GOOGL">Give a verdict &rarr;</a>
+    </div>
+  
+    <div class="border-l-2 border-l-slate-700 pl-3">
+      <div class="flex items-baseline gap-2 flex-wrap">
+        <a href="ticker/INTC.html" class="text-sm font-semibold text-slate-300 tlink">INTC</a>
+        <span class="text-[11px] text-slate-500">Theme fit + news -- 2 independent signals</span>
+      </div>
+      
+      
+      <div class="grid grid-cols-4 gap-1 text-[11px] mt-1 mb-1">
+        <div><div class="text-slate-600">Entry</div><div class="text-slate-400">$109.20 - $116.22</div></div>
+        <div><div class="text-slate-600">Stop</div><div class="text-slate-400">$96.05</div></div>
+        <div><div class="text-slate-600">Target</div><div class="text-slate-400">$146.03</div></div>
+        <div><div class="text-slate-600">Hold</div><div class="text-slate-400">2-3 weeks</div></div>
+      </div>
+      
+      <a class="text-[11px] text-sky-500/70 hover:underline" target="_blank" rel="noopener"
+         href="https://github.com/htbot34/PortfolioManagment/issues/new?template=idea-action.yml&amp;title=Idea+INTC&amp;ticker=INTC">Give a verdict &rarr;</a>
     </div>
   
   </div>

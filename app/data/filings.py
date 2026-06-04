@@ -14,7 +14,7 @@ import httpx
 import pandas as pd
 from bs4 import BeautifulSoup
 
-from app.config import settings
+from app.config import settings, sec_user_agent_is_placeholder
 from app.logging import get_logger
 
 log = get_logger(__name__)
@@ -57,6 +57,35 @@ class CIKLookupError(RuntimeError):
 
 def _headers() -> dict:
     return {"User-Agent": settings.sec_user_agent, "Accept-Encoding": "gzip, deflate"}
+
+
+def _describe_fetch_error(e: Exception) -> str:
+    """Diagnostic string for a CIK-index fetch failure.
+
+    Surfaces the HTTP status code + a short body snippet so a 403 (SEC
+    rejected the User-Agent) is distinguishable from a 429 (throttled) and
+    from a transport error, with an actionable hint for the common cases.
+    """
+    resp = getattr(e, "response", None)
+    if resp is not None:
+        try:
+            code = resp.status_code
+        except Exception:
+            code = "?"
+        try:
+            body = " ".join((resp.text or "").split())[:160]
+        except Exception:
+            body = ""
+        hint = ""
+        if code == 403:
+            hint = (" -- SEC likely rejected the User-Agent; set SEC_USER_AGENT "
+                    "to a real monitored 'Name email@domain'")
+            if sec_user_agent_is_placeholder(settings.sec_user_agent):
+                hint += " (current UA looks like a placeholder)"
+        elif code == 429:
+            hint = " -- throttled by SEC; back off or raise CIK_CACHE_TTL_DAYS"
+        return f"{type(e).__name__}: HTTP {code}{hint}" + (f" | body: {body}" if body else "")
+    return f"{type(e).__name__}: {e}"
 
 
 def _cik_cache_path() -> Path:
@@ -125,10 +154,14 @@ def _ticker_to_cik() -> dict[str, str]:
             for row in rows.values()
         }
     except Exception as e:
-        LAST_CIK_ERROR = f"CIK index fetch failed: {type(e).__name__}: {e}"
+        # Never cache a negative/403 result - that would suppress recovery.
+        # Serve whatever cache we have (stale beats nothing); only raise when
+        # there is no cache at all, so a real outage is loud, not a silent 0.
+        LAST_CIK_ERROR = f"CIK index fetch failed: {_describe_fetch_error(e)}"
         log.warning("%s", LAST_CIK_ERROR)
         if mapping:
-            log.warning("serving stale CIK cache (age=%.0fs)", age_s or 0)
+            log.warning("serving stale CIK cache (age=%.0fs) - resolution preserved",
+                        age_s or 0)
             return mapping
         raise CIKLookupError(LAST_CIK_ERROR) from e
     _write_cik_cache(path, fresh)

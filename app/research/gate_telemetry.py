@@ -21,6 +21,10 @@ _PRIMARY_SIGNALS = ("technical", "sector_momentum", "news", "trump")
 _BLOCK_KEYS = ("technical", "sector_momentum", "news", "trump",
                "earnings_window", "regime", "soft_veto",
                "trump_block")
+# Data-availability status buckets, recorded distinctly from pass/fail so the
+# durable history can tell a genuine score-0 / no-news apart from an outage.
+_INSIDER_STATUSES = ("scored", "zero", "unavailable", "not_evaluated")
+_NEWS_STATUSES = ("ok", "empty", "outage", "unknown")
 
 
 def _blank_blocked_by() -> dict:
@@ -61,6 +65,8 @@ def record(candidates: list, gate_evals: list, date_str: str) -> dict:
     trump_promotions = 0
     trump_vetoes = 0
     trump_firings: list[dict] = []
+    insider_status_counts = {k: 0 for k in _INSIDER_STATUSES}
+    news_status_counts = {k: 0 for k in _NEWS_STATUSES}
 
     for ev in gate_evals or []:
         pre = ev.get("pre_block")
@@ -69,6 +75,13 @@ def record(candidates: list, gate_evals: list, date_str: str) -> dict:
             continue
         reasons = ev.get("reasons") or {}
         passed = [s for s in _PRIMARY_SIGNALS if reasons.get(s)]
+        # Data-availability tally over candidates that actually reached the
+        # gate. Unrecognised / missing values fold into the safe defaults so
+        # old callers and pre-Phase-A records stay valid.
+        ist = ev.get("insider_status", "not_evaluated")
+        insider_status_counts[ist if ist in insider_status_counts else "not_evaluated"] += 1
+        nst = ev.get("news_status", "unknown")
+        news_status_counts[nst if nst in news_status_counts else "unknown"] += 1
         # Trump telemetry (independent of qualification outcome).
         if ev.get("trump_mention"):
             trump_mentions += 1
@@ -123,6 +136,11 @@ def record(candidates: list, gate_evals: list, date_str: str) -> dict:
                 "passed": passed,
                 "failed": failed_list[0] if failed_list else None,
                 "insider_score": int(ev.get("insider_score", 0) or 0),
+                # Distinguish "insider scored 0" from "insider unreachable"
+                # and "news empty" from "news-feed outage" in the durable
+                # near-miss record - the calibration history depends on it.
+                "insider_status": ev.get("insider_status", "not_evaluated"),
+                "news_status": ev.get("news_status", "unknown"),
             })
 
     near_miss.sort(key=lambda n: (-n["insider_score"], n["ticker"]))
@@ -143,6 +161,11 @@ def record(candidates: list, gate_evals: list, date_str: str) -> dict:
             "vetoes": trump_vetoes,
             "firings": trump_firings,
         },
+        # Per-day data-availability rollup over evaluated candidates. Makes a
+        # both-feeds-down news day or an EDGAR outage visible in the durable
+        # history instead of masquerading as genuine zeros.
+        "insider": insider_status_counts,
+        "news": news_status_counts,
     }
 
 
@@ -189,7 +212,10 @@ def rollup(history: list[dict]) -> dict:
     if not history:
         return {"days": 0, "cleared": 0, "reached_2of3": 0,
                 "mean_near_miss_per_day": 0.0,
-                "top_blocker_signal": None, "top_blocker_pct": 0.0}
+                "top_blocker_signal": None, "top_blocker_pct": 0.0,
+                "insider": {k: 0 for k in _INSIDER_STATUSES},
+                "news": {k: 0 for k in _NEWS_STATUSES},
+                "insider_unavailable_days": 0, "news_outage_days": 0}
     cleared = sum((r.get("cleared_primary", 0) or 0)
                   + (r.get("cleared_insider_promotion", 0) or 0)
                   for r in history)
@@ -206,6 +232,25 @@ def rollup(history: list[dict]) -> dict:
     if total_blocks:
         top_signal = max(block_totals, key=lambda k: block_totals[k])
         top_pct = round(block_totals[top_signal] / total_blocks * 100, 1)
+    # Data-availability rollup. Records lacking the blocks (pre-Phase-A) simply
+    # contribute nothing - the field reads as absent, not as a spurious zero.
+    insider_totals = {k: 0 for k in _INSIDER_STATUSES}
+    news_totals = {k: 0 for k in _NEWS_STATUSES}
+    insider_unavailable_days = 0
+    news_outage_days = 0
+    for r in history:
+        ins = r.get("insider") or {}
+        for k, v in ins.items():
+            if k in insider_totals:
+                insider_totals[k] += (v or 0)
+        if (ins.get("unavailable") or 0) > 0:
+            insider_unavailable_days += 1
+        nws = r.get("news") or {}
+        for k, v in nws.items():
+            if k in news_totals:
+                news_totals[k] += (v or 0)
+        if (nws.get("outage") or 0) > 0:
+            news_outage_days += 1
     return {
         "days": len(history),
         "cleared": cleared,
@@ -213,4 +258,8 @@ def rollup(history: list[dict]) -> dict:
         "mean_near_miss_per_day": round(near_miss_total / len(history), 2),
         "top_blocker_signal": top_signal,
         "top_blocker_pct": top_pct,
+        "insider": insider_totals,
+        "news": news_totals,
+        "insider_unavailable_days": insider_unavailable_days,
+        "news_outage_days": news_outage_days,
     }

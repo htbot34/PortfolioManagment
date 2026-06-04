@@ -52,6 +52,10 @@ def _gate_entry(ticker: str, gate: dict | None = None,
         "trump_block": gate.get("trump_block"),
         "reasons": reasons,
         "insider_score": int(gate.get("insider_score", 0) or 0),
+        # Data-availability statuses (Phase A): keep "scored zero / no news"
+        # distinct from "source unreachable" in the durable telemetry.
+        "insider_status": gate.get("insider_status", "not_evaluated"),
+        "news_status": gate.get("news_status", "unknown"),
         "trump_mention": bool(trump_sig.get("valence") in ("endorse", "attack")
                                or trump_sig.get("pass")),
         "trump_valence": trump_sig.get("valence", "none"),
@@ -145,7 +149,7 @@ def _defense_from_book(recommendations: list[dict], macro_line: str,
             log.append(_gate_entry(ticker, pre_block="soft_veto"))
             continue
         gate = conviction.evaluate(r, direction="short", macro=macro or {},
-                                    news_fetcher=news_mod.company_news,
+                                    news_fetcher=news_mod.company_news_with_status,
                                     action=r.get("action"))
         log.append(_gate_entry(ticker, gate))
         if not gate["qualifies"]:
@@ -304,7 +308,7 @@ def _trade_from_scanner(scan_result: dict, macro: dict, macro_line: str,
             log.append(_gate_entry(ticker, pre_block="regime"))
             continue
         gate = conviction.evaluate(s, direction="long", macro=macro,
-                                    news_fetcher=news_mod.company_news,
+                                    news_fetcher=news_mod.company_news_with_status,
                                     action="new_buy", portfolio=account,
                                     allow_insider_promotion=allow_promo)
         log.append(_gate_entry(ticker, gate))

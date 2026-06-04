@@ -214,12 +214,25 @@
     {% set nm = tel.near_miss[0] %}
     <div>Evaluated {{ tel.candidates_evaluated }} candidate{{ '' if tel.candidates_evaluated == 1 else 's' }} today. Closest miss:
       <span class="text-slate-400 font-semibold">{{ nm.ticker }}</span>
-      (passed {{ nm.passed|join(' + ')|replace('_',' ') }}, failed {{ nm.failed|replace('_',' ') }}, insider score {{ nm.insider_score }}).</div>
+      (passed {{ nm.passed|join(' + ')|replace('_',' ') }}, failed {{ nm.failed|replace('_',' ') }},
+      {% if nm.insider_status == 'unavailable' %}insider data unavailable{% else %}insider score {{ nm.insider_score }}{% endif %}).</div>
     {% else %}
     <div>Evaluated {{ tel.candidates_evaluated }} candidate{{ '' if tel.candidates_evaluated == 1 else 's' }}. None reached 2-of-3.</div>
     {% endif %}
+    {# Durable data-availability surface (Phase A): a fail-closed-on-missing-data
+       day must not look like a clean no-setup day. #}
+    {% set ins_unavail = (tel.insider.unavailable if tel.insider else 0) or 0 %}
+    {% set news_outage = (tel.news.outage if tel.news else 0) or 0 %}
+    {% if ins_unavail or news_outage %}
+    <div class="text-amber-400/80">Data gaps today:
+      {%- if ins_unavail %} insider data unavailable for {{ ins_unavail }} candidate{{ '' if ins_unavail == 1 else 's' }}{% endif %}
+      {%- if ins_unavail and news_outage %};{% endif %}
+      {%- if news_outage %} news-feed outage for {{ news_outage }} candidate{{ '' if news_outage == 1 else 's' }}{% endif %}.
+      <span class="text-slate-600">(a closed gate here may reflect missing data, not a weak tape)</span>
+    </div>
+    {% endif %}
     {% if t30 and t30.days %}
-    <div>30-day: {{ t30.cleared }} cleared, {{ t30.reached_2of3 }} reached 2-of-3{% if t30.top_blocker_signal %}, top blocker = {{ t30.top_blocker_signal|replace('_',' ') }} ({{ t30.top_blocker_pct }}%){% endif %}.</div>
+    <div>30-day: {{ t30.cleared }} cleared, {{ t30.reached_2of3 }} reached 2-of-3{% if t30.top_blocker_signal %}, top blocker = {{ t30.top_blocker_signal|replace('_',' ') }} ({{ t30.top_blocker_pct }}%){% endif %}.{% if t30.insider_unavailable_days or t30.news_outage_days %} Data gaps on {{ t30.insider_unavailable_days or 0 }} insider / {{ t30.news_outage_days or 0 }} news day(s).{% endif %}</div>
     {% endif %}
   </div>
   {% endif %}

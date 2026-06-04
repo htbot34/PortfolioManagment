@@ -140,11 +140,12 @@ def test_cik_cache_fresh_hit_skips_network(monkeypatch, tmp_path):
 def test_cik_cache_expired_triggers_refetch(monkeypatch, tmp_path):
     """A CIK cache older than the TTL must re-fetch from SEC."""
     import json, time
+    from app.config import settings
     from app.data import filings
     monkeypatch.setattr(filings, "_CIK_CACHE_PATH", tmp_path / "ticker_cik_cache.json")
     monkeypatch.setattr(filings, "LAST_CIK_ERROR", None)
-    # Cache older than 7 days (TTL).
-    stale_payload = {"fetched_at": time.time() - (8 * 24 * 3600),
+    # Cache older than the (long) TTL so a refetch is forced.
+    stale_payload = {"fetched_at": time.time() - ((settings.cik_cache_ttl_days + 5) * 24 * 3600),
                      "mapping": {"OLD": "0000000999"}}
     filings._CIK_CACHE_PATH.write_text(json.dumps(stale_payload))
 
@@ -252,3 +253,114 @@ def test_insider_success_clears_loud_diagnostic(monkeypatch, tmp_path):
     assert ok is True
     # The previous error must be cleared on success.
     assert "AAA" not in insider.LAST_FETCH_ERRORS
+
+
+# ---------------------------------------------------------------------------
+# Phase B: EDGAR/CIK reliability (finding #3).
+# ---------------------------------------------------------------------------
+
+def _resp_403(text="Forbidden: User-Agent not allowed"):
+    """A fake httpx response that raises a 403 HTTPStatusError (carrying a
+    .response, so the diagnostic can distinguish 403 from 429)."""
+    from app.data import filings
+
+    class _R:
+        status_code = 403
+
+        def raise_for_status(self):
+            req = filings.httpx.Request(
+                "GET", "https://www.sec.gov/files/company_tickers.json")
+            resp = filings.httpx.Response(403, text=text, request=req)
+            raise filings.httpx.HTTPStatusError(
+                "403 Forbidden", request=req, response=resp)
+
+        def json(self):
+            return {}
+
+    return _R()
+
+
+def test_cik_403_with_cache_serves_cached_map(monkeypatch, tmp_path):
+    """A transient index 403 must NOT break resolution once the map has ever
+    been cached - the cached map is served and the error is recorded as a 403."""
+    import json, time
+    from app.config import settings
+    from app.data import filings
+    monkeypatch.setattr(filings, "_CIK_CACHE_PATH", tmp_path / "ticker_cik_cache.json")
+    monkeypatch.setattr(filings, "LAST_CIK_ERROR", None)
+    # Stale enough to force a live refresh attempt (which will 403).
+    payload = {"fetched_at": time.time() - ((settings.cik_cache_ttl_days + 5) * 24 * 3600),
+               "mapping": {"AAA": "0000000001"}}
+    filings._CIK_CACHE_PATH.write_text(json.dumps(payload))
+    monkeypatch.setattr(filings.httpx, "get", lambda *a, **kw: _resp_403())
+
+    out = filings._ticker_to_cik()
+    assert out == {"AAA": "0000000001"}             # resolution preserved
+    assert filings.LAST_CIK_ERROR is not None
+    assert "HTTP 403" in filings.LAST_CIK_ERROR     # 403 distinguished from 429
+    # A negative/403 result must NOT be cached (recovery must stay possible).
+    saved = json.loads(filings._CIK_CACHE_PATH.read_text())
+    assert saved["mapping"] == {"AAA": "0000000001"}
+
+
+def test_cik_long_ttl_skips_network_for_old_but_intra_ttl_cache(monkeypatch, tmp_path):
+    """The long TTL means an 8-day-old map is still fresh -> no SEC hit, so a
+    flaky index cannot even be reached on most builds."""
+    import json, time
+    from app.config import settings
+    from app.data import filings
+    assert settings.cik_cache_ttl_days >= 14    # "days, not 24h"
+    monkeypatch.setattr(filings, "_CIK_CACHE_PATH", tmp_path / "ticker_cik_cache.json")
+    payload = {"fetched_at": time.time() - (8 * 24 * 3600),
+               "mapping": {"AAA": "0000000001"}}
+    filings._CIK_CACHE_PATH.write_text(json.dumps(payload))
+
+    def _no_network(*a, **kw):
+        raise AssertionError("network hit despite an intra-TTL cache")
+    monkeypatch.setattr(filings.httpx, "get", _no_network)
+    assert filings._ticker_to_cik() == {"AAA": "0000000001"}
+
+
+def test_403_with_no_cache_propagates_data_available_false(monkeypatch, tmp_path):
+    """No cache + 403 must still surface as a loud unavailable (no silent 0).
+    Preserves the existing loud-failure contract."""
+    from app.data import filings, insider
+    monkeypatch.setattr(filings, "_CIK_CACHE_PATH", tmp_path / "no_cache.json")
+    monkeypatch.setattr(filings, "LAST_CIK_ERROR", None)
+    monkeypatch.setattr(insider, "_CACHE_PATH", tmp_path / "form4_cache.json")
+    insider.reset_diagnostics()
+    monkeypatch.setattr(filings.httpx, "get", lambda *a, **kw: _resp_403())
+
+    txns, ok = insider._recent_form4_transactions_uncached("AAA")
+    assert txns == [] and ok is False              # loud failure, not silent 0
+    diag = insider.diagnostics()
+    assert diag["cik_index_error"] is not None
+    assert "HTTP 403" in diag["ticker_errors"]["AAA"]
+
+
+def test_sec_user_agent_placeholder_detection():
+    from app.config import SEC_UA_PLACEHOLDER, sec_user_agent_is_placeholder
+    # Placeholders / non-deliverable shapes -> True.
+    assert sec_user_agent_is_placeholder(SEC_UA_PLACEHOLDER) is True
+    assert sec_user_agent_is_placeholder("") is True
+    assert sec_user_agent_is_placeholder("PortfolioAdvisor") is True       # no @
+    assert sec_user_agent_is_placeholder("YourName your.email@example.com") is True
+    assert sec_user_agent_is_placeholder("PortfolioAdvisor htbot34@users.noreply.github.com") is True
+    # A real monitored contact -> False.
+    assert sec_user_agent_is_placeholder("Jane Doe jane@realcompany.com") is False
+
+
+def test_build_site_warns_loudly_on_placeholder_ua(monkeypatch, capsys):
+    from app import build_site
+    from app.config import settings, SEC_UA_PLACEHOLDER
+    monkeypatch.setattr(settings, "sec_user_agent", SEC_UA_PLACEHOLDER)
+    warned = build_site._warn_if_placeholder_ua()
+    out = capsys.readouterr().out
+    assert warned is True
+    assert "SEC_USER_AGENT is a placeholder" in out
+    assert "TODO(owner)" in out
+
+    # A real UA -> no warning.
+    monkeypatch.setattr(settings, "sec_user_agent", "Jane Doe jane@realcompany.com")
+    assert build_site._warn_if_placeholder_ua() is False
+    assert capsys.readouterr().out == ""

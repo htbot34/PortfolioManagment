@@ -1,16 +1,30 @@
 """Conviction gate orchestrator.
 
 ``evaluate()`` runs the technical signal first (a hard prerequisite - it can
-never be substituted), then sector_momentum and news. A recommendation
-``qualifies`` via one of two paths:
+never be substituted), then sector_momentum, news, and the Trump-mention
+signal. A recommendation ``qualifies`` via one of these paths:
 
-  PRIMARY PATH       all three primary signals (technical, sector, news) pass.
-  INSIDER PROMOTION  exactly two of the three pass, technical is one of them,
-                     and the insider cluster score for the direction is >= 2.
-                     The failing signal must be sector or news, never technical.
+  PRIMARY PATH       technical passes AND at least ``trump_confluence_min``
+                     (default 2) of (sector_momentum, news, trump) confirm.
+                     With no qualifying Trump mention this reduces to
+                     "sector AND news" -- byte-for-byte the original 3-of-3
+                     rule (the neutrality invariant, enforced by
+                     tests/test_conviction_trump_neutrality.py).
+  INSIDER PROMOTION  technical passes, EXACTLY ONE of (sector, news, trump)
+                     confirms, that one confirmation includes a FUNDAMENTAL
+                     primary (sector or news -- a Trump mention alone is NOT
+                     enough), and the insider cluster score for the direction
+                     is >= 2 with data actually available. One evidence-based
+                     primary must agree before an orthogonal Form-4 cluster can
+                     rescue a near-miss; a rec can never clear with BOTH sector
+                     and news failing.
 
-Phase 1 added: semantic LLM news classification and the earnings-window
-hard block. Phase 2 added: the insider-promotion path.
+Then deny-only overlays may BLOCK an already-qualified rec (Trump-attack veto,
+correlation, valuation-extreme, earnings window); none of them can promote.
+
+Phase 1 added semantic LLM news classification and the earnings-window block;
+Phase 2 the insider-promotion path; Phase 3 the Trump-mention primary;
+Phase C restricted promotion to a fundamental surviving primary.
 """
 from __future__ import annotations
 
@@ -259,13 +273,16 @@ def evaluate(
         qualifies = True
     promoted_by_insider = False
 
-    # Insider-promotion path: exactly 1 confirmation (tech + one of
-    # sector/news/trump), technical is already verified, insider score
-    # >= 2. Same conservative spirit as the old 2-of-3 path -- one full
-    # primary still must agree, then an orthogonal Form-4 cluster
-    # rescues it.
-    if (not qualifies and confirmations == 1 and tech["pass"]
-            and allow_insider_promotion):
+    # Insider-promotion path: exactly 1 confirmation among (sector, news,
+    # trump), and that confirmation must include a FUNDAMENTAL primary
+    # (sector or news) -- a Trump mention ALONE cannot open promotion. This
+    # restores the original safety-valve intent: one evidence-based primary
+    # must agree before an orthogonal Form-4 cluster rescues a near-miss, so
+    # a rec can never clear with BOTH sector and news failing. Trump still
+    # counts as a peer in the >=2 confluence (PRIMARY) path above; only this
+    # 1-confirmation promotion tier is restricted.
+    if (not qualifies and confirmations == 1 and (sec_pass or news_pass)
+            and tech["pass"] and allow_insider_promotion):
         insider = _insider_signal(ticker, direction, ticker_payload, insider_fetcher)
         out_signals["insider"] = insider
         avail = bool(insider.get("data_available", True))

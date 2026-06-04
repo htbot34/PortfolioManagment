@@ -323,3 +323,80 @@ def test_trump_solo_with_technical_on_allows_solo():
                                 macro=_macro_sector_fail(),
                                 gate_config=cfg)
     assert out["qualifies"] is True
+
+
+# ---------------------------------------------------------------------------
+# Phase C: insider promotion requires a FUNDAMENTAL surviving primary
+# (sector or news). Trump alone must NOT open the 1-confirmation promotion
+# tier -- closing the latent below-bar trapdoor (audit finding #1).
+# ---------------------------------------------------------------------------
+
+def _endorse_finding():
+    return {"mention": True, "valence": "endorse", "confidence": 0.9,
+            "as_of": "2026-06-01", "source": "WH", "summary": "Praised",
+            "manual": False, "low_confidence_seen": []}
+
+
+def _no_trump_finding():
+    return {"mention": False, "valence": "none", "confidence": 0.0,
+            "as_of": None, "source": "", "summary": "", "manual": False,
+            "low_confidence_seen": []}
+
+
+def test_trump_plus_insider_cannot_promote_when_sector_and_news_fail():
+    """tech + trump + insider, with BOTH sector and news failing, must NOT
+    qualify -- a Trump mention alone cannot unlock insider promotion."""
+    payload = _payload(tech_pass=True, news_pass=False,           # news fails
+                       sector_payload_sector="Technology",
+                       with_insider_cluster=True)                 # insider score 3
+    payload["trump_signal_result"] = _endorse_finding()
+    out = conviction.evaluate(payload, direction="long",
+                                macro=_macro_sector_fail())       # sector fails
+    assert out["signals"]["sector_momentum"]["pass"] is False
+    assert out["signals"]["news"]["pass"] is False
+    assert out["signals"]["trump"]["pass"] is True
+    assert out["qualifies"] is False
+    assert out["promoted_by_insider"] is False
+    # Insider is not even consulted: there is no fundamental primary to rescue.
+    assert out["insider_status"] == "not_evaluated"
+    assert "insider" not in out["signals"]
+
+
+def test_insider_promotion_still_fires_on_sector_plus_insider():
+    """tech + sector (news fail, no trump) + insider>=2 still promotes."""
+    payload = _payload(tech_pass=True, news_pass=False,
+                       sector_payload_sector="Technology",
+                       with_insider_cluster=True)
+    payload["trump_signal_result"] = _no_trump_finding()
+    out = conviction.evaluate(payload, direction="long",
+                                macro=_macro_sector_pass())       # sector passes
+    assert out["qualifies"] is True
+    assert out["promoted_by_insider"] is True
+    assert out["insider_status"] == "scored"
+
+
+def test_insider_promotion_still_fires_on_news_plus_insider():
+    """tech + news (sector fail, no trump) + insider>=2 still promotes."""
+    payload = _payload(tech_pass=True, news_pass=True,
+                       sector_payload_sector="Technology",
+                       with_insider_cluster=True)
+    payload["trump_signal_result"] = _no_trump_finding()
+    out = conviction.evaluate(payload, direction="long",
+                                macro=_macro_sector_fail())       # sector fails
+    assert out["qualifies"] is True
+    assert out["promoted_by_insider"] is True
+    assert out["insider_status"] == "scored"
+
+
+def test_trump_plus_sector_plus_insider_qualifies_via_confluence_not_promotion():
+    """tech + sector + trump (news fail) is a >=2 confluence qualification --
+    NOT an insider promotion. The insider tier is never consulted here."""
+    payload = _payload(tech_pass=True, news_pass=False,
+                       sector_payload_sector="Technology",
+                       with_insider_cluster=True)
+    payload["trump_signal_result"] = _endorse_finding()
+    out = conviction.evaluate(payload, direction="long",
+                                macro=_macro_sector_pass())       # sector passes
+    assert out["qualifies"] is True
+    assert out["promoted_by_insider"] is False     # confluence, not promotion
+    assert out["insider_status"] == "not_evaluated"

@@ -145,3 +145,97 @@ def test_rollup_empty():
     assert r["cleared"] == 0
     assert r["reached_2of3"] == 0
     assert r["top_blocker_signal"] is None
+
+
+# ---------------------------------------------------------------------------
+# Phase A: data-availability status fields (finding #2).
+# ---------------------------------------------------------------------------
+
+def _near_miss_ev(ticker, *, insider_status, news_status, insider_score=0):
+    """A confluence-1 near-miss (tech + sector pass, news fail)."""
+    return {"ticker": ticker, "pre_block": None, "qualifies": False,
+            "promoted_by_insider": False, "earnings_block": None,
+            "reasons": {"technical": True, "sector_momentum": True, "news": False},
+            "insider_score": insider_score,
+            "insider_status": insider_status, "news_status": news_status}
+
+
+def test_insider_unavailable_serializes_distinctly_from_zero():
+    """An UNREACHABLE insider near-miss must serialize differently from a
+    genuine score-0 - both read insider_score 0, only the status disambiguates."""
+    zero = _near_miss_ev("ZRO", insider_status="zero", news_status="ok")
+    unavail = _near_miss_ev("UNA", insider_status="unavailable", news_status="ok")
+    rec = gate_telemetry.record([zero, unavail], [zero, unavail], "2026-06-03")
+    nm = {n["ticker"]: n for n in rec["near_miss"]}
+    assert nm["ZRO"]["insider_score"] == nm["UNA"]["insider_score"] == 0
+    assert nm["ZRO"]["insider_status"] == "zero"
+    assert nm["UNA"]["insider_status"] == "unavailable"
+    assert nm["ZRO"] != nm["UNA"]                      # serialize differently
+    assert rec["insider"]["zero"] == 1
+    assert rec["insider"]["unavailable"] == 1
+
+
+def test_news_outage_serializes_distinctly_from_empty():
+    """A both-feeds-down news outage must be distinguishable from genuine
+    no-news, in both the per-near-miss record and the per-day rollup."""
+    empty = _near_miss_ev("EMP", insider_status="zero", news_status="empty")
+    outage = _near_miss_ev("OUT", insider_status="zero", news_status="outage")
+    rec = gate_telemetry.record([empty, outage], [empty, outage], "2026-06-03")
+    nm = {n["ticker"]: n for n in rec["near_miss"]}
+    assert nm["EMP"]["news_status"] == "empty"
+    assert nm["OUT"]["news_status"] == "outage"
+    assert rec["news"]["empty"] == 1
+    assert rec["news"]["outage"] == 1
+
+
+def test_record_status_buckets_default_for_legacy_evals():
+    """Evals lacking the new fields fold into the safe defaults (the old
+    test helper _ev never sets them)."""
+    evals = [_ev("AAA"), _ev("BBB", news=False)]
+    rec = gate_telemetry.record(evals, evals, "2026-06-03")
+    assert rec["insider"]["not_evaluated"] == 2
+    assert rec["news"]["unknown"] == 2
+    assert sum(rec["insider"].values()) == 2
+    assert sum(rec["news"].values()) == 2
+
+
+def test_rollup_counts_new_status_buckets():
+    hist = [
+        gate_telemetry.record(
+            [_near_miss_ev("A", insider_status="unavailable", news_status="ok")],
+            [_near_miss_ev("A", insider_status="unavailable", news_status="ok")],
+            "2026-06-01"),
+        gate_telemetry.record(
+            [_near_miss_ev("B", insider_status="zero", news_status="outage")],
+            [_near_miss_ev("B", insider_status="zero", news_status="outage")],
+            "2026-06-02"),
+    ]
+    r = gate_telemetry.rollup(hist)
+    assert r["insider"]["unavailable"] == 1
+    assert r["insider"]["zero"] == 1
+    assert r["news"]["ok"] == 1
+    assert r["news"]["outage"] == 1
+    assert r["insider_unavailable_days"] == 1
+    assert r["news_outage_days"] == 1
+
+
+def test_old_format_records_still_load_and_rollup(tmp_path):
+    """Pre-Phase-A records (no insider/news blocks) load and roll up without
+    error and contribute nothing to the new buckets."""
+    import yaml
+    p = tmp_path / "gt.yaml"
+    old = {"date": "2026-05-01", "candidates_evaluated": 2,
+           "cleared_primary": 0, "cleared_insider_promotion": 0,
+           "blocked_by": {"technical": 1, "sector_momentum": 0, "news": 1,
+                          "earnings_window": 0, "regime": 0, "soft_veto": 0},
+           "near_miss": [{"ticker": "OLD", "passed": ["technical"],
+                          "failed": "news", "insider_score": 0}]}
+    p.write_text(yaml.safe_dump([old]))
+    hist = gate_telemetry.load(p)
+    assert len(hist) == 1                       # old format still loads
+    r = gate_telemetry.rollup(hist)
+    assert r["days"] == 1
+    assert r["insider"]["unavailable"] == 0     # absent block -> no spurious count
+    assert r["news"]["outage"] == 0
+    assert r["insider_unavailable_days"] == 0
+    assert r["news_outage_days"] == 0

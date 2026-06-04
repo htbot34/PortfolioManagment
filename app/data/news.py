@@ -38,12 +38,15 @@ def _is_denylisted(source: str, headline: str, ticker: str) -> bool:
     return ticker.upper() not in (headline or "").upper()
 
 
-def _yahoo_news(ticker: str) -> list[dict]:
+def _yahoo_news(ticker: str) -> tuple[list[dict], bool]:
+    """Return ``(items, ok)``. ``ok`` is False on a genuine fetch failure -
+    distinct from a clean empty result - so a both-feeds-down outage can be
+    told apart from "this company simply has no recent news"."""
     try:
         items = yf.Ticker(ticker).news or []
     except Exception as e:
         log.debug("yahoo .news failed for %s: %s", ticker, e)
-        return []
+        return [], False
     out = []
     for it in items:
         content = it.get("content") or it
@@ -54,10 +57,11 @@ def _yahoo_news(ticker: str) -> list[dict]:
         provider = (content.get("provider") or {}).get("displayName") or it.get("publisher", "")
         pub = content.get("pubDate") or it.get("providerPublishTime")
         out.append({"headline": title, "url": link, "source": provider, "published": str(pub) if pub else None})
-    return out
+    return out, True
 
 
-def _google_news(ticker: str, limit: int = 10) -> list[dict]:
+def _google_news(ticker: str, limit: int = 10) -> tuple[list[dict], bool]:
+    """Return ``(items, ok)``. See :func:`_yahoo_news` for ``ok`` semantics."""
     q = quote_plus(f"{ticker} stock")
     url = f"https://news.google.com/rss/search?q={q}&hl=en-US&gl=US&ceid=US:en"
     try:
@@ -66,7 +70,7 @@ def _google_news(ticker: str, limit: int = 10) -> list[dict]:
         feed = feedparser.parse(r.text)
     except Exception as e:
         log.debug("google news failed for %s: %s", ticker, e)
-        return []
+        return [], False
     out = []
     for entry in feed.entries[:limit]:
         out.append({
@@ -75,14 +79,26 @@ def _google_news(ticker: str, limit: int = 10) -> list[dict]:
             "source": (entry.get("source") or {}).get("title", "Google News"),
             "published": entry.get("published"),
         })
-    return out
+    return out, True
 
 
-def company_news(ticker: str, limit: int = 20) -> list[dict]:
-    """Merge Yahoo + Google News, denylist PR wires, dedupe, cap at limit."""
+def _merge_feeds(ticker: str, limit: int) -> tuple[list[dict], str]:
+    """Merge Yahoo + Google, denylist PR wires, dedupe, cap at ``limit``, and
+    classify the fetch outcome.
+
+    Status:
+      ``ok``      at least one merged item survived filtering.
+      ``empty``   at least one feed responded cleanly but there was no news.
+      ``outage``  BOTH feeds errored - no provider responded. This is a data
+                  outage, NOT genuinely-no-news, and the caller must be able to
+                  tell them apart (otherwise a feed failure silently fails the
+                  conviction gate's news signal closed).
+    """
+    yahoo, y_ok = _yahoo_news(ticker)
+    google, g_ok = _google_news(ticker, limit=limit)
     seen: set[str] = set()
     out: list[dict] = []
-    for item in _yahoo_news(ticker) + _google_news(ticker, limit=limit):
+    for item in yahoo + google:
         headline = (item.get("headline") or "").strip()
         if not headline:
             continue
@@ -97,4 +113,23 @@ def company_news(ticker: str, limit: int = 20) -> list[dict]:
         out.append(item)
         if len(out) >= limit:
             break
-    return out
+    if out:
+        status = "ok"
+    elif not y_ok and not g_ok:
+        status = "outage"
+    else:
+        status = "empty"
+    return out, status
+
+
+def company_news(ticker: str, limit: int = 20) -> list[dict]:
+    """Merge Yahoo + Google News, denylist PR wires, dedupe, cap at limit."""
+    return _merge_feeds(ticker, limit)[0]
+
+
+def company_news_with_status(ticker: str, limit: int = 20) -> tuple[list[dict], str]:
+    """Like :func:`company_news` but also returns a fetch status in
+    ``{ok, empty, outage}`` so a both-feeds-down outage is observable rather
+    than coalesced into an empty list. Used by the conviction gate so news
+    outages are recorded distinctly in the durable telemetry."""
+    return _merge_feeds(ticker, limit)

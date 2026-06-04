@@ -122,6 +122,55 @@ def test_sell_passes_when_short_aligned():
     assert out["qualifies"] is True
 
 
+def test_status_fields_on_technical_short_circuit():
+    """Technical fail short-circuits before news/insider -> statuses default."""
+    payload = _strong_long_payload(rsi14=80, macd_hist=-0.1,
+                                    stacked_uptrend=False, breakout_20d=False)
+    out = conviction.evaluate(payload, direction="long", macro=_macro())
+    assert out["news_status"] == "unknown"          # news never fetched
+    assert out["insider_status"] == "not_evaluated"  # promotion never ran
+
+
+def test_status_news_ok_from_payload():
+    """A payload-supplied non-empty news list reads as ok; a clean 3-of-3
+    qualifier never consults the insider path."""
+    out = conviction.evaluate(_strong_long_payload(), direction="long", macro=_macro())
+    assert out["qualifies"] is True
+    assert out["news_status"] == "ok"
+    assert out["insider_status"] == "not_evaluated"
+
+
+def test_status_news_outage_from_status_fetcher():
+    """A status-aware fetcher reporting an outage propagates to news_status."""
+    payload = _strong_long_payload()
+    payload.pop("news")
+
+    def outage_fetcher(_t):
+        return ([], "outage")
+
+    out = conviction.evaluate(payload, direction="long", macro=_macro(),
+                              news_fetcher=outage_fetcher)
+    assert out["news_status"] == "outage"
+
+
+def test_status_insider_unavailable_propagates():
+    """When the insider path runs but the fetch fails, insider_status is
+    'unavailable' (distinct from a genuine 'zero') and nothing promotes."""
+    payload = _strong_long_payload(news=[{"headline": "neutral company update"}])
+    payload.pop("insider_transactions", None)  # force the fetcher path
+
+    def boom(_t):
+        raise RuntimeError("EDGAR 403")
+
+    out = conviction.evaluate(payload, direction="long", macro=_macro(),
+                              insider_fetcher=boom)
+    assert out["signals"]["sector_momentum"]["pass"] is True
+    assert out["signals"]["news"]["pass"] is False
+    assert out["insider_status"] == "unavailable"
+    assert out["promoted_by_insider"] is False
+    assert out["qualifies"] is False
+
+
 def test_scanner_row_uses_theme_when_sector_missing():
     payload = {
         "ticker": "ACME",

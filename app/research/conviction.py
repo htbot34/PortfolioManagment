@@ -159,29 +159,57 @@ def evaluate(
         raise ValueError(f"direction must be 'long' or 'short', got {direction!r}")
 
     out_signals: dict[str, dict] = {}
+    # Data-availability status, recorded distinctly from pass/fail so the
+    # durable telemetry can tell "scored zero / no news" apart from
+    # "couldn't reach the source". Defaults cover the paths that never run.
+    news_status = "unknown"          # ok | empty | outage | unknown
+    insider_status = "not_evaluated" # scored | zero | unavailable | not_evaluated
 
     tech = signals.technical_signal(ticker_payload, direction)
     out_signals["technical"] = tech
     if not tech["pass"]:
         # Technical is a hard prerequisite - no path qualifies without it.
+        # News was never fetched and the insider path never ran.
         result = _result(False, out_signals)
         result["promoted_by_insider"] = False
+        result["news_status"] = news_status
+        result["insider_status"] = insider_status
         return result
 
     sector = _extract_sector(ticker_payload)
     sec = signals.sector_momentum_signal(sector, macro, direction)
     out_signals["sector_momentum"] = sec
 
-    news_items = ticker_payload.get("news")
-    if news_items is None and news_fetcher is not None:
-        tk = ticker_payload.get("ticker") or ""
-        try:
-            news_items = news_fetcher(tk) if tk else []
-        except Exception:
-            news_items = []
     ticker = ticker_payload.get("ticker", "")
     classifications = ticker_payload.get("news_classifications")
-    if classifications is None:
+    if classifications is not None:
+        # Caller pre-supplied classifications (test injection / batched
+        # build): no fetch happened, so the fetch status is unknown.
+        news_status = "unknown"
+    else:
+        news_items = ticker_payload.get("news")
+        if news_items is not None:
+            news_status = "ok" if news_items else "empty"
+        elif news_fetcher is not None and ticker:
+            try:
+                fetched = news_fetcher(ticker)
+            except Exception:
+                # A fetcher that raises is a feed failure, not "no news".
+                news_items, news_status = [], "outage"
+            else:
+                if isinstance(fetched, tuple) and len(fetched) == 2:
+                    # Status-aware fetcher (news.company_news_with_status):
+                    # (items, status). Carries a real "outage" through.
+                    items_f, status_f = fetched
+                    news_items = items_f or []
+                    news_status = status_f or "unknown"
+                else:
+                    # Legacy list-returning fetcher: can't tell outage from
+                    # empty, so derive ok/empty from what we got.
+                    news_items = fetched or []
+                    news_status = "ok" if news_items else "empty"
+        else:
+            news_items, news_status = [], "empty"
         classifications = news_classifier.classify_news_items(ticker, news_items or [])
     nws = signals.news_signal(ticker, classifications, direction)
     out_signals["news"] = nws
@@ -240,12 +268,25 @@ def evaluate(
             and allow_insider_promotion):
         insider = _insider_signal(ticker, direction, ticker_payload, insider_fetcher)
         out_signals["insider"] = insider
-        if insider.get("score", 0) >= 2 and insider.get("data_available", True):
+        avail = bool(insider.get("data_available", True))
+        score = int(insider.get("score", 0) or 0)
+        # Status precedence: an unreachable source is "unavailable" even
+        # though its score reads 0 - that is the distinction the durable
+        # telemetry must preserve (outage vs. genuine score-0).
+        if not avail:
+            insider_status = "unavailable"
+        elif score >= 2:
+            insider_status = "scored"
+        else:
+            insider_status = "zero"
+        if score >= 2 and avail:
             qualifies = True
             promoted_by_insider = True
 
     result = _result(qualifies, out_signals)
     result["promoted_by_insider"] = promoted_by_insider
+    result["news_status"] = news_status
+    result["insider_status"] = insider_status
 
     # Trump-attack veto on new long entries / endorsement veto on new
     # shorts. We surface the avoid flag regardless of qualifies (so

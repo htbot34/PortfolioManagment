@@ -200,6 +200,23 @@ into a per-day `insider: {available: bool, tickers_unavailable: int}` block in
 
 ### Finding 3 — Insider data still does not flow (SEC 403); the 2-of-3 → 1-of-3 promotion valve remains inoperative in production — `[fail-closed-hidden]` (now visibly)
 
+> **◑ HARDENED — Phase B, commit `445cb52`** (root-cause clearance needs one owner action).
+> Code/config side is done: `_ticker_to_cik` now distinguishes a **403** (UA rejected)
+> from a **429** (throttled) in the diagnostic (`_describe_fetch_error`, with body
+> snippet + actionable hint); the CIK TTL is now **30 days** so a near-static map
+> rarely re-hits SEC and resolution falls back to the cached map on any transient
+> outage (a 403 is never cached, so recovery is never suppressed); a true no-cache
+> outage still raises `CIKLookupError → data_available=False` (no silent zero). A loud
+> startup warning fires when `SEC_USER_AGENT` is a placeholder / non-deliverable
+> (`config.sec_user_agent_is_placeholder` + `build_site._warn_if_placeholder_ua`), and
+> `refresh.yml` now reads a `SEC_USER_AGENT` **repo secret** with a TODO. **Remaining
+> owner action:** set that secret to a real monitored `Name email@domain` (no address
+> was invented). Until then the signal stays loudly unavailable — correct, not silent.
+> Tests: `test_insider_cache.py::test_cik_403_with_cache_serves_cached_map`,
+> `::test_403_with_no_cache_propagates_data_available_false`,
+> `::test_sec_user_agent_placeholder_detection`,
+> `::test_build_site_warns_loudly_on_placeholder_ua`.
+
 **Evidence.** From the committed `data.json` (2026-06-02 build):
 
 ```
@@ -431,6 +448,8 @@ instrumentation fixes even though neither lowers the bar.
    `gate_telemetry.yaml`. *Makes the fail-closed states auditable in history.*
    **✅ DONE — Phase A, commit `df13706`.**
 3. Finding 3 — fix `SEC_USER_AGENT` (operational).
+   **◑ HARDENED — Phase B, commit `445cb52`** (resilience + 403/429 diagnostics + loud
+   warning + secret wiring done; owner must set the `SEC_USER_AGENT` secret).
 4. Finding 9 — correct the stale docstring.
 
 No code behavior was changed in this pass.

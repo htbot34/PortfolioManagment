@@ -11,11 +11,11 @@ by_failed_signal:
     count: 7
     horizons:
       '5':
-        n_realized: 1
-        n_pending: 6
+        n_realized: 2
+        n_pending: 5
         hit_rate: 0.0
-        avg_excess_return: -0.01736473505190506
-        avg_forward_return: -0.01515158371431625
+        avg_excess_return: -0.029989902644092327
+        avg_forward_return: -0.03327866032885582
       '10':
         n_realized: 0
         n_pending: 7
@@ -53,11 +53,11 @@ overall:
   count: 11
   horizons:
     '5':
-      n_realized: 1
-      n_pending: 10
+      n_realized: 2
+      n_pending: 9
       hit_rate: 0.0
-      avg_excess_return: -0.01736473505190506
-      avg_forward_return: -0.01515158371431625
+      avg_excess_return: -0.029989902644092327
+      avg_forward_return: -0.03327866032885582
     '10':
       n_realized: 0
       n_pending: 11

@@ -1,40 +1,55 @@
 {
-  "checked_at": "2026-06-05T17:49:20Z",
+  "checked_at": "2026-06-05T19:43:41Z",
   "alerts": [
     {
       "severity": "high",
       "kind": "macro_shock",
-      "text": "VIX spiked +19.5% today"
+      "text": "VIX spiked +34.9% today"
+    },
+    {
+      "severity": "high",
+      "kind": "macro_shock",
+      "text": "SPX down -2.65% today"
     },
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "NBIS gapped down -13.9% today"
+      "text": "NBIS gapped down -13.1% today"
     },
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "OKLO gapped down -11.5% today"
+      "text": "OKLO gapped down -11.4% today"
     },
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "IREN gapped down -14.1% today"
+      "text": "IREN gapped down -13.7% today"
     },
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "FBL gapped down -6.1% today"
+      "text": "FBL gapped down -12.1% today"
     },
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "LEU gapped down -10.9% today"
+      "text": "LEU gapped down -14.5% today"
+    },
+    {
+      "severity": "high",
+      "kind": "position_break",
+      "text": "META gapped down -6.0% today"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "XBI in entry zone $126.90-$130.56 (plan: stop $121.41, target $143.37, hold 2-3 weeks)"
+      "text": "CAT in entry zone $887.83-$909.61 (plan: stop $846.99, target $1002.18, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "BWXT in entry zone $179.39-$186.05 (plan: stop $169.41, target $209.34, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
@@ -61,6 +76,8 @@
     "NVO|48.89": "2026-06-05",
     "CMG|34.4": "2026-06-05",
     "XLF|54.9": "2026-06-05",
-    "XBI|143.37": "2026-06-05"
+    "XBI|143.37": "2026-06-05",
+    "CAT|1002.18": "2026-06-05",
+    "BWXT|209.34": "2026-06-05"
   }
 }

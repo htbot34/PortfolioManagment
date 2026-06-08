@@ -1,72 +1,93 @@
-generated_at: '2026-06-05'
+generated_at: '2026-06-08'
 horizons:
 - 5
 - 10
 - 20
 benchmark: SPY
 direction: long
-total_records: 11
+total_records: 16
 by_failed_signal:
   news:
-    count: 7
+    count: 8
     horizons:
       '5':
         n_realized: 2
-        n_pending: 5
+        n_pending: 6
         hit_rate: 0.0
         avg_excess_return: -0.029989902644092327
         avg_forward_return: -0.03327866032885582
       '10':
         n_realized: 0
-        n_pending: 7
+        n_pending: 8
         hit_rate: null
         avg_excess_return: null
         avg_forward_return: null
       '20':
         n_realized: 0
-        n_pending: 7
+        n_pending: 8
         hit_rate: null
         avg_excess_return: null
         avg_forward_return: null
   sector_momentum:
-    count: 4
+    count: 7
     horizons:
       '5':
         n_realized: 0
-        n_pending: 4
+        n_pending: 7
         hit_rate: null
         avg_excess_return: null
         avg_forward_return: null
       '10':
         n_realized: 0
-        n_pending: 4
+        n_pending: 7
         hit_rate: null
         avg_excess_return: null
         avg_forward_return: null
       '20':
         n_realized: 0
-        n_pending: 4
+        n_pending: 7
+        hit_rate: null
+        avg_excess_return: null
+        avg_forward_return: null
+  trump_attack:
+    count: 1
+    horizons:
+      '5':
+        n_realized: 0
+        n_pending: 1
+        hit_rate: null
+        avg_excess_return: null
+        avg_forward_return: null
+      '10':
+        n_realized: 0
+        n_pending: 1
+        hit_rate: null
+        avg_excess_return: null
+        avg_forward_return: null
+      '20':
+        n_realized: 0
+        n_pending: 1
         hit_rate: null
         avg_excess_return: null
         avg_forward_return: null
 overall:
-  count: 11
+  count: 16
   horizons:
     '5':
       n_realized: 2
-      n_pending: 9
+      n_pending: 14
       hit_rate: 0.0
       avg_excess_return: -0.029989902644092327
       avg_forward_return: -0.03327866032885582
     '10':
       n_realized: 0
-      n_pending: 11
+      n_pending: 16
       hit_rate: null
       avg_excess_return: null
       avg_forward_return: null
     '20':
       n_realized: 0
-      n_pending: 11
+      n_pending: 16
       hit_rate: null
       avg_excess_return: null
       avg_forward_return: null

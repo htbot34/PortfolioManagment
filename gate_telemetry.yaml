@@ -174,3 +174,80 @@
     empty: 0
     outage: 0
     unknown: 2
+- date: '2026-06-08'
+  candidates_evaluated: 11
+  cleared_primary: 0
+  cleared_insider_promotion: 0
+  blocked_by:
+    technical: 0
+    sector_momentum: 9
+    news: 2
+    trump: 0
+    earnings_window: 0
+    regime: 0
+    soft_veto: 0
+    trump_block: 0
+  near_miss:
+  - ticker: ASML
+    passed:
+    - technical
+    - news
+    failed: sector_momentum
+    insider_score: 0
+    insider_status: zero
+    news_status: ok
+  - ticker: BRK-B
+    passed:
+    - technical
+    - news
+    failed: sector_momentum
+    insider_score: 0
+    insider_status: zero
+    news_status: ok
+  - ticker: LEU
+    passed:
+    - technical
+    - news
+    failed: sector_momentum
+    insider_score: 0
+    insider_status: zero
+    news_status: ok
+  - ticker: LLY
+    passed:
+    - technical
+    - sector_momentum
+    failed: news
+    insider_score: 0
+    insider_status: zero
+    news_status: ok
+  - ticker: META
+    passed:
+    - technical
+    - sector_momentum
+    failed: news
+    insider_score: 0
+    insider_status: zero
+    news_status: ok
+  trump:
+    mentions: 1
+    endorsements: 0
+    attacks: 1
+    promotions: 0
+    vetoes: 0
+    firings:
+    - ticker: LLY
+      valence: attack
+      as_of: '2026-06-06'
+      source: 'Elizabeth Warren Singles Out Micron, Dell And Eli Lilly As Just 3 Of
+        The 3000+ Trades Trump Made: ''Looks Like An Absurd Level Of Corruption'''
+      qualifies: false
+  insider:
+    scored: 0
+    zero: 6
+    unavailable: 0
+    not_evaluated: 5
+  news:
+    ok: 11
+    empty: 0
+    outage: 0
+    unknown: 0

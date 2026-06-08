@@ -19,7 +19,7 @@
 <body class="min-h-screen">
   <nav class="px-6 py-3 border-b border-[#1f2a44] flex items-center gap-4">
     <a href="index.html" class="text-sm font-semibold text-slate-200">Portfolio Advisor</a>
-    <div class="ml-auto text-[10px] text-slate-500">2026-06-05 13:58 UTC</div>
+    <div class="ml-auto text-[10px] text-slate-500">2026-06-08 00:51 UTC</div>
   </nav>
   <main class="p-6 max-w-7xl mx-auto">
     
@@ -29,7 +29,7 @@
 <div class="max-w-3xl mx-auto">
 
 <div class="flex items-center justify-between mb-3">
-  <div class="text-xs text-slate-500">2026-06-05</div>
+  <div class="text-xs text-slate-500">2026-06-08</div>
   
   
   
@@ -42,15 +42,15 @@
 
 
 
-<div class="card rounded-lg p-3 mb-3 border-l-4 border-l-emerald-500">
+<div class="card rounded-lg p-3 mb-3 border-l-4 border-l-amber-500">
   <div class="flex items-baseline justify-between">
     <div class="text-sm">
       <span class="text-slate-400 uppercase tracking-widest text-xs">Market Regime</span>
-      <span class="font-bold text-emerald-300 ml-2">RISK-ON</span>
+      <span class="font-bold text-amber-300 ml-2">RISK-OFF</span>
       <span class="text-xs text-slate-500 ml-1">confidence 2/3</span>
     </div>
   </div>
-  <div class="text-xs text-slate-400 mt-1">Risk-on - trend up, participation broad (VIX 16.1, breadth 62%) [confidence 2/3]</div>
+  <div class="text-xs text-slate-400 mt-1">Risk-off - below the 50-day, vol elevated (VIX 21.5, breadth 58%) [confidence 2/3]</div>
   
   <details class="mt-2 text-xs">
     <summary class="cursor-pointer text-slate-500 hover:text-slate-300 select-none">Regime factors</summary>
@@ -62,18 +62,18 @@
       
       <li>spy stacked up: <span class="text-slate-300">True</span></li>
       
-      <li>vix level: <span class="text-slate-300">16.100000381469727</span></li>
+      <li>vix level: <span class="text-slate-300">21.510000228881836</span></li>
       
-      <li>vix change 5d pct: <span class="text-slate-300">5.091388395451646</span></li>
+      <li>vix change 5d pct: <span class="text-slate-300">40.40470402978452</span></li>
       
       <li>hyg ief trend: <span class="text-slate-300">flat</span></li>
       
-      <li>breadth pct: <span class="text-slate-300">62.0</span></li>
+      <li>breadth pct: <span class="text-slate-300">58.0</span></li>
       
       <li>spy range bound 10d: <span class="text-slate-300">False</span></li>
       
       
-      <li>regime scores: <span class="text-slate-300">{&#39;risk_on&#39;: 0.75, &#39;risk_off&#39;: 0.0, &#39;chop&#39;: 0.0, &#39;breakdown&#39;: 0.0}</span></li>
+      <li>regime scores: <span class="text-slate-300">{&#39;risk_on&#39;: 0.25, &#39;risk_off&#39;: 0.67, &#39;chop&#39;: 0.0, &#39;breakdown&#39;: 0.25}</span></li>
       
     </ul>
   </details>
@@ -94,24 +94,50 @@
   <div class="text-xs text-slate-500 text-center mb-4 space-y-0.5">
     <div class="uppercase tracking-widest text-[10px] text-slate-600">Gate status</div>
     
-    <div>Evaluated 2 candidates. None reached 2-of-3.</div>
+    
+    <div>Evaluated 11 candidates today. Closest miss:
+      <span class="text-slate-400 font-semibold">ASML</span>
+      (passed technical + news, failed sector momentum,
+      insider score 0).</div>
     
     
     
     
     
     
-    <div>30-day: 0 cleared, 4 reached 2-of-3, top blocker = technical (79.2%).</div>
+    <div>30-day: 0 cleared, 9 reached 2-of-3, top blocker = technical (54.3%).</div>
     
   </div>
   
 
 
 
-<div class="text-center text-xs text-slate-400 mb-4">SPX -0.96%, VIX 16.1, Cons Stap leads +1.4%.</div>
+<div class="text-center text-xs text-slate-400 mb-4">SPX -2.64%, VIX 21.5, Cons Stap leads +1.7%.</div>
 
 
 
+
+<div class="card rounded-lg p-4 mb-4 border border-amber-900/40">
+  <div class="text-xs text-amber-300 uppercase tracking-widest mb-2">Presidential mentions today</div>
+  <ul class="text-sm space-y-2">
+  
+    <li class="flex items-start gap-2">
+      <span class="text-[10px] uppercase font-bold mt-0.5
+        text-rose-300">
+        attack
+      </span>
+      <span class="flex-1 text-slate-200">
+        <a href="ticker/LLY.html" class="font-semibold tlink">LLY</a>
+        <span class="text-[10px] text-slate-500 ml-1">2026-06-06</span>
+        <div class="text-xs text-slate-400 mt-0.5">Elizabeth Warren Singles Out Micron, Dell And Eli Lilly As Just 3 Of The 3000+ Trades Trump Made: &#39;Looks Like An Absurd Level Of Corruption&#39;</div>
+        <div class="text-[10px] text-slate-500 mt-0.5">
+          Did not clear the gate
+        </div>
+      </span>
+    </li>
+  
+  </ul>
+</div>
 
 
 
@@ -119,15 +145,15 @@
   <div class="text-xs text-slate-400 uppercase tracking-widest mb-2">Watching</div>
   <ul class="text-sm space-y-1">
   
-    <li class="text-slate-300">- CIFR - watching for pullback entry</li>
+    <li class="text-slate-300">- XLV - watching for clean breakout</li>
   
-    <li class="text-slate-300">- XLI - watching for pullback entry</li>
+    <li class="text-slate-300">- ASML - watching for pullback entry</li>
   
-    <li class="text-slate-300">- ABNB - watching SMA50 hold</li>
+    <li class="text-slate-300">- AMAT - watching for pullback entry</li>
   
-    <li class="text-slate-300">- ETN - watching SMA50 hold</li>
+    <li class="text-slate-300">- MRNA - watching SMA50 hold</li>
   
-    <li class="text-slate-300">- DIA - fresh 52w high, waiting for retest</li>
+    <li class="text-slate-300">- BEAM - watching SMA50 hold</li>
   
   </ul>
 </div>
@@ -161,9 +187,9 @@
       
       
       <div class="grid grid-cols-4 gap-1 text-[11px] mt-1 mb-1">
-        <div><div class="text-slate-600">Entry</div><div class="text-slate-400">$361.97 - $372.07</div></div>
-        <div><div class="text-slate-600">Stop</div><div class="text-slate-400">$346.82</div></div>
-        <div><div class="text-slate-600">Target</div><div class="text-slate-400">$407.42</div></div>
+        <div><div class="text-slate-600">Entry</div><div class="text-slate-400">$360.43 - $370.56</div></div>
+        <div><div class="text-slate-600">Stop</div><div class="text-slate-400">$345.24</div></div>
+        <div><div class="text-slate-600">Target</div><div class="text-slate-400">$406.00</div></div>
         <div><div class="text-slate-600">Hold</div><div class="text-slate-400">2-3 weeks</div></div>
       </div>
       
@@ -179,9 +205,9 @@
       
       
       <div class="grid grid-cols-4 gap-1 text-[11px] mt-1 mb-1">
-        <div><div class="text-slate-600">Entry</div><div class="text-slate-400">$207.11 - $215.12</div></div>
-        <div><div class="text-slate-600">Stop</div><div class="text-slate-400">$195.09</div></div>
-        <div><div class="text-slate-600">Target</div><div class="text-slate-400">$243.17</div></div>
+        <div><div class="text-slate-600">Entry</div><div class="text-slate-400">$198.20 - $206.82</div></div>
+        <div><div class="text-slate-600">Stop</div><div class="text-slate-400">$185.26</div></div>
+        <div><div class="text-slate-600">Target</div><div class="text-slate-400">$237.01</div></div>
         <div><div class="text-slate-600">Hold</div><div class="text-slate-400">2-3 weeks</div></div>
       </div>
       
@@ -191,20 +217,20 @@
   
     <div class="border-l-2 border-l-slate-700 pl-3">
       <div class="flex items-baseline gap-2 flex-wrap">
-        <a href="ticker/ONTO.html" class="text-sm font-semibold text-slate-300 tlink">ONTO</a>
-        <span class="text-[11px] text-slate-500">Pullback + theme fit -- 2 independent signals</span>
+        <a href="ticker/ASML.html" class="text-sm font-semibold text-slate-300 tlink">ASML</a>
+        <span class="text-[11px] text-slate-500">Momentum + theme fit -- 2 independent signals</span>
       </div>
       
       
       <div class="grid grid-cols-4 gap-1 text-[11px] mt-1 mb-1">
-        <div><div class="text-slate-600">Entry</div><div class="text-slate-400">$255.05 - $269.66</div></div>
-        <div><div class="text-slate-600">Stop</div><div class="text-slate-400">$233.14</div></div>
-        <div><div class="text-slate-600">Target</div><div class="text-slate-400">$320.79</div></div>
+        <div><div class="text-slate-600">Entry</div><div class="text-slate-400">$1621.51 - $1675.45</div></div>
+        <div><div class="text-slate-600">Stop</div><div class="text-slate-400">$1520.37</div></div>
+        <div><div class="text-slate-600">Target</div><div class="text-slate-400">$1904.70</div></div>
         <div><div class="text-slate-600">Hold</div><div class="text-slate-400">2-3 weeks</div></div>
       </div>
       
       <a class="text-[11px] text-sky-500/70 hover:underline" target="_blank" rel="noopener"
-         href="https://github.com/htbot34/PortfolioManagment/issues/new?template=idea-action.yml&amp;title=Idea+ONTO&amp;ticker=ONTO">Give a verdict &rarr;</a>
+         href="https://github.com/htbot34/PortfolioManagment/issues/new?template=idea-action.yml&amp;title=Idea+ASML&amp;ticker=ASML">Give a verdict &rarr;</a>
     </div>
   
   </div>

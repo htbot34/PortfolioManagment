@@ -1,40 +1,15 @@
 {
-  "checked_at": "2026-06-08T19:16:06Z",
+  "checked_at": "2026-06-08T21:24:39Z",
   "alerts": [
-    {
-      "severity": "med",
-      "kind": "position_break",
-      "text": "FBL lost SMA50 ($26.50) on 2.0x volume"
-    },
-    {
-      "severity": "med",
-      "kind": "position_break",
-      "text": "LEU lost SMA50 ($191.73) on 1.7x volume"
-    },
-    {
-      "severity": "med",
-      "kind": "position_break",
-      "text": "META lost SMA50 ($620.28) on 1.8x volume"
-    },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "XLV at $152.72 - within buy zone of yesterday's breakout setup ($153.01)"
+      "text": "XLV at $152.65 - within buy zone of yesterday's breakout setup ($153.01)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "TT in entry zone $447.99-$459.05 (plan: stop $431.40, target $497.76, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "WULF in entry zone $25.62-$27.05 (plan: stop $22.94, target $33.12, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "NEE in entry zone $82.50-$84.83 (plan: stop $79.00, target $92.99, hold 2-3 weeks)"
+      "text": "LLY in entry zone $1120.25-$1150.04 (plan: stop $1064.39, target $1276.65, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
@@ -56,6 +31,7 @@
     "BRK-B|515.17": "2026-06-08",
     "TT|497.76": "2026-06-08",
     "WULF|33.12": "2026-06-08",
-    "NEE|92.99": "2026-06-08"
+    "NEE|92.99": "2026-06-08",
+    "LLY|1276.65": "2026-06-08"
   }
 }

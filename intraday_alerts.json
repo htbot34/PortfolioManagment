@@ -1,73 +1,123 @@
 {
-  "checked_at": "2026-06-05T21:19:00Z",
+  "checked_at": "2026-06-08T16:44:48Z",
   "alerts": [
     {
-      "severity": "high",
-      "kind": "macro_shock",
-      "text": "VIX spiked +39.7% today"
-    },
-    {
-      "severity": "high",
-      "kind": "macro_shock",
-      "text": "SPX down -2.64% today"
-    },
-    {
-      "severity": "high",
+      "severity": "med",
       "kind": "position_break",
-      "text": "NBIS gapped down -12.3% today"
+      "text": "FBL lost SMA50 ($26.50) on 2.0x volume"
     },
     {
-      "severity": "high",
+      "severity": "med",
       "kind": "position_break",
-      "text": "OKLO gapped down -11.2% today"
+      "text": "LEU lost SMA50 ($191.79) on 1.7x volume"
     },
     {
-      "severity": "high",
+      "severity": "med",
       "kind": "position_break",
-      "text": "IREN gapped down -12.1% today"
+      "text": "META lost SMA50 ($620.32) on 1.8x volume"
     },
     {
-      "severity": "high",
-      "kind": "position_break",
-      "text": "FBL gapped down -11.2% today"
+      "severity": "low",
+      "kind": "watchlist_entry",
+      "text": "XLV at $152.74 - within buy zone of yesterday's breakout setup ($153.01)"
     },
     {
-      "severity": "high",
-      "kind": "position_break",
-      "text": "LEU gapped down -13.3% today"
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "GEV in entry zone $924.86-$967.99 (plan: stop $860.17, target $1118.93, hold 2-3 weeks)"
     },
     {
-      "severity": "high",
-      "kind": "position_break",
-      "text": "META gapped down -5.5% today"
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "ABNB in entry zone $130.95-$135.52 (plan: stop $124.09, target $151.53, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "GOOGL in entry zone $360.43-$370.56 (plan: stop $345.24, target $406.00, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "BEAM in entry zone $27.63-$29.84 (plan: stop $24.32, target $37.56, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "XLI in entry zone $173.45-$175.39 (plan: stop $169.81, target $183.64, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "XBI in entry zone $126.90-$130.56 (plan: stop $121.41, target $143.37, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "DIA in entry zone $508.00-$512.54 (plan: stop $499.49, target $531.83, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "MRVL in entry zone $295.36-$312.14 (plan: stop $263.89, target $383.47, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "INTC in entry zone $109.20-$116.22 (plan: stop $96.05, target $146.03, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "WDAY in entry zone $142.99-$149.39 (plan: stop $131.00, target $176.57, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "MRNA in entry zone $45.26-$47.99 (plan: stop $41.17, target $57.53, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "VRTX in entry zone $440.78-$449.94 (plan: stop $423.59, target $488.90, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "CMG in entry zone $28.86-$29.82 (plan: stop $27.05, target $33.92, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "XLF in entry zone $52.02-$52.58 (plan: stop $50.98, target $54.94, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "XLV in entry zone $152.28-$154.22 (plan: stop $148.65, target $162.45, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "BRK-B in entry zone $485.28-$490.98 (plan: stop $474.61, target $515.17, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
-    "TSM|488.69": "2026-06-05",
-    "ALAB|438.45": "2026-06-05",
-    "LLY|1289.07": "2026-06-05",
-    "NVDA|243.17": "2026-06-05",
-    "KLAC|2378.0": "2026-06-05",
-    "GEV|1118.93": "2026-06-05",
-    "ABNB|151.53": "2026-06-05",
-    "GOOGL|407.42": "2026-06-05",
-    "AVGO|484.21": "2026-06-05",
-    "ONTO|320.79": "2026-06-05",
-    "ETN|455.34": "2026-06-05",
-    "TT|496.85": "2026-06-05",
-    "XLI|184.01": "2026-06-05",
-    "WDAY|176.57": "2026-06-05",
-    "MRNA|58.34": "2026-06-05",
-    "REGN|714.96": "2026-06-05",
-    "VRTX|488.9": "2026-06-05",
-    "AAPL|331.43": "2026-06-05",
-    "URI|1176.0": "2026-06-05",
-    "LRCX|380.0": "2026-06-05",
-    "NVO|48.89": "2026-06-05",
-    "CMG|34.4": "2026-06-05",
-    "XLF|54.9": "2026-06-05",
-    "XBI|143.37": "2026-06-05",
-    "CAT|1002.18": "2026-06-05",
-    "BWXT|209.34": "2026-06-05"
+    "GEV|1118.93": "2026-06-08",
+    "ABNB|151.53": "2026-06-08",
+    "GOOGL|406.0": "2026-06-08",
+    "BEAM|37.56": "2026-06-08",
+    "XLI|183.64": "2026-06-08",
+    "XBI|143.37": "2026-06-08",
+    "DIA|531.83": "2026-06-08",
+    "MRVL|383.47": "2026-06-08",
+    "INTC|146.03": "2026-06-08",
+    "WDAY|176.57": "2026-06-08",
+    "MRNA|57.53": "2026-06-08",
+    "VRTX|488.9": "2026-06-08",
+    "CMG|33.92": "2026-06-08",
+    "XLF|54.94": "2026-06-08",
+    "XLV|162.45": "2026-06-08",
+    "BRK-B|515.17": "2026-06-08"
   }
 }

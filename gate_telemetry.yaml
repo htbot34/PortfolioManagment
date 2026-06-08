@@ -184,6 +184,8 @@
     news: 2
     trump: 0
     earnings_window: 0
+    correlation_block: 0
+    valuation_block: 0
     regime: 0
     soft_veto: 0
     trump_block: 0
@@ -229,23 +231,17 @@
     insider_status: zero
     news_status: ok
   trump:
-    mentions: 1
+    mentions: 0
     endorsements: 0
-    attacks: 1
+    attacks: 0
     promotions: 0
     vetoes: 0
-    firings:
-    - ticker: LLY
-      valence: attack
-      as_of: '2026-06-06'
-      source: 'Elizabeth Warren Singles Out Micron, Dell And Eli Lilly As Just 3 Of
-        The 3000+ Trades Trump Made: ''Looks Like An Absurd Level Of Corruption'''
-      qualifies: false
+    firings: []
   insider:
     scored: 0
-    zero: 6
+    zero: 5
     unavailable: 0
-    not_evaluated: 5
+    not_evaluated: 6
   news:
     ok: 11
     empty: 0

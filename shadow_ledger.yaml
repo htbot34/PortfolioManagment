@@ -591,8 +591,10 @@
   direction: long
   kind: near_miss
   valence: null
-  failed_signal: trump_attack
-  passed_signals: []
+  failed_signal: news
+  passed_signals:
+  - technical
+  - sector_momentum
   insider_score: 0
   source: null
   entry_price: null

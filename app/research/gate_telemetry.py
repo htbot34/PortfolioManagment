@@ -19,7 +19,8 @@ MAX_NEAR_MISS = 5
 
 _PRIMARY_SIGNALS = ("technical", "sector_momentum", "news", "trump")
 _BLOCK_KEYS = ("technical", "sector_momentum", "news", "trump",
-               "earnings_window", "regime", "soft_veto",
+               "earnings_window", "correlation_block", "valuation_block",
+               "regime", "soft_veto",
                "trump_block")
 # Data-availability status buckets, recorded distinctly from pass/fail so the
 # durable history can tell a genuine score-0 / no-news apart from an outage.
@@ -109,13 +110,23 @@ def record(candidates: list, gate_evals: list, date_str: str) -> dict:
             else:
                 cleared_primary += 1
             continue
-        # Did not qualify - attribute a single primary block reason.
-        # Earnings block only fires when all 3 of (tech, sector, news)
-        # passed, so it remains a "passed 3" check (Trump is not part of
-        # the earnings-window precondition).
+        # Did not qualify - attribute a single block reason.
+        #
+        # Post-qualification OVERLAYS (correlation, valuation, earnings) fire
+        # only after all the primaries the gate needed have already passed,
+        # so they must be attributed to their own bucket FIRST. Otherwise an
+        # overlay block on a candidate that cleared technical+sector+news gets
+        # laundered into the first un-passed primary - which is `trump`, the
+        # always-neutral 4th - spuriously inflating the trump blocker count.
+        # The overlays are mutually exclusive (the gate stops at the first one
+        # that fires), so at most one of these fields is ever set.
         primary3_passed = sum(1 for s in ("technical", "sector_momentum", "news")
                               if reasons.get(s))
-        if ev.get("earnings_block") and primary3_passed == 3:
+        if ev.get("correlation_block"):
+            blocked_by["correlation_block"] += 1
+        elif ev.get("valuation_block"):
+            blocked_by["valuation_block"] += 1
+        elif ev.get("earnings_block") and primary3_passed == 3:
             blocked_by["earnings_window"] += 1
         else:
             for s in _PRIMARY_SIGNALS:

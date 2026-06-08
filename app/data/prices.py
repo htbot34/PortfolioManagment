@@ -15,9 +15,11 @@ import io
 import json
 import time as _time
 from dataclasses import dataclass, asdict
+from datetime import datetime, time as dtime
 from functools import wraps
 from pathlib import Path
 from time import time
+from zoneinfo import ZoneInfo
 
 import httpx
 import pandas as pd
@@ -327,6 +329,47 @@ def _series_dump(s: "pd.Series", tail: int = 200) -> list[dict]:
     return out
 
 
+# US equity regular session closes at 16:00 ET. A daily volume bar is only
+# comparable to a 20-day average once its session has closed; during market
+# hours the providers return a partial current-day bar whose cumulative
+# volume is a fraction of a full day.
+_MARKET_TZ = "America/New_York"
+_MARKET_CLOSE = dtime(16, 0)
+
+
+def _session_in_progress(last_bar_date, now_et) -> bool:
+    """True if the final daily bar is the still-forming current session.
+
+    Only when the last bar is dated *today* (market tz) AND the regular
+    session has not yet closed. After the close (or for a prior-day bar) the
+    bar is complete and is used as-is.
+    """
+    if last_bar_date is None or now_et is None:
+        return False
+    return last_bar_date == now_et.date() and now_et.time() < _MARKET_CLOSE
+
+
+def _volume_ratio(volume, last_bar_date, now_et) -> float | None:
+    """Last *full-day* volume / trailing 20-day average.
+
+    Excludes a still-forming current-session bar so the ratio compares full
+    days to full days. Without this, an intraday build divides a partial
+    day's cumulative volume by a full-day average, yielding a structurally
+    tiny ratio (~0.1-0.3) that silently fails the scanner's volume gates and
+    the offense pre-filter (vol_ratio_20d >= 1.2) for the entire universe.
+    """
+    if volume is None:
+        return None
+    series = volume
+    if _session_in_progress(last_bar_date, now_et) and len(series) >= 22:
+        series = series.iloc[:-1]  # drop the partial current-session bar
+    if len(series) < 21:
+        return None
+    v_last = float(series.iloc[-1])
+    v_avg = float(series.tail(20).mean())
+    return v_last / v_avg if v_avg else None
+
+
 def technicals(ticker: str) -> dict:
     df, _ = _history_with_source(ticker)
     if df is None or df.empty:
@@ -391,13 +434,18 @@ def technicals(ticker: str) -> dict:
     else:
         atr14 = atr_pct = None
 
-    # Volume ratio vs 20-day avg
-    if volume is not None and len(volume) >= 21:
-        v_last = float(volume.iloc[-1])
-        v_avg = float(volume.tail(20).mean())
-        vol_ratio = v_last / v_avg if v_avg else None
-    else:
-        vol_ratio = None
+    # Volume ratio vs 20-day avg, excluding a still-forming current-session
+    # bar (a partial intraday bar would read as anomalously low and starve
+    # the volume-gated scanner buckets + offense pre-filter).
+    try:
+        last_bar_date = df.index[-1].date()
+    except Exception:
+        last_bar_date = None
+    try:
+        now_et = datetime.now(ZoneInfo(_MARKET_TZ))
+    except Exception:
+        now_et = None
+    vol_ratio = _volume_ratio(volume, last_bar_date, now_et)
 
     # 20-day breakout: today's close above the prior 20-day high
     breakout_20d = bool(high_20d is not None and last >= high_20d and len(close) >= 21

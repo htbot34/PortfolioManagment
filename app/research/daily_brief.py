@@ -50,6 +50,10 @@ def _gate_entry(ticker: str, gate: dict | None = None,
         "promoted_by_insider": bool(gate.get("promoted_by_insider")),
         "earnings_block": gate.get("earnings_block"),
         "trump_block": gate.get("trump_block"),
+        # Overlay blocks get their own telemetry buckets so they aren't
+        # mis-attributed to a primary signal (notably trump).
+        "correlation_block": gate.get("correlation_block"),
+        "valuation_block": gate.get("valuation_block"),
         "reasons": reasons,
         "insider_score": int(gate.get("insider_score", 0) or 0),
         # Data-availability statuses (Phase A): keep "scored zero / no news"

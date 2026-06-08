@@ -34,7 +34,8 @@ def test_record_shape():
     # attack-veto entry blocks distinctly from the trump-signal block.
     assert set(rec["blocked_by"]) == {
         "technical", "sector_momentum", "news", "trump",
-        "earnings_window", "regime", "soft_veto", "trump_block"}
+        "earnings_window", "correlation_block", "valuation_block",
+        "regime", "soft_veto", "trump_block"}
     assert rec["blocked_by"]["news"] == 1
     assert isinstance(rec["near_miss"], list)
     assert rec["near_miss"][0]["ticker"] == "BBB"
@@ -49,6 +50,48 @@ def test_insider_promotion_counted_separately():
     assert rec["cleared_insider_promotion"] == 1
     # A promoted candidate is not a near-miss.
     assert rec["near_miss"] == []
+
+
+def _overlay_block_ev(ticker, *, correlation_block=None, valuation_block=None):
+    """A candidate that cleared all 3 fundamental primaries (so it qualified)
+    but was then knocked out by a post-qualification overlay. trump is the
+    always-neutral 4th -> a naive attribution would blame it."""
+    return {"ticker": ticker, "pre_block": None, "qualifies": False,
+            "promoted_by_insider": False,
+            "reasons": {"technical": True, "sector_momentum": True,
+                         "news": True, "trump": False},
+            "insider_score": 0,
+            "correlation_block": correlation_block,
+            "valuation_block": valuation_block}
+
+
+def test_correlation_block_not_attributed_to_trump():
+    ev = _overlay_block_ev("CORR", correlation_block="high correlation to top holdings")
+    rec = gate_telemetry.record([ev], [ev], "2026-06-08")
+    assert rec["blocked_by"]["correlation_block"] == 1
+    assert rec["blocked_by"]["trump"] == 0       # the bug: was 1
+    assert rec["near_miss"] == []                # 3 primaries passed -> not a near-miss
+
+
+def test_valuation_block_not_attributed_to_trump():
+    ev = _overlay_block_ev("VAL", valuation_block="valuation extreme (99th pct in sector)")
+    rec = gate_telemetry.record([ev], [ev], "2026-06-08")
+    assert rec["blocked_by"]["valuation_block"] == 1
+    assert rec["blocked_by"]["trump"] == 0       # the bug: was 1
+
+
+def test_genuine_trump_neutral_fail_still_attributed_when_a_primary_failed():
+    """A real primary failure (sector) is still attributed to that primary,
+    not to an overlay - the overlay fields are None here."""
+    ev = {"ticker": "SEC", "pre_block": None, "qualifies": False,
+          "promoted_by_insider": False,
+          "reasons": {"technical": True, "sector_momentum": False,
+                       "news": True, "trump": False},
+          "insider_score": 0}
+    rec = gate_telemetry.record([ev], [ev], "2026-06-08")
+    assert rec["blocked_by"]["sector_momentum"] == 1
+    assert rec["blocked_by"]["correlation_block"] == 0
+    assert rec["blocked_by"]["valuation_block"] == 0
 
 
 def test_pre_block_and_earnings():

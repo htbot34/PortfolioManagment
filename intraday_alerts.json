@@ -1,45 +1,20 @@
 {
-  "checked_at": "2026-06-09T17:54:17Z",
+  "checked_at": "2026-06-09T19:57:54Z",
   "alerts": [
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "OKLO gapped down -6.0% today"
-    },
-    {
-      "severity": "high",
-      "kind": "position_break",
-      "text": "IREN gapped down -9.2% today"
-    },
-    {
-      "severity": "high",
-      "kind": "position_break",
-      "text": "LEU gapped down -6.2% today"
+      "text": "IREN gapped down -8.9% today"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "XLV at $154.70 - within buy zone of yesterday's breakout setup ($153.01)"
+      "text": "XLV at $154.52 - within buy zone of yesterday's breakout setup ($153.01)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "GOOGL in entry zone $360.43-$370.56 (plan: stop $345.24, target $406.00, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "XLI in entry zone $173.45-$175.39 (plan: stop $169.81, target $183.64, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "RDDT in entry zone $175.66-$183.70 (plan: stop $160.60, target $217.84, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "GD in entry zone $344.07-$348.81 (plan: stop $335.17, target $368.98, hold 2-3 weeks)"
+      "text": "DIA in entry zone $508.00-$512.54 (plan: stop $499.49, target $531.83, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
@@ -63,6 +38,7 @@
     "GOOGL|406.0": "2026-06-09",
     "XLI|183.64": "2026-06-09",
     "RDDT|217.84": "2026-06-09",
-    "GD|368.98": "2026-06-09"
+    "GD|368.98": "2026-06-09",
+    "DIA|531.83": "2026-06-09"
   }
 }

@@ -184,6 +184,34 @@ def test_held_and_excluded_tickers_skipped():
     assert ev.call_count == 1
 
 
+def test_new_buy_primary_action_carries_unrealized_pnl_key():
+    """Regression: the offense (verdict "trade") primary_action must carry
+    unrealized_pnl_on_action like the defense path does.
+
+    The index.html action_card macro guards the field with `is not none`,
+    which a MISSING dict key passes (Jinja resolves it to Undefined, and
+    `Undefined is not none` is True); the subsequent `>= 0` comparison then
+    raised UndefinedError and aborted the site build. For a new buy sizing
+    reports the field as None, so the dict must carry an explicit None.
+    """
+    scan = _empty_buckets(breakouts=[_scanner_row("NEWB")])
+    with patch.object(daily_brief.conviction, "evaluate",
+                       return_value=_passing_gate()), \
+         patch.object(daily_brief.prices, "technicals",
+                       return_value={"atr14": 2.0}):
+        out = daily_brief._trade_from_scanner(
+            scan, macro={"indices": {}}, macro_line="", exclude=set(),
+            account=Account(cash=10_000, total_value=0, currency="USD",
+                            positions=[]))
+    assert out is not None
+    assert out["verdict"] == "trade"
+    pa = out["primary_action"]
+    # NEWB is not held, so this is a new_buy: the key must be PRESENT
+    # (so the template's `is not none` guard works) and its value None.
+    assert "unrealized_pnl_on_action" in pa
+    assert pa["unrealized_pnl_on_action"] is None
+
+
 def test_scanner_row_propagates_above_sma_to_technical_signal():
     """Regression guard for the scanner -> gate hand-off.
 

@@ -197,6 +197,52 @@ def _write(path: Path, html: str) -> None:
     path.write_text(html, encoding="utf-8")
 
 
+def _render_page(env: Environment, template_name: str, dest: Path,
+                 page_name: str, ctx: dict) -> tuple[str, str] | None:
+    """Render one template to ``dest``; never raise.
+
+    On failure print the full traceback and return ``(page_name,
+    repr(error))`` so the caller can publish the failure in data.json
+    diagnostics instead of aborting the whole refresh.
+    """
+    try:
+        _write(dest, env.get_template(template_name).render(**ctx))
+        return None
+    except Exception as e:
+        traceback.print_exc()
+        return (page_name, repr(e))
+
+
+def render_and_publish(env: Environment, site: Path,
+                       pages: list[tuple[str, str, dict]],
+                       data_dump: dict) -> list[tuple[str, str]]:
+    """Render every page fail-soft, then ALWAYS write data.json + .nojekyll.
+
+    ``pages`` is a list of ``(template_name, output_name, context)``. One
+    broken template must not freeze the public site: failures are collected
+    per page and published under ``diagnostics.render_errors`` in data.json
+    (the canonical artifact) while every healthy page still renders.
+    """
+    render_errors: list[tuple[str, str]] = []
+    for template_name, out_name, ctx in pages:
+        err = _render_page(env, template_name, site / out_name, out_name, ctx)
+        if err is not None:
+            render_errors.append(err)
+    # Copy so the template-facing diagnostics dict (string values only)
+    # is not aliased with the list we add here.
+    diagnostics = dict(data_dump.get("diagnostics") or {})
+    diagnostics["render_errors"] = [
+        {"page": page, "error": error} for page, error in render_errors
+    ]
+    data_dump["diagnostics"] = diagnostics
+    (site / "data.json").write_text(json.dumps(data_dump, default=str, indent=2))
+    (site / ".nojekyll").write_text("")
+    if render_errors:
+        print("RENDER FAILURES (site still published): "
+              + "; ".join(f"{page}: {error}" for page, error in render_errors))
+    return render_errors
+
+
 def main() -> int:
     site = settings.site_dir
     site.mkdir(exist_ok=True)
@@ -423,28 +469,28 @@ def main() -> int:
 
     activity = _recent_activity(limit=8)
     intraday_alerts = _load_intraday_alerts()
-    _write(site / "index.html", env.get_template("index.html").render(
-        brief=brief, macro=macro, exposures=exposures, scan=scan_result,
-        recs_by_ticker=ticker_payloads, activity=activity, regime=regime,
-        intraday=intraday_alerts, base="", **common,
-    ))
-    _write(site / "positions.html", env.get_template("positions.html").render(
-        exposures=exposures, review=review_out, metrics=metrics, base="", **common,
-    ))
-    _write(site / "scanner.html", env.get_template("scanner.html").render(
-        scan=scan_result, base="", **common,
-    ))
-    _write(site / "recommendations.html", env.get_template("recommendations.html").render(
-        recs=recs, base="", **common,
-    ))
-    _write(site / "candidates.html", env.get_template("candidates.html").render(
-        candidates=cand_out, funnel=funnel, base="", **common,
-    ))
-    tpl_ticker = env.get_template("ticker.html")
+    pages: list[tuple[str, str, dict]] = [
+        ("index.html", "index.html", dict(
+            brief=brief, macro=macro, exposures=exposures, scan=scan_result,
+            recs_by_ticker=ticker_payloads, activity=activity, regime=regime,
+            intraday=intraday_alerts, base="", **common,
+        )),
+        ("positions.html", "positions.html", dict(
+            exposures=exposures, review=review_out, metrics=metrics, base="",
+            **common,
+        )),
+        ("scanner.html", "scanner.html", dict(scan=scan_result, base="", **common)),
+        ("recommendations.html", "recommendations.html", dict(
+            recs=recs, base="", **common,
+        )),
+        ("candidates.html", "candidates.html", dict(
+            candidates=cand_out, funnel=funnel, base="", **common,
+        )),
+    ]
     for ticker, payload in ticker_payloads.items():
-        _write(site / "ticker" / f"{ticker}.html", tpl_ticker.render(
+        pages.append(("ticker.html", f"ticker/{ticker}.html", dict(
             ticker=ticker, payload=payload, base="../", **common,
-        ))
+        )))
 
     data_dump = {
         "generated_at": common["generated_at"],
@@ -465,8 +511,10 @@ def main() -> int:
         "idea_funnel": funnel,
         "idea_queue": {"prune_stats": prune_stats},
     }
-    (site / "data.json").write_text(json.dumps(data_dump, default=str, indent=2))
-    (site / ".nojekyll").write_text("")
+    # Fail-soft: a single broken page records a render error in data.json
+    # instead of aborting the refresh (and freezing the public site).
+    # main() still returns 0 so the workflow's Commit step publishes.
+    render_and_publish(env, site, pages, data_dump)
     print(f"Built site to {site}")
     return 0
 

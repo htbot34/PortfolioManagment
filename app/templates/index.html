@@ -37,7 +37,7 @@
     Sizing: {{ a.size.rejection_reason }}
   </div>
   {% endif %}
-  {% if a.unrealized_pnl_on_action is not none %}
+  {% if a.unrealized_pnl_on_action is defined and a.unrealized_pnl_on_action is not none %}
   <div class="text-sm mb-3">
     Unrealized P&amp;L on this action:
     <span class="font-semibold {% if a.unrealized_pnl_on_action >= 0 %}pos{% else %}neg{% endif %}">
@@ -69,7 +69,7 @@
     {{ a.conviction_gate.trump_exit_flag }}
   </div>
   {% endif %}
-  {% if a.conviction_gate and a.conviction_gate.correlation and a.conviction_gate.correlation.candidate_to_book and a.conviction_gate.correlation.candidate_to_book.avg_corr_to_top5 is not none %}
+  {% if a.conviction_gate and a.conviction_gate.correlation and a.conviction_gate.correlation.candidate_to_book and a.conviction_gate.correlation.candidate_to_book.avg_corr_to_top5 is defined and a.conviction_gate.correlation.candidate_to_book.avg_corr_to_top5 is not none %}
   {% set avgc = a.conviction_gate.correlation.candidate_to_book.avg_corr_to_top5 %}
   <div class="text-sm text-slate-400 mb-3">
     Correlation to your top 5: <span class="font-semibold {% if avgc > 0.7 %}text-rose-300{% else %}text-slate-200{% endif %}">{{ '%.2f'|format(avgc) }}</span>{% if avgc > 0.7 %} (high){% endif %}
@@ -83,7 +83,7 @@
   {% if a.conviction_gate and a.conviction_gate.valuation and a.conviction_gate.valuation.tier and a.conviction_gate.valuation.tier != 'unknown' %}
   {% set v = a.conviction_gate.valuation %}
   <div class="text-sm text-slate-400 mb-3">
-    Valuation: <span class="font-semibold {% if v.tier == 'extreme' %}text-rose-300{% elif v.tier == 'cheap' %}text-emerald-300{% else %}text-slate-200{% endif %}">{{ v.tier }}</span>{% if v.percentile_in_sector is not none %} ({{ '%.0f'|format(v.percentile_in_sector) }}th pct in sector){% endif %}{% if a.conviction_gate.valuation_tailwind %} - sizing tailwind{% endif %}{% if a.conviction_gate.valuation_override %} - {{ a.conviction_gate.valuation_override }}{% endif %}
+    Valuation: <span class="font-semibold {% if v.tier == 'extreme' %}text-rose-300{% elif v.tier == 'cheap' %}text-emerald-300{% else %}text-slate-200{% endif %}">{{ v.tier }}</span>{% if v.percentile_in_sector is defined and v.percentile_in_sector is not none %} ({{ '%.0f'|format(v.percentile_in_sector) }}th pct in sector){% endif %}{% if a.conviction_gate.valuation_tailwind %} - sizing tailwind{% endif %}{% if a.conviction_gate.valuation_override %} - {{ a.conviction_gate.valuation_override }}{% endif %}
   </div>
   {% endif %}
   {% if a.conviction_gate and a.conviction_gate.valuation_annotation %}

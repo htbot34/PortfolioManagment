@@ -1,73 +1,116 @@
 {
-  "checked_at": "2026-06-12T20:33:45Z",
+  "checked_at": "2026-06-15T17:49:23Z",
   "alerts": [
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "GD at $360.22 - within buy zone of yesterday's breakout setup ($360.02)"
+      "text": "GD at $361.18 - within buy zone of yesterday's breakout setup ($360.02)"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "IWM at $292.95 - within buy zone of yesterday's breakout setup ($293.01)"
+      "text": "IWM at $295.26 - within buy zone of yesterday's breakout setup ($293.01)"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "LRCX at $366.81 - within buy zone of yesterday's breakout setup ($363.98)"
+      "text": "LRCX at $390.00 - within buy zone of yesterday's breakout setup ($363.98)"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "KLAC at $254.54 - within buy zone of yesterday's breakout setup ($249.02)"
+      "text": "KLAC at $252.29 - within buy zone of yesterday's breakout setup ($249.02)"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "AMAT at $567.25 - within buy zone of yesterday's breakout setup ($554.58)"
+      "text": "AMAT at $591.05 - within buy zone of yesterday's breakout setup ($554.58)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "ALAB in entry zone $363.70-$390.88 (plan: stop $312.73, target $506.41, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "KLAC in entry zone $244.54-$256.49 (plan: stop $222.13, target $307.28, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "IWM in entry zone $291.18-$296.06 (plan: stop $282.02, target $316.82, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "AVGO in entry zone $372.20-$397.15 (plan: stop $334.77, target $484.48, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "XBI in entry zone $133.03-$136.09 (plan: stop $127.28, target $149.12, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "NEE in entry zone $85.01-$86.35 (plan: stop $82.51, target $92.02, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "MDB in entry zone $344.82-$368.45 (plan: stop $300.51, target $468.88, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "TEM in entry zone $50.17-$53.36 (plan: stop $44.19, target $66.92, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "RDDT in entry zone $173.32-$182.90 (plan: stop $155.35, target $223.63, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "NVO in entry zone $43.50-$44.53 (plan: stop $41.58, target $48.89, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "XLV in entry zone $152.28-$154.22 (plan: stop $148.65, target $162.45, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "RIOT in entry zone $26.55-$28.25 (plan: stop $23.38, target $35.44, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "GD in entry zone $357.83-$363.66 (plan: stop $346.90, target $388.44, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "MELI in entry zone $1619.32-$1663.00 (plan: stop $1537.40, target $1848.68, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
-    "TSM|495.06": "2026-06-12",
-    "ARM|521.71": "2026-06-12",
-    "ALAB|506.41": "2026-06-12",
-    "LLY|1310.35": "2026-06-12",
-    "NVDA|236.17": "2026-06-12",
-    "KLAC|307.28": "2026-06-12",
-    "GEV|1118.93": "2026-06-12",
-    "IWM|316.82": "2026-06-12",
-    "GOOGL|400.29": "2026-06-12",
-    "AVGO|484.48": "2026-06-12",
-    "AMAT|681.8": "2026-06-12",
-    "ONTO|396.1": "2026-06-12",
-    "AMD|646.07": "2026-06-12",
-    "ETN|455.5": "2026-06-12",
-    "TT|505.62": "2026-06-12",
-    "XLI|187.91": "2026-06-12",
-    "XBI|149.12": "2026-06-12",
-    "DIA|535.62": "2026-06-12",
-    "MRVL|407.59": "2026-06-12",
-    "BITQ|33.26": "2026-06-12",
-    "NEE|92.02": "2026-06-12",
-    "CIFR|34.96": "2026-06-12",
-    "CAT|1051.95": "2026-06-12",
-    "NET|286.48": "2026-06-12",
-    "VRTX|488.9": "2026-06-12",
-    "MDB|468.88": "2026-06-12",
-    "SMR|14.56": "2026-06-12",
-    "AAPL|319.86": "2026-06-12",
-    "XLK|209.11": "2026-06-12",
-    "UEC|15.45": "2026-06-12",
-    "URI|1189.93": "2026-06-12",
-    "LRCX|450.66": "2026-06-12",
-    "NVO|48.89": "2026-06-12",
-    "XLV|162.45": "2026-06-12",
-    "RIOT|35.44": "2026-06-12",
-    "GD|388.44": "2026-06-12",
-    "BRK-B|515.17": "2026-06-12",
-    "MA|535.94": "2026-06-12",
-    "IONQ|85.21": "2026-06-12",
-    "MARA|18.53": "2026-06-12",
-    "NU|14.11": "2026-06-12"
+    "ALAB|506.41": "2026-06-15",
+    "KLAC|307.28": "2026-06-15",
+    "IWM|316.82": "2026-06-15",
+    "AVGO|484.48": "2026-06-15",
+    "XBI|149.12": "2026-06-15",
+    "NEE|92.02": "2026-06-15",
+    "MDB|468.88": "2026-06-15",
+    "TEM|66.92": "2026-06-15",
+    "RDDT|223.63": "2026-06-15",
+    "NVO|48.89": "2026-06-15",
+    "XLV|162.45": "2026-06-15",
+    "RIOT|35.44": "2026-06-15",
+    "GD|388.44": "2026-06-15",
+    "MELI|1848.68": "2026-06-15"
   }
 }

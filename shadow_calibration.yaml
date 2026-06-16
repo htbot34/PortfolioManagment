@@ -1,4 +1,4 @@
-generated_at: '2026-06-12'
+generated_at: '2026-06-16'
 horizons:
 - 5
 - 10
@@ -11,17 +11,17 @@ by_failed_signal:
     count: 11
     horizons:
       '5':
-        n_realized: 7
-        n_pending: 4
+        n_realized: 9
+        n_pending: 2
         hit_rate: 0.0
-        avg_excess_return: -0.05826695727970881
-        avg_forward_return: -0.07551298277335074
+        avg_excess_return: -0.04997247394864243
+        avg_forward_return: -0.05913832712605165
       '10':
-        n_realized: 2
-        n_pending: 9
+        n_realized: 4
+        n_pending: 7
         hit_rate: 0.0
-        avg_excess_return: -0.1193627891118455
-        avg_forward_return: -0.14780599084400936
+        avg_excess_return: -0.07526235815835866
+        avg_forward_return: -0.09290500642585993
       '20':
         n_realized: 0
         n_pending: 11
@@ -32,11 +32,11 @@ by_failed_signal:
     count: 18
     horizons:
       '5':
-        n_realized: 4
-        n_pending: 14
-        hit_rate: 0.75
-        avg_excess_return: 0.006000682702498003
-        avg_forward_return: -0.01916884288771991
+        n_realized: 7
+        n_pending: 11
+        hit_rate: 0.7142857142857143
+        avg_excess_return: 0.02073019615697661
+        avg_forward_return: 0.014539645789454334
       '10':
         n_realized: 0
         n_pending: 18
@@ -53,17 +53,17 @@ overall:
   count: 29
   horizons:
     '5':
-      n_realized: 11
-      n_pending: 18
-      hit_rate: 0.2727272727272727
-      avg_excess_return: -0.03489690637708815
-      avg_forward_return: -0.05502420463312135
+      n_realized: 16
+      n_pending: 13
+      hit_rate: 0.3125
+      avg_excess_return: -0.019040055777434103
+      avg_forward_return: -0.02690421397551779
     '10':
-      n_realized: 2
-      n_pending: 27
+      n_realized: 4
+      n_pending: 25
       hit_rate: 0.0
-      avg_excess_return: -0.1193627891118455
-      avg_forward_return: -0.14780599084400936
+      avg_excess_return: -0.07526235815835866
+      avg_forward_return: -0.09290500642585993
     '20':
       n_realized: 0
       n_pending: 29

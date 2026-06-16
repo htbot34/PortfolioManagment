@@ -1,5 +1,10 @@
 """Tests for the valuation overlay + the conviction valuation gate."""
+from datetime import date, timedelta
+
 from app.research import conviction, valuation
+
+# Keep the insider fixture inside the 30-day lookback so it can't rot past it.
+_RECENT = (date.today() - timedelta(days=3)).isoformat()
 
 
 def _f(ticker, trailing_pe=None, forward_pe=None, price_to_sales=None,
@@ -140,7 +145,7 @@ def test_extreme_valuation_overridden_by_score3_insider():
     # valuation is then overridden because the promotion was score-3.
     txns = [{"filer_name": n, "role": "Chief Executive Officer"
              if n == "A" else "Director",
-             "transaction_date": "2026-05-18", "transaction_code": "P",
+             "transaction_date": _RECENT, "transaction_code": "P",
              "acquired_disposed": "A", "shares": 1000.0,
              "price": 1500.0 if n == "A" else 200.0,
              "total_value": 1_500_000.0 if n == "A" else 200_000.0,

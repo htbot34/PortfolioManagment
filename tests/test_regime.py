@@ -2,8 +2,13 @@
 
 All inputs are synthetic dicts - detect_regime is a pure function.
 """
+from datetime import date, timedelta
+
 from app.research import conviction, daily_brief, regime, sizing
 from app.portfolio.store import Account, Position
+
+# Keep the insider fixture inside the 30-day lookback so it can't rot past it.
+_RECENT = (date.today() - timedelta(days=3)).isoformat()
 
 
 # ---------------------------------------------------------------------------
@@ -118,7 +123,7 @@ def test_chop_disables_insider_promotion():
     # In chop, conviction.evaluate must be called with allow_insider_promotion
     # False. Verify the flag itself: a 2-of-3 candidate with a strong insider
     # cluster does NOT promote when the flag is off.
-    txns = [{"filer_name": n, "role": "", "transaction_date": "2026-05-18",
+    txns = [{"filer_name": n, "role": "", "transaction_date": _RECENT,
              "transaction_code": "P", "acquired_disposed": "A",
              "shares": 1000.0, "price": 400.0, "total_value": 400_000.0,
              "is_planned_10b5_1": False} for n in ("A", "B", "C", "D")]

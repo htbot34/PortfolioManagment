@@ -18,6 +18,11 @@ import pytest
 
 from app.research import conviction
 
+from datetime import date, timedelta
+
+# Fixtures must stay inside the 14-day news window and 30-day trump TTL or they rot and break CI.
+_RECENT = (date.today() - timedelta(days=3)).isoformat()
+
 
 # ---------------------------------------------------------------------------
 # Synthetic payload builders. Each one toggles a single primary signal
@@ -30,13 +35,13 @@ _BULL_NEWS = [
     # Two long-durability bullish items, magnitude 5 each: net = 10 > 3.
     {"direction": "bullish", "magnitude": 5, "durability": "long",
      "one_line_summary": "ACME secures $1B contract",
-     "published": "2026-06-01",
+     "published": _RECENT,
      # Crucially: no Trump mention.
      "trump_mention": False, "trump_valence": "none",
      "trump_confidence": 0.0},
     {"direction": "bullish", "magnitude": 5, "durability": "long",
      "one_line_summary": "ACME raises full-year guidance",
-     "published": "2026-06-01",
+     "published": _RECENT,
      "trump_mention": False, "trump_valence": "none",
      "trump_confidence": 0.0},
 ]
@@ -44,12 +49,12 @@ _BULL_NEWS = [
 _BEAR_NEWS = [
     {"direction": "bearish", "magnitude": 5, "durability": "long",
      "one_line_summary": "ACME warns on guidance",
-     "published": "2026-06-01",
+     "published": _RECENT,
      "trump_mention": False, "trump_valence": "none",
      "trump_confidence": 0.0},
     {"direction": "bearish", "magnitude": 5, "durability": "long",
      "one_line_summary": "ACME under investigation",
-     "published": "2026-06-01",
+     "published": _RECENT,
      "trump_mention": False, "trump_valence": "none",
      "trump_confidence": 0.0},
 ]
@@ -213,7 +218,7 @@ def test_kill_switch_makes_trump_signal_inert():
                         sector_payload_sector="Technology")
     payload["trump_signal_result"] = {
         "mention": True, "valence": "endorse", "confidence": 1.0,
-        "as_of": "2026-06-01", "source": "Source", "summary": "x",
+        "as_of": _RECENT, "source": "Source", "summary": "x",
         "manual": True, "low_confidence_seen": [],
     }
     cfg = {
@@ -241,7 +246,7 @@ def test_trump_endorse_substitutes_for_one_primary():
                         sector_payload_sector="Technology")
     payload["trump_signal_result"] = {
         "mention": True, "valence": "endorse", "confidence": 0.9,
-        "as_of": "2026-06-01", "source": "WH statement",
+        "as_of": _RECENT, "source": "WH statement",
         "summary": "Praised", "manual": False, "low_confidence_seen": [],
     }
     out = conviction.evaluate(payload, direction="long",
@@ -257,7 +262,7 @@ def test_trump_attack_vetoes_new_long_entry():
                         sector_payload_sector="Technology")
     payload["trump_signal_result"] = {
         "mention": True, "valence": "attack", "confidence": 0.9,
-        "as_of": "2026-06-01", "source": "Truth Social",
+        "as_of": _RECENT, "source": "Truth Social",
         "summary": "Slammed", "manual": False, "low_confidence_seen": [],
     }
     out = conviction.evaluate(payload, direction="long",
@@ -275,7 +280,7 @@ def test_trump_attack_on_existing_holding_attaches_exit_flag():
     payload["position"] = {"weight_pct": 8.0}  # presence => held
     payload["trump_signal_result"] = {
         "mention": True, "valence": "attack", "confidence": 0.9,
-        "as_of": "2026-06-01", "source": "Truth Social",
+        "as_of": _RECENT, "source": "Truth Social",
         "summary": "Slammed", "manual": False, "low_confidence_seen": [],
     }
     out = conviction.evaluate(payload, direction="long",
@@ -293,7 +298,7 @@ def test_trump_solo_with_technical_off_by_default():
                         sector_payload_sector="Technology")
     payload["trump_signal_result"] = {
         "mention": True, "valence": "endorse", "confidence": 0.9,
-        "as_of": "2026-06-01", "source": "WH",
+        "as_of": _RECENT, "source": "WH",
         "summary": "Praised", "manual": False, "low_confidence_seen": [],
     }
     out = conviction.evaluate(payload, direction="long",
@@ -309,7 +314,7 @@ def test_trump_solo_with_technical_on_allows_solo():
                         sector_payload_sector="Technology")
     payload["trump_signal_result"] = {
         "mention": True, "valence": "endorse", "confidence": 0.9,
-        "as_of": "2026-06-01", "source": "WH",
+        "as_of": _RECENT, "source": "WH",
         "summary": "Praised", "manual": False, "low_confidence_seen": [],
     }
     cfg = {
@@ -333,7 +338,7 @@ def test_trump_solo_with_technical_on_allows_solo():
 
 def _endorse_finding():
     return {"mention": True, "valence": "endorse", "confidence": 0.9,
-            "as_of": "2026-06-01", "source": "WH", "summary": "Praised",
+            "as_of": _RECENT, "source": "WH", "summary": "Praised",
             "manual": False, "low_confidence_seen": []}
 
 

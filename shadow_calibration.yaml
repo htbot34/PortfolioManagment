@@ -1,30 +1,30 @@
-generated_at: '2026-06-16'
+generated_at: '2026-06-17'
 horizons:
 - 5
 - 10
 - 20
 benchmark: SPY
 direction: long
-total_records: 29
+total_records: 30
 by_failed_signal:
   news:
-    count: 11
+    count: 12
     horizons:
       '5':
         n_realized: 9
-        n_pending: 2
+        n_pending: 3
         hit_rate: 0.0
         avg_excess_return: -0.04997247394864243
         avg_forward_return: -0.05913832712605165
       '10':
         n_realized: 4
-        n_pending: 7
+        n_pending: 8
         hit_rate: 0.0
         avg_excess_return: -0.07526235815835866
         avg_forward_return: -0.09290500642585993
       '20':
         n_realized: 0
-        n_pending: 11
+        n_pending: 12
         hit_rate: null
         avg_excess_return: null
         avg_forward_return: null
@@ -32,11 +32,11 @@ by_failed_signal:
     count: 18
     horizons:
       '5':
-        n_realized: 7
-        n_pending: 11
-        hit_rate: 0.7142857142857143
-        avg_excess_return: 0.02073019615697661
-        avg_forward_return: 0.014539645789454334
+        n_realized: 8
+        n_pending: 10
+        hit_rate: 0.75
+        avg_excess_return: 0.023457837009557444
+        avg_forward_return: 0.020293332138473893
       '10':
         n_realized: 0
         n_pending: 18
@@ -50,23 +50,23 @@ by_failed_signal:
         avg_excess_return: null
         avg_forward_return: null
 overall:
-  count: 29
+  count: 30
   horizons:
     '5':
-      n_realized: 16
+      n_realized: 17
       n_pending: 13
-      hit_rate: 0.3125
-      avg_excess_return: -0.019040055777434103
-      avg_forward_return: -0.02690421397551779
+      hit_rate: 0.35294117647058826
+      avg_excess_return: -0.015417033497724846
+      avg_forward_return: -0.021758722766274934
     '10':
       n_realized: 4
-      n_pending: 25
+      n_pending: 26
       hit_rate: 0.0
       avg_excess_return: -0.07526235815835866
       avg_forward_return: -0.09290500642585993
     '20':
       n_realized: 0
-      n_pending: 29
+      n_pending: 30
       hit_rate: null
       avg_excess_return: null
       avg_forward_return: null

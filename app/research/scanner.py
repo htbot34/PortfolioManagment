@@ -120,6 +120,11 @@ def _setup_score(r: dict, kind: str) -> float:
 
 
 def scan(held: set[str] | None = None) -> dict:
+    # Warm the price cache for the whole universe in parallel up front so the
+    # per-ticker _enrich loop below hits the in-memory cache instead of making
+    # one network round-trip at a time. Purely a fetch-ordering optimisation -
+    # the loop's logic, bucketing, and fallbacks are unchanged.
+    prices.prefetch(universe.all_tickers())
     held = {t.upper() for t in (held or set())}
     rows: list[dict] = []
     for ticker in universe.all_tickers():

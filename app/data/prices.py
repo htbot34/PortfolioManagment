@@ -14,6 +14,7 @@ in the rendered site and in data.json.
 import io
 import json
 import time as _time
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, asdict
 from datetime import datetime, time as dtime
 from functools import wraps
@@ -82,7 +83,11 @@ class Quote:
 
 
 _HISTORY_CACHE: dict[str, tuple[float, pd.DataFrame | None, str | None]] = {}
-_TTL_S = 300.0
+# Intra-run TTL: a single build fetches a ticker once (often via prefetch) and
+# reuses it across several stages (scanner -> macro -> position analysis ->
+# correlation). 3600s keeps a ticker warmed early in a multi-minute build still
+# cached when a later stage reuses it, so we don't re-fetch the same history.
+_TTL_S = 3600.0
 
 
 @_retry(attempts=3, backoff_s=0.5)
@@ -182,6 +187,51 @@ def _history_with_source(ticker: str) -> tuple[pd.DataFrame | None, str | None]:
             return df, name
     _HISTORY_CACHE[ticker] = (now, None, None)
     return None, None
+
+
+def prefetch(tickers: list[str], workers: int = 8) -> None:
+    """Warm ``_HISTORY_CACHE`` for ``tickers`` concurrently.
+
+    Purely additive performance helper. Each worker calls
+    ``_history_with_source`` - the very function the sequential ``quote`` /
+    ``technicals`` / ``history`` paths use - so once this returns those calls
+    hit the warm in-memory cache instead of each issuing its own network
+    round-trip. It does NOT change ``quote``, ``technicals``, the source
+    fallback order, or the persistent-cache behavior; it only front-loads the
+    history fetch onto a small thread pool.
+
+    Never raises: per-ticker errors are swallowed so one bad ticker can't
+    abort the prefetch (the wrapped sources already make ``_history_with_source``
+    non-raising; the guard is belt-and-suspenders). Thread-safe under the GIL
+    because the list is de-duplicated, so every worker writes a *distinct*
+    cache key.
+    """
+    # De-dupe (case-insensitively) so repeated spellings of one symbol don't
+    # race on the same key or waste a fetch. Keys are upper-cased to match the
+    # dominant lookup path (``quote`` upper-cases before caching); every real
+    # call site already passes upper-case symbols.
+    seen: set[str] = set()
+    unique: list[str] = []
+    for t in tickers:
+        tu = (t or "").upper()
+        if tu and tu not in seen:
+            seen.add(tu)
+            unique.append(tu)
+    if not unique:
+        return
+
+    def _warm(ticker: str) -> None:
+        try:
+            _history_with_source(ticker)
+        except Exception as e:  # never let one ticker abort the prefetch
+            log.debug("prefetch %s failed: %s", ticker, e)
+
+    try:
+        with ThreadPoolExecutor(max_workers=max(1, min(workers, len(unique)))) as ex:
+            # Drain the iterator so every worker completes before we return.
+            list(ex.map(_warm, unique))
+    except Exception as e:  # pool setup/teardown must not abort the caller
+        log.warning("prefetch pool failed: %s", e)
 
 
 def _from_persistent_cache(ticker: str) -> dict | None:

@@ -328,6 +328,17 @@ def main() -> int:
         metrics = {"available": False, "reason": str(e)}
     weight_by_ticker = {row["ticker"]: row for row in exposures["positions"]}
 
+    # Warm the price cache in parallel for everything the position analysis
+    # (plus the SPY benchmark and the macro / sector ETF reads) reuses, so the
+    # sequential loop below hits the in-memory cache instead of one network
+    # round-trip per ticker. Additive only - no change to what is computed.
+    prices.prefetch(
+        [p.ticker for p in account.positions]
+        + ["SPY"]
+        + list(macro_mod.INDICES.values())
+        + list(macro_mod.SECTOR_ETFS.values())
+    )
+
     print("Analyzing positions...")
     recs: list[dict] = []
     ticker_payloads: dict[str, dict] = {}

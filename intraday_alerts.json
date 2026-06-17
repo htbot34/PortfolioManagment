@@ -1,20 +1,25 @@
 {
-  "checked_at": "2026-06-17T19:18:31Z",
+  "checked_at": "2026-06-17T21:26:57Z",
   "alerts": [
     {
-      "severity": "med",
+      "severity": "high",
       "kind": "position_break",
-      "text": "NFLX lost SMA50 ($89.67) on 1.8x volume"
+      "text": "FBL gapped down -11.0% today"
     },
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "FBL gapped down -9.4% today"
+      "text": "META gapped down -5.4% today"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "MELI in entry zone $1619.32-$1663.00 (plan: stop $1537.40, target $1848.68, hold 2-3 weeks)"
+      "text": "XLK in entry zone $182.89-$187.88 (plan: stop $173.52, target $209.11, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "GD in entry zone $357.83-$363.66 (plan: stop $346.90, target $388.44, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
@@ -63,6 +68,8 @@
     "QLYS|133.39": "2026-06-17",
     "NNE|37.14": "2026-06-17",
     "SOFI|22.57": "2026-06-17",
-    "MELI|1848.68": "2026-06-17"
+    "MELI|1848.68": "2026-06-17",
+    "XLK|209.11": "2026-06-17",
+    "GD|388.44": "2026-06-17"
   }
 }

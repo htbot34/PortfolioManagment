@@ -11,8 +11,10 @@ Provider chain (each wrapped, never raises):
 If everything fails, error fields carry the diagnosis so the failure is visible
 in the rendered site and in data.json.
 """
+import atexit
 import io
 import json
+import threading
 import time as _time
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, asdict
@@ -158,7 +160,18 @@ _SOURCES = [
 ]
 
 
-def _load_persistent_cache() -> dict:
+# --- Persistent price cache (price_cache.json) -----------------------------
+# Read once and written once per process. Live fetches accumulate in an
+# in-memory dict (_PERSISTENT_CACHE); flush_persistent_cache() writes the whole
+# thing to disk a single time at end of run (plus an atexit fallback), instead
+# of the previous full read+write of the JSON file for every ticker.
+_PERSISTENT_LOCK = threading.Lock()
+_PERSISTENT_CACHE: dict | None = None   # disk snapshot + this run's live saves
+_PERSISTENT_DIRTY = False               # True once a live fetch has been recorded
+
+
+def _read_cache_file() -> dict:
+    """Pure disk read of price_cache.json. Never raises."""
     if not _CACHE_PATH.exists():
         return {}
     try:
@@ -168,11 +181,52 @@ def _load_persistent_cache() -> dict:
 
 
 def _save_persistent_cache(data: dict) -> None:
+    """Pure disk write of the whole cache dict. Never raises."""
     try:
         _CACHE_PATH.parent.mkdir(exist_ok=True)
         _CACHE_PATH.write_text(json.dumps(data, default=str))
     except Exception:
         pass
+
+
+def _load_persistent_cache() -> dict:
+    """Return the process-wide persistent price cache, reading the JSON file
+    from disk exactly once.
+
+    The returned dict is the live in-memory store: ``_save_to_persistent_cache``
+    updates it in place and ``flush_persistent_cache`` writes it back. Reading
+    it here for the live-fetch fallback therefore sees both prior-run entries
+    and anything saved earlier this run - identical to the old behavior, minus
+    the per-call disk round-trip.
+    """
+    global _PERSISTENT_CACHE
+    if _PERSISTENT_CACHE is None:
+        with _PERSISTENT_LOCK:
+            if _PERSISTENT_CACHE is None:  # double-checked under the lock
+                _PERSISTENT_CACHE = _read_cache_file()
+    return _PERSISTENT_CACHE
+
+
+def flush_persistent_cache() -> None:
+    """Persist this run's accumulated live fetches in a single disk write.
+
+    No-op when nothing new was recorded. Concurrency-safe: the snapshot, the
+    disk write, and clearing the dirty flag all happen under
+    ``_PERSISTENT_LOCK`` so a concurrent ``_save_to_persistent_cache`` can
+    neither mutate the dict mid-serialization nor let a stale write clobber a
+    fresher one. Writes are infrequent (normally once per process), so holding
+    the lock across the write costs nothing in practice. Registered with
+    ``atexit`` so a partial run still persists whatever it managed to fetch.
+    """
+    global _PERSISTENT_DIRTY
+    with _PERSISTENT_LOCK:
+        if not _PERSISTENT_DIRTY or _PERSISTENT_CACHE is None:
+            return
+        _save_persistent_cache(dict(_PERSISTENT_CACHE))
+        _PERSISTENT_DIRTY = False
+
+
+atexit.register(flush_persistent_cache)
 
 
 def _history_with_source(ticker: str) -> tuple[pd.DataFrame | None, str | None]:
@@ -235,7 +289,12 @@ def prefetch(tickers: list[str], workers: int = 8) -> None:
 
 
 def _from_persistent_cache(ticker: str) -> dict | None:
-    """Return cached quote dict if available."""
+    """Return the cached quote dict for ``ticker`` if present (read-only).
+
+    Hits the in-memory cache (loaded from disk once), so the live-fetch
+    fallback path behaves exactly as before - it just no longer re-reads the
+    JSON file on every miss.
+    """
     cache = _load_persistent_cache()
     entry = cache.get(ticker.upper())
     if not entry:
@@ -244,9 +303,17 @@ def _from_persistent_cache(ticker: str) -> dict | None:
 
 
 def _save_to_persistent_cache(ticker: str, payload: dict) -> None:
+    """Record a live fetch in the in-memory cache (no disk write here).
+
+    The entry is written to disk once per process by
+    ``flush_persistent_cache``. The update + dirty flag are set under
+    ``_PERSISTENT_LOCK`` so the flush's snapshot can't race a writer.
+    """
+    global _PERSISTENT_DIRTY
     cache = _load_persistent_cache()
-    cache[ticker.upper()] = payload
-    _save_persistent_cache(cache)
+    with _PERSISTENT_LOCK:
+        cache[ticker.upper()] = payload
+        _PERSISTENT_DIRTY = True
 
 
 def _yfinance_fundamentals(ticker: str) -> dict:

@@ -526,6 +526,10 @@ def main() -> int:
     # instead of aborting the refresh (and freezing the public site).
     # main() still returns 0 so the workflow's Commit step publishes.
     render_and_publish(env, site, pages, data_dump)
+    # Persist all of this run's live price fetches in a single write (entries
+    # were accumulated in memory rather than re-writing price_cache.json per
+    # ticker). An atexit fallback covers partial/early-exit runs.
+    prices.flush_persistent_cache()
     print(f"Built site to {site}")
     return 0
 

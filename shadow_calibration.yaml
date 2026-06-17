@@ -32,11 +32,11 @@ by_failed_signal:
     count: 18
     horizons:
       '5':
-        n_realized: 8
-        n_pending: 10
-        hit_rate: 0.75
-        avg_excess_return: 0.023457837009557444
-        avg_forward_return: 0.020293332138473893
+        n_realized: 13
+        n_pending: 5
+        hit_rate: 0.7692307692307693
+        avg_excess_return: -0.024929242218120262
+        avg_forward_return: -0.019749003651299654
       '10':
         n_realized: 0
         n_pending: 18
@@ -53,11 +53,11 @@ overall:
   count: 30
   horizons:
     '5':
-      n_realized: 17
-      n_pending: 13
-      hit_rate: 0.35294117647058826
-      avg_excess_return: -0.015417033497724846
-      avg_forward_return: -0.021758722766274934
+      n_realized: 22
+      n_pending: 8
+      hit_rate: 0.45454545454545453
+      avg_excess_return: -0.035174200653333876
+      avg_forward_return: -0.035862817800061834
     '10':
       n_realized: 4
       n_pending: 26

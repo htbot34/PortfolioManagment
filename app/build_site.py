@@ -13,6 +13,7 @@ import json
 import os
 import sys
 import traceback
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -243,6 +244,59 @@ def render_and_publish(env: Environment, site: Path,
     return render_errors
 
 
+def _analyze_positions(account, weight_by_ticker: dict) -> tuple[list[dict], dict[str, dict]]:
+    """Analyze every position and return ``(recs, ticker_payloads)``.
+
+    Runs the per-position pipeline (analyst + correlation + valuation) on a
+    small thread pool so the network I/O overlaps, then assembles results in
+    ``account.positions`` order. ``Executor.map`` yields in submission order,
+    so the output is identical to the previous sequential loop. Each of the
+    three steps keeps its own try/except fail-soft, so one position's (or one
+    step's) failure degrades to the same fallback it always did and can't abort
+    the others.
+
+    ``workers=4`` caps SEC EDGAR concurrency to a small, fair-access-respecting
+    pool; the CIK index and Form 4 results are day-cached so most calls are
+    cache hits. ``analyst.analyze_ticker`` only calls the rate-paced LLM when
+    ``USE_LLM_PER_TICKER`` is set (the refresh workflow does not), so this pool
+    does not burst the LLM path.
+    """
+    def _analyze_one(p) -> dict:
+        print(f"  {p.ticker}")
+        try:
+            rec = analyst.analyze_ticker(
+                p.ticker, position_context=weight_by_ticker.get(p.ticker, {}))
+        except Exception as e:
+            traceback.print_exc()
+            rec = {"ticker": p.ticker, "error": str(e), "action": "hold", "horizon": "long_term",
+                   "conviction": 1, "thesis": f"Failed to analyze: {e}",
+                   "key_catalysts": [], "key_risks": [], "suggested_action_detail": "",
+                   "quote": {}, "technicals": {}, "news": [], "earnings": None,
+                   "consensus": None, "analyst_recs": [], "position": {}}
+        try:
+            rec["correlation_to_book"] = correlation.candidate_correlation_to_book(
+                p.ticker, account)
+        except Exception:
+            traceback.print_exc()
+            rec["correlation_to_book"] = {"available": False}
+        try:
+            f = fundamentals_mod.get_fundamentals(p.ticker)
+            comps = valuation.build_sector_comparables(f.get("sector"))
+            rec["valuation"] = valuation.valuation_score(p.ticker, f, comps)
+        except Exception:
+            traceback.print_exc()
+            rec["valuation"] = {"tier": "unknown"}
+        return rec
+
+    positions = list(account.positions)
+    if not positions:
+        return [], {}
+    with ThreadPoolExecutor(max_workers=4) as ex:
+        recs = list(ex.map(_analyze_one, positions))
+    ticker_payloads = {p.ticker: rec for p, rec in zip(positions, recs)}
+    return recs, ticker_payloads
+
+
 def main() -> int:
     site = settings.site_dir
     site.mkdir(exist_ok=True)
@@ -340,34 +394,7 @@ def main() -> int:
     )
 
     print("Analyzing positions...")
-    recs: list[dict] = []
-    ticker_payloads: dict[str, dict] = {}
-    for p in account.positions:
-        print(f"  {p.ticker}")
-        try:
-            rec = analyst.analyze_ticker(p.ticker, position_context=weight_by_ticker.get(p.ticker, {}))
-        except Exception as e:
-            traceback.print_exc()
-            rec = {"ticker": p.ticker, "error": str(e), "action": "hold", "horizon": "long_term",
-                   "conviction": 1, "thesis": f"Failed to analyze: {e}",
-                   "key_catalysts": [], "key_risks": [], "suggested_action_detail": "",
-                   "quote": {}, "technicals": {}, "news": [], "earnings": None,
-                   "consensus": None, "analyst_recs": [], "position": {}}
-        try:
-            rec["correlation_to_book"] = correlation.candidate_correlation_to_book(
-                p.ticker, account)
-        except Exception:
-            traceback.print_exc()
-            rec["correlation_to_book"] = {"available": False}
-        try:
-            f = fundamentals_mod.get_fundamentals(p.ticker)
-            comps = valuation.build_sector_comparables(f.get("sector"))
-            rec["valuation"] = valuation.valuation_score(p.ticker, f, comps)
-        except Exception:
-            traceback.print_exc()
-            rec["valuation"] = {"tier": "unknown"}
-        recs.append(rec)
-        ticker_payloads[p.ticker] = rec
+    recs, ticker_payloads = _analyze_positions(account, weight_by_ticker)
 
     print("Generating candidates...")
     try:

@@ -37,6 +37,10 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run tests
+        # Gate the suite on code changes only. Scheduled (cron) and manual
+        # (workflow_dispatch) runs are data-only refreshes - skip the 427-test
+        # gate so a daily refresh isn't blocked behind it. Pushes still run it.
+        if: github.event_name == 'push'
         run: pytest -q
 
       - name: Build site

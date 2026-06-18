@@ -550,13 +550,13 @@
     outage: 0
     unknown: 0
 - date: '2026-06-18'
-  candidates_evaluated: 7
+  candidates_evaluated: 6
   cleared_primary: 1
   cleared_insider_promotion: 0
   blocked_by:
     technical: 0
     sector_momentum: 3
-    news: 2
+    news: 1
     trump: 0
     earnings_window: 0
     correlation_block: 0
@@ -565,29 +565,13 @@
     soft_veto: 1
     trump_block: 0
   near_miss:
-  - ticker: HOOD
+  - ticker: GEV
     passed:
     - technical
     - sector_momentum
     failed: news
     insider_score: 0
-    insider_status: not_evaluated
-    news_status: ok
-  - ticker: MRNA
-    passed:
-    - technical
-    - news
-    failed: sector_momentum
-    insider_score: 0
-    insider_status: not_evaluated
-    news_status: ok
-  - ticker: ROKU
-    passed:
-    - technical
-    - sector_momentum
-    failed: news
-    insider_score: 0
-    insider_status: not_evaluated
+    insider_status: zero
     news_status: ok
   trump:
     mentions: 0
@@ -598,11 +582,11 @@
     firings: []
   insider:
     scored: 0
-    zero: 0
+    zero: 1
     unavailable: 0
-    not_evaluated: 6
+    not_evaluated: 4
   news:
-    ok: 6
+    ok: 5
     empty: 0
     outage: 0
     unknown: 0

@@ -1,72 +1,72 @@
-generated_at: '2026-06-17'
+generated_at: '2026-06-18'
 horizons:
 - 5
 - 10
 - 20
 benchmark: SPY
 direction: long
-total_records: 30
+total_records: 33
 by_failed_signal:
   news:
-    count: 12
+    count: 14
     horizons:
       '5':
         n_realized: 9
-        n_pending: 3
+        n_pending: 5
         hit_rate: 0.0
         avg_excess_return: -0.04997247394864243
         avg_forward_return: -0.05913832712605165
       '10':
         n_realized: 4
-        n_pending: 8
+        n_pending: 10
         hit_rate: 0.0
         avg_excess_return: -0.07526235815835866
         avg_forward_return: -0.09290500642585993
       '20':
         n_realized: 0
-        n_pending: 12
+        n_pending: 14
         hit_rate: null
         avg_excess_return: null
         avg_forward_return: null
   sector_momentum:
-    count: 18
+    count: 19
     horizons:
       '5':
         n_realized: 13
-        n_pending: 5
+        n_pending: 6
         hit_rate: 0.7692307692307693
         avg_excess_return: -0.024929242218120262
         avg_forward_return: -0.019749003651299654
       '10':
         n_realized: 0
-        n_pending: 18
+        n_pending: 19
         hit_rate: null
         avg_excess_return: null
         avg_forward_return: null
       '20':
         n_realized: 0
-        n_pending: 18
+        n_pending: 19
         hit_rate: null
         avg_excess_return: null
         avg_forward_return: null
 overall:
-  count: 30
+  count: 33
   horizons:
     '5':
       n_realized: 22
-      n_pending: 8
+      n_pending: 11
       hit_rate: 0.45454545454545453
       avg_excess_return: -0.035174200653333876
       avg_forward_return: -0.035862817800061834
     '10':
       n_realized: 4
-      n_pending: 26
+      n_pending: 29
       hit_rate: 0.0
       avg_excess_return: -0.07526235815835866
       avg_forward_return: -0.09290500642585993
     '20':
       n_realized: 0
-      n_pending: 30
+      n_pending: 33
       hit_rate: null
       avg_excess_return: null
       avg_forward_return: null

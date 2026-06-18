@@ -1258,6 +1258,90 @@
       excess_return: null
       hit: null
   last_updated: '2026-06-18'
+- ticker: ALAB
+  miss_date: '2026-06-18'
+  direction: long
+  kind: near_miss
+  valence: null
+  failed_signal: news
+  passed_signals:
+  - technical
+  - sector_momentum
+  insider_score: 0
+  source: null
+  entry_price: 417.07000732421875
+  benchmark_entry_price: 746.739990234375
+  horizons:
+    '5':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+    '10':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+    '20':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+  last_updated: '2026-06-18'
+- ticker: BEAM
+  miss_date: '2026-06-18'
+  direction: long
+  kind: near_miss
+  valence: null
+  failed_signal: sector_momentum
+  passed_signals:
+  - technical
+  - news
+  insider_score: 0
+  source: null
+  entry_price: 34.13999938964844
+  benchmark_entry_price: 746.739990234375
+  horizons:
+    '5':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+    '10':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+    '20':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+  last_updated: '2026-06-18'
 - ticker: GEV
   miss_date: '2026-06-18'
   direction: long
@@ -1355,6 +1439,47 @@
   source: null
   entry_price: 61.13999938964844
   benchmark_entry_price: 745.22998046875
+  horizons:
+    '5':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+    '10':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+    '20':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+  last_updated: '2026-06-18'
+- ticker: NNE
+  miss_date: '2026-06-18'
+  direction: long
+  kind: trump
+  valence: endorse
+  failed_signal: trump_endorse
+  passed_signals: []
+  insider_score: 0
+  source: SMR, NNE, OKLO Gain After Trump's EPA Chief Lee Zeldin Touts Small Modular
+    Reactor Buildout
+  entry_price: 28.209999084472656
+  benchmark_entry_price: 746.739990234375
   horizons:
     '5':
       status: pending

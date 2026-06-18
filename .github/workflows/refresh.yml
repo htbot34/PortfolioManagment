@@ -4,6 +4,12 @@ on:
   schedule:
     # Weekdays at 11:00 UTC = 7am ET (EDT) / 6am ET (EST) - before market open
     - cron: "0 11 * * 1-5"
+    # Weekdays at 22:00 UTC = 6pm ET (EDT) / 5pm ET (EST) - after market close,
+    # so same-day close data feeds the next morning's technicals. The pipeline
+    # is idempotent across same-day runs (rec_history dedupes on rec_id;
+    # gate_telemetry, regime_history, and shadow_tracker are all date-keyed),
+    # so a second run overwrites rather than double-counts.
+    - cron: "0 22 * * 1-5"
   workflow_dispatch: {}
   push:
     branches: [main]

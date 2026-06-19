@@ -605,29 +605,21 @@
     outage: 0
     unknown: 0
 - date: '2026-06-19'
-  candidates_evaluated: 9
+  candidates_evaluated: 8
   cleared_primary: 1
   cleared_insider_promotion: 0
   blocked_by:
     technical: 0
-    sector_momentum: 4
-    news: 2
+    sector_momentum: 3
+    news: 1
     trump: 0
     earnings_window: 0
     correlation_block: 0
-    valuation_block: 1
+    valuation_block: 2
     regime: 0
     soft_veto: 1
     trump_block: 0
   near_miss:
-  - ticker: ALAB
-    passed:
-    - technical
-    - sector_momentum
-    failed: news
-    insider_score: 0
-    insider_status: not_evaluated
-    news_status: ok
   - ticker: BEAM
     passed:
     - technical
@@ -636,7 +628,7 @@
     insider_score: 0
     insider_status: not_evaluated
     news_status: ok
-  - ticker: TSM
+  - ticker: ROKU
     passed:
     - technical
     - sector_momentum
@@ -645,18 +637,12 @@
     insider_status: not_evaluated
     news_status: ok
   trump:
-    mentions: 2
+    mentions: 1
     endorsements: 1
-    attacks: 1
+    attacks: 0
     promotions: 0
     vetoes: 0
     firings:
-    - ticker: TSM
-      valence: attack
-      as_of: '2026-06-19'
-      source: "\u201CThey Forgot to Protect Our Industries With TARIFFS!\u201D \u2014\
-        \ Does a Trump Trade War 2.0 Loom?"
-      qualifies: false
     - ticker: NNE
       valence: endorse
       as_of: '2026-06-05'
@@ -667,9 +653,9 @@
     scored: 0
     zero: 0
     unavailable: 0
-    not_evaluated: 8
+    not_evaluated: 7
   news:
-    ok: 8
+    ok: 7
     empty: 0
     outage: 0
     unknown: 0

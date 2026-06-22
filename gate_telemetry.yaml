@@ -660,58 +660,26 @@
     outage: 0
     unknown: 0
 - date: '2026-06-22'
-  candidates_evaluated: 21
+  candidates_evaluated: 8
   cleared_primary: 1
   cleared_insider_promotion: 0
   blocked_by:
     technical: 0
-    sector_momentum: 10
-    news: 4
+    sector_momentum: 5
+    news: 0
     trump: 0
     earnings_window: 0
     correlation_block: 0
-    valuation_block: 5
+    valuation_block: 1
     regime: 0
     soft_veto: 1
     trump_block: 0
   near_miss:
-  - ticker: ALAB
-    passed:
-    - technical
-    - sector_momentum
-    failed: news
-    insider_score: 0
-    insider_status: zero
-    news_status: ok
-  - ticker: ASML
-    passed:
-    - technical
-    - sector_momentum
-    failed: news
-    insider_score: 0
-    insider_status: zero
-    news_status: ok
   - ticker: BEAM
     passed:
     - technical
     - news
     failed: sector_momentum
-    insider_score: 0
-    insider_status: zero
-    news_status: ok
-  - ticker: BWXT
-    passed:
-    - technical
-    - news
-    failed: sector_momentum
-    insider_score: 0
-    insider_status: zero
-    news_status: ok
-  - ticker: CIFR
-    passed:
-    - technical
-    - sector_momentum
-    failed: news
     insider_score: 0
     insider_status: zero
     news_status: ok
@@ -722,19 +690,18 @@
     promotions: 0
     vetoes: 0
     firings:
-    - ticker: DIA
+    - ticker: MARA
       valence: endorse
-      as_of: '2026-06-18'
-      source: "Trump Says Markets Are \u2018Loving What Is Happening\u2019 As US-Iran\
-        \ Peace Deal Sends Oil Lower And Stocks \u2018Way Up\u2019"
-      qualifies: false
+      as_of: '2026-06-19'
+      source: "Here\u2019s Donald Trump\u2019s Top Crypto Stock Pick in 2026"
+      qualifies: true
   insider:
     scored: 0
-    zero: 9
+    zero: 1
     unavailable: 0
-    not_evaluated: 11
+    not_evaluated: 6
   news:
-    ok: 20
+    ok: 7
     empty: 0
     outage: 0
     unknown: 0

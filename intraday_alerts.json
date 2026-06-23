@@ -1,60 +1,45 @@
 {
-  "checked_at": "2026-06-23T17:45:33Z",
+  "checked_at": "2026-06-23T19:51:00Z",
   "alerts": [
     {
       "severity": "med",
       "kind": "position_break",
-      "text": "NFLX lost SMA50 ($88.05) on 1.9x volume"
+      "text": "NFLX lost SMA50 ($88.04) on 2.0x volume"
     },
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "INTC gapped down -5.1% today"
+      "text": "INTC gapped down -6.3% today"
     },
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "AMAT gapped down -8.1% today"
+      "text": "AMAT gapped down -8.9% today"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "XBI at $147.97 - within buy zone of yesterday's breakout setup ($146.26)"
+      "text": "XBI at $147.23 - within buy zone of yesterday's breakout setup ($146.26)"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "MARA at $15.02 - within buy zone of yesterday's breakout setup ($14.90)"
-    },
-    {
-      "severity": "low",
-      "kind": "watchlist_entry",
-      "text": "DASH at $174.71 - within buy zone of yesterday's breakout setup ($174.51)"
-    },
-    {
-      "severity": "low",
-      "kind": "watchlist_entry",
-      "text": "NVO at $46.76 - within buy zone of yesterday's breakout setup ($46.94)"
-    },
-    {
-      "severity": "low",
-      "kind": "watchlist_entry",
-      "text": "XLC RSI 30 - oversold reversal in progress (from yesterday's bucket)"
+      "text": "NVO at $47.35 - within buy zone of yesterday's breakout setup ($46.94)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "RBRK in entry zone $73.26-$77.24 (plan: stop $65.79, target $94.17, hold 2-3 weeks)"
+      "text": "MRNA in entry zone $58.06-$61.49 (plan: stop $51.61, target $76.11, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "RDDT in entry zone $172.07-$182.71 (plan: stop $152.13, target $227.91, hold 2-3 weeks)"
+      "text": "CCJ in entry zone $102.68-$108.71 (plan: stop $93.63, target $129.82, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "QLYS in entry zone $112.68-$116.62 (plan: stop $105.28, target $133.39, hold 2-3 weeks)"
+      "text": "VRNS in entry zone $33.81-$35.13 (plan: stop $31.34, target $40.73, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
@@ -92,6 +77,9 @@
     "DXCM|80.18": "2026-06-23",
     "RBRK|94.17": "2026-06-23",
     "RDDT|227.91": "2026-06-23",
-    "QLYS|133.39": "2026-06-23"
+    "QLYS|133.39": "2026-06-23",
+    "MRNA|76.11": "2026-06-23",
+    "CCJ|129.82": "2026-06-23",
+    "VRNS|40.73": "2026-06-23"
   }
 }

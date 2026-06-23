@@ -1,45 +1,30 @@
 {
-  "checked_at": "2026-06-23T19:51:00Z",
+  "checked_at": "2026-06-23T21:25:03Z",
   "alerts": [
     {
-      "severity": "med",
+      "severity": "high",
       "kind": "position_break",
-      "text": "NFLX lost SMA50 ($88.04) on 2.0x volume"
+      "text": "INTC gapped down -6.1% today"
     },
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "INTC gapped down -6.3% today"
-    },
-    {
-      "severity": "high",
-      "kind": "position_break",
-      "text": "AMAT gapped down -8.9% today"
+      "text": "AMAT gapped down -8.5% today"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "XBI at $147.23 - within buy zone of yesterday's breakout setup ($146.26)"
+      "text": "XBI at $147.03 - within buy zone of yesterday's breakout setup ($146.26)"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "NVO at $47.35 - within buy zone of yesterday's breakout setup ($46.94)"
+      "text": "NVO at $47.42 - within buy zone of yesterday's breakout setup ($46.94)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "MRNA in entry zone $58.06-$61.49 (plan: stop $51.61, target $76.11, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "CCJ in entry zone $102.68-$108.71 (plan: stop $93.63, target $129.82, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "VRNS in entry zone $33.81-$35.13 (plan: stop $31.34, target $40.73, hold 2-3 weeks)"
+      "text": "NET in entry zone $211.59-$225.13 (plan: stop $191.28, target $272.52, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
@@ -80,6 +65,7 @@
     "QLYS|133.39": "2026-06-23",
     "MRNA|76.11": "2026-06-23",
     "CCJ|129.82": "2026-06-23",
-    "VRNS|40.73": "2026-06-23"
+    "VRNS|40.73": "2026-06-23",
+    "NET|272.52": "2026-06-23"
   }
 }

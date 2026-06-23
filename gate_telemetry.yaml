@@ -705,3 +705,57 @@
     empty: 0
     outage: 0
     unknown: 0
+- date: '2026-06-23'
+  candidates_evaluated: 6
+  cleared_primary: 1
+  cleared_insider_promotion: 0
+  blocked_by:
+    technical: 0
+    sector_momentum: 4
+    news: 0
+    trump: 0
+    earnings_window: 0
+    correlation_block: 0
+    valuation_block: 0
+    regime: 0
+    soft_veto: 1
+    trump_block: 0
+  near_miss:
+  - ticker: LRCX
+    passed:
+    - technical
+    - news
+    failed: sector_momentum
+    insider_score: 0
+    insider_status: not_evaluated
+    news_status: ok
+  - ticker: XBI
+    passed:
+    - technical
+    - news
+    failed: sector_momentum
+    insider_score: 0
+    insider_status: not_evaluated
+    news_status: ok
+  trump:
+    mentions: 1
+    endorsements: 1
+    attacks: 0
+    promotions: 1
+    vetoes: 0
+    firings:
+    - ticker: MARA
+      valence: endorse
+      as_of: '2026-06-19'
+      source: "Here\u2019s Donald Trump\u2019s Top Crypto Stock Pick in 2026"
+      qualifies: true
+  insider:
+    scored: 0
+    zero: 0
+    unavailable: 0
+    not_evaluated: 5
+  news:
+    ok: 5
+    empty: 0
+    outage: 0
+    unknown: 0

@@ -694,14 +694,14 @@
       excess_return: 0.04255132297762326
       hit: true
     '10':
-      status: pending
-      exit_date: null
-      exit_price: null
-      benchmark_exit_price: null
-      forward_return: null
-      benchmark_forward_return: null
-      excess_return: null
-      hit: null
+      status: realized
+      exit_date: '2026-06-24'
+      exit_price: 171.1300048828125
+      benchmark_exit_price: 733.239990234375
+      forward_return: 0.09684655939352917
+      benchmark_forward_return: -0.005169252590319487
+      excess_return: 0.10201581198384865
+      hit: true
     '20':
       status: pending
       exit_date: null
@@ -2310,8 +2310,8 @@
   - news
   insider_score: 0
   source: null
-  entry_price: null
-  benchmark_entry_price: null
+  entry_price: 33.900001525878906
+  benchmark_entry_price: 733.239990234375
   horizons:
     '5':
       status: pending
@@ -2352,8 +2352,8 @@
   - news
   insider_score: 0
   source: null
-  entry_price: null
-  benchmark_entry_price: null
+  entry_price: 701.8800048828125
+  benchmark_entry_price: 733.239990234375
   horizons:
     '5':
       status: pending
@@ -2394,8 +2394,50 @@
   - news
   insider_score: 0
   source: null
-  entry_price: null
-  benchmark_entry_price: null
+  entry_price: 440.8299865722656
+  benchmark_entry_price: 733.239990234375
+  horizons:
+    '5':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+    '10':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+    '20':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+  last_updated: '2026-06-24'
+- ticker: VRNS
+  miss_date: '2026-06-24'
+  direction: long
+  kind: near_miss
+  valence: null
+  failed_signal: sector_momentum
+  passed_signals:
+  - technical
+  - news
+  insider_score: 0
+  source: null
+  entry_price: 37.290000915527344
+  benchmark_entry_price: 733.239990234375
   horizons:
     '5':
       status: pending

@@ -763,12 +763,12 @@
     outage: 0
     unknown: 1
 - date: '2026-06-24'
-  candidates_evaluated: 8
-  cleared_primary: 0
+  candidates_evaluated: 6
+  cleared_primary: 1
   cleared_insider_promotion: 0
   blocked_by:
-    technical: 1
-    sector_momentum: 6
+    technical: 0
+    sector_momentum: 4
     news: 0
     trump: 0
     earnings_window: 0
@@ -778,23 +778,7 @@
     soft_veto: 1
     trump_block: 0
   near_miss:
-  - ticker: BEAM
-    passed:
-    - technical
-    - news
-    failed: sector_momentum
-    insider_score: 0
-    insider_status: not_evaluated
-    news_status: ok
-  - ticker: PWR
-    passed:
-    - technical
-    - news
-    failed: sector_momentum
-    insider_score: 0
-    insider_status: not_evaluated
-    news_status: ok
-  - ticker: TSM
+  - ticker: VRNS
     passed:
     - technical
     - news
@@ -813,9 +797,9 @@
     scored: 0
     zero: 0
     unavailable: 0
-    not_evaluated: 7
+    not_evaluated: 5
   news:
-    ok: 6
+    ok: 5
     empty: 0
     outage: 0
-    unknown: 1
+    unknown: 0

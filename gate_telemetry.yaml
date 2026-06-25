@@ -804,12 +804,12 @@
     outage: 0
     unknown: 0
 - date: '2026-06-25'
-  candidates_evaluated: 12
+  candidates_evaluated: 6
   cleared_primary: 1
   cleared_insider_promotion: 0
   blocked_by:
     technical: 0
-    sector_momentum: 9
+    sector_momentum: 3
     news: 0
     trump: 0
     earnings_window: 0
@@ -819,31 +819,7 @@
     soft_veto: 1
     trump_block: 0
   near_miss:
-  - ticker: DASH
-    passed:
-    - technical
-    - news
-    failed: sector_momentum
-    insider_score: 0
-    insider_status: not_evaluated
-    news_status: ok
-  - ticker: UBER
-    passed:
-    - technical
-    - news
-    failed: sector_momentum
-    insider_score: 0
-    insider_status: not_evaluated
-    news_status: ok
-  - ticker: VRNS
-    passed:
-    - technical
-    - news
-    failed: sector_momentum
-    insider_score: 0
-    insider_status: not_evaluated
-    news_status: ok
-  - ticker: XBI
+  - ticker: MU
     passed:
     - technical
     - news
@@ -862,9 +838,9 @@
     scored: 0
     zero: 0
     unavailable: 0
-    not_evaluated: 11
+    not_evaluated: 5
   news:
-    ok: 11
+    ok: 5
     empty: 0
     outage: 0
     unknown: 0

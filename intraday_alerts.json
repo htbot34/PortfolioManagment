@@ -1,55 +1,40 @@
 {
-  "checked_at": "2026-06-25T18:03:52Z",
+  "checked_at": "2026-06-25T20:33:07Z",
   "alerts": [
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "RUN gapped down -5.9% today"
+      "text": "OKLO gapped down -5.6% today"
+    },
+    {
+      "severity": "high",
+      "kind": "position_break",
+      "text": "IREN gapped down -5.1% today"
+    },
+    {
+      "severity": "high",
+      "kind": "position_break",
+      "text": "FBL gapped down -5.4% today"
+    },
+    {
+      "severity": "high",
+      "kind": "position_break",
+      "text": "RUN gapped down -5.7% today"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "VRNS at $39.36 - within buy zone of yesterday's breakout setup ($37.29)"
+      "text": "VRNS at $38.56 - within buy zone of yesterday's breakout setup ($37.29)"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "XBI at $151.04 - within buy zone of yesterday's breakout setup ($149.71)"
+      "text": "XBI at $151.59 - within buy zone of yesterday's breakout setup ($149.71)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "XBI in entry zone $148.35-$151.97 (plan: stop $141.56, target $167.36, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "DIA in entry zone $514.92-$520.67 (plan: stop $504.14, target $545.10, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "WULF in entry zone $26.29-$28.11 (plan: stop $22.87, target $35.86, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "CIFR in entry zone $25.41-$27.57 (plan: stop $21.37, target $36.73, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "TEM in entry zone $50.31-$53.56 (plan: stop $44.22, target $67.37, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "NU in entry zone $11.99-$12.40 (plan: stop $11.24, target $14.11, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "TOST in entry zone $25.60-$26.44 (plan: stop $24.01, target $30.04, hold 2-3 weeks)"
+      "text": "GE in entry zone $362.48-$371.55 (plan: stop $345.48, target $410.08, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
@@ -91,6 +76,7 @@
     "CIFR|36.73": "2026-06-25",
     "TEM|67.37": "2026-06-25",
     "NU|14.11": "2026-06-25",
-    "TOST|30.04": "2026-06-25"
+    "TOST|30.04": "2026-06-25",
+    "GE|410.08": "2026-06-25"
   }
 }

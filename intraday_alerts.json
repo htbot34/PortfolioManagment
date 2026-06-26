@@ -1,45 +1,35 @@
 {
-  "checked_at": "2026-06-26T19:15:00Z",
+  "checked_at": "2026-06-26T21:03:26Z",
   "alerts": [
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "NBIS gapped down -7.3% today"
+      "text": "NBIS gapped down -6.4% today"
     },
     {
       "severity": "med",
       "kind": "position_break",
-      "text": "AMZN lost SMA50 ($256.04) on 1.5x volume"
+      "text": "AMZN lost SMA50 ($256.13) on 4.0x volume"
+    },
+    {
+      "severity": "med",
+      "kind": "position_break",
+      "text": "OKLO lost SMA50 ($64.97) on 1.6x volume"
     },
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "FPS gapped down -7.0% today"
+      "text": "FPS gapped down -6.1% today"
     },
     {
-      "severity": "med",
+      "severity": "high",
       "kind": "position_break",
-      "text": "RUN lost SMA50 ($13.55) on 1.5x volume"
+      "text": "AMAT gapped down -6.2% today"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "VRNS at $39.33 - within buy zone of yesterday's breakout setup ($38.56)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "XBI in entry zone $150.22-$153.87 (plan: stop $143.39, target $169.36, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "GD in entry zone $338.86-$347.25 (plan: stop $326.27, target $376.63, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "DXCM in entry zone $66.40-$69.21 (plan: stop $62.19, target $79.04, hold 2-3 weeks)"
+      "text": "VRNS at $40.30 - within buy zone of yesterday's breakout setup ($38.56)"
     }
   ],
   "fired_plans": {

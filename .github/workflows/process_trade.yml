@@ -29,6 +29,7 @@ jobs:
 
       - name: Apply (rec-action)
         id: apply_rec
+        continue-on-error: true
         if: contains(github.event.issue.labels.*.name, 'rec-action')
         env:
           ISSUE_TITLE: ${{ github.event.issue.title }}
@@ -37,6 +38,7 @@ jobs:
 
       - name: Apply (trade-log / chat)
         id: apply
+        continue-on-error: true
         if: contains(github.event.issue.labels.*.name, 'trade-log') || contains(github.event.issue.labels.*.name, 'chat')
         env:
           ISSUE_BODY: ${{ github.event.issue.body }}
@@ -44,6 +46,7 @@ jobs:
 
       - name: Apply (idea-action)
         id: apply_idea
+        continue-on-error: true
         if: contains(github.event.issue.labels.*.name, 'idea-action')
         env:
           ISSUE_TITLE: ${{ github.event.issue.title }}
@@ -97,7 +100,7 @@ jobs:
             -d '{"state":"closed"}'
 
       - name: Comment failure
-        if: steps.apply.outputs.error || steps.apply_rec.outputs.error || steps.apply_idea.outputs.error
+        if: always() && (steps.apply.outputs.error || steps.apply_rec.outputs.error || steps.apply_idea.outputs.error)
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}

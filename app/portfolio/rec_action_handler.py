@@ -18,6 +18,7 @@ from __future__ import annotations
 import os
 import re
 import sys
+import traceback
 from pathlib import Path
 
 from app.portfolio import rec_history, store, trade_log
@@ -173,7 +174,8 @@ def main() -> int:
         return 1
     try:
         result = apply_from_issue(title, body)
-    except ValueError as e:
+    except Exception as e:
+        traceback.print_exc()
         print(f"::error::{e}")
         _write_output("error", str(e))
         return 2

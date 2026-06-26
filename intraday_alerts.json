@@ -1,65 +1,45 @@
 {
-  "checked_at": "2026-06-26T17:14:18Z",
+  "checked_at": "2026-06-26T19:15:00Z",
   "alerts": [
+    {
+      "severity": "high",
+      "kind": "position_break",
+      "text": "NBIS gapped down -7.3% today"
+    },
     {
       "severity": "med",
       "kind": "position_break",
-      "text": "AMZN lost SMA50 ($256.10) on 1.5x volume"
+      "text": "AMZN lost SMA50 ($256.04) on 1.5x volume"
     },
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "FPS gapped down -5.8% today"
+      "text": "FPS gapped down -7.0% today"
+    },
+    {
+      "severity": "med",
+      "kind": "position_break",
+      "text": "RUN lost SMA50 ($13.55) on 1.5x volume"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "VRNS at $39.55 - within buy zone of yesterday's breakout setup ($38.56)"
+      "text": "VRNS at $39.33 - within buy zone of yesterday's breakout setup ($38.56)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "NVDA in entry zone $193.80-$201.60 (plan: stop $182.10, target $228.90, hold 2-3 weeks)"
+      "text": "XBI in entry zone $150.22-$153.87 (plan: stop $143.39, target $169.36, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "AVGO in entry zone $371.45-$397.30 (plan: stop $332.68, target $487.76, hold 2-3 weeks)"
+      "text": "GD in entry zone $338.86-$347.25 (plan: stop $326.27, target $376.63, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "MU in entry zone $1180.55-$1268.58 (plan: stop $1015.50, target $1642.70, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "ASML in entry zone $1799.51-$1882.85 (plan: stop $1643.25, target $2237.04, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "TEM in entry zone $53.35-$56.39 (plan: stop $47.64, target $69.33, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "SMH in entry zone $616.40-$644.24 (plan: stop $564.21, target $762.54, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "ROK in entry zone $474.73-$487.16 (plan: stop $451.42, target $540.00, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "MARA in entry zone $14.53-$15.50 (plan: stop $12.70, target $19.65, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "GE in entry zone $367.98-$376.99 (plan: stop $351.09, target $415.28, hold 2-3 weeks)"
+      "text": "DXCM in entry zone $66.40-$69.21 (plan: stop $62.19, target $79.04, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
@@ -98,6 +78,9 @@
     "SMH|762.54": "2026-06-26",
     "ROK|540.0": "2026-06-26",
     "MARA|19.65": "2026-06-26",
-    "GE|415.28": "2026-06-26"
+    "GE|415.28": "2026-06-26",
+    "XBI|169.36": "2026-06-26",
+    "GD|376.63": "2026-06-26",
+    "DXCM|79.04": "2026-06-26"
   }
 }

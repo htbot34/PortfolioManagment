@@ -118,6 +118,24 @@ def find(rec_id: str, history: list[dict] | None = None,
     return None
 
 
+def _resolve_for_update(rec_id: str, history: list[dict]) -> dict | None:
+    """Pick the entry ``update_status`` should mutate when a rec_id recurs.
+
+    ``find()`` returns the *first* match, which is fine for most callers but
+    wrong for status updates: a recycled rec_id (the id is only stable within a
+    day, but ids can still collide or be re-logged) can leave a stale,
+    already-resolved entry ahead of the live one, so a reject/accept would land
+    on the dead entry and never resolve the pending rec. History is newest-last,
+    so prefer the most-recent entry that is still ``pending``; fall back to the
+    most-recent matching entry overall when none are pending.
+    """
+    matches = [e for e in history if e.get("rec_id") == rec_id]
+    if not matches:
+        return None
+    pendings = [e for e in matches if e.get("status") == "pending"]
+    return pendings[-1] if pendings else matches[-1]
+
+
 def update_status(
     rec_id: str,
     status: str,
@@ -132,7 +150,7 @@ def update_status(
     if status not in ("accepted", "rejected", "counter", "pending"):
         raise ValueError(f"unknown status: {status!r}")
     history = load(path)
-    entry = find(rec_id, history)
+    entry = _resolve_for_update(rec_id, history)
     if entry is None:
         return None
     entry["status"] = status

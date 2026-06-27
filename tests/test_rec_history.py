@@ -1,7 +1,21 @@
 """Tests for app.portfolio.rec_history."""
+from datetime import date, timedelta
 from pathlib import Path
 
 from app.portfolio import rec_history
+
+
+def _entry(rec_id, day, status, *, user_reason=None, ticker="TT", action="buy"):
+    iso = day.isoformat()
+    return {
+        "rec_id": rec_id, "date": iso, "ticker": ticker, "action": action,
+        "size": {"display": "", "shares": 0, "dollars": 0},
+        "status": status, "user_reason": user_reason,
+        "counter_proposal": None, "executed_price": None,
+        "executed_shares": None,
+        "resolved_at": None if status == "pending" else iso + "T00:00:00Z",
+        "created_at": iso + "T00:00:00Z",
+    }
 
 
 def _brief(*recs) -> dict:
@@ -95,6 +109,63 @@ def test_update_status_rejects_bad_status(tmp_path: Path):
     except ValueError:
         return
     raise AssertionError("expected ValueError")
+
+
+def test_update_status_targets_live_pending_when_rec_id_recurs(tmp_path: Path):
+    """A recycled rec_id must resolve the live pending entry, not a stale one.
+
+    find() returns the first match; when an already-resolved entry precedes a
+    re-proposed pending entry sharing the same rec_id, update_status must still
+    flip the pending one and leave the resolved entry untouched. Without the
+    _resolve_for_update fix this rejects the older (already-rejected) entry and
+    strands the live pending rec -- exactly what left issue #33 open.
+    """
+    p = tmp_path / "rec_history.yaml"
+    older = date.today() - timedelta(days=2)
+    newer = date.today() - timedelta(days=1)
+    rec_history.save([
+        _entry("dup00001", older, "rejected", user_reason="too pricey"),
+        _entry("dup00001", newer, "pending"),
+    ], p)
+
+    entry = rec_history.update_status(
+        "dup00001", "rejected", user_reason="cleanup", path=p)
+
+    # The entry that got resolved is the live (pending) one.
+    assert entry is not None
+    assert entry["date"] == newer.isoformat()
+    assert entry["status"] == "rejected"
+    assert entry["user_reason"] == "cleanup"
+
+    loaded = rec_history.load(p)
+    older_e = next(e for e in loaded if e["date"] == older.isoformat())
+    newer_e = next(e for e in loaded if e["date"] == newer.isoformat())
+    # The previously-resolved entry is untouched...
+    assert older_e["status"] == "rejected"
+    assert older_e["user_reason"] == "too pricey"
+    # ...and there is no longer any pending entry for the rec_id.
+    assert rec_history.pending(path=p) == []
+
+
+def test_update_status_falls_back_to_latest_when_none_pending(tmp_path: Path):
+    """With no pending match, resolve the most-recent (last) entry, not the first."""
+    p = tmp_path / "rec_history.yaml"
+    older = date.today() - timedelta(days=2)
+    newer = date.today() - timedelta(days=1)
+    rec_history.save([
+        _entry("dup00002", older, "rejected", user_reason="first"),
+        _entry("dup00002", newer, "accepted", user_reason="second"),
+    ], p)
+
+    entry = rec_history.update_status(
+        "dup00002", "counter",
+        counter_proposal={"action": "hold", "shares": None, "reason": "x"},
+        path=p)
+
+    assert entry["date"] == newer.isoformat()
+    assert entry["status"] == "counter"
+    loaded = rec_history.load(p)
+    assert next(e for e in loaded if e["date"] == older.isoformat())["status"] == "rejected"
 
 
 def test_pending_filter(tmp_path: Path):

@@ -101,7 +101,12 @@ jobs:
               if [ -n "$thesis" ]; then echo; echo "**Thesis**: $thesis"; fi
               invalidation=$(echo "$rec" | jq -r '.invalidation // ""')
               [ -n "$invalidation" ] && echo "**Invalidation**: $invalidation"
-              evidence=$(echo "$rec" | jq -r '.evidence // [] | if type=="array" then map("- " + .) | join("\n") else "" end')
+              # Evidence items are structured objects ({source, ref, supports}),
+              # not strings, so render each as "ref: supports" (falling back to
+              # source / raw JSON). The old `"- " + .` aborted the whole step
+              # with "string and object cannot be added" the moment a rec
+              # carried evidence, killing the new-rec notification.
+              evidence=$(echo "$rec" | jq -r '.evidence // [] | if type=="array" then map("- " + (if type=="object" then (([.ref, .supports] | map(select(type=="string" and . != "")) | join(": ")) as $rs | (if $rs != "" then $rs else (.source // tostring) end)) elif type=="string" then . else tostring end)) | join("\n") else "" end')
               if [ -n "$evidence" ]; then echo; echo "**Evidence**:"; echo "$evidence"; fi
               echo
               echo "[Dashboard]($DASHBOARD_URL) · [Recommendations](${DASHBOARD_URL}recommendations.html) · [data.json](${DASHBOARD_URL}data.json)"

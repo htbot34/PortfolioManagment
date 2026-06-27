@@ -128,13 +128,17 @@ def apply_from_issue(title: str, body: str) -> dict:
             f"{shares:g} shares @ ${price:.2f}. {mutate_summary}"
         )
     elif kind == "reject":
+        # A reason is optional: the intent (reject) is already explicit in the
+        # title, and the issue form often leaves Reason as "N/A" (normalized to
+        # empty), which previously hard-failed the reject and stranded the
+        # pending rec (and its issue) instead of resolving it.
         reason = _read_field(body, "reason")
-        if not reason:
-            raise ValueError("reject requires a reason")
-        entry = rec_history.update_status(rec_id, "rejected", user_reason=reason)
+        entry = rec_history.update_status(rec_id, "rejected", user_reason=reason or None)
         if entry is None:
             raise ValueError(f"rec_id {rec_id} not found")
-        summary = f"Rejected {entry.get('ticker')} {entry.get('action')}: {reason[:80]}"
+        summary = f"Rejected {entry.get('ticker')} {entry.get('action')}"
+        if reason:
+            summary += f": {reason[:80]}"
     elif kind == "counter":
         cp = {
             "action": _read_field(body, "counter_action") or None,

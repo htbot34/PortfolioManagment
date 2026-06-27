@@ -151,6 +151,23 @@ def test_reject_does_not_touch_portfolio(patched_paths):
     assert "bullish" in entry["user_reason"]
 
 
+def test_reject_without_reason_still_resolves(patched_paths):
+    """Mirror issue #33: a reject whose Reason is "N/A" (normalized to empty)
+    must still flip the rec to rejected and yield a non-empty summary (so the
+    workflow commits and closes the issue), not hard-fail on a missing reason."""
+    _seed_pending("rej00033", "TT", "buy")
+    before = store.load()
+    body = _body("rej00033", reason="N/A")
+    result = rec_action_handler.apply_from_issue("Reject rec rej00033", body)
+    after = store.load()
+    assert before.cash == after.cash
+    assert len(before.positions) == len(after.positions)
+    entry = rec_history.find("rej00033")
+    assert entry["status"] == "rejected"
+    assert entry["user_reason"] is None
+    assert result["summary"]  # non-empty -> commit + close steps fire
+
+
 def test_counter_does_not_touch_portfolio(patched_paths):
     _seed_pending("ctr77777", "META", "trim")
     before = store.load()

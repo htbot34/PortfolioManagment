@@ -3097,6 +3097,90 @@
       excess_return: null
       hit: null
   last_updated: '2026-07-01'
+- ticker: COIN
+  miss_date: '2026-07-01'
+  direction: long
+  kind: near_miss
+  valence: null
+  failed_signal: news
+  passed_signals:
+  - technical
+  - sector_momentum
+  insider_score: 0
+  source: null
+  entry_price: 159.24000549316406
+  benchmark_entry_price: 745.760009765625
+  horizons:
+    '5':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+    '10':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+    '20':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+  last_updated: '2026-07-01'
+- ticker: LRCX
+  miss_date: '2026-07-01'
+  direction: long
+  kind: near_miss
+  valence: null
+  failed_signal: sector_momentum
+  passed_signals:
+  - technical
+  - news
+  insider_score: 0
+  source: null
+  entry_price: 391.260009765625
+  benchmark_entry_price: 745.760009765625
+  horizons:
+    '5':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+    '10':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+    '20':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+  last_updated: '2026-07-01'
 - ticker: SE
   miss_date: '2026-07-01'
   direction: long
@@ -3152,6 +3236,88 @@
   source: null
   entry_price: 36.9900016784668
   benchmark_entry_price: 742.739990234375
+  horizons:
+    '5':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+    '10':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+    '20':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+  last_updated: '2026-07-01'
+- ticker: TSM
+  miss_date: '2026-07-01'
+  direction: long
+  kind: near_miss
+  valence: null
+  failed_signal: trump_endorse
+  passed_signals: []
+  insider_score: 0
+  source: null
+  entry_price: 444.2300109863281
+  benchmark_entry_price: 745.760009765625
+  horizons:
+    '5':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+    '10':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+    '20':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+  last_updated: '2026-07-01'
+- ticker: V
+  miss_date: '2026-07-01'
+  direction: long
+  kind: near_miss
+  valence: null
+  failed_signal: news
+  passed_signals:
+  - technical
+  - sector_momentum
+  insider_score: 0
+  source: null
+  entry_price: 351.0799865722656
+  benchmark_entry_price: 745.760009765625
   horizons:
     '5':
       status: pending

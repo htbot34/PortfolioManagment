@@ -1024,3 +1024,52 @@
     empty: 0
     outage: 0
     unknown: 0
+- date: '2026-07-01'
+  candidates_evaluated: 9
+  cleared_primary: 1
+  cleared_insider_promotion: 0
+  blocked_by:
+    technical: 1
+    sector_momentum: 5
+    news: 0
+    trump: 0
+    earnings_window: 0
+    correlation_block: 0
+    valuation_block: 0
+    regime: 0
+    soft_veto: 2
+    trump_block: 0
+  near_miss:
+  - ticker: SE
+    passed:
+    - technical
+    - news
+    failed: sector_momentum
+    insider_score: 0
+    insider_status: not_evaluated
+    news_status: ok
+  - ticker: TENB
+    passed:
+    - technical
+    - news
+    failed: sector_momentum
+    insider_score: 0
+    insider_status: not_evaluated
+    news_status: ok
+  trump:
+    mentions: 0
+    endorsements: 0
+    attacks: 0
+    promotions: 0
+    vetoes: 0
+    firings: []
+  insider:
+    scored: 0
+    zero: 0
+    unavailable: 0
+    not_evaluated: 7
+  news:
+    ok: 6
+    empty: 0
+    outage: 0
+    unknown: 1

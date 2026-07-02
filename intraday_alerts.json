@@ -1,25 +1,20 @@
 {
-  "checked_at": "2026-07-02T18:55:25Z",
+  "checked_at": "2026-07-02T20:15:19Z",
   "alerts": [
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "NBIS gapped down -6.8% today"
+      "text": "NBIS gapped down -5.9% today"
     },
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "IREN gapped down -9.6% today"
+      "text": "IREN gapped down -10.4% today"
     },
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "FBL gapped down -9.5% today"
-    },
-    {
-      "severity": "med",
-      "kind": "position_break",
-      "text": "META lost SMA50 ($605.25) on 2.3x volume"
+      "text": "FBL gapped down -9.9% today"
     },
     {
       "severity": "high",
@@ -27,34 +22,34 @@
       "text": "INTC gapped down -5.3% today"
     },
     {
-      "severity": "med",
+      "severity": "high",
       "kind": "position_break",
-      "text": "FPS lost SMA50 ($49.64) on 1.9x volume"
+      "text": "FPS gapped down -6.0% today"
     },
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "AMAT gapped down -8.5% today"
+      "text": "AMAT gapped down -7.4% today"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "SE at $103.51 - within buy zone of yesterday's breakout setup ($102.33)"
+      "text": "SE at $103.26 - within buy zone of yesterday's breakout setup ($102.33)"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "SPGI at $436.38 - within buy zone of yesterday's breakout setup ($414.97)"
+      "text": "SPGI at $439.81 - within buy zone of yesterday's breakout setup ($414.97)"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "V at $359.10 - within buy zone of yesterday's breakout setup ($351.08)"
+      "text": "V at $361.58 - within buy zone of yesterday's breakout setup ($351.08)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "LYFT in entry zone $15.06-$15.57 (plan: stop $14.10, target $17.75, hold 2-3 weeks)"
+      "text": "RDDT in entry zone $194.08-$203.90 (plan: stop $175.66, target $245.65, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
@@ -92,6 +87,7 @@
     "COST|1049.06": "2026-07-02",
     "FTNT|182.12": "2026-07-02",
     "OKTA|165.09": "2026-07-02",
-    "LYFT|17.75": "2026-07-02"
+    "LYFT|17.75": "2026-07-02",
+    "RDDT|245.65": "2026-07-02"
   }
 }

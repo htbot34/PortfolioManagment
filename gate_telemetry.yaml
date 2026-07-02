@@ -1103,13 +1103,13 @@
     outage: 0
     unknown: 1
 - date: '2026-07-02'
-  candidates_evaluated: 12
-  cleared_primary: 0
+  candidates_evaluated: 5
+  cleared_primary: 1
   cleared_insider_promotion: 0
   blocked_by:
-    technical: 1
-    sector_momentum: 7
-    news: 2
+    technical: 0
+    sector_momentum: 1
+    news: 1
     trump: 0
     earnings_window: 0
     correlation_block: 0
@@ -1118,65 +1118,28 @@
     soft_veto: 2
     trump_block: 0
   near_miss:
-  - ticker: COIN
+  - ticker: CRSP
     passed:
     - technical
     - sector_momentum
     failed: news
     insider_score: 0
-    insider_status: zero
-    news_status: ok
-  - ticker: LRCX
-    passed:
-    - technical
-    - news
-    failed: sector_momentum
-    insider_score: 0
-    insider_status: zero
-    news_status: ok
-  - ticker: SPGI
-    passed:
-    - technical
-    - news
-    failed: sector_momentum
-    insider_score: 0
-    insider_status: zero
-    news_status: ok
-  - ticker: TENB
-    passed:
-    - technical
-    - news
-    failed: sector_momentum
-    insider_score: 0
-    insider_status: zero
-    news_status: ok
-  - ticker: TSM
-    passed:
-    - technical
-    - trump
-    failed: sector_momentum
-    insider_score: 0
     insider_status: not_evaluated
     news_status: ok
   trump:
-    mentions: 1
-    endorsements: 1
+    mentions: 0
+    endorsements: 0
     attacks: 0
     promotions: 0
     vetoes: 0
-    firings:
-    - ticker: TSM
-      valence: endorse
-      as_of: '2026-07-01'
-      source: Trump says Taiwan is doubling the size of chipmaking plant in Arizona
-      qualifies: false
+    firings: []
   insider:
     scored: 0
-    zero: 5
+    zero: 0
     unavailable: 0
-    not_evaluated: 5
+    not_evaluated: 3
   news:
-    ok: 9
+    ok: 3
     empty: 0
     outage: 0
-    unknown: 1
+    unknown: 0

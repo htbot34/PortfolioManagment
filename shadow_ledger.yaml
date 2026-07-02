@@ -1240,14 +1240,14 @@
       excess_return: 0.04900672023637899
       hit: true
     '10':
-      status: pending
-      exit_date: null
-      exit_price: null
-      benchmark_exit_price: null
-      forward_return: null
-      benchmark_forward_return: null
-      excess_return: null
-      hit: null
+      status: realized
+      exit_date: '2026-07-02'
+      exit_price: 192.00999450683594
+      benchmark_exit_price: 744.780029296875
+      forward_return: 0.11373094117220144
+      benchmark_forward_return: -0.008915594367137047
+      excess_return: 0.12264653553933848
+      hit: true
     '20':
       status: pending
       exit_date: null
@@ -2482,14 +2482,14 @@
   benchmark_entry_price: 734.2999877929688
   horizons:
     '5':
-      status: pending
-      exit_date: null
-      exit_price: null
-      benchmark_exit_price: null
-      forward_return: null
-      benchmark_forward_return: null
-      excess_return: null
-      hit: null
+      status: realized
+      exit_date: '2026-07-02'
+      exit_price: 192.00999450683594
+      benchmark_exit_price: 744.780029296875
+      forward_return: 0.08535408135295111
+      benchmark_forward_return: 0.014272152632611826
+      excess_return: 0.07108192872033929
+      hit: true
     '10':
       status: pending
       exit_date: null
@@ -2524,14 +2524,14 @@
   benchmark_entry_price: 734.2999877929688
   horizons:
     '5':
-      status: pending
-      exit_date: null
-      exit_price: null
-      benchmark_exit_price: null
-      forward_return: null
-      benchmark_forward_return: null
-      excess_return: null
-      hit: null
+      status: realized
+      exit_date: '2026-07-02'
+      exit_price: 975.5599975585938
+      benchmark_exit_price: 744.780029296875
+      forward_return: -0.19611724969833477
+      benchmark_forward_return: 0.014272152632611826
+      excess_return: -0.2103894023309466
+      hit: false
     '10':
       status: pending
       exit_date: null
@@ -2566,14 +2566,14 @@
   benchmark_entry_price: 734.2999877929688
   horizons:
     '5':
-      status: pending
-      exit_date: null
-      exit_price: null
-      benchmark_exit_price: null
-      forward_return: null
-      benchmark_forward_return: null
-      excess_return: null
-      hit: null
+      status: realized
+      exit_date: '2026-07-02'
+      exit_price: 74.43000030517578
+      benchmark_exit_price: 744.780029296875
+      forward_return: 0.030173014604509083
+      benchmark_forward_return: 0.014272152632611826
+      excess_return: 0.01590086197189726
+      hit: true
     '10':
       status: pending
       exit_date: null
@@ -2608,14 +2608,14 @@
   benchmark_entry_price: 734.2999877929688
   horizons:
     '5':
-      status: pending
-      exit_date: null
-      exit_price: null
-      benchmark_exit_price: null
-      forward_return: null
-      benchmark_forward_return: null
-      excess_return: null
-      hit: null
+      status: realized
+      exit_date: '2026-07-02'
+      exit_price: 42.86000061035156
+      benchmark_exit_price: 744.780029296875
+      forward_return: 0.1115144990642813
+      benchmark_forward_return: 0.014272152632611826
+      excess_return: 0.09724234643166949
+      hit: true
     '10':
       status: pending
       exit_date: null
@@ -2650,14 +2650,14 @@
   benchmark_entry_price: 734.2999877929688
   horizons:
     '5':
-      status: pending
-      exit_date: null
-      exit_price: null
-      benchmark_exit_price: null
-      forward_return: null
-      benchmark_forward_return: null
-      excess_return: null
-      hit: null
+      status: realized
+      exit_date: '2026-07-02'
+      exit_price: 160.4600067138672
+      benchmark_exit_price: 744.780029296875
+      forward_return: 0.05851316439249403
+      benchmark_forward_return: 0.014272152632611826
+      excess_return: 0.0442410117598822
+      hit: true
     '10':
       status: pending
       exit_date: null
@@ -3358,8 +3358,50 @@
   - sector_momentum
   insider_score: 0
   source: null
-  entry_price: null
-  benchmark_entry_price: null
+  entry_price: 165.47999572753906
+  benchmark_entry_price: 744.780029296875
+  horizons:
+    '5':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+    '10':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+    '20':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+  last_updated: '2026-07-02'
+- ticker: CRSP
+  miss_date: '2026-07-02'
+  direction: long
+  kind: near_miss
+  valence: null
+  failed_signal: news
+  passed_signals:
+  - technical
+  - sector_momentum
+  insider_score: 0
+  source: null
+  entry_price: 60.08000183105469
+  benchmark_entry_price: 744.780029296875
   horizons:
     '5':
       status: pending
@@ -3400,8 +3442,8 @@
   - news
   insider_score: 0
   source: null
-  entry_price: null
-  benchmark_entry_price: null
+  entry_price: 351.4100036621094
+  benchmark_entry_price: 744.780029296875
   horizons:
     '5':
       status: pending
@@ -3442,8 +3484,8 @@
   - news
   insider_score: 0
   source: null
-  entry_price: null
-  benchmark_entry_price: null
+  entry_price: 439.8900146484375
+  benchmark_entry_price: 744.780029296875
   horizons:
     '5':
       status: pending
@@ -3484,8 +3526,8 @@
   - news
   insider_score: 0
   source: null
-  entry_price: null
-  benchmark_entry_price: null
+  entry_price: 38.599998474121094
+  benchmark_entry_price: 744.780029296875
   horizons:
     '5':
       status: pending
@@ -3524,8 +3566,8 @@
   passed_signals: []
   insider_score: 0
   source: null
-  entry_price: null
-  benchmark_entry_price: null
+  entry_price: 434.1600036621094
+  benchmark_entry_price: 744.780029296875
   horizons:
     '5':
       status: pending

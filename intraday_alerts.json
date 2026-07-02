@@ -1,65 +1,60 @@
 {
-  "checked_at": "2026-07-02T17:09:08Z",
+  "checked_at": "2026-07-02T18:55:25Z",
   "alerts": [
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "NBIS gapped down -8.0% today"
+      "text": "NBIS gapped down -6.8% today"
     },
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "IREN gapped down -12.2% today"
+      "text": "IREN gapped down -9.6% today"
     },
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "FBL gapped down -9.1% today"
+      "text": "FBL gapped down -9.5% today"
     },
     {
       "severity": "med",
       "kind": "position_break",
-      "text": "META lost SMA50 ($605.27) on 2.3x volume"
+      "text": "META lost SMA50 ($605.25) on 2.3x volume"
     },
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "FPS gapped down -6.9% today"
+      "text": "INTC gapped down -5.3% today"
+    },
+    {
+      "severity": "med",
+      "kind": "position_break",
+      "text": "FPS lost SMA50 ($49.64) on 1.9x volume"
     },
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "AMAT gapped down -9.9% today"
+      "text": "AMAT gapped down -8.5% today"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "SE at $103.52 - within buy zone of yesterday's breakout setup ($102.33)"
+      "text": "SE at $103.51 - within buy zone of yesterday's breakout setup ($102.33)"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "SPGI at $434.43 - within buy zone of yesterday's breakout setup ($414.97)"
+      "text": "SPGI at $436.38 - within buy zone of yesterday's breakout setup ($414.97)"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "V at $358.82 - within buy zone of yesterday's breakout setup ($351.08)"
+      "text": "V at $359.10 - within buy zone of yesterday's breakout setup ($351.08)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "COST in entry zone $947.54-$970.10 (plan: stop $913.70, target $1049.06, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "FTNT in entry zone $157.20-$161.95 (plan: stop $148.30, target $182.12, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "OKTA in entry zone $138.57-$143.62 (plan: stop $129.10, target $165.09, hold 2-3 weeks)"
+      "text": "LYFT in entry zone $15.06-$15.57 (plan: stop $14.10, target $17.75, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
@@ -96,6 +91,7 @@
     "TEAM|99.93": "2026-07-02",
     "COST|1049.06": "2026-07-02",
     "FTNT|182.12": "2026-07-02",
-    "OKTA|165.09": "2026-07-02"
+    "OKTA|165.09": "2026-07-02",
+    "LYFT|17.75": "2026-07-02"
   }
 }

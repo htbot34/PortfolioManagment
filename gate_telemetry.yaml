@@ -1144,13 +1144,13 @@
     outage: 0
     unknown: 0
 - date: '2026-07-03'
-  candidates_evaluated: 6
-  cleared_primary: 1
+  candidates_evaluated: 11
+  cleared_primary: 0
   cleared_insider_promotion: 0
   blocked_by:
-    technical: 0
-    sector_momentum: 2
-    news: 1
+    technical: 1
+    sector_momentum: 6
+    news: 2
     trump: 0
     earnings_window: 0
     correlation_block: 0
@@ -1167,7 +1167,31 @@
     insider_score: 0
     insider_status: not_evaluated
     news_status: ok
+  - ticker: MRNA
+    passed:
+    - technical
+    - sector_momentum
+    failed: news
+    insider_score: 0
+    insider_status: not_evaluated
+    news_status: ok
+  - ticker: PLTR
+    passed:
+    - technical
+    - news
+    failed: sector_momentum
+    insider_score: 0
+    insider_status: not_evaluated
+    news_status: ok
   - ticker: SPGI
+    passed:
+    - technical
+    - news
+    failed: sector_momentum
+    insider_score: 0
+    insider_status: not_evaluated
+    news_status: ok
+  - ticker: XLV
     passed:
     - technical
     - news
@@ -1186,9 +1210,9 @@
     scored: 0
     zero: 0
     unavailable: 0
-    not_evaluated: 4
+    not_evaluated: 9
   news:
-    ok: 4
+    ok: 8
     empty: 0
     outage: 0
-    unknown: 0
+    unknown: 1

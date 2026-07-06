@@ -1,35 +1,25 @@
 {
-  "checked_at": "2026-07-06T18:24:50Z",
+  "checked_at": "2026-07-06T20:20:47Z",
   "alerts": [
     {
       "severity": "med",
-      "kind": "position_break",
-      "text": "FPS lost SMA50 ($49.88) on 4.2x volume"
+      "kind": "watchlist_entry",
+      "text": "BEAM in entry zone $33.64-$35.59 (plan: stop $29.98, target $43.89, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "IWM in entry zone $296.03-$300.15 (plan: stop $288.31, target $317.65, hold 2-3 weeks)"
+      "text": "ROK in entry zone $482.15-$494.14 (plan: stop $459.67, target $545.09, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "MRNA in entry zone $79.44-$83.96 (plan: stop $70.95, target $103.20, hold 2-3 weeks)"
+      "text": "LYFT in entry zone $15.06-$15.57 (plan: stop $14.10, target $17.75, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "RDDT in entry zone $194.08-$203.90 (plan: stop $175.66, target $245.65, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "REGN in entry zone $648.39-$660.15 (plan: stop $626.33, target $710.15, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "MSFT in entry zone $385.22-$395.76 (plan: stop $365.47, target $440.53, hold 2-3 weeks)"
+      "text": "CRM in entry zone $161.23-$166.13 (plan: stop $152.04, target $186.96, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
@@ -83,6 +73,10 @@
     "MRNA|103.2": "2026-07-06",
     "RDDT|245.65": "2026-07-06",
     "REGN|710.15": "2026-07-06",
-    "MSFT|440.53": "2026-07-06"
+    "MSFT|440.53": "2026-07-06",
+    "BEAM|43.89": "2026-07-06",
+    "ROK|545.09": "2026-07-06",
+    "LYFT|17.75": "2026-07-06",
+    "CRM|186.96": "2026-07-06"
   }
 }

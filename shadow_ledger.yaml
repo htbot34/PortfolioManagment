@@ -39,7 +39,7 @@
       benchmark_forward_return: -0.03393849215496815
       excess_return: -0.07357796271160713
       hit: false
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: LEU
   miss_date: '2026-05-29'
   direction: long
@@ -81,7 +81,7 @@
       benchmark_forward_return: -0.026914109926539642
       excess_return: -0.10664206343979488
       hit: false
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: LEU
   miss_date: '2026-05-30'
   direction: long
@@ -123,7 +123,7 @@
       benchmark_forward_return: -0.015516596141316981
       excess_return: -0.0962823714926116
       hit: false
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: ARM
   miss_date: '2026-06-01'
   direction: long
@@ -165,7 +165,7 @@
       benchmark_forward_return: -0.015516596141316981
       excess_return: -0.11724602577131146
       hit: false
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: AVGO
   miss_date: '2026-06-04'
   direction: long
@@ -199,15 +199,15 @@
       excess_return: 0.014598236450448155
       hit: true
     '20':
-      status: pending
-      exit_date: null
-      exit_price: null
-      benchmark_exit_price: null
-      forward_return: null
-      benchmark_forward_return: null
-      excess_return: null
-      hit: null
-  last_updated: '2026-07-03'
+      status: realized
+      exit_date: '2026-07-06'
+      exit_price: 379.6099853515625
+      benchmark_exit_price: 749.8300170898438
+      forward_return: -0.07067671577136711
+      benchmark_forward_return: -0.008515480284935638
+      excess_return: -0.062161235486431474
+      hit: false
+  last_updated: '2026-07-06'
 - ticker: CIFR
   miss_date: '2026-06-04'
   direction: long
@@ -241,15 +241,15 @@
       excess_return: 0.11050770845337762
       hit: true
     '20':
-      status: pending
-      exit_date: null
-      exit_price: null
-      benchmark_exit_price: null
-      forward_return: null
-      benchmark_forward_return: null
-      excess_return: null
-      hit: null
-  last_updated: '2026-07-03'
+      status: realized
+      exit_date: '2026-07-06'
+      exit_price: 22.18000030517578
+      benchmark_exit_price: 749.8300170898438
+      forward_return: -0.1061857816712678
+      benchmark_forward_return: -0.008515480284935638
+      excess_return: -0.09767030138633216
+      hit: false
+  last_updated: '2026-07-06'
 - ticker: URI
   miss_date: '2026-06-04'
   direction: long
@@ -283,15 +283,15 @@
       excess_return: 0.01308469594960849
       hit: true
     '20':
-      status: pending
-      exit_date: null
-      exit_price: null
-      benchmark_exit_price: null
-      forward_return: null
-      benchmark_forward_return: null
-      excess_return: null
-      hit: null
-  last_updated: '2026-07-03'
+      status: realized
+      exit_date: '2026-07-06'
+      exit_price: 1088.1300048828125
+      benchmark_exit_price: 749.8300170898438
+      forward_return: 0.007140742715879766
+      benchmark_forward_return: -0.008515480284935638
+      excess_return: 0.015656223000815404
+      hit: true
+  last_updated: '2026-07-06'
 - ticker: AVGO
   miss_date: '2026-06-05'
   direction: long
@@ -333,7 +333,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: CIFR
   miss_date: '2026-06-05'
   direction: long
@@ -375,7 +375,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: MRVL
   miss_date: '2026-06-05'
   direction: long
@@ -417,7 +417,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: URI
   miss_date: '2026-06-05'
   direction: long
@@ -459,7 +459,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: ASML
   miss_date: '2026-06-08'
   direction: long
@@ -501,7 +501,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: BRK-B
   miss_date: '2026-06-08'
   direction: long
@@ -543,7 +543,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: LEU
   miss_date: '2026-06-08'
   direction: long
@@ -585,7 +585,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: LLY
   miss_date: '2026-06-08'
   direction: long
@@ -627,7 +627,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: META
   miss_date: '2026-06-08'
   direction: long
@@ -669,7 +669,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: LEU
   miss_date: '2026-06-09'
   direction: long
@@ -711,7 +711,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: AMAT
   miss_date: '2026-06-10'
   direction: long
@@ -753,7 +753,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: ASML
   miss_date: '2026-06-10'
   direction: long
@@ -795,7 +795,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: KLAC
   miss_date: '2026-06-10'
   direction: long
@@ -837,7 +837,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: LEU
   miss_date: '2026-06-10'
   direction: long
@@ -879,7 +879,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: LRCX
   miss_date: '2026-06-10'
   direction: long
@@ -921,7 +921,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: AMAT
   miss_date: '2026-06-11'
   direction: long
@@ -963,7 +963,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: ASML
   miss_date: '2026-06-11'
   direction: long
@@ -1005,7 +1005,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: KLAC
   miss_date: '2026-06-11'
   direction: long
@@ -1047,7 +1047,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: LEU
   miss_date: '2026-06-11'
   direction: long
@@ -1089,7 +1089,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: META
   miss_date: '2026-06-11'
   direction: long
@@ -1131,7 +1131,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: LEU
   miss_date: '2026-06-12'
   direction: long
@@ -1173,7 +1173,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: META
   miss_date: '2026-06-12'
   direction: long
@@ -1215,7 +1215,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: DASH
   miss_date: '2026-06-17'
   direction: long
@@ -1257,7 +1257,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: ALAB
   miss_date: '2026-06-18'
   direction: long
@@ -1282,14 +1282,14 @@
       excess_return: -0.03696326297474646
       hit: false
     '10':
-      status: pending
-      exit_date: null
-      exit_price: null
-      benchmark_exit_price: null
-      forward_return: null
-      benchmark_forward_return: null
-      excess_return: null
-      hit: null
+      status: realized
+      exit_date: '2026-07-06'
+      exit_price: 446.3399963378906
+      benchmark_exit_price: 749.8300170898438
+      forward_return: 0.07018003812227665
+      benchmark_forward_return: 0.004138022465488825
+      excess_return: 0.06604201565678783
+      hit: true
     '20':
       status: pending
       exit_date: null
@@ -1299,7 +1299,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: BEAM
   miss_date: '2026-06-18'
   direction: long
@@ -1324,14 +1324,14 @@
       excess_return: 0.0433951188690669
       hit: true
     '10':
-      status: pending
-      exit_date: null
-      exit_price: null
-      benchmark_exit_price: null
-      forward_return: null
-      benchmark_forward_return: null
-      excess_return: null
-      hit: null
+      status: realized
+      exit_date: '2026-07-06'
+      exit_price: 34.369998931884766
+      benchmark_exit_price: 749.8300170898438
+      forward_return: 0.006736952148454522
+      benchmark_forward_return: 0.004138022465488825
+      excess_return: 0.002598929682965697
+      hit: true
     '20':
       status: pending
       exit_date: null
@@ -1341,7 +1341,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: GEV
   miss_date: '2026-06-18'
   direction: long
@@ -1366,14 +1366,14 @@
       excess_return: -0.026392107574799276
       hit: false
     '10':
-      status: pending
-      exit_date: null
-      exit_price: null
-      benchmark_exit_price: null
-      forward_return: null
-      benchmark_forward_return: null
-      excess_return: null
-      hit: null
+      status: realized
+      exit_date: '2026-07-06'
+      exit_price: 1181.4000244140625
+      benchmark_exit_price: 749.8300170898438
+      forward_return: 0.07587796125405774
+      benchmark_forward_return: 0.006172640314605063
+      excess_return: 0.06970532093945268
+      hit: true
     '20':
       status: pending
       exit_date: null
@@ -1383,7 +1383,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: HOOD
   miss_date: '2026-06-18'
   direction: long
@@ -1408,14 +1408,14 @@
       excess_return: -0.03722786679368556
       hit: false
     '10':
-      status: pending
-      exit_date: null
-      exit_price: null
-      benchmark_exit_price: null
-      forward_return: null
-      benchmark_forward_return: null
-      excess_return: null
-      hit: null
+      status: realized
+      exit_date: '2026-07-06'
+      exit_price: 115.08000183105469
+      benchmark_exit_price: 749.8300170898438
+      forward_return: 0.09725405076995564
+      benchmark_forward_return: 0.006172640314605063
+      excess_return: 0.09108141045535058
+      hit: true
     '20':
       status: pending
       exit_date: null
@@ -1425,7 +1425,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: MRNA
   miss_date: '2026-06-18'
   direction: long
@@ -1450,14 +1450,14 @@
       excess_return: 0.12205356802490788
       hit: true
     '10':
-      status: pending
-      exit_date: null
-      exit_price: null
-      benchmark_exit_price: null
-      forward_return: null
-      benchmark_forward_return: null
-      excess_return: null
-      hit: null
+      status: realized
+      exit_date: '2026-07-06'
+      exit_price: 81.13500213623047
+      benchmark_exit_price: 749.8300170898438
+      forward_return: 0.32703635829553784
+      benchmark_forward_return: 0.006172640314605063
+      excess_return: 0.32086371798093277
+      hit: true
     '20':
       status: pending
       exit_date: null
@@ -1467,7 +1467,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: NNE
   miss_date: '2026-06-18'
   direction: long
@@ -1491,14 +1491,14 @@
       excess_return: -0.2718698042309892
       hit: false
     '10':
-      status: pending
-      exit_date: null
-      exit_price: null
-      benchmark_exit_price: null
-      forward_return: null
-      benchmark_forward_return: null
-      excess_return: null
-      hit: null
+      status: realized
+      exit_date: '2026-07-06'
+      exit_price: 20.43000030517578
+      benchmark_exit_price: 749.8300170898438
+      forward_return: -0.27578869308007675
+      benchmark_forward_return: 0.004138022465488825
+      excess_return: -0.2799267155455656
+      hit: false
     '20':
       status: pending
       exit_date: null
@@ -1508,7 +1508,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: ROKU
   miss_date: '2026-06-18'
   direction: long
@@ -1533,14 +1533,14 @@
       excess_return: 0.007163433918552892
       hit: true
     '10':
-      status: pending
-      exit_date: null
-      exit_price: null
-      benchmark_exit_price: null
-      forward_return: null
-      benchmark_forward_return: null
-      excess_return: null
-      hit: null
+      status: realized
+      exit_date: '2026-07-06'
+      exit_price: 142.61000061035156
+      benchmark_exit_price: 749.8300170898438
+      forward_return: 0.037842237045084964
+      benchmark_forward_return: 0.006172640314605063
+      excess_return: 0.0316695967304799
+      hit: true
     '20':
       status: pending
       exit_date: null
@@ -1550,7 +1550,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: ALAB
   miss_date: '2026-06-19'
   direction: long
@@ -1592,7 +1592,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: BEAM
   miss_date: '2026-06-19'
   direction: long
@@ -1634,7 +1634,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: NNE
   miss_date: '2026-06-19'
   direction: long
@@ -1675,7 +1675,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: ROKU
   miss_date: '2026-06-19'
   direction: long
@@ -1717,7 +1717,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: TSM
   miss_date: '2026-06-19'
   direction: long
@@ -1757,7 +1757,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: ALAB
   miss_date: '2026-06-22'
   direction: long
@@ -1799,7 +1799,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: ASML
   miss_date: '2026-06-22'
   direction: long
@@ -1841,7 +1841,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: BEAM
   miss_date: '2026-06-22'
   direction: long
@@ -1883,7 +1883,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: BWXT
   miss_date: '2026-06-22'
   direction: long
@@ -1925,7 +1925,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: CIFR
   miss_date: '2026-06-22'
   direction: long
@@ -1967,7 +1967,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: DIA
   miss_date: '2026-06-22'
   direction: long
@@ -2008,7 +2008,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: MARA
   miss_date: '2026-06-22'
   direction: long
@@ -2048,7 +2048,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: BEAM
   miss_date: '2026-06-23'
   direction: long
@@ -2090,7 +2090,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: LRCX
   miss_date: '2026-06-23'
   direction: long
@@ -2132,7 +2132,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: MARA
   miss_date: '2026-06-23'
   direction: long
@@ -2172,7 +2172,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: PWR
   miss_date: '2026-06-23'
   direction: long
@@ -2214,7 +2214,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: TSM
   miss_date: '2026-06-23'
   direction: long
@@ -2256,7 +2256,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: XBI
   miss_date: '2026-06-23'
   direction: long
@@ -2298,7 +2298,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: BEAM
   miss_date: '2026-06-24'
   direction: long
@@ -2340,7 +2340,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: PWR
   miss_date: '2026-06-24'
   direction: long
@@ -2382,7 +2382,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: TSM
   miss_date: '2026-06-24'
   direction: long
@@ -2424,7 +2424,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: VRNS
   miss_date: '2026-06-24'
   direction: long
@@ -2466,7 +2466,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: DASH
   miss_date: '2026-06-25'
   direction: long
@@ -2508,7 +2508,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: MU
   miss_date: '2026-06-25'
   direction: long
@@ -2550,7 +2550,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: UBER
   miss_date: '2026-06-25'
   direction: long
@@ -2592,7 +2592,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: VRNS
   miss_date: '2026-06-25'
   direction: long
@@ -2634,7 +2634,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: XBI
   miss_date: '2026-06-25'
   direction: long
@@ -2676,7 +2676,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: ONTO
   miss_date: '2026-06-27'
   direction: long
@@ -2718,7 +2718,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: TT
   miss_date: '2026-06-27'
   direction: long
@@ -2760,7 +2760,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: LRCX
   miss_date: '2026-06-29'
   direction: long
@@ -2802,7 +2802,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: ONTO
   miss_date: '2026-06-29'
   direction: long
@@ -2844,7 +2844,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: ROKU
   miss_date: '2026-06-29'
   direction: long
@@ -2886,7 +2886,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: ABNB
   miss_date: '2026-06-30'
   direction: long
@@ -2928,7 +2928,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: LRCX
   miss_date: '2026-06-30'
   direction: long
@@ -2970,7 +2970,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: ONTO
   miss_date: '2026-06-30'
   direction: long
@@ -3012,7 +3012,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: SE
   miss_date: '2026-06-30'
   direction: long
@@ -3054,7 +3054,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: TENB
   miss_date: '2026-06-30'
   direction: long
@@ -3096,7 +3096,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: COIN
   miss_date: '2026-07-01'
   direction: long
@@ -3138,7 +3138,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: LRCX
   miss_date: '2026-07-01'
   direction: long
@@ -3180,7 +3180,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: SE
   miss_date: '2026-07-01'
   direction: long
@@ -3222,7 +3222,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: TENB
   miss_date: '2026-07-01'
   direction: long
@@ -3264,7 +3264,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: TSM
   miss_date: '2026-07-01'
   direction: long
@@ -3304,7 +3304,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: V
   miss_date: '2026-07-01'
   direction: long
@@ -3346,7 +3346,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: COIN
   miss_date: '2026-07-02'
   direction: long
@@ -3388,7 +3388,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: CRSP
   miss_date: '2026-07-02'
   direction: long
@@ -3430,7 +3430,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: LRCX
   miss_date: '2026-07-02'
   direction: long
@@ -3472,7 +3472,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: SPGI
   miss_date: '2026-07-02'
   direction: long
@@ -3514,7 +3514,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: TENB
   miss_date: '2026-07-02'
   direction: long
@@ -3556,7 +3556,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: TSM
   miss_date: '2026-07-02'
   direction: long
@@ -3596,7 +3596,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: CRSP
   miss_date: '2026-07-03'
   direction: long
@@ -3608,8 +3608,8 @@
   - sector_momentum
   insider_score: 0
   source: null
-  entry_price: null
-  benchmark_entry_price: null
+  entry_price: 59.474998474121094
+  benchmark_entry_price: 749.8300170898438
   horizons:
     '5':
       status: pending
@@ -3638,7 +3638,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: MRNA
   miss_date: '2026-07-03'
   direction: long
@@ -3650,8 +3650,8 @@
   - sector_momentum
   insider_score: 0
   source: null
-  entry_price: null
-  benchmark_entry_price: null
+  entry_price: 81.13500213623047
+  benchmark_entry_price: 749.8300170898438
   horizons:
     '5':
       status: pending
@@ -3680,7 +3680,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: PLTR
   miss_date: '2026-07-03'
   direction: long
@@ -3692,8 +3692,8 @@
   - news
   insider_score: 0
   source: null
-  entry_price: null
-  benchmark_entry_price: null
+  entry_price: 130.9199981689453
+  benchmark_entry_price: 749.8300170898438
   horizons:
     '5':
       status: pending
@@ -3722,7 +3722,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: SPGI
   miss_date: '2026-07-03'
   direction: long
@@ -3734,8 +3734,8 @@
   - news
   insider_score: 0
   source: null
-  entry_price: null
-  benchmark_entry_price: null
+  entry_price: 434.57501220703125
+  benchmark_entry_price: 749.8300170898438
   horizons:
     '5':
       status: pending
@@ -3764,7 +3764,7 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
 - ticker: XLV
   miss_date: '2026-07-03'
   direction: long
@@ -3776,8 +3776,8 @@
   - news
   insider_score: 0
   source: null
-  entry_price: null
-  benchmark_entry_price: null
+  entry_price: 161.16000366210938
+  benchmark_entry_price: 749.8300170898438
   horizons:
     '5':
       status: pending
@@ -3806,4 +3806,46 @@
       benchmark_forward_return: null
       excess_return: null
       hit: null
-  last_updated: '2026-07-03'
+  last_updated: '2026-07-06'
+- ticker: MRNA
+  miss_date: '2026-07-06'
+  direction: long
+  kind: near_miss
+  valence: null
+  failed_signal: news
+  passed_signals:
+  - technical
+  - sector_momentum
+  insider_score: 0
+  source: null
+  entry_price: 81.13500213623047
+  benchmark_entry_price: 749.8300170898438
+  horizons:
+    '5':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+    '10':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+    '20':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+  last_updated: '2026-07-06'

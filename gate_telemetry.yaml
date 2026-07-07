@@ -1274,52 +1274,36 @@
     outage: 0
     unknown: 1
 - date: '2026-07-07'
-  candidates_evaluated: 10
+  candidates_evaluated: 5
   cleared_primary: 0
   cleared_insider_promotion: 0
   blocked_by:
-    technical: 1
-    sector_momentum: 5
-    news: 2
+    technical: 0
+    sector_momentum: 3
+    news: 0
     trump: 0
     earnings_window: 0
     correlation_block: 0
-    valuation_block: 0
+    valuation_block: 1
     regime: 0
-    soft_veto: 2
+    soft_veto: 1
     trump_block: 0
   near_miss:
-  - ticker: ISRG
-    passed:
-    - technical
-    - sector_momentum
-    failed: news
-    insider_score: 0
-    insider_status: zero
-    news_status: ok
-  - ticker: MRNA
-    passed:
-    - technical
-    - sector_momentum
-    failed: news
-    insider_score: 0
-    insider_status: zero
-    news_status: ok
-  - ticker: PATH
+  - ticker: NET
     passed:
     - technical
     - news
     failed: sector_momentum
     insider_score: 0
-    insider_status: zero
+    insider_status: not_evaluated
     news_status: ok
-  - ticker: TENB
+  - ticker: XLE
     passed:
     - technical
     - news
     failed: sector_momentum
     insider_score: 0
-    insider_status: zero
+    insider_status: not_evaluated
     news_status: ok
   trump:
     mentions: 0
@@ -1330,11 +1314,11 @@
     firings: []
   insider:
     scored: 0
-    zero: 4
+    zero: 0
     unavailable: 0
     not_evaluated: 4
   news:
-    ok: 7
+    ok: 4
     empty: 0
     outage: 0
-    unknown: 1
+    unknown: 0

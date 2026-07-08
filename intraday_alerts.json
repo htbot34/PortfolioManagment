@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-07-08T16:55:46Z",
+  "checked_at": "2026-07-08T18:14:08Z",
   "alerts": [
     {
       "severity": "med",
@@ -12,14 +12,39 @@
       "text": "FPS lost SMA50 ($50.27) on 1.7x volume"
     },
     {
-      "severity": "high",
-      "kind": "position_break",
-      "text": "RUN gapped down -6.0% today"
+      "severity": "low",
+      "kind": "watchlist_entry",
+      "text": "NET at $267.52 - within buy zone of yesterday's breakout setup ($268.83)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "LYFT in entry zone $15.06-$15.57 (plan: stop $14.10, target $17.75, hold 2-3 weeks)"
+      "text": "PWR in entry zone $662.00-$692.46 (plan: stop $616.31, target $799.07, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "BEAM in entry zone $37.10-$39.29 (plan: stop $32.99, target $48.60, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "SPY in entry zone $744.81-$752.55 (plan: stop $730.30, target $785.44, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "MARA in entry zone $11.86-$13.22 (plan: stop $9.81, target $18.00, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "LDOS in entry zone $107.05-$110.63 (plan: stop $100.34, target $125.84, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "COST in entry zone $939.67-$955.33 (plan: stop $910.32, target $1021.86, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
@@ -46,6 +71,12 @@
     "CRM|186.96": "2026-07-08",
     "COIN|199.42": "2026-07-08",
     "NOC|608.69": "2026-07-08",
-    "LYFT|17.75": "2026-07-08"
+    "LYFT|17.75": "2026-07-08",
+    "PWR|799.07": "2026-07-08",
+    "BEAM|48.6": "2026-07-08",
+    "SPY|785.44": "2026-07-08",
+    "MARA|18.0": "2026-07-08",
+    "LDOS|125.84": "2026-07-08",
+    "COST|1021.86": "2026-07-08"
   }
 }

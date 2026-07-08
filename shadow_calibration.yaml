@@ -1,11 +1,11 @@
-generated_at: '2026-07-07'
+generated_at: '2026-07-08'
 horizons:
 - 5
 - 10
 - 20
 benchmark: SPY
 direction: long
-total_records: 100
+total_records: 101
 by_failed_signal:
   news:
     count: 31
@@ -29,23 +29,23 @@ by_failed_signal:
         avg_excess_return: -0.10557971963349377
         avg_forward_return: -0.12073055913956399
   sector_momentum:
-    count: 61
+    count: 62
     horizons:
       '5':
         n_realized: 41
-        n_pending: 20
+        n_pending: 21
         hit_rate: 0.7317073170731707
         avg_excess_return: -0.0148808051825627
         avg_forward_return: -0.006087388477947672
       '10':
         n_realized: 23
-        n_pending: 38
+        n_pending: 39
         hit_rate: 0.782608695652174
         avg_excess_return: 0.0003882112579709846
         avg_forward_return: -0.0024895846630743406
       '20':
         n_realized: 4
-        n_pending: 57
+        n_pending: 58
         hit_rate: 0.25
         avg_excess_return: -0.05348676155055532
         avg_forward_return: -0.059158152166376675
@@ -92,23 +92,23 @@ by_failed_signal:
         avg_excess_return: null
         avg_forward_return: null
 overall:
-  count: 100
+  count: 101
   horizons:
     '5':
       n_realized: 69
-      n_pending: 31
+      n_pending: 32
       hit_rate: 0.4927536231884058
       avg_excess_return: -0.028828135943007295
       avg_forward_return: -0.027369979619777673
     '10':
       n_realized: 49
-      n_pending: 51
+      n_pending: 52
       hit_rate: 0.5714285714285714
       avg_excess_return: -0.02629209794723337
       avg_forward_return: -0.02886008229146326
     '20':
       n_realized: 11
-      n_pending: 89
+      n_pending: 90
       hit_rate: 0.09090909090909091
       avg_excess_return: -0.08663682578515251
       avg_forward_return: -0.09834059296749588

@@ -1325,8 +1325,8 @@
   cleared_insider_promotion: 0
   blocked_by:
     technical: 0
-    sector_momentum: 1
-    news: 1
+    sector_momentum: 2
+    news: 0
     trump: 0
     earnings_window: 0
     correlation_block: 0
@@ -1334,15 +1334,7 @@
     regime: 0
     soft_veto: 1
     trump_block: 0
-  near_miss:
-  - ticker: BEAM
-    passed:
-    - technical
-    - sector_momentum
-    failed: news
-    insider_score: 0
-    insider_status: not_evaluated
-    news_status: ok
+  near_miss: []
   trump:
     mentions: 0
     endorsements: 0

@@ -1,30 +1,20 @@
 {
-  "checked_at": "2026-07-09T19:23:39Z",
+  "checked_at": "2026-07-09T21:01:11Z",
   "alerts": [
     {
       "severity": "med",
-      "kind": "position_break",
-      "text": "FPS lost SMA50 ($50.47) on 1.5x volume"
-    },
-    {
-      "severity": "med",
-      "kind": "position_break",
-      "text": "RUN lost SMA50 ($13.60) on 1.8x volume"
+      "kind": "watchlist_entry",
+      "text": "WULF in entry zone $21.81-$23.85 (plan: stop $17.98, target $32.53, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "SMH in entry zone $578.66-$610.71 (plan: stop $530.59, target $722.87, hold 2-3 weeks)"
+      "text": "CIFR in entry zone $20.74-$23.40 (plan: stop $16.74, target $32.73, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "MARA in entry zone $12.11-$13.47 (plan: stop $10.07, target $18.23, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "XLF in entry zone $54.92-$55.52 (plan: stop $53.79, target $58.08, hold 2-3 weeks)"
+      "text": "VRTX in entry zone $492.84-$505.48 (plan: stop $469.13, target $559.22, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
@@ -74,6 +64,9 @@
     "MA|559.45": "2026-07-09",
     "SMH|722.87": "2026-07-09",
     "MARA|18.23": "2026-07-09",
-    "XLF|58.08": "2026-07-09"
+    "XLF|58.08": "2026-07-09",
+    "WULF|32.53": "2026-07-09",
+    "CIFR|32.73": "2026-07-09",
+    "VRTX|559.22": "2026-07-09"
   }
 }

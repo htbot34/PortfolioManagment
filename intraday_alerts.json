@@ -1,6 +1,11 @@
 {
-  "checked_at": "2026-07-09T17:48:32Z",
+  "checked_at": "2026-07-09T19:23:39Z",
   "alerts": [
+    {
+      "severity": "med",
+      "kind": "position_break",
+      "text": "FPS lost SMA50 ($50.47) on 1.5x volume"
+    },
     {
       "severity": "med",
       "kind": "position_break",
@@ -9,32 +14,17 @@
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "BEAM in entry zone $36.44-$38.60 (plan: stop $32.38, target $47.80, hold 2-3 weeks)"
+      "text": "SMH in entry zone $578.66-$610.71 (plan: stop $530.59, target $722.87, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "XBI in entry zone $163.61-$166.94 (plan: stop $157.37, target $181.09, hold 2-3 weeks)"
+      "text": "MARA in entry zone $12.11-$13.47 (plan: stop $10.07, target $18.23, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "NEE in entry zone $85.92-$87.45 (plan: stop $83.63, target $92.80, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "LRCX in entry zone $355.83-$381.13 (plan: stop $308.38, target $488.68, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "OKTA in entry zone $146.37-$151.97 (plan: stop $135.88, target $175.75, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "MA in entry zone $511.63-$520.74 (plan: stop $494.55, target $559.45, hold 2-3 weeks)"
+      "text": "XLF in entry zone $54.92-$55.52 (plan: stop $53.79, target $58.08, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
@@ -81,6 +71,9 @@
     "NEE|92.8": "2026-07-09",
     "LRCX|488.68": "2026-07-09",
     "OKTA|175.75": "2026-07-09",
-    "MA|559.45": "2026-07-09"
+    "MA|559.45": "2026-07-09",
+    "SMH|722.87": "2026-07-09",
+    "MARA|18.23": "2026-07-09",
+    "XLF|58.08": "2026-07-09"
   }
 }

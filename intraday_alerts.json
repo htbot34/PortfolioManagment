@@ -1,35 +1,30 @@
 {
-  "checked_at": "2026-07-15T17:44:07Z",
+  "checked_at": "2026-07-15T18:56:34Z",
   "alerts": [
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "INTC gapped down -5.5% today"
+      "text": "INTC gapped down -5.8% today"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "S at $20.04 - within buy zone of yesterday's breakout setup ($19.92)"
-    },
-    {
-      "severity": "low",
-      "kind": "watchlist_entry",
-      "text": "PATH at $11.90 - within buy zone of yesterday's breakout setup ($11.94)"
+      "text": "PATH at $11.94 - within buy zone of yesterday's breakout setup ($11.94)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "AMD in entry zone $522.87-$553.59 (plan: stop $465.26, target $684.17, hold 2-3 weeks)"
+      "text": "ABNB in entry zone $145.08-$148.97 (plan: stop $137.80, target $165.47, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "MARA in entry zone $12.07-$13.51 (plan: stop $9.91, target $18.55, hold 2-3 weeks)"
+      "text": "CIFR in entry zone $20.05-$22.63 (plan: stop $16.19, target $31.64, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "SPGI in entry zone $435.49-$447.23 (plan: stop $413.48, target $497.12, hold 2-3 weeks)"
+      "text": "XLF in entry zone $55.94-$56.58 (plan: stop $54.74, target $59.30, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
@@ -77,6 +72,9 @@
     "CEG|291.97": "2026-07-15",
     "AMD|684.17": "2026-07-15",
     "MARA|18.55": "2026-07-15",
-    "SPGI|497.12": "2026-07-15"
+    "SPGI|497.12": "2026-07-15",
+    "ABNB|165.47": "2026-07-15",
+    "CIFR|31.64": "2026-07-15",
+    "XLF|59.3": "2026-07-15"
   }
 }

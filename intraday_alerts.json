@@ -1,30 +1,25 @@
 {
-  "checked_at": "2026-07-15T18:56:34Z",
+  "checked_at": "2026-07-15T20:04:01Z",
   "alerts": [
-    {
-      "severity": "high",
-      "kind": "position_break",
-      "text": "INTC gapped down -5.8% today"
-    },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "PATH at $11.94 - within buy zone of yesterday's breakout setup ($11.94)"
+      "text": "PATH at $11.95 - within buy zone of yesterday's breakout setup ($11.94)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "ABNB in entry zone $145.08-$148.97 (plan: stop $137.80, target $165.47, hold 2-3 weeks)"
+      "text": "ARM in entry zone $274.88-$305.02 (plan: stop $229.67, target $410.51, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "CIFR in entry zone $20.05-$22.63 (plan: stop $16.19, target $31.64, hold 2-3 weeks)"
+      "text": "BKNG in entry zone $182.51-$187.97 (plan: stop $172.27, target $211.18, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "XLF in entry zone $55.94-$56.58 (plan: stop $54.74, target $59.30, hold 2-3 weeks)"
+      "text": "MSFT in entry zone $385.22-$395.76 (plan: stop $365.47, target $440.53, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
@@ -75,6 +70,9 @@
     "SPGI|497.12": "2026-07-15",
     "ABNB|165.47": "2026-07-15",
     "CIFR|31.64": "2026-07-15",
-    "XLF|59.3": "2026-07-15"
+    "XLF|59.3": "2026-07-15",
+    "ARM|410.51": "2026-07-15",
+    "BKNG|211.18": "2026-07-15",
+    "MSFT|440.53": "2026-07-15"
   }
 }

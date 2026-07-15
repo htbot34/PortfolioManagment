@@ -1,70 +1,35 @@
 {
-  "checked_at": "2026-07-15T16:13:49Z",
+  "checked_at": "2026-07-15T17:44:07Z",
   "alerts": [
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "INTC gapped down -7.7% today"
-    },
-    {
-      "severity": "high",
-      "kind": "position_break",
-      "text": "AMAT gapped down -5.7% today"
+      "text": "INTC gapped down -5.5% today"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "S at $20.23 - within buy zone of yesterday's breakout setup ($19.92)"
+      "text": "S at $20.04 - within buy zone of yesterday's breakout setup ($19.92)"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "PATH at $12.04 - within buy zone of yesterday's breakout setup ($11.94)"
+      "text": "PATH at $11.90 - within buy zone of yesterday's breakout setup ($11.94)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "ETN in entry zone $388.39-$406.47 (plan: stop $361.28, target $469.73, hold 2-3 weeks)"
+      "text": "AMD in entry zone $522.87-$553.59 (plan: stop $465.26, target $684.17, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "CRWD in entry zone $207.51-$216.09 (plan: stop $191.42, target $252.56, hold 2-3 weeks)"
+      "text": "MARA in entry zone $12.07-$13.51 (plan: stop $9.91, target $18.55, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "ASML in entry zone $1648.15-$1745.51 (plan: stop $1502.10, target $2086.29, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "FTNT in entry zone $164.73-$170.33 (plan: stop $154.24, target $194.11, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "S in entry zone $19.60-$20.45 (plan: stop $18.02, target $24.03, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "KTOS in entry zone $49.07-$51.65 (plan: stop $44.25, target $62.58, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "PATH in entry zone $11.74-$12.27 (plan: stop $10.74, target $14.53, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "DIA in entry zone $521.02-$525.68 (plan: stop $512.28, target $545.49, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "CEG in entry zone $253.95-$261.19 (plan: stop $240.37, target $291.97, hold 2-3 weeks)"
+      "text": "SPGI in entry zone $435.49-$447.23 (plan: stop $413.48, target $497.12, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
@@ -109,6 +74,9 @@
     "KTOS|62.58": "2026-07-15",
     "PATH|14.53": "2026-07-15",
     "DIA|545.49": "2026-07-15",
-    "CEG|291.97": "2026-07-15"
+    "CEG|291.97": "2026-07-15",
+    "AMD|684.17": "2026-07-15",
+    "MARA|18.55": "2026-07-15",
+    "SPGI|497.12": "2026-07-15"
   }
 }

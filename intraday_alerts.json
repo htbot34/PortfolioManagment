@@ -1,65 +1,60 @@
 {
-  "checked_at": "2026-07-16T16:10:32Z",
+  "checked_at": "2026-07-16T17:44:57Z",
   "alerts": [
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "NBIS gapped down -10.7% today"
+      "text": "NBIS gapped down -14.4% today"
     },
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "OKLO gapped down -9.1% today"
+      "text": "OKLO gapped down -9.4% today"
     },
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "IREN gapped down -8.4% today"
+      "text": "IREN gapped down -9.7% today"
     },
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "INTC gapped down -5.2% today"
+      "text": "INTC gapped down -6.9% today"
     },
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "FPS gapped down -7.9% today"
+      "text": "FPS gapped down -9.2% today"
     },
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "RUN gapped down -5.1% today"
+      "text": "RUN gapped down -5.4% today"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "XLF at $56.69 - within buy zone of yesterday's breakout setup ($56.56)"
+      "text": "PATH at $11.99 - within buy zone of yesterday's breakout setup ($11.95)"
+    },
+    {
+      "severity": "low",
+      "kind": "watchlist_entry",
+      "text": "XLF at $56.53 - within buy zone of yesterday's breakout setup ($56.56)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "HOOD in entry zone $105.80-$111.50 (plan: stop $95.11, target $135.73, hold 2-3 weeks)"
+      "text": "DXCM in entry zone $75.65-$77.51 (plan: stop $72.17, target $85.40, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "VRTX in entry zone $463.95-$480.36 (plan: stop $439.33, target $537.80, hold 2-3 weeks)"
+      "text": "DIA in entry zone $521.02-$525.68 (plan: stop $512.28, target $545.49, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "PATH in entry zone $11.75-$12.29 (plan: stop $10.74, target $14.58, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "INTU in entry zone $284.86-$294.66 (plan: stop $266.47, target $336.34, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "VRNS in entry zone $47.40-$49.51 (plan: stop $43.44, target $58.48, hold 2-3 weeks)"
+      "text": "COST in entry zone $939.67-$955.33 (plan: stop $910.32, target $1021.86, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
@@ -96,6 +91,9 @@
     "VRTX|537.8": "2026-07-16",
     "PATH|14.58": "2026-07-16",
     "INTU|336.34": "2026-07-16",
-    "VRNS|58.48": "2026-07-16"
+    "VRNS|58.48": "2026-07-16",
+    "DXCM|85.4": "2026-07-16",
+    "DIA|545.49": "2026-07-16",
+    "COST|1021.86": "2026-07-16"
   }
 }

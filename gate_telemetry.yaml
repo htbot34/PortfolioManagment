@@ -1414,7 +1414,15 @@
     regime: 0
     soft_veto: 0
     trump_block: 0
-  near_miss: []
+  near_miss:
+  - ticker: DXCM
+    passed:
+    - technical
+    - news
+    failed: sector_momentum
+    insider_score: 0
+    insider_status: not_evaluated
+    news_status: ok
   trump:
     mentions: 0
     endorsements: 0

@@ -1,34 +1,3 @@
-- date: '2026-06-05'
-  candidates_evaluated: 2
-  cleared_primary: 0
-  cleared_insider_promotion: 0
-  blocked_by:
-    technical: 2
-    sector_momentum: 0
-    news: 0
-    trump: 0
-    earnings_window: 0
-    regime: 0
-    soft_veto: 0
-    trump_block: 0
-  near_miss: []
-  trump:
-    mentions: 0
-    endorsements: 0
-    attacks: 0
-    promotions: 0
-    vetoes: 0
-    firings: []
-  insider:
-    scored: 0
-    zero: 0
-    unavailable: 0
-    not_evaluated: 2
-  news:
-    ok: 0
-    empty: 0
-    outage: 0
-    unknown: 2
 - date: '2026-06-08'
   candidates_evaluated: 11
   cleared_primary: 0
@@ -1400,6 +1369,47 @@
     outage: 0
     unknown: 1
 - date: '2026-07-16'
+  candidates_evaluated: 4
+  cleared_primary: 0
+  cleared_insider_promotion: 0
+  blocked_by:
+    technical: 1
+    sector_momentum: 3
+    news: 0
+    trump: 0
+    earnings_window: 0
+    correlation_block: 0
+    valuation_block: 0
+    regime: 0
+    soft_veto: 0
+    trump_block: 0
+  near_miss:
+  - ticker: DXCM
+    passed:
+    - technical
+    - news
+    failed: sector_momentum
+    insider_score: 0
+    insider_status: not_evaluated
+    news_status: ok
+  trump:
+    mentions: 0
+    endorsements: 0
+    attacks: 0
+    promotions: 0
+    vetoes: 0
+    firings: []
+  insider:
+    scored: 0
+    zero: 0
+    unavailable: 0
+    not_evaluated: 4
+  news:
+    ok: 3
+    empty: 0
+    outage: 0
+    unknown: 1
+- date: '2026-07-17'
   candidates_evaluated: 4
   cleared_primary: 0
   cleared_insider_promotion: 0

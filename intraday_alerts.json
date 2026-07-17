@@ -1,10 +1,10 @@
 {
-  "checked_at": "2026-07-17T18:32:31Z",
+  "checked_at": "2026-07-17T19:59:18Z",
   "alerts": [
     {
       "severity": "med",
       "kind": "position_break",
-      "text": "NBIS lost SMA50 ($224.96) on 1.5x volume"
+      "text": "NBIS lost SMA50 ($224.82) on 1.5x volume"
     },
     {
       "severity": "high",
@@ -14,17 +14,17 @@
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "FBL gapped down -5.2% today"
+      "text": "FBL gapped down -5.4% today"
+    },
+    {
+      "severity": "high",
+      "kind": "position_break",
+      "text": "AMAT gapped down -5.4% today"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "PATH at $12.15 - within buy zone of yesterday's breakout setup ($12.03)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "PANW in entry zone $345.50-$360.28 (plan: stop $317.78, target $423.11, hold 2-3 weeks)"
+      "text": "PATH at $12.14 - within buy zone of yesterday's breakout setup ($12.03)"
     }
   ],
   "fired_plans": {

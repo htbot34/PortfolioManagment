@@ -1,30 +1,30 @@
 {
-  "checked_at": "2026-07-17T19:59:18Z",
+  "checked_at": "2026-07-17T20:55:44Z",
   "alerts": [
+    {
+      "severity": "high",
+      "kind": "position_break",
+      "text": "NFLX gapped down -7.3% today"
+    },
+    {
+      "severity": "high",
+      "kind": "position_break",
+      "text": "FBL gapped down -5.7% today"
+    },
     {
       "severity": "med",
       "kind": "position_break",
-      "text": "NBIS lost SMA50 ($224.82) on 1.5x volume"
+      "text": "FPS lost SMA50 ($50.85) on 2.0x volume"
     },
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "NFLX gapped down -6.9% today"
-    },
-    {
-      "severity": "high",
-      "kind": "position_break",
-      "text": "FBL gapped down -5.4% today"
-    },
-    {
-      "severity": "high",
-      "kind": "position_break",
-      "text": "AMAT gapped down -5.4% today"
+      "text": "AMAT gapped down -5.6% today"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "PATH at $12.14 - within buy zone of yesterday's breakout setup ($12.03)"
+      "text": "PATH at $12.15 - within buy zone of yesterday's breakout setup ($12.03)"
     }
   ],
   "fired_plans": {

@@ -1,20 +1,20 @@
 {
-  "checked_at": "2026-07-20T18:49:07Z",
+  "checked_at": "2026-07-20T20:16:33Z",
   "alerts": [
     {
       "severity": "med",
       "kind": "position_break",
-      "text": "NFLX lost SMA50 ($80.15) on 2.6x volume"
-    },
-    {
-      "severity": "med",
-      "kind": "position_break",
-      "text": "FPS lost SMA50 ($50.78) on 2.0x volume"
+      "text": "IREN lost SMA50 ($52.30) on 2.1x volume"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "NVDA in entry zone $196.93-$204.28 (plan: stop $185.91, target $230.00, hold 2-3 weeks)"
+      "text": "AMD in entry zone $463.20-$503.90 (plan: stop $402.16, target $646.33, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "XLV in entry zone $157.42-$159.74 (plan: stop $153.07, target $169.60, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
@@ -57,6 +57,8 @@
     "INTU|346.29": "2026-07-20",
     "CEG|291.97": "2026-07-20",
     "ADBE|269.91": "2026-07-20",
-    "NVDA|230.0": "2026-07-20"
+    "NVDA|230.0": "2026-07-20",
+    "AMD|646.33": "2026-07-20",
+    "XLV|169.6": "2026-07-20"
   }
 }

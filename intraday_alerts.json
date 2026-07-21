@@ -1,10 +1,15 @@
 {
-  "checked_at": "2026-07-21T17:50:37Z",
+  "checked_at": "2026-07-21T19:05:00Z",
   "alerts": [
     {
       "severity": "med",
       "kind": "position_break",
-      "text": "IREN lost SMA50 ($52.00) on 2.2x volume"
+      "text": "IREN lost SMA50 ($51.98) on 2.2x volume"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "XBI in entry zone $154.02-$157.53 (plan: stop $147.44, target $172.45, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
@@ -36,6 +41,7 @@
     "FTNT|187.14": "2026-07-21",
     "SPY|783.5": "2026-07-21",
     "V|395.22": "2026-07-21",
-    "DIA|545.49": "2026-07-21"
+    "DIA|545.49": "2026-07-21",
+    "XBI|172.45": "2026-07-21"
   }
 }

@@ -1,76 +1,3 @@
-- date: '2026-06-10'
-  candidates_evaluated: 10
-  cleared_primary: 0
-  cleared_insider_promotion: 0
-  blocked_by:
-    technical: 1
-    sector_momentum: 9
-    news: 0
-    trump: 0
-    earnings_window: 0
-    correlation_block: 0
-    valuation_block: 0
-    regime: 0
-    soft_veto: 0
-    trump_block: 0
-  near_miss:
-  - ticker: AMAT
-    passed:
-    - technical
-    - news
-    failed: sector_momentum
-    insider_score: 0
-    insider_status: zero
-    news_status: ok
-  - ticker: ASML
-    passed:
-    - technical
-    - news
-    failed: sector_momentum
-    insider_score: 0
-    insider_status: zero
-    news_status: ok
-  - ticker: KLAC
-    passed:
-    - technical
-    - news
-    failed: sector_momentum
-    insider_score: 0
-    insider_status: zero
-    news_status: ok
-  - ticker: LEU
-    passed:
-    - technical
-    - news
-    failed: sector_momentum
-    insider_score: 0
-    insider_status: zero
-    news_status: ok
-  - ticker: LRCX
-    passed:
-    - technical
-    - news
-    failed: sector_momentum
-    insider_score: 0
-    insider_status: zero
-    news_status: ok
-  trump:
-    mentions: 0
-    endorsements: 0
-    attacks: 0
-    promotions: 0
-    vetoes: 0
-    firings: []
-  insider:
-    scored: 0
-    zero: 5
-    unavailable: 0
-    not_evaluated: 5
-  news:
-    ok: 9
-    empty: 0
-    outage: 0
-    unknown: 1
 - date: '2026-06-11'
   candidates_evaluated: 9
   cleared_primary: 0
@@ -1405,6 +1332,53 @@
       as_of: '2026-07-21'
       source: "Coinbase Stock Is Rallying. Can Donald Trump\u2019s Ethics Compromise\
         \ Save the Clarity Act?"
+      qualifies: false
+  insider:
+    scored: 0
+    zero: 0
+    unavailable: 0
+    not_evaluated: 5
+  news:
+    ok: 4
+    empty: 0
+    outage: 0
+    unknown: 1
+- date: '2026-07-22'
+  candidates_evaluated: 5
+  cleared_primary: 0
+  cleared_insider_promotion: 0
+  blocked_by:
+    technical: 1
+    sector_momentum: 4
+    news: 0
+    trump: 0
+    earnings_window: 0
+    correlation_block: 0
+    valuation_block: 0
+    regime: 0
+    soft_veto: 0
+    trump_block: 0
+  near_miss:
+  - ticker: COIN
+    passed:
+    - technical
+    - news
+    failed: sector_momentum
+    insider_score: 0
+    insider_status: not_evaluated
+    news_status: ok
+  trump:
+    mentions: 1
+    endorsements: 1
+    attacks: 0
+    promotions: 0
+    vetoes: 0
+    firings:
+    - ticker: OKLO
+      valence: endorse
+      as_of: '2026-07-21'
+      source: "OKLO, XE Stocks Jump After-Hours \u2014 Trump Administration Taps Oklo,\
+        \ X-Energy In $200M Push To Power AI Data Centers"
       qualifies: false
   insider:
     scored: 0

@@ -1349,8 +1349,8 @@
   cleared_insider_promotion: 0
   blocked_by:
     technical: 1
-    sector_momentum: 4
-    news: 0
+    sector_momentum: 3
+    news: 1
     trump: 0
     earnings_window: 0
     correlation_block: 0
@@ -1359,7 +1359,7 @@
     soft_veto: 0
     trump_block: 0
   near_miss:
-  - ticker: COIN
+  - ticker: SMCI
     passed:
     - technical
     - news
@@ -1367,19 +1367,21 @@
     insider_score: 0
     insider_status: not_evaluated
     news_status: ok
+  - ticker: SMR
+    passed:
+    - technical
+    - sector_momentum
+    failed: news
+    insider_score: 0
+    insider_status: not_evaluated
+    news_status: ok
   trump:
-    mentions: 1
-    endorsements: 1
+    mentions: 0
+    endorsements: 0
     attacks: 0
     promotions: 0
     vetoes: 0
-    firings:
-    - ticker: OKLO
-      valence: endorse
-      as_of: '2026-07-21'
-      source: "OKLO, XE Stocks Jump After-Hours \u2014 Trump Administration Taps Oklo,\
-        \ X-Energy In $200M Push To Power AI Data Centers"
-      qualifies: false
+    firings: []
   insider:
     scored: 0
     zero: 0

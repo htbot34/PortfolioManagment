@@ -1,15 +1,20 @@
 {
-  "checked_at": "2026-07-22T16:18:36Z",
+  "checked_at": "2026-07-22T17:47:45Z",
   "alerts": [
     {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "SPY in entry zone $748.20-$754.92 (plan: stop $735.59, target $783.50, hold 2-3 weeks)"
+      "severity": "high",
+      "kind": "position_break",
+      "text": "FBL gapped down -5.1% today"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "JOBY in entry zone $7.66-$8.12 (plan: stop $6.81, target $10.05, hold 2-3 weeks)"
+      "text": "ETN in entry zone $407.67-$421.50 (plan: stop $381.74, target $480.28, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "NET in entry zone $268.13-$279.27 (plan: stop $247.24, target $326.62, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
@@ -42,6 +47,8 @@
     "SMR|11.31": "2026-07-22",
     "LUNR|19.98": "2026-07-22",
     "SPY|783.5": "2026-07-22",
-    "JOBY|10.05": "2026-07-22"
+    "JOBY|10.05": "2026-07-22",
+    "ETN|480.28": "2026-07-22",
+    "NET|326.62": "2026-07-22"
   }
 }

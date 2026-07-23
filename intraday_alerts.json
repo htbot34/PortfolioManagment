@@ -1,20 +1,35 @@
 {
-  "checked_at": "2026-07-23T16:54:03Z",
+  "checked_at": "2026-07-23T18:08:48Z",
   "alerts": [
     {
       "severity": "high",
+      "kind": "macro_shock",
+      "text": "VIX spiked +16.3% today"
+    },
+    {
+      "severity": "high",
       "kind": "position_break",
-      "text": "FBL gapped down -7.4% today"
+      "text": "FBL gapped down -6.6% today"
+    },
+    {
+      "severity": "high",
+      "kind": "position_break",
+      "text": "RUN gapped down -5.7% today"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "NEE in entry zone $88.97-$90.15 (plan: stop $86.76, target $95.16, hold 2-3 weeks)"
+      "text": "AFRM in entry zone $71.75-$75.46 (plan: stop $66.18, target $88.45, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "RIOT in entry zone $22.64-$24.12 (plan: stop $19.87, target $30.40, hold 2-3 weeks)"
+      "text": "KTOS in entry zone $46.92-$49.50 (plan: stop $42.10, target $60.43, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "AVGO in entry zone $373.83-$389.67 (plan: stop $350.07, target $445.11, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
@@ -44,6 +59,9 @@
     "SMR|11.26": "2026-07-23",
     "URA|46.99": "2026-07-23",
     "NEE|95.16": "2026-07-23",
-    "RIOT|30.4": "2026-07-23"
+    "RIOT|30.4": "2026-07-23",
+    "AFRM|88.45": "2026-07-23",
+    "KTOS|60.43": "2026-07-23",
+    "AVGO|445.11": "2026-07-23"
   }
 }

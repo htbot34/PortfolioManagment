@@ -1324,53 +1324,31 @@
   cleared_primary: 0
   cleared_insider_promotion: 0
   blocked_by:
-    technical: 1
-    sector_momentum: 3
-    news: 1
+    technical: 2
+    sector_momentum: 0
+    news: 0
     trump: 0
-    earnings_window: 0
+    earnings_window: 2
     correlation_block: 0
     valuation_block: 0
     regime: 0
-    soft_veto: 0
+    soft_veto: 1
     trump_block: 0
-  near_miss:
-  - ticker: RIOT
-    passed:
-    - technical
-    - news
-    failed: sector_momentum
-    insider_score: 0
-    insider_status: not_evaluated
-    news_status: ok
-  - ticker: SMR
-    passed:
-    - technical
-    - sector_momentum
-    failed: news
-    insider_score: 0
-    insider_status: not_evaluated
-    news_status: ok
+  near_miss: []
   trump:
-    mentions: 1
-    endorsements: 1
+    mentions: 0
+    endorsements: 0
     attacks: 0
     promotions: 0
     vetoes: 0
-    firings:
-    - ticker: OKLO
-      valence: endorse
-      as_of: '2026-07-22'
-      source: The Trump Administration Just Gave Oklo Stock a Big Boost. Here's What
-        to Know.
-      qualifies: false
+    firings: []
   insider:
     scored: 0
     zero: 0
     unavailable: 0
-    not_evaluated: 5
+    not_evaluated: 4
   news:
-    ok: 4
+    ok: 2
     empty: 0
     outage: 0
-    unknown: 1
+    unknown: 2

@@ -2332,14 +2332,14 @@
       excess_return: 0.07869016124507773
       hit: true
     '20':
-      status: pending
-      exit_date: null
-      exit_price: null
-      benchmark_exit_price: null
-      forward_return: null
-      benchmark_forward_return: null
-      excess_return: null
-      hit: null
+      status: realized
+      exit_date: '2026-07-23'
+      exit_price: 25.90999984741211
+      benchmark_exit_price: 738.1799926757812
+      forward_return: -0.2356932542426971
+      benchmark_forward_return: 0.006737224520210925
+      excess_return: -0.24243047876290802
+      hit: false
   last_updated: '2026-07-23'
 - ticker: PWR
   miss_date: '2026-06-24'
@@ -2374,14 +2374,14 @@
       excess_return: -0.0512035324081188
       hit: false
     '20':
-      status: pending
-      exit_date: null
-      exit_price: null
-      benchmark_exit_price: null
-      forward_return: null
-      benchmark_forward_return: null
-      excess_return: null
-      hit: null
+      status: realized
+      exit_date: '2026-07-23'
+      exit_price: 653.7999877929688
+      benchmark_exit_price: 738.1799926757812
+      forward_return: -0.06850176206098263
+      benchmark_forward_return: 0.006737224520210925
+      excess_return: -0.07523898658119356
+      hit: false
   last_updated: '2026-07-23'
 - ticker: TSM
   miss_date: '2026-06-24'
@@ -2416,14 +2416,14 @@
       excess_return: -0.016373700107905387
       hit: false
     '20':
-      status: pending
-      exit_date: null
-      exit_price: null
-      benchmark_exit_price: null
-      forward_return: null
-      benchmark_forward_return: null
-      excess_return: null
-      hit: null
+      status: realized
+      exit_date: '2026-07-23'
+      exit_price: 415.5799865722656
+      benchmark_exit_price: 738.1799926757812
+      forward_return: -0.057278317648794395
+      benchmark_forward_return: 0.006737224520210925
+      excess_return: -0.06401554216900532
+      hit: false
   last_updated: '2026-07-23'
 - ticker: VRNS
   miss_date: '2026-06-24'
@@ -2458,14 +2458,14 @@
       excess_return: 0.19547757241337368
       hit: true
     '20':
-      status: pending
-      exit_date: null
-      exit_price: null
-      benchmark_exit_price: null
-      forward_return: null
-      benchmark_forward_return: null
-      excess_return: null
-      hit: null
+      status: realized
+      exit_date: '2026-07-23'
+      exit_price: 44.779998779296875
+      benchmark_exit_price: 738.1799926757812
+      forward_return: 0.20085807669290615
+      benchmark_forward_return: 0.006737224520210925
+      excess_return: 0.19412085217269523
+      hit: true
   last_updated: '2026-07-23'
 - ticker: DASH
   miss_date: '2026-06-25'
@@ -4251,14 +4251,14 @@
       excess_return: -0.24148868984798388
       hit: false
     '10':
-      status: pending
-      exit_date: null
-      exit_price: null
-      benchmark_exit_price: null
-      forward_return: null
-      benchmark_forward_return: null
-      excess_return: null
-      hit: null
+      status: realized
+      exit_date: '2026-07-23'
+      exit_price: 25.90999984741211
+      benchmark_exit_price: 738.1799926757812
+      forward_return: -0.3044295342976615
+      benchmark_forward_return: -0.013128352037725602
+      excess_return: -0.2913011822599359
+      hit: false
     '20':
       status: pending
       exit_date: null
@@ -4494,14 +4494,14 @@
   benchmark_entry_price: 750.719970703125
   horizons:
     '5':
-      status: pending
-      exit_date: null
-      exit_price: null
-      benchmark_exit_price: null
-      forward_return: null
-      benchmark_forward_return: null
-      excess_return: null
-      hit: null
+      status: realized
+      exit_date: '2026-07-23'
+      exit_price: 70.4800033569336
+      benchmark_exit_price: 738.1799926757812
+      forward_return: -0.096178503169212
+      benchmark_forward_return: -0.016703935577468115
+      excess_return: -0.07947456759174389
+      hit: false
     '10':
       status: pending
       exit_date: null
@@ -4864,8 +4864,8 @@
   insider_score: 0
   source: The Trump Administration Just Gave Oklo Stock a Big Boost. Here's What to
     Know.
-  entry_price: null
-  benchmark_entry_price: null
+  entry_price: 44.0
+  benchmark_entry_price: 738.1799926757812
   horizons:
     '5':
       status: pending
@@ -4906,8 +4906,8 @@
   - news
   insider_score: 0
   source: null
-  entry_price: null
-  benchmark_entry_price: null
+  entry_price: 23.860000610351562
+  benchmark_entry_price: 738.1799926757812
   horizons:
     '5':
       status: pending
@@ -4948,8 +4948,8 @@
   - sector_momentum
   insider_score: 0
   source: null
-  entry_price: null
-  benchmark_entry_price: null
+  entry_price: 8.8100004196167
+  benchmark_entry_price: 738.1799926757812
   horizons:
     '5':
       status: pending

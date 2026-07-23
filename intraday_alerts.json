@@ -1,20 +1,25 @@
 {
-  "checked_at": "2026-07-23T19:54:02Z",
+  "checked_at": "2026-07-23T20:52:07Z",
   "alerts": [
     {
       "severity": "high",
-      "kind": "macro_shock",
-      "text": "VIX spiked +15.9% today"
+      "kind": "position_break",
+      "text": "FBL gapped down -6.7% today"
     },
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "FBL gapped down -7.0% today"
+      "text": "RUN gapped down -5.2% today"
     },
     {
-      "severity": "high",
-      "kind": "position_break",
-      "text": "RUN gapped down -6.0% today"
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "V in entry zone $350.89-$357.63 (plan: stop $338.26, target $386.26, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "XLF in entry zone $55.81-$56.42 (plan: stop $54.68, target $58.99, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
@@ -47,6 +52,8 @@
     "RIOT|30.4": "2026-07-23",
     "AFRM|88.45": "2026-07-23",
     "KTOS|60.43": "2026-07-23",
-    "AVGO|445.11": "2026-07-23"
+    "AVGO|445.11": "2026-07-23",
+    "V|386.26": "2026-07-23",
+    "XLF|58.99": "2026-07-23"
   }
 }

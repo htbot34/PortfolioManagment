@@ -19,7 +19,7 @@
 <body class="min-h-screen">
   <nav class="px-6 py-3 border-b border-[#1f2a44] flex items-center gap-4">
     <a href="index.html" class="text-sm font-semibold text-slate-200">Portfolio Advisor</a>
-    <div class="ml-auto text-[10px] text-slate-500">2026-07-23 23:01 UTC</div>
+    <div class="ml-auto text-[10px] text-slate-500">2026-07-24 12:26 UTC</div>
   </nav>
   <main class="p-6 max-w-7xl mx-auto">
     
@@ -29,7 +29,7 @@
 <div class="max-w-3xl mx-auto">
 
 <div class="flex items-center justify-between mb-3">
-  <div class="text-xs text-slate-500">2026-07-23</div>
+  <div class="text-xs text-slate-500">2026-07-24</div>
   
   
   
@@ -50,7 +50,7 @@
       <span class="text-xs text-slate-500 ml-1">confidence 2/3</span>
     </div>
   </div>
-  <div class="text-xs text-slate-400 mt-1">Risk-off - below the 50-day, vol elevated (VIX 18.7, breadth 40%) [confidence 2/3]</div>
+  <div class="text-xs text-slate-400 mt-1">Risk-off - below the 50-day, vol elevated (VIX 18.8, breadth 40%) [confidence 2/3]</div>
   
   <details class="mt-2 text-xs">
     <summary class="cursor-pointer text-slate-500 hover:text-slate-300 select-none">Regime factors</summary>
@@ -62,9 +62,9 @@
       
       <li>spy stacked up: <span class="text-slate-300">False</span></li>
       
-      <li>vix level: <span class="text-slate-300">18.700000762939453</span></li>
+      <li>vix level: <span class="text-slate-300">18.75</span></li>
       
-      <li>vix change 5d pct: <span class="text-slate-300">11.775261653353228</span></li>
+      <li>vix change 5d pct: <span class="text-slate-300">-0.10655544632871472</span></li>
       
       <li>hyg ief trend: <span class="text-slate-300">rising</span></li>
       
@@ -84,31 +84,119 @@
 
 
 
-  <div class="card rounded-lg p-10 mb-4 text-center">
-    <div class="text-5xl font-bold text-slate-300 mb-3">No trade today</div>
-    <div class="text-sm text-slate-400 max-w-xl mx-auto">No setup meets the conviction bar.</div>
+  
+<div class="card rounded-lg p-6 mb-4 border-l-4
+  border-l-emerald-500
+  ">
+  <div class="flex items-baseline justify-between mb-3">
+    <div class="text-xs text-slate-400 uppercase tracking-widest">Today&#39;s call</div>
+    <div class="flex items-baseline gap-3">
+      <span class="text-[10px] font-mono text-slate-600 select-all">#330c0ad0</span>
+      <span class="text-xs text-slate-500">Conviction 5/5</span>
+    </div>
+  </div>
+  <div class="flex items-baseline gap-3 mb-4">
+    <span class="text-3xl font-bold
+      text-emerald-400
+      ">BUY</span>
+    <a href="ticker/LMT.html" class="text-3xl font-bold text-slate-100 tlink">LMT</a>
+  </div>
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4 text-sm">
+    <div><div class="text-[10px] text-slate-500 uppercase">Entry</div><div class="text-slate-100 font-semibold">~$568.59</div></div>
+    <div><div class="text-[10px] text-slate-500 uppercase">Stop</div><div class="text-rose-300 font-semibold">$544.45</div></div>
+    <div><div class="text-[10px] text-slate-500 uppercase">Target</div><div class="text-emerald-300 font-semibold">$641.01</div></div>
+    <div><div class="text-[10px] text-slate-500 uppercase">Size</div><div class="text-slate-100 font-semibold">5.0%</div></div>
+  </div>
+  
+  <div class="text-sm text-amber-300 bg-amber-950/30 border border-amber-900/60 rounded px-3 py-2 mb-3">
+    Sizing: price $568.59 too high for available dollars $258
+  </div>
+  
+  
+  <p class="text-base text-slate-200 leading-relaxed mb-3">LMT - 20-day breakout on volume. RSI 68, volume 2.6x 20-day average. Theme: Defense / aero. Long-term hold target.</p>
+  
+  
+  
+  
+  
+  <div class="text-sm text-slate-400 mb-3">
+    Correlation to your top 5: <span class="font-semibold text-slate-200">-0.02</span>
   </div>
   
   
   
-  <div class="text-xs text-slate-500 text-center mb-4 space-y-0.5">
-    <div class="uppercase tracking-widest text-[10px] text-slate-600">Gate status</div>
-    
-    <div>Evaluated 5 candidates. None reached 2-of-3.</div>
-    
-    
-    
-    
-    
-    
-    <div>30-day: 11 cleared, 42 reached 2-of-3, top blocker = sector momentum (62.0%).</div>
-    
+  
+  <div class="text-sm text-slate-400 mb-3">
+    Valuation: <span class="font-semibold text-slate-200">fair</span> (27th pct in sector)
   </div>
+  
+  
+  <div class="text-sm text-slate-400 border-t border-[#1f2a44] pt-3"><span class="text-rose-400 font-semibold">Invalidation:</span> Daily close below $544.45</div>
+  
+  <details class="mt-3 text-xs">
+    <summary class="cursor-pointer text-slate-400 hover:text-slate-200 select-none">Evidence (5)</summary>
+    <ul class="mt-2 space-y-1">
+      
+      <li class="flex gap-2 items-baseline">
+        <span class="text-[10px] uppercase tracking-wide text-slate-500 w-16 shrink-0">technical</span>
+        <span class="text-slate-300 font-medium">RSI 68</span>
+        <span class="text-slate-500">- momentum in the sweet spot</span>
+      </li>
+      
+      <li class="flex gap-2 items-baseline">
+        <span class="text-[10px] uppercase tracking-wide text-slate-500 w-16 shrink-0">technical</span>
+        <span class="text-slate-300 font-medium">MACD histogram +2.97</span>
+        <span class="text-slate-500">- bullish</span>
+      </li>
+      
+      <li class="flex gap-2 items-baseline">
+        <span class="text-[10px] uppercase tracking-wide text-slate-500 w-16 shrink-0">technical</span>
+        <span class="text-slate-300 font-medium">volume 2.6x 20d avg</span>
+        <span class="text-slate-500">- confirmation</span>
+      </li>
+      
+      <li class="flex gap-2 items-baseline">
+        <span class="text-[10px] uppercase tracking-wide text-slate-500 w-16 shrink-0">technical</span>
+        <span class="text-slate-300 font-medium">-16% off 52-week high</span>
+        <span class="text-slate-500">- drawdown context</span>
+      </li>
+      
+      <li class="flex gap-2 items-baseline">
+        <span class="text-[10px] uppercase tracking-wide text-slate-500 w-16 shrink-0">theme</span>
+        <span class="text-slate-300 font-medium">Defense / aero</span>
+        <span class="text-slate-500">- fits investor mandate</span>
+      </li>
+      
+    </ul>
+  </details>
+  
+  
+  <div class="mt-4 pt-3 border-t border-[#1f2a44] flex flex-wrap gap-2">
+    <a href="https://github.com/htbot34/PortfolioManagment/issues/new?template=rec-accept.yml&title=Accept%20rec%20330c0ad0&rec_id=330c0ad0"
+       target="_blank" rel="noopener"
+       class="px-3 py-1.5 rounded bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-semibold">
+      Accept
+    </a>
+    <a href="https://github.com/htbot34/PortfolioManagment/issues/new?template=rec-reject.yml&title=Reject%20rec%20330c0ad0&rec_id=330c0ad0"
+       target="_blank" rel="noopener"
+       class="px-3 py-1.5 rounded bg-rose-800 hover:bg-rose-700 text-white text-xs font-semibold">
+      Reject
+    </a>
+    <a href="https://github.com/htbot34/PortfolioManagment/issues/new?template=rec-counter.yml&title=Counter%20rec%20330c0ad0&rec_id=330c0ad0"
+       target="_blank" rel="noopener"
+       class="px-3 py-1.5 rounded bg-slate-700 hover:bg-slate-600 text-slate-100 text-xs font-semibold">
+      Counter
+    </a>
+    <span class="text-[10px] text-slate-500 ml-1 self-center">Opens a GitHub issue. The bot logs your response within a minute.</span>
+  </div>
+  
+</div>
+
   
 
 
 
-<div class="text-center text-xs text-slate-400 mb-4">SPX -1.21%, VIX 18.7, Industrials leads +1.7%.</div>
+<div class="text-center text-xs text-slate-400 mb-4">SPX -1.21%, VIX 18.8, Industrials leads +1.7%.</div>
 
 
 
@@ -119,8 +207,6 @@
   <div class="text-xs text-slate-400 uppercase tracking-widest mb-2">Watching</div>
   <ul class="text-sm space-y-1">
   
-    <li class="text-slate-300">- LMT - watching for clean breakout</li>
-  
     <li class="text-slate-300">- URI - watching for clean breakout</li>
   
     <li class="text-slate-300">- ETN - watching for pullback entry</li>
@@ -128,6 +214,8 @@
     <li class="text-slate-300">- NEE - watching for pullback entry</li>
   
     <li class="text-slate-300">- XLY - watching for reversal confirmation</li>
+  
+    <li class="text-slate-300">- GOOGL - watching for reversal confirmation</li>
   
   </ul>
 </div>
@@ -147,68 +235,6 @@
 
 
 
-
-<div class="rounded-lg border border-[#1f2a44]/60 p-4 mb-4">
-  <div class="text-xs text-slate-500 uppercase tracking-widest mb-1">Highest-confluence ideas (not recommendations)</div>
-  <div class="text-[11px] text-slate-600 mb-3">The funnel's most independently corroborated ideas. They did not clear the conviction bar - watchlist context, not advice.</div>
-  <div class="space-y-3">
-  
-    <div class="border-l-2 border-l-slate-700 pl-3">
-      <div class="flex items-baseline gap-2 flex-wrap">
-        <a href="ticker/AMD.html" class="text-sm font-semibold text-slate-300 tlink">AMD</a>
-        <span class="text-[11px] text-slate-500">Momentum + theme fit + news -- 3 independent signals</span>
-      </div>
-      
-      
-      <div class="grid grid-cols-4 gap-1 text-[11px] mt-1 mb-1">
-        <div><div class="text-slate-600">Entry</div><div class="text-slate-400">$528.30 - $558.67</div></div>
-        <div><div class="text-slate-600">Stop</div><div class="text-slate-400">$471.36</div></div>
-        <div><div class="text-slate-600">Target</div><div class="text-slate-400">$687.73</div></div>
-        <div><div class="text-slate-600">Hold</div><div class="text-slate-400">2-3 weeks</div></div>
-      </div>
-      
-      <a class="text-[11px] text-sky-500/70 hover:underline" target="_blank" rel="noopener"
-         href="https://github.com/htbot34/PortfolioManagment/issues/new?template=idea-action.yml&amp;title=Idea+AMD&amp;ticker=AMD">Give a verdict &rarr;</a>
-    </div>
-  
-    <div class="border-l-2 border-l-slate-700 pl-3">
-      <div class="flex items-baseline gap-2 flex-wrap">
-        <a href="ticker/LMT.html" class="text-sm font-semibold text-slate-300 tlink">LMT</a>
-        <span class="text-[11px] text-slate-500">Momentum + news -- 2 independent signals</span>
-      </div>
-      
-      
-      <div class="grid grid-cols-4 gap-1 text-[11px] mt-1 mb-1">
-        <div><div class="text-slate-600">Entry</div><div class="text-slate-400">$563.76 - $576.64</div></div>
-        <div><div class="text-slate-600">Stop</div><div class="text-slate-400">$539.62</div></div>
-        <div><div class="text-slate-600">Target</div><div class="text-slate-400">$631.36</div></div>
-        <div><div class="text-slate-600">Hold</div><div class="text-slate-400">2-3 weeks</div></div>
-      </div>
-      
-      <a class="text-[11px] text-sky-500/70 hover:underline" target="_blank" rel="noopener"
-         href="https://github.com/htbot34/PortfolioManagment/issues/new?template=idea-action.yml&amp;title=Idea+LMT&amp;ticker=LMT">Give a verdict &rarr;</a>
-    </div>
-  
-    <div class="border-l-2 border-l-slate-700 pl-3">
-      <div class="flex items-baseline gap-2 flex-wrap">
-        <a href="ticker/URI.html" class="text-sm font-semibold text-slate-300 tlink">URI</a>
-        <span class="text-[11px] text-slate-500">Momentum + news -- 2 independent signals</span>
-      </div>
-      
-      
-      <div class="grid grid-cols-4 gap-1 text-[11px] mt-1 mb-1">
-        <div><div class="text-slate-600">Entry</div><div class="text-slate-400">$1127.32 - $1160.37</div></div>
-        <div><div class="text-slate-600">Stop</div><div class="text-slate-400">$1065.35</div></div>
-        <div><div class="text-slate-600">Target</div><div class="text-slate-400">$1300.83</div></div>
-        <div><div class="text-slate-600">Hold</div><div class="text-slate-400">2-3 weeks</div></div>
-      </div>
-      
-      <a class="text-[11px] text-sky-500/70 hover:underline" target="_blank" rel="noopener"
-         href="https://github.com/htbot34/PortfolioManagment/issues/new?template=idea-action.yml&amp;title=Idea+URI&amp;ticker=URI">Give a verdict &rarr;</a>
-    </div>
-  
-  </div>
-</div>
 
 
 <!-- ============== Chat panel ============== -->

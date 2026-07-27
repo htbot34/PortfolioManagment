@@ -1,55 +1,70 @@
 {
-  "checked_at": "2026-07-27T18:56:28Z",
+  "checked_at": "2026-07-27T20:16:19Z",
   "alerts": [
     {
-      "severity": "med",
+      "severity": "high",
       "kind": "position_break",
-      "text": "INTC lost SMA50 ($114.69) on 1.6x volume"
+      "text": "NBIS gapped down -15.0% today"
+    },
+    {
+      "severity": "high",
+      "kind": "position_break",
+      "text": "IREN gapped down -10.6% today"
+    },
+    {
+      "severity": "high",
+      "kind": "position_break",
+      "text": "INTC gapped down -8.5% today"
+    },
+    {
+      "severity": "high",
+      "kind": "position_break",
+      "text": "FPS gapped down -7.0% today"
+    },
+    {
+      "severity": "high",
+      "kind": "position_break",
+      "text": "AMAT gapped down -8.2% today"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "LMT at $583.25 - within buy zone of yesterday's breakout setup ($585.99)"
-    },
-    {
-      "severity": "low",
-      "kind": "watchlist_entry",
-      "text": "RTX at $220.25 - within buy zone of yesterday's breakout setup ($217.58)"
+      "text": "RTX at $218.42 - within buy zone of yesterday's breakout setup ($217.58)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "KLAC in entry zone $199.26-$213.33 (plan: stop $178.16, target $262.57, hold 2-3 weeks)"
+      "text": "TT in entry zone $482.04-$492.81 (plan: stop $461.86, target $538.56, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "AMD in entry zone $485.44-$521.38 (plan: stop $431.54, target $647.15, hold 2-3 weeks)"
+      "text": "GE in entry zone $361.41-$370.29 (plan: stop $344.75, target $408.05, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "ETN in entry zone $392.55-$408.06 (plan: stop $369.28, target $462.36, hold 2-3 weeks)"
+      "text": "XLF in entry zone $56.86-$57.44 (plan: stop $55.78, target $59.89, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "XLI in entry zone $181.78-$184.12 (plan: stop $177.39, target $194.07, hold 2-3 weeks)"
+      "text": "SMCI in entry zone $29.79-$31.33 (plan: stop $26.91, target $37.86, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "ASML in entry zone $1635.54-$1711.36 (plan: stop $1521.82, target $1976.71, hold 2-3 weeks)"
+      "text": "SMR in entry zone $8.41-$8.95 (plan: stop $7.39, target $11.26, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "NET in entry zone $265.78-$277.14 (plan: stop $244.48, target $325.42, hold 2-3 weeks)"
+      "text": "IONQ in entry zone $35.76-$37.86 (plan: stop $31.84, target $46.75, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "ZS in entry zone $148.89-$155.29 (plan: stop $136.89, target $182.49, hold 2-3 weeks)"
+      "text": "RGTI in entry zone $15.49-$16.33 (plan: stop $13.92, target $19.89, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
@@ -84,6 +99,13 @@
     "XLI|194.07": "2026-07-27",
     "ASML|1976.71": "2026-07-27",
     "NET|325.42": "2026-07-27",
-    "ZS|182.49": "2026-07-27"
+    "ZS|182.49": "2026-07-27",
+    "TT|538.56": "2026-07-27",
+    "GE|408.05": "2026-07-27",
+    "XLF|59.89": "2026-07-27",
+    "SMCI|37.86": "2026-07-27",
+    "SMR|11.26": "2026-07-27",
+    "IONQ|46.75": "2026-07-27",
+    "RGTI|19.89": "2026-07-27"
   }
 }

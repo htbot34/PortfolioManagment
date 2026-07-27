@@ -1318,13 +1318,13 @@
     outage: 0
     unknown: 1
 - date: '2026-07-27'
-  candidates_evaluated: 5
-  cleared_primary: 1
+  candidates_evaluated: 6
+  cleared_primary: 0
   cleared_insider_promotion: 0
   blocked_by:
     technical: 2
-    sector_momentum: 1
-    news: 1
+    sector_momentum: 4
+    news: 0
     trump: 0
     earnings_window: 0
     correlation_block: 0
@@ -1333,11 +1333,11 @@
     soft_veto: 0
     trump_block: 0
   near_miss:
-  - ticker: LMT
+  - ticker: RTX
     passed:
     - technical
-    - sector_momentum
-    failed: news
+    - news
+    failed: sector_momentum
     insider_score: 0
     insider_status: not_evaluated
     news_status: ok
@@ -1352,9 +1352,9 @@
     scored: 0
     zero: 0
     unavailable: 0
-    not_evaluated: 5
+    not_evaluated: 6
   news:
-    ok: 3
+    ok: 4
     empty: 0
     outage: 0
     unknown: 2

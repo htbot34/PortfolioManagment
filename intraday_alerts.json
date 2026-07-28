@@ -1,65 +1,50 @@
 {
-  "checked_at": "2026-07-28T16:57:06Z",
+  "checked_at": "2026-07-28T18:08:08Z",
   "alerts": [
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "NBIS gapped down -9.1% today"
+      "text": "NBIS gapped down -11.7% today"
     },
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "IREN gapped down -5.1% today"
+      "text": "OKLO gapped down -6.3% today"
     },
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "FPS gapped down -7.6% today"
+      "text": "IREN gapped down -7.2% today"
     },
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "AMAT gapped down -7.3% today"
+      "text": "INTC gapped down -5.8% today"
+    },
+    {
+      "severity": "high",
+      "kind": "position_break",
+      "text": "FPS gapped down -10.9% today"
+    },
+    {
+      "severity": "high",
+      "kind": "position_break",
+      "text": "AMAT gapped down -8.4% today"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "WDAY at $158.77 - within buy zone of yesterday's breakout setup ($147.54)"
+      "text": "WDAY at $159.37 - within buy zone of yesterday's breakout setup ($147.54)"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "SHOP at $133.35 - within buy zone of yesterday's breakout setup ($126.88)"
-    },
-    {
-      "severity": "low",
-      "kind": "watchlist_entry",
-      "text": "RTX at $217.67 - within buy zone of yesterday's breakout setup ($218.42)"
+      "text": "SHOP at $131.00 - within buy zone of yesterday's breakout setup ($126.88)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "GEV in entry zone $947.81-$1008.76 (plan: stop $856.38, target $1222.09, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "XLI in entry zone $182.35-$184.61 (plan: stop $178.11, target $194.22, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "LEU in entry zone $166.47-$176.01 (plan: stop $148.59, target $216.54, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "UEC in entry zone $9.50-$9.96 (plan: stop $8.66, target $11.87, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "MSTR in entry zone $96.42-$100.88 (plan: stop $88.05, target $119.85, hold 2-3 weeks)"
+      "text": "NEE in entry zone $88.37-$89.60 (plan: stop $86.05, target $94.86, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
@@ -85,6 +70,7 @@
     "XLI|194.22": "2026-07-28",
     "LEU|216.54": "2026-07-28",
     "UEC|11.87": "2026-07-28",
-    "MSTR|119.85": "2026-07-28"
+    "MSTR|119.85": "2026-07-28",
+    "NEE|94.86": "2026-07-28"
   }
 }

@@ -2794,14 +2794,14 @@
       excess_return: -0.14291524764282088
       hit: false
     '20':
-      status: pending
-      exit_date: null
-      exit_price: null
-      benchmark_exit_price: null
-      forward_return: null
-      benchmark_forward_return: null
-      excess_return: null
-      hit: null
+      status: realized
+      exit_date: '2026-07-28'
+      exit_price: 269.6099853515625
+      benchmark_exit_price: 740.8599853515625
+      forward_return: -0.3157106970772525
+      benchmark_forward_return: 0.006439154303396435
+      excess_return: -0.32214985138064894
+      hit: false
   last_updated: '2026-07-28'
 - ticker: ONTO
   miss_date: '2026-06-29'
@@ -4377,14 +4377,14 @@
       excess_return: 0.003475806190880275
       hit: true
     '10':
-      status: pending
-      exit_date: null
-      exit_price: null
-      benchmark_exit_price: null
-      forward_return: null
-      benchmark_forward_return: null
-      excess_return: null
-      hit: null
+      status: realized
+      exit_date: '2026-07-28'
+      exit_price: 57.599998474121094
+      benchmark_exit_price: 740.8599853515625
+      forward_return: 0.025275866166460135
+      benchmark_forward_return: -0.014591106352395519
+      excess_return: 0.03986697251885565
+      hit: true
     '20':
       status: pending
       exit_date: null
@@ -4578,14 +4578,14 @@
   benchmark_entry_price: 748.280029296875
   horizons:
     '5':
-      status: pending
-      exit_date: null
-      exit_price: null
-      benchmark_exit_price: null
-      forward_return: null
-      benchmark_forward_return: null
-      excess_return: null
-      hit: null
+      status: realized
+      exit_date: '2026-07-28'
+      exit_price: 4.820000171661377
+      benchmark_exit_price: 740.8599853515625
+      forward_return: -0.08712121588413146
+      benchmark_forward_return: -0.009916132537019303
+      excess_return: -0.07720508334711217
+      hit: false
     '10':
       status: pending
       exit_date: null
@@ -4618,14 +4618,14 @@
   benchmark_entry_price: 748.280029296875
   horizons:
     '5':
-      status: pending
-      exit_date: null
-      exit_price: null
-      benchmark_exit_price: null
-      forward_return: null
-      benchmark_forward_return: null
-      excess_return: null
-      hit: null
+      status: realized
+      exit_date: '2026-07-28'
+      exit_price: 167.89999389648438
+      benchmark_exit_price: 740.8599853515625
+      forward_return: -0.04520905277848786
+      benchmark_forward_return: -0.009916132537019303
+      excess_return: -0.03529292024146855
+      hit: false
     '10':
       status: pending
       exit_date: null
@@ -4660,14 +4660,14 @@
   benchmark_entry_price: 748.280029296875
   horizons:
     '5':
-      status: pending
-      exit_date: null
-      exit_price: null
-      benchmark_exit_price: null
-      forward_return: null
-      benchmark_forward_return: null
-      excess_return: null
-      hit: null
+      status: realized
+      exit_date: '2026-07-28'
+      exit_price: 14.680000305175781
+      benchmark_exit_price: 740.8599853515625
+      forward_return: 0.020152880815433274
+      benchmark_forward_return: -0.009916132537019303
+      excess_return: 0.03006901335245258
+      hit: true
     '10':
       status: pending
       exit_date: null
@@ -5117,6 +5117,215 @@
   source: null
   entry_price: 218.4199981689453
   benchmark_entry_price: 739.0900268554688
+  horizons:
+    '5':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+    '10':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+    '20':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+  last_updated: '2026-07-28'
+- ticker: NOW
+  miss_date: '2026-07-28'
+  direction: long
+  kind: near_miss
+  valence: null
+  failed_signal: sector_momentum
+  passed_signals:
+  - technical
+  - news
+  insider_score: 0
+  source: null
+  entry_price: 110.62000274658203
+  benchmark_entry_price: 740.8599853515625
+  horizons:
+    '5':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+    '10':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+    '20':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+  last_updated: '2026-07-28'
+- ticker: OKLO
+  miss_date: '2026-07-28'
+  direction: long
+  kind: trump
+  valence: endorse
+  failed_signal: trump_endorse
+  passed_signals: []
+  insider_score: 0
+  source: "Oklo Joins Trump\u2019s $200M Nuclear Push for AI. Here\u2019s What It\
+    \ Means for OKLO Stock."
+  entry_price: 39.58000183105469
+  benchmark_entry_price: 740.8599853515625
+  horizons:
+    '5':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+    '10':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+    '20':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+  last_updated: '2026-07-28'
+- ticker: RTX
+  miss_date: '2026-07-28'
+  direction: long
+  kind: near_miss
+  valence: null
+  failed_signal: sector_momentum
+  passed_signals:
+  - technical
+  - news
+  insider_score: 0
+  source: null
+  entry_price: 218.5800018310547
+  benchmark_entry_price: 740.8599853515625
+  horizons:
+    '5':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+    '10':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+    '20':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+  last_updated: '2026-07-28'
+- ticker: URI
+  miss_date: '2026-07-28'
+  direction: long
+  kind: near_miss
+  valence: null
+  failed_signal: sector_momentum
+  passed_signals:
+  - technical
+  - news
+  insider_score: 0
+  source: null
+  entry_price: 1091.260009765625
+  benchmark_entry_price: 740.8599853515625
+  horizons:
+    '5':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+    '10':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+    '20':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+  last_updated: '2026-07-28'
+- ticker: XLV
+  miss_date: '2026-07-28'
+  direction: long
+  kind: near_miss
+  valence: null
+  failed_signal: sector_momentum
+  passed_signals:
+  - technical
+  - news
+  insider_score: 0
+  source: null
+  entry_price: 167.25999450683594
+  benchmark_entry_price: 740.8599853515625
   horizons:
     '5':
       status: pending

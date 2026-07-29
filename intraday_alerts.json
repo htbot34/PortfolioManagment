@@ -1,65 +1,60 @@
 {
-  "checked_at": "2026-07-29T18:02:13Z",
+  "checked_at": "2026-07-29T19:51:04Z",
   "alerts": [
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "NBIS gapped down -5.1% today"
+      "text": "NBIS gapped down -13.6% today"
     },
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "IREN gapped down -7.1% today"
+      "text": "OKLO gapped down -7.3% today"
     },
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "FPS gapped down -5.4% today"
+      "text": "IREN gapped down -14.2% today"
     },
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "AMAT gapped down -5.0% today"
+      "text": "FPS gapped down -10.1% today"
+    },
+    {
+      "severity": "high",
+      "kind": "position_break",
+      "text": "AMAT gapped down -6.8% today"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "ABNB at $155.06 - within buy zone of yesterday's breakout setup ($153.11)"
+      "text": "ABNB at $153.02 - within buy zone of yesterday's breakout setup ($153.11)"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "TEAM at $106.27 - within buy zone of yesterday's breakout setup ($99.98)"
+      "text": "TEAM at $104.62 - within buy zone of yesterday's breakout setup ($99.98)"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "WDAY at $169.83 - within buy zone of yesterday's breakout setup ($159.69)"
+      "text": "WDAY at $168.01 - within buy zone of yesterday's breakout setup ($159.69)"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "HUBS at $254.12 - within buy zone of yesterday's breakout setup ($238.05)"
+      "text": "HUBS at $252.41 - within buy zone of yesterday's breakout setup ($238.05)"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "ADBE at $266.05 - within buy zone of yesterday's breakout setup ($249.18)"
+      "text": "ADBE at $263.42 - within buy zone of yesterday's breakout setup ($249.18)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "URI in entry zone $1078.89-$1111.88 (plan: stop $1017.04, target $1252.08, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "DXCM in entry zone $75.81-$78.05 (plan: stop $71.61, target $87.57, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "MSTR in entry zone $96.42-$100.88 (plan: stop $88.05, target $119.85, hold 2-3 weeks)"
+      "text": "NOC in entry zone $526.96-$540.00 (plan: stop $502.53, target $595.38, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
@@ -85,6 +80,7 @@
     "RTX|240.63": "2026-07-29",
     "URI|1252.08": "2026-07-29",
     "DXCM|87.57": "2026-07-29",
-    "MSTR|119.85": "2026-07-29"
+    "MSTR|119.85": "2026-07-29",
+    "NOC|595.38": "2026-07-29"
   }
 }

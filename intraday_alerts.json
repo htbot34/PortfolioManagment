@@ -1,86 +1,146 @@
 {
-  "checked_at": "2026-07-29T20:43:55Z",
+  "checked_at": "2026-07-30T15:04:31Z",
   "alerts": [
     {
-      "severity": "high",
+      "severity": "med",
       "kind": "position_break",
-      "text": "NBIS gapped down -12.7% today"
+      "text": "NBIS lost SMA50 ($223.89) on 1.9x volume"
+    },
+    {
+      "severity": "med",
+      "kind": "position_break",
+      "text": "IREN lost SMA50 ($49.30) on 1.5x volume"
     },
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "OKLO gapped down -6.9% today"
+      "text": "FBL gapped down -17.5% today"
     },
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "IREN gapped down -13.6% today"
-    },
-    {
-      "severity": "high",
-      "kind": "position_break",
-      "text": "INTC gapped down -5.1% today"
-    },
-    {
-      "severity": "high",
-      "kind": "position_break",
-      "text": "FPS gapped down -9.8% today"
-    },
-    {
-      "severity": "high",
-      "kind": "position_break",
-      "text": "AMAT gapped down -8.4% today"
+      "text": "META gapped down -8.4% today"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "ABNB at $153.01 - within buy zone of yesterday's breakout setup ($153.11)"
+      "text": "SNOW at $289.08 - within buy zone of yesterday's breakout setup ($282.90)"
     },
     {
-      "severity": "low",
+      "severity": "med",
       "kind": "watchlist_entry",
-      "text": "TEAM at $104.28 - within buy zone of yesterday's breakout setup ($99.98)"
+      "text": "GEV in entry zone $947.81-$1008.76 (plan: stop $856.38, target $1222.09, hold 2-3 weeks)"
     },
     {
-      "severity": "low",
+      "severity": "med",
       "kind": "watchlist_entry",
-      "text": "WDAY at $168.01 - within buy zone of yesterday's breakout setup ($159.69)"
+      "text": "AMD in entry zone $465.81-$502.23 (plan: stop $411.18, target $629.70, hold 2-3 weeks)"
     },
     {
-      "severity": "low",
+      "severity": "med",
       "kind": "watchlist_entry",
-      "text": "HUBS at $251.12 - within buy zone of yesterday's breakout setup ($238.05)"
+      "text": "ETN in entry zone $373.50-$389.45 (plan: stop $349.57, target $445.29, hold 2-3 weeks)"
     },
     {
-      "severity": "low",
+      "severity": "med",
       "kind": "watchlist_entry",
-      "text": "ADBE at $263.43 - within buy zone of yesterday's breakout setup ($249.18)"
+      "text": "CRWD in entry zone $171.13-$181.44 (plan: stop $155.66, target $217.53, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "ASML in entry zone $1589.94-$1671.59 (plan: stop $1467.47, target $1957.35, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "DDOG in entry zone $260.05-$271.11 (plan: stop $239.32, target $318.10, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "URI in entry zone $1021.23-$1063.58 (plan: stop $957.71, target $1211.79, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "GE in entry zone $341.98-$352.79 (plan: stop $325.75, target $390.65, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "LEU in entry zone $166.47-$176.01 (plan: stop $148.59, target $216.54, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "TENB in entry zone $29.44-$31.99 (plan: stop $25.61, target $40.92, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "CLSK in entry zone $13.89-$14.95 (plan: stop $11.89, target $19.48, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "RBRK in entry zone $68.36-$72.80 (plan: stop $61.70, target $88.34, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "UEC in entry zone $9.50-$9.96 (plan: stop $8.66, target $11.87, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "SNOW in entry zone $278.56-$290.13 (plan: stop $256.87, target $339.30, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "ORCL in entry zone $123.17-$128.51 (plan: stop $113.14, target $151.24, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "AI in entry zone $8.64-$9.00 (plan: stop $7.98, target $10.50, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "MSTR in entry zone $96.42-$100.88 (plan: stop $88.05, target $119.85, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "MRNA in entry zone $53.05-$56.49 (plan: stop $47.89, target $68.53, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "ESTC in entry zone $63.54-$65.94 (plan: stop $59.06, target $76.10, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
-    "LLY|1354.1": "2026-07-29",
-    "ABNB|169.88": "2026-07-29",
-    "ROKU|150.48": "2026-07-29",
-    "CRWD|220.43": "2026-07-29",
-    "NEE|94.86": "2026-07-29",
-    "AAPL|370.89": "2026-07-29",
-    "XLV|178.0": "2026-07-29",
-    "FTNT|174.18": "2026-07-29",
-    "AFRM|85.16": "2026-07-29",
-    "BKNG|224.79": "2026-07-29",
-    "V|394.5": "2026-07-29",
-    "TENB|41.31": "2026-07-29",
-    "AVGO|436.23": "2026-07-29",
-    "RBRK|89.06": "2026-07-29",
-    "NU|16.44": "2026-07-29",
-    "SHOP|152.02": "2026-07-29",
-    "AI|10.5": "2026-07-29",
-    "TOST|37.18": "2026-07-29",
-    "MRNA|68.53": "2026-07-29",
-    "RTX|240.63": "2026-07-29",
-    "URI|1252.08": "2026-07-29",
-    "DXCM|87.57": "2026-07-29",
-    "MSTR|119.85": "2026-07-29",
-    "NOC|595.38": "2026-07-29"
+    "GEV|1222.09": "2026-07-30",
+    "AMD|629.7": "2026-07-30",
+    "ETN|445.29": "2026-07-30",
+    "CRWD|217.53": "2026-07-30",
+    "ASML|1957.35": "2026-07-30",
+    "DDOG|318.1": "2026-07-30",
+    "URI|1211.79": "2026-07-30",
+    "GE|390.65": "2026-07-30",
+    "LEU|216.54": "2026-07-30",
+    "TENB|40.92": "2026-07-30",
+    "CLSK|19.48": "2026-07-30",
+    "RBRK|88.34": "2026-07-30",
+    "UEC|11.87": "2026-07-30",
+    "SNOW|339.3": "2026-07-30",
+    "ORCL|151.24": "2026-07-30",
+    "AI|10.5": "2026-07-30",
+    "MSTR|119.85": "2026-07-30",
+    "MRNA|68.53": "2026-07-30",
+    "ESTC|76.1": "2026-07-30"
   }
 }

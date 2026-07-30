@@ -1,10 +1,10 @@
 {
-  "checked_at": "2026-07-30T16:58:03Z",
+  "checked_at": "2026-07-30T18:13:35Z",
   "alerts": [
     {
       "severity": "med",
       "kind": "position_break",
-      "text": "NBIS lost SMA50 ($223.84) on 1.9x volume"
+      "text": "NBIS lost SMA50 ($223.81) on 1.9x volume"
     },
     {
       "severity": "med",
@@ -14,17 +14,17 @@
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "FBL gapped down -19.0% today"
+      "text": "FBL gapped down -18.4% today"
     },
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "META gapped down -9.3% today"
+      "text": "META gapped down -9.0% today"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "SNOW at $294.20 - within buy zone of yesterday's breakout setup ($282.90)"
+      "text": "SNOW at $294.21 - within buy zone of yesterday's breakout setup ($282.90)"
     },
     {
       "severity": "low",
@@ -34,42 +34,27 @@
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "TSM in entry zone $402.64-$418.82 (plan: stop $378.37, target $475.45, hold 2-3 weeks)"
+      "text": "ABNB in entry zone $151.74-$155.12 (plan: stop $145.40, target $169.49, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "ROKU in entry zone $144.82-$146.18 (plan: stop $142.28, target $151.94, hold 2-3 weeks)"
+      "text": "MU in entry zone $864.22-$938.03 (plan: stop $753.50, target $1196.38, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "NU in entry zone $14.23-$14.65 (plan: stop $13.44, target $16.44, hold 2-3 weeks)"
+      "text": "S in entry zone $18.22-$19.01 (plan: stop $16.74, target $22.37, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "NNE in entry zone $16.31-$17.27 (plan: stop $14.51, target $21.35, hold 2-3 weeks)"
+      "text": "SMR in entry zone $8.41-$8.95 (plan: stop $7.39, target $11.26, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "NOC in entry zone $526.96-$540.00 (plan: stop $502.53, target $595.38, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "CCJ in entry zone $87.92-$90.78 (plan: stop $82.57, target $102.91, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "IONQ in entry zone $34.92-$36.92 (plan: stop $31.16, target $45.44, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "BRK-B in entry zone $507.10-$512.59 (plan: stop $496.81, target $535.92, hold 2-3 weeks)"
+      "text": "TOST in entry zone $31.83-$32.85 (plan: stop $29.92, target $37.18, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
@@ -99,6 +84,11 @@
     "NOC|595.38": "2026-07-30",
     "CCJ|102.91": "2026-07-30",
     "IONQ|45.44": "2026-07-30",
-    "BRK-B|535.92": "2026-07-30"
+    "BRK-B|535.92": "2026-07-30",
+    "ABNB|169.49": "2026-07-30",
+    "MU|1196.38": "2026-07-30",
+    "S|22.37": "2026-07-30",
+    "SMR|11.26": "2026-07-30",
+    "TOST|37.18": "2026-07-30"
   }
 }

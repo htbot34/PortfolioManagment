@@ -1,10 +1,10 @@
 {
-  "checked_at": "2026-07-30T15:04:31Z",
+  "checked_at": "2026-07-30T16:58:03Z",
   "alerts": [
     {
       "severity": "med",
       "kind": "position_break",
-      "text": "NBIS lost SMA50 ($223.89) on 1.9x volume"
+      "text": "NBIS lost SMA50 ($223.84) on 1.9x volume"
     },
     {
       "severity": "med",
@@ -14,112 +14,62 @@
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "FBL gapped down -17.5% today"
+      "text": "FBL gapped down -19.0% today"
     },
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "META gapped down -8.4% today"
+      "text": "META gapped down -9.3% today"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "SNOW at $289.08 - within buy zone of yesterday's breakout setup ($282.90)"
+      "text": "SNOW at $294.20 - within buy zone of yesterday's breakout setup ($282.90)"
+    },
+    {
+      "severity": "low",
+      "kind": "watchlist_entry",
+      "text": "CAT RSI 34 - oversold reversal in progress (from yesterday's bucket)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "GEV in entry zone $947.81-$1008.76 (plan: stop $856.38, target $1222.09, hold 2-3 weeks)"
+      "text": "TSM in entry zone $402.64-$418.82 (plan: stop $378.37, target $475.45, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "AMD in entry zone $465.81-$502.23 (plan: stop $411.18, target $629.70, hold 2-3 weeks)"
+      "text": "ROKU in entry zone $144.82-$146.18 (plan: stop $142.28, target $151.94, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "ETN in entry zone $373.50-$389.45 (plan: stop $349.57, target $445.29, hold 2-3 weeks)"
+      "text": "NU in entry zone $14.23-$14.65 (plan: stop $13.44, target $16.44, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "CRWD in entry zone $171.13-$181.44 (plan: stop $155.66, target $217.53, hold 2-3 weeks)"
+      "text": "NNE in entry zone $16.31-$17.27 (plan: stop $14.51, target $21.35, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "ASML in entry zone $1589.94-$1671.59 (plan: stop $1467.47, target $1957.35, hold 2-3 weeks)"
+      "text": "NOC in entry zone $526.96-$540.00 (plan: stop $502.53, target $595.38, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "DDOG in entry zone $260.05-$271.11 (plan: stop $239.32, target $318.10, hold 2-3 weeks)"
+      "text": "CCJ in entry zone $87.92-$90.78 (plan: stop $82.57, target $102.91, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "URI in entry zone $1021.23-$1063.58 (plan: stop $957.71, target $1211.79, hold 2-3 weeks)"
+      "text": "IONQ in entry zone $34.92-$36.92 (plan: stop $31.16, target $45.44, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "GE in entry zone $341.98-$352.79 (plan: stop $325.75, target $390.65, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "LEU in entry zone $166.47-$176.01 (plan: stop $148.59, target $216.54, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "TENB in entry zone $29.44-$31.99 (plan: stop $25.61, target $40.92, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "CLSK in entry zone $13.89-$14.95 (plan: stop $11.89, target $19.48, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "RBRK in entry zone $68.36-$72.80 (plan: stop $61.70, target $88.34, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "UEC in entry zone $9.50-$9.96 (plan: stop $8.66, target $11.87, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "SNOW in entry zone $278.56-$290.13 (plan: stop $256.87, target $339.30, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "ORCL in entry zone $123.17-$128.51 (plan: stop $113.14, target $151.24, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "AI in entry zone $8.64-$9.00 (plan: stop $7.98, target $10.50, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "MSTR in entry zone $96.42-$100.88 (plan: stop $88.05, target $119.85, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "MRNA in entry zone $53.05-$56.49 (plan: stop $47.89, target $68.53, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "ESTC in entry zone $63.54-$65.94 (plan: stop $59.06, target $76.10, hold 2-3 weeks)"
+      "text": "BRK-B in entry zone $507.10-$512.59 (plan: stop $496.81, target $535.92, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
@@ -141,6 +91,14 @@
     "AI|10.5": "2026-07-30",
     "MSTR|119.85": "2026-07-30",
     "MRNA|68.53": "2026-07-30",
-    "ESTC|76.1": "2026-07-30"
+    "ESTC|76.1": "2026-07-30",
+    "TSM|475.45": "2026-07-30",
+    "ROKU|151.94": "2026-07-30",
+    "NU|16.44": "2026-07-30",
+    "NNE|21.35": "2026-07-30",
+    "NOC|595.38": "2026-07-30",
+    "CCJ|102.91": "2026-07-30",
+    "IONQ|45.44": "2026-07-30",
+    "BRK-B|535.92": "2026-07-30"
   }
 }

@@ -1,60 +1,50 @@
 {
-  "checked_at": "2026-07-30T18:13:35Z",
+  "checked_at": "2026-07-30T20:00:08Z",
   "alerts": [
     {
       "severity": "med",
       "kind": "position_break",
-      "text": "NBIS lost SMA50 ($223.81) on 1.9x volume"
+      "text": "NBIS lost SMA50 ($223.84) on 1.9x volume"
     },
     {
       "severity": "med",
       "kind": "position_break",
-      "text": "IREN lost SMA50 ($49.30) on 1.5x volume"
+      "text": "IREN lost SMA50 ($49.32) on 1.6x volume"
     },
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "FBL gapped down -18.4% today"
+      "text": "FBL gapped down -16.2% today"
     },
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "META gapped down -9.0% today"
+      "text": "META gapped down -7.9% today"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "SNOW at $294.21 - within buy zone of yesterday's breakout setup ($282.90)"
+      "text": "SNOW at $298.09 - within buy zone of yesterday's breakout setup ($282.90)"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "CAT RSI 34 - oversold reversal in progress (from yesterday's bucket)"
+      "text": "CAT RSI 35 - oversold reversal in progress (from yesterday's bucket)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "ABNB in entry zone $151.74-$155.12 (plan: stop $145.40, target $169.49, hold 2-3 weeks)"
+      "text": "ALAB in entry zone $299.54-$338.73 (plan: stop $240.75, target $475.90, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "MU in entry zone $864.22-$938.03 (plan: stop $753.50, target $1196.38, hold 2-3 weeks)"
+      "text": "V in entry zone $366.28-$372.82 (plan: stop $354.01, target $400.63, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "S in entry zone $18.22-$19.01 (plan: stop $16.74, target $22.37, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "SMR in entry zone $8.41-$8.95 (plan: stop $7.39, target $11.26, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "TOST in entry zone $31.83-$32.85 (plan: stop $29.92, target $37.18, hold 2-3 weeks)"
+      "text": "PATH in entry zone $12.27-$12.91 (plan: stop $11.07, target $15.63, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
@@ -89,6 +79,9 @@
     "MU|1196.38": "2026-07-30",
     "S|22.37": "2026-07-30",
     "SMR|11.26": "2026-07-30",
-    "TOST|37.18": "2026-07-30"
+    "TOST|37.18": "2026-07-30",
+    "ALAB|475.9": "2026-07-30",
+    "V|400.63": "2026-07-30",
+    "PATH|15.63": "2026-07-30"
   }
 }

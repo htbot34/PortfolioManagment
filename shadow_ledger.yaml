@@ -3380,14 +3380,14 @@
       excess_return: -0.04851904572033418
       hit: false
     '20':
-      status: pending
-      exit_date: null
-      exit_price: null
-      benchmark_exit_price: null
-      forward_return: null
-      benchmark_forward_return: null
-      excess_return: null
-      hit: null
+      status: realized
+      exit_date: '2026-07-31'
+      exit_price: 146.25999450683594
+      benchmark_exit_price: 747.030029296875
+      forward_return: -0.1161469767762663
+      benchmark_forward_return: 0.003021026224513779
+      excess_return: -0.11916800300078008
+      hit: false
   last_updated: '2026-07-31'
 - ticker: CRSP
   miss_date: '2026-07-02'
@@ -3422,14 +3422,14 @@
       excess_return: -0.20272641564300337
       hit: false
     '20':
-      status: pending
-      exit_date: null
-      exit_price: null
-      benchmark_exit_price: null
-      forward_return: null
-      benchmark_forward_return: null
-      excess_return: null
-      hit: null
+      status: realized
+      exit_date: '2026-07-31'
+      exit_price: 47.9900016784668
+      benchmark_exit_price: 747.030029296875
+      forward_return: -0.2012316874853806
+      benchmark_forward_return: 0.003021026224513779
+      excess_return: -0.20425271370989437
+      hit: false
   last_updated: '2026-07-31'
 - ticker: LRCX
   miss_date: '2026-07-02'
@@ -3464,14 +3464,14 @@
       excess_return: -0.1064482049561566
       hit: false
     '20':
-      status: pending
-      exit_date: null
-      exit_price: null
-      benchmark_exit_price: null
-      forward_return: null
-      benchmark_forward_return: null
-      excess_return: null
-      hit: null
+      status: realized
+      exit_date: '2026-07-31'
+      exit_price: 293.0199890136719
+      benchmark_exit_price: 747.030029296875
+      forward_return: -0.16615922722729642
+      benchmark_forward_return: 0.003021026224513779
+      excess_return: -0.1691802534518102
+      hit: false
   last_updated: '2026-07-31'
 - ticker: SPGI
   miss_date: '2026-07-02'
@@ -3506,14 +3506,14 @@
       excess_return: 0.026893203867123718
       hit: true
     '20':
-      status: pending
-      exit_date: null
-      exit_price: null
-      benchmark_exit_price: null
-      forward_return: null
-      benchmark_forward_return: null
-      excess_return: null
-      hit: null
+      status: realized
+      exit_date: '2026-07-31'
+      exit_price: 411.92999267578125
+      benchmark_exit_price: 747.030029296875
+      forward_return: -0.06356139271540877
+      benchmark_forward_return: 0.003021026224513779
+      excess_return: -0.06658241893992255
+      hit: false
   last_updated: '2026-07-31'
 - ticker: TENB
   miss_date: '2026-07-02'
@@ -3548,14 +3548,14 @@
       excess_return: 0.03516134981271613
       hit: true
     '20':
-      status: pending
-      exit_date: null
-      exit_price: null
-      benchmark_exit_price: null
-      forward_return: null
-      benchmark_forward_return: null
-      excess_return: null
-      hit: null
+      status: realized
+      exit_date: '2026-07-31'
+      exit_price: 32.63999938964844
+      benchmark_exit_price: 747.030029296875
+      forward_return: -0.15440412746307403
+      benchmark_forward_return: 0.003021026224513779
+      excess_return: -0.1574251536875878
+      hit: false
   last_updated: '2026-07-31'
 - ticker: TSM
   miss_date: '2026-07-02'
@@ -3588,14 +3588,14 @@
       excess_return: -0.08043440643517866
       hit: false
     '20':
-      status: pending
-      exit_date: null
-      exit_price: null
-      benchmark_exit_price: null
-      forward_return: null
-      benchmark_forward_return: null
-      excess_return: null
-      hit: null
+      status: realized
+      exit_date: '2026-07-31'
+      exit_price: 404.25
+      benchmark_exit_price: 747.030029296875
+      forward_return: -0.06889166070071075
+      benchmark_forward_return: 0.003021026224513779
+      excess_return: -0.07191268692522453
+      hit: false
   last_updated: '2026-07-31'
 - ticker: CRSP
   miss_date: '2026-07-03'
@@ -4545,14 +4545,14 @@
       excess_return: -0.06080088003130066
       hit: false
     '10':
-      status: pending
-      exit_date: null
-      exit_price: null
-      benchmark_exit_price: null
-      forward_return: null
-      benchmark_forward_return: null
-      excess_return: null
-      hit: null
+      status: realized
+      exit_date: '2026-07-31'
+      exit_price: 83.44999694824219
+      benchmark_exit_price: 747.030029296875
+      forward_return: 0.08871487654266305
+      benchmark_forward_return: 0.0050317525865977205
+      excess_return: 0.08368312395606534
+      hit: true
     '20':
       status: pending
       exit_date: null
@@ -4993,14 +4993,14 @@
   benchmark_entry_price: 738.9299926757812
   horizons:
     '5':
-      status: pending
-      exit_date: null
-      exit_price: null
-      benchmark_exit_price: null
-      forward_return: null
-      benchmark_forward_return: null
-      excess_return: null
-      hit: null
+      status: realized
+      exit_date: '2026-07-31'
+      exit_price: 38.83000183105469
+      benchmark_exit_price: 747.030029296875
+      forward_return: -0.035279457613548136
+      benchmark_forward_return: 0.010961845778870402
+      excess_return: -0.04624130339241854
+      hit: false
     '10':
       status: pending
       exit_date: null
@@ -5035,14 +5035,14 @@
   benchmark_entry_price: 738.9299926757812
   horizons:
     '5':
-      status: pending
-      exit_date: null
-      exit_price: null
-      benchmark_exit_price: null
-      forward_return: null
-      benchmark_forward_return: null
-      excess_return: null
-      hit: null
+      status: realized
+      exit_date: '2026-07-31'
+      exit_price: 215.22000122070312
+      benchmark_exit_price: 747.030029296875
+      forward_return: 0.011419747221396583
+      benchmark_forward_return: 0.010961845778870402
+      excess_return: 0.00045790144252618077
+      hit: true
     '10':
       status: pending
       exit_date: null
@@ -6079,8 +6079,8 @@
   - sector_momentum
   insider_score: 0
   source: null
-  entry_price: null
-  benchmark_entry_price: null
+  entry_price: 22.31999969482422
+  benchmark_entry_price: 747.030029296875
   horizons:
     '5':
       status: pending
@@ -6121,8 +6121,8 @@
   - sector_momentum
   insider_score: 0
   source: null
-  entry_price: null
-  benchmark_entry_price: null
+  entry_price: 13.760000228881836
+  benchmark_entry_price: 747.030029296875
   horizons:
     '5':
       status: pending
@@ -6163,8 +6163,92 @@
   - news
   insider_score: 0
   source: null
-  entry_price: null
-  benchmark_entry_price: null
+  entry_price: 37.220001220703125
+  benchmark_entry_price: 747.030029296875
+  horizons:
+    '5':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+    '10':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+    '20':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+  last_updated: '2026-07-31'
+- ticker: DXCM
+  miss_date: '2026-07-31'
+  direction: long
+  kind: near_miss
+  valence: null
+  failed_signal: sector_momentum
+  passed_signals:
+  - technical
+  - news
+  insider_score: 0
+  source: null
+  entry_price: 83.44999694824219
+  benchmark_entry_price: 747.030029296875
+  horizons:
+    '5':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+    '10':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+    '20':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+  last_updated: '2026-07-31'
+- ticker: GOOGL
+  miss_date: '2026-07-31'
+  direction: long
+  kind: near_miss
+  valence: null
+  failed_signal: sector_momentum
+  passed_signals:
+  - technical
+  - news
+  insider_score: 0
+  source: null
+  entry_price: 356.1300048828125
+  benchmark_entry_price: 747.030029296875
   horizons:
     '5':
       status: pending
@@ -6205,8 +6289,8 @@
   - sector_momentum
   insider_score: 0
   source: null
-  entry_price: null
-  benchmark_entry_price: null
+  entry_price: 107.62999725341797
+  benchmark_entry_price: 747.030029296875
   horizons:
     '5':
       status: pending
@@ -6247,8 +6331,92 @@
   - news
   insider_score: 0
   source: null
-  entry_price: null
-  benchmark_entry_price: null
+  entry_price: 464.7200012207031
+  benchmark_entry_price: 747.030029296875
+  horizons:
+    '5':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+    '10':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+    '20':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+  last_updated: '2026-07-31'
+- ticker: PWR
+  miss_date: '2026-07-31'
+  direction: long
+  kind: near_miss
+  valence: null
+  failed_signal: sector_momentum
+  passed_signals:
+  - technical
+  - news
+  insider_score: 0
+  source: null
+  entry_price: 667.3599853515625
+  benchmark_entry_price: 747.030029296875
+  horizons:
+    '5':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+    '10':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+    '20':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+  last_updated: '2026-07-31'
+- ticker: REGN
+  miss_date: '2026-07-31'
+  direction: long
+  kind: near_miss
+  valence: null
+  failed_signal: sector_momentum
+  passed_signals:
+  - technical
+  - news
+  insider_score: 0
+  source: null
+  entry_price: 762.6300048828125
+  benchmark_entry_price: 747.030029296875
   horizons:
     '5':
       status: pending

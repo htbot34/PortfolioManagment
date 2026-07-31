@@ -1362,12 +1362,12 @@
     unknown: 2
 - date: '2026-07-31'
   candidates_evaluated: 8
-  cleared_primary: 1
+  cleared_primary: 0
   cleared_insider_promotion: 0
   blocked_by:
     technical: 1
-    sector_momentum: 3
-    news: 3
+    sector_momentum: 7
+    news: 0
     trump: 0
     earnings_window: 0
     correlation_block: 0
@@ -1376,23 +1376,7 @@
     soft_veto: 0
     trump_block: 0
   near_miss:
-  - ticker: CIFR
-    passed:
-    - technical
-    - sector_momentum
-    failed: news
-    insider_score: 0
-    insider_status: not_evaluated
-    news_status: ok
-  - ticker: CLSK
-    passed:
-    - technical
-    - sector_momentum
-    failed: news
-    insider_score: 0
-    insider_status: not_evaluated
-    news_status: ok
-  - ticker: CMG
+  - ticker: DXCM
     passed:
     - technical
     - news
@@ -1400,15 +1384,31 @@
     insider_score: 0
     insider_status: not_evaluated
     news_status: ok
-  - ticker: HUT
+  - ticker: GOOGL
     passed:
     - technical
-    - sector_momentum
-    failed: news
+    - news
+    failed: sector_momentum
     insider_score: 0
     insider_status: not_evaluated
     news_status: ok
   - ticker: MSFT
+    passed:
+    - technical
+    - news
+    failed: sector_momentum
+    insider_score: 0
+    insider_status: not_evaluated
+    news_status: ok
+  - ticker: PWR
+    passed:
+    - technical
+    - news
+    failed: sector_momentum
+    insider_score: 0
+    insider_status: not_evaluated
+    news_status: ok
+  - ticker: REGN
     passed:
     - technical
     - news

@@ -1,65 +1,45 @@
 {
-  "checked_at": "2026-07-31T18:23:33Z",
+  "checked_at": "2026-07-31T20:00:27Z",
   "alerts": [
     {
       "severity": "med",
       "kind": "position_break",
-      "text": "NBIS lost SMA50 ($223.68) on 2.0x volume"
+      "text": "NBIS lost SMA50 ($223.69) on 2.0x volume"
+    },
+    {
+      "severity": "high",
+      "kind": "position_break",
+      "text": "OKLO gapped down -5.2% today"
     },
     {
       "severity": "med",
       "kind": "position_break",
-      "text": "IREN lost SMA50 ($49.12) on 1.5x volume"
+      "text": "IREN lost SMA50 ($49.11) on 1.5x volume"
     },
     {
       "severity": "med",
       "kind": "position_break",
-      "text": "FBL lost SMA50 ($23.95) on 2.4x volume"
+      "text": "FBL lost SMA50 ($23.96) on 2.4x volume"
     },
     {
       "severity": "med",
       "kind": "position_break",
-      "text": "META lost SMA50 ($602.07) on 2.2x volume"
+      "text": "META lost SMA50 ($602.18) on 2.2x volume"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "MSFT at $462.26 - within buy zone of yesterday's breakout setup ($451.10)"
+      "text": "MSFT at $465.35 - within buy zone of yesterday's breakout setup ($451.10)"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "REGN at $754.49 - within buy zone of yesterday's breakout setup ($738.34)"
-    },
-    {
-      "severity": "low",
-      "kind": "watchlist_entry",
-      "text": "SNOW at $297.17 - within buy zone of yesterday's breakout setup ($298.10)"
+      "text": "REGN at $762.63 - within buy zone of yesterday's breakout setup ($738.34)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "NVDA in entry zone $198.24-$205.68 (plan: stop $187.08, target $231.72, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "GEV in entry zone $929.31-$995.15 (plan: stop $830.56, target $1225.57, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "XLV in entry zone $162.65-$164.98 (plan: stop $158.28, target $174.88, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "SPY in entry zone $745.29-$750.94 (plan: stop $734.71, target $774.92, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "MRNA in entry zone $53.05-$56.49 (plan: stop $47.89, target $68.53, hold 2-3 weeks)"
+      "text": "LMT in entry zone $581.02-$594.27 (plan: stop $556.17, target $650.60, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
@@ -99,6 +79,7 @@
     "GEV|1225.57": "2026-07-31",
     "XLV|174.88": "2026-07-31",
     "SPY|774.92": "2026-07-31",
-    "MRNA|68.53": "2026-07-31"
+    "MRNA|68.53": "2026-07-31",
+    "LMT|650.6": "2026-07-31"
   }
 }

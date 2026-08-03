@@ -1377,37 +1377,21 @@
     outage: 0
     unknown: 1
 - date: '2026-08-03'
-  candidates_evaluated: 13
+  candidates_evaluated: 9
   cleared_primary: 0
   cleared_insider_promotion: 0
   blocked_by:
     technical: 1
-    sector_momentum: 11
+    sector_momentum: 8
     news: 0
     trump: 0
     earnings_window: 0
     correlation_block: 0
-    valuation_block: 1
+    valuation_block: 0
     regime: 0
     soft_veto: 0
     trump_block: 0
   near_miss:
-  - ticker: AI
-    passed:
-    - technical
-    - news
-    failed: sector_momentum
-    insider_score: 0
-    insider_status: zero
-    news_status: ok
-  - ticker: DDOG
-    passed:
-    - technical
-    - news
-    failed: sector_momentum
-    insider_score: 0
-    insider_status: zero
-    news_status: ok
   - ticker: DXCM
     passed:
     - technical
@@ -1416,7 +1400,7 @@
     insider_score: 0
     insider_status: zero
     news_status: ok
-  - ticker: ENPH
+  - ticker: ESTC
     passed:
     - technical
     - news
@@ -1425,6 +1409,22 @@
     insider_status: zero
     news_status: ok
   - ticker: ETN
+    passed:
+    - technical
+    - news
+    failed: sector_momentum
+    insider_score: 0
+    insider_status: zero
+    news_status: ok
+  - ticker: MSFT
+    passed:
+    - technical
+    - news
+    failed: sector_momentum
+    insider_score: 0
+    insider_status: zero
+    news_status: ok
+  - ticker: ROK
     passed:
     - technical
     - news
@@ -1441,11 +1441,11 @@
     firings: []
   insider:
     scored: 0
-    zero: 9
+    zero: 6
     unavailable: 0
-    not_evaluated: 4
+    not_evaluated: 3
   news:
-    ok: 12
+    ok: 8
     empty: 0
     outage: 0
     unknown: 1

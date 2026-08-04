@@ -1409,22 +1409,30 @@
     outage: 0
     unknown: 1
 - date: '2026-08-04'
-  candidates_evaluated: 12
-  cleared_primary: 0
+  candidates_evaluated: 15
+  cleared_primary: 1
   cleared_insider_promotion: 0
   blocked_by:
     technical: 1
-    sector_momentum: 11
-    news: 0
+    sector_momentum: 6
+    news: 2
     trump: 0
     earnings_window: 0
     correlation_block: 0
-    valuation_block: 0
+    valuation_block: 5
     regime: 0
     soft_veto: 0
     trump_block: 0
   near_miss:
-  - ticker: DXCM
+  - ticker: ALAB
+    passed:
+    - technical
+    - sector_momentum
+    failed: news
+    insider_score: 0
+    insider_status: zero
+    news_status: ok
+  - ticker: DIA
     passed:
     - technical
     - news
@@ -1432,7 +1440,7 @@
     insider_score: 0
     insider_status: zero
     news_status: ok
-  - ticker: ESTC
+  - ticker: FSLR
     passed:
     - technical
     - news
@@ -1440,23 +1448,15 @@
     insider_score: 0
     insider_status: zero
     news_status: ok
-  - ticker: ETN
+  - ticker: TOST
     passed:
     - technical
-    - news
-    failed: sector_momentum
+    - sector_momentum
+    failed: news
     insider_score: 0
     insider_status: zero
     news_status: ok
-  - ticker: LDOS
-    passed:
-    - technical
-    - news
-    failed: sector_momentum
-    insider_score: 0
-    insider_status: zero
-    news_status: ok
-  - ticker: ROK
+  - ticker: XLK
     passed:
     - technical
     - news
@@ -1473,11 +1473,11 @@
     firings: []
   insider:
     scored: 0
-    zero: 6
+    zero: 5
     unavailable: 0
-    not_evaluated: 6
+    not_evaluated: 10
   news:
-    ok: 11
+    ok: 14
     empty: 0
     outage: 0
     unknown: 1

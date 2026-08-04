@@ -1,75 +1,40 @@
 {
-  "checked_at": "2026-08-04T17:11:04Z",
+  "checked_at": "2026-08-04T19:04:08Z",
   "alerts": [
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "DXCM at $87.18 - within buy zone of yesterday's breakout setup ($87.31)"
+      "text": "DXCM at $86.98 - within buy zone of yesterday's breakout setup ($87.31)"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "ETN at $441.19 - within buy zone of yesterday's breakout setup ($438.23)"
+      "text": "ETN at $445.71 - within buy zone of yesterday's breakout setup ($438.23)"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "MSFT at $495.42 - within buy zone of yesterday's breakout setup ($487.65)"
+      "text": "MSFT at $496.51 - within buy zone of yesterday's breakout setup ($487.65)"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "SNOW at $318.87 - within buy zone of yesterday's breakout setup ($307.53)"
+      "text": "SNOW at $318.29 - within buy zone of yesterday's breakout setup ($307.53)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "NEE in entry zone $86.50-$88.29 (plan: stop $83.81, target $94.57, hold 2-3 weeks)"
+      "text": "ABNB in entry zone $149.39-$152.72 (plan: stop $143.15, target $166.87, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "HUBS in entry zone $244.61-$258.63 (plan: stop $218.33, target $318.20, hold 2-3 weeks)"
+      "text": "LUNR in entry zone $14.08-$15.20 (plan: stop $11.97, target $19.98, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "NOW in entry zone $115.81-$121.33 (plan: stop $105.48, target $144.75, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "V in entry zone $369.18-$375.61 (plan: stop $357.13, target $402.92, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "MSFT in entry zone $482.40-$496.39 (plan: stop $456.17, target $555.84, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "ACHR in entry zone $5.17-$5.45 (plan: stop $4.63, target $6.67, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "XLE in entry zone $58.43-$59.38 (plan: stop $56.65, target $63.42, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "RTX in entry zone $216.88-$221.41 (plan: stop $208.40, target $240.63, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "BWXT in entry zone $173.92-$179.14 (plan: stop $164.13, target $201.33, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "REGN in entry zone $756.19-$773.37 (plan: stop $723.98, target $846.38, hold 2-3 weeks)"
+      "text": "MSTR in entry zone $96.42-$100.88 (plan: stop $88.05, target $119.85, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
@@ -108,6 +73,9 @@
     "XLE|63.42": "2026-08-04",
     "RTX|240.63": "2026-08-04",
     "BWXT|201.33": "2026-08-04",
-    "REGN|846.38": "2026-08-04"
+    "REGN|846.38": "2026-08-04",
+    "ABNB|166.87": "2026-08-04",
+    "LUNR|19.98": "2026-08-04",
+    "MSTR|119.85": "2026-08-04"
   }
 }

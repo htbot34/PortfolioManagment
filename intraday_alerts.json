@@ -1,40 +1,25 @@
 {
-  "checked_at": "2026-08-05T16:58:43Z",
+  "checked_at": "2026-08-05T18:20:05Z",
   "alerts": [
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "KTOS at $55.07 - within buy zone of yesterday's breakout setup ($51.87)"
+      "text": "KTOS at $56.01 - within buy zone of yesterday's breakout setup ($51.87)"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "DIA at $544.76 - within buy zone of yesterday's breakout setup ($540.43)"
+      "text": "DIA at $544.87 - within buy zone of yesterday's breakout setup ($540.43)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "ABNB in entry zone $148.71-$151.94 (plan: stop $142.64, target $165.69, hold 2-3 weeks)"
+      "text": "REGN in entry zone $756.19-$773.37 (plan: stop $723.98, target $846.38, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "HUBS in entry zone $244.61-$258.63 (plan: stop $218.33, target $318.20, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "ACHR in entry zone $5.16-$5.46 (plan: stop $4.59, target $6.75, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "PLTR in entry zone $160.14-$166.87 (plan: stop $147.52, target $195.47, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "MRNA in entry zone $54.39-$57.64 (plan: stop $49.52, target $69.00, hold 2-3 weeks)"
+      "text": "ESTC in entry zone $67.88-$70.17 (plan: stop $63.58, target $79.92, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
@@ -76,6 +61,8 @@
     "HUBS|318.2": "2026-08-05",
     "ACHR|6.75": "2026-08-05",
     "PLTR|195.47": "2026-08-05",
-    "MRNA|69.0": "2026-08-05"
+    "MRNA|69.0": "2026-08-05",
+    "REGN|846.38": "2026-08-05",
+    "ESTC|79.92": "2026-08-05"
   }
 }

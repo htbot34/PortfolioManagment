@@ -1441,50 +1441,26 @@
     outage: 0
     unknown: 1
 - date: '2026-08-05'
-  candidates_evaluated: 15
+  candidates_evaluated: 3
   cleared_primary: 1
   cleared_insider_promotion: 0
   blocked_by:
-    technical: 1
-    sector_momentum: 7
+    technical: 0
+    sector_momentum: 1
     news: 1
     trump: 0
     earnings_window: 0
     correlation_block: 0
-    valuation_block: 5
+    valuation_block: 0
     regime: 0
     soft_veto: 0
     trump_block: 0
   near_miss:
-  - ticker: DIA
-    passed:
-    - technical
-    - news
-    failed: sector_momentum
-    insider_score: 0
-    insider_status: zero
-    news_status: ok
-  - ticker: FSLR
-    passed:
-    - technical
-    - news
-    failed: sector_momentum
-    insider_score: 0
-    insider_status: zero
-    news_status: ok
-  - ticker: NET
+  - ticker: RBRK
     passed:
     - technical
     - sector_momentum
     failed: news
-    insider_score: 0
-    insider_status: zero
-    news_status: ok
-  - ticker: SPY
-    passed:
-    - technical
-    - news
-    failed: sector_momentum
     insider_score: 0
     insider_status: zero
     news_status: ok
@@ -1497,11 +1473,11 @@
     firings: []
   insider:
     scored: 0
-    zero: 4
+    zero: 1
     unavailable: 0
-    not_evaluated: 11
+    not_evaluated: 2
   news:
-    ok: 14
+    ok: 3
     empty: 0
     outage: 0
-    unknown: 1
+    unknown: 0

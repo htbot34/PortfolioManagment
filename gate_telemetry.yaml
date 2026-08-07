@@ -1441,65 +1441,35 @@
     outage: 0
     unknown: 0
 - date: '2026-08-07'
-  candidates_evaluated: 11
+  candidates_evaluated: 2
   cleared_primary: 1
   cleared_insider_promotion: 0
   blocked_by:
-    technical: 1
-    sector_momentum: 5
-    news: 1
+    technical: 0
+    sector_momentum: 1
+    news: 0
     trump: 0
     earnings_window: 0
     correlation_block: 0
-    valuation_block: 3
+    valuation_block: 0
     regime: 0
     soft_veto: 0
     trump_block: 0
-  near_miss:
-  - ticker: NET
-    passed:
-    - technical
-    - news
-    failed: sector_momentum
-    insider_score: 0
-    insider_status: zero
-    news_status: ok
-  - ticker: SHOP
-    passed:
-    - technical
-    - sector_momentum
-    failed: news
-    insider_score: 0
-    insider_status: zero
-    news_status: ok
-  - ticker: SOUN
-    passed:
-    - technical
-    - news
-    failed: sector_momentum
-    insider_score: 0
-    insider_status: zero
-    news_status: ok
+  near_miss: []
   trump:
-    mentions: 1
+    mentions: 0
     endorsements: 0
-    attacks: 1
+    attacks: 0
     promotions: 0
     vetoes: 0
-    firings:
-    - ticker: FSLR
-      valence: attack
-      as_of: '2026-08-07'
-      source: First Solar Shares Jump After Trump Introduces New Tariffs on Solar
-        Imports
-      qualifies: false
+    firings: []
   insider:
     scored: 0
-    zero: 3
+    zero: 0
     unavailable: 0
-    not_evaluated: 8
+    not_evaluated: 2
   news:
-    ok: 10
+    ok: 2
     empty: 0
     outage: 0
-    unknown: 1
+    unknown: 0

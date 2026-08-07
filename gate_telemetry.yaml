@@ -1442,21 +1442,21 @@
     unknown: 0
 - date: '2026-08-07'
   candidates_evaluated: 11
-  cleared_primary: 0
+  cleared_primary: 1
   cleared_insider_promotion: 0
   blocked_by:
     technical: 1
     sector_momentum: 5
     news: 1
     trump: 0
-    earnings_window: 1
+    earnings_window: 0
     correlation_block: 0
     valuation_block: 3
     regime: 0
     soft_veto: 0
     trump_block: 0
   near_miss:
-  - ticker: META
+  - ticker: NET
     passed:
     - technical
     - news
@@ -1481,12 +1481,18 @@
     insider_status: zero
     news_status: ok
   trump:
-    mentions: 0
+    mentions: 1
     endorsements: 0
-    attacks: 0
+    attacks: 1
     promotions: 0
     vetoes: 0
-    firings: []
+    firings:
+    - ticker: FSLR
+      valence: attack
+      as_of: '2026-08-07'
+      source: First Solar Shares Jump After Trump Introduces New Tariffs on Solar
+        Imports
+      qualifies: false
   insider:
     scored: 0
     zero: 3

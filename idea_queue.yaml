@@ -61,11 +61,11 @@
   user_note: null
   swing_plan:
     entry_low: 216.65
-    entry_high: 222.88
-    entry_zone: $216.65 - $222.88
-    stop: 204.97
+    entry_high: 222.89
+    entry_zone: $216.65 - $222.89
+    stop: 204.94
     stop_pct: -6.7
-    target: 249.35
+    target: 249.43
     target_pct: 13.5
     reward_risk: 2.0
     hold_window: 2-3 weeks
@@ -271,12 +271,12 @@
   verdict_at: null
   user_note: null
   swing_plan:
-    entry_low: 473.66
+    entry_low: 473.65
     entry_high: 487.0
-    entry_zone: $473.66 - $487.00
-    stop: 448.65
+    entry_zone: $473.65 - $487.00
+    stop: 448.62
     stop_pct: -6.6
-    target: 543.69
+    target: 543.73
     target_pct: 13.2
     reward_risk: 2.0
     hold_window: 2-3 weeks
@@ -413,12 +413,12 @@
   verdict_at: null
   user_note: null
   swing_plan:
-    entry_low: 1640.97
-    entry_high: 1720.22
-    entry_zone: $1640.97 - $1720.22
-    stop: 1522.1
+    entry_low: 1640.94
+    entry_high: 1720.23
+    entry_zone: $1640.94 - $1720.23
+    stop: 1522.01
     stop_pct: -9.4
-    target: 1997.59
+    target: 1997.74
     target_pct: 18.9
     reward_risk: 2.0
     hold_window: 2-3 weeks
@@ -818,18 +818,18 @@
 - ticker: V
   idea_id: c9ee5681
   first_seen: '2026-06-26'
-  last_seen: '2026-08-03'
-  last_rank: 33
+  last_seen: '2026-08-07'
+  last_rank: 37
   last_score: 2.0
   last_why: Momentum signal
   swing_plan:
-    entry_low: 369.18
-    entry_high: 375.61
-    entry_zone: $369.18 - $375.61
-    stop: 357.13
-    stop_pct: -4.1
-    target: 402.92
-    target_pct: 8.2
+    entry_low: 368.17
+    entry_high: 374.31
+    entry_zone: $368.17 - $374.31
+    stop: 356.66
+    stop_pct: -3.9
+    target: 400.4
+    target_pct: 7.9
     reward_risk: 2.0
     hold_window: 2-3 weeks
   verdict: open
@@ -1030,7 +1030,7 @@
   idea_id: 5c78664e
   first_seen: '2026-07-06'
   last_seen: '2026-08-07'
-  last_rank: 33
+  last_rank: 35
   last_score: 2.0
   last_why: Momentum signal
   swing_plan:
@@ -1178,12 +1178,12 @@
   last_score: 2.0
   last_why: Momentum signal
   swing_plan:
-    entry_low: 313.52
-    entry_high: 325.47
-    entry_zone: $313.52 - $325.47
-    stop: 291.11
+    entry_low: 313.51
+    entry_high: 325.49
+    entry_zone: $313.51 - $325.49
+    stop: 291.04
     stop_pct: -8.9
-    target: 376.26
+    target: 376.42
     target_pct: 17.8
     reward_risk: 2.0
     hold_window: 2-3 weeks
@@ -1225,7 +1225,7 @@
   idea_id: 88545b12
   first_seen: '2026-07-23'
   last_seen: '2026-08-07'
-  last_rank: 37
+  last_rank: 32
   last_score: 2.0
   last_why: Momentum signal
   swing_plan:
@@ -1452,9 +1452,9 @@
     entry_low: 210.78
     entry_high: 217.39
     entry_zone: $210.78 - $217.39
-    stop: 198.4
+    stop: 198.39
     stop_pct: -7.3
-    target: 245.45
+    target: 245.47
     target_pct: 14.7
     reward_risk: 2.0
     hold_window: 2-3 weeks
@@ -1565,7 +1565,7 @@
   idea_id: b3120f81
   first_seen: '2026-07-28'
   last_seen: '2026-08-07'
-  last_rank: 32
+  last_rank: 33
   last_score: 2.0
   last_why: Momentum signal
   swing_plan:
@@ -2060,6 +2060,26 @@
     stop_pct: -13.7
     target: 19.01
     target_pct: 27.3
+    reward_risk: 2.0
+    hold_window: 2-3 weeks
+  verdict: open
+  verdict_at: null
+  user_note: null
+- ticker: JOBY
+  idea_id: f4642006
+  first_seen: '2026-08-07'
+  last_seen: '2026-08-07'
+  last_rank: 40
+  last_score: 1.38
+  last_why: News / social signal
+  swing_plan:
+    entry_low: 8.03
+    entry_high: 8.43
+    entry_zone: $8.03 - $8.43
+    stop: 7.29
+    stop_pct: -11.4
+    target: 10.11
+    target_pct: 22.8
     reward_risk: 2.0
     hold_window: 2-3 weeks
   verdict: open

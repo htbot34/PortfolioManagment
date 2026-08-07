@@ -1,35 +1,40 @@
 {
-  "checked_at": "2026-08-07T19:26:53Z",
+  "checked_at": "2026-08-07T20:04:25Z",
   "alerts": [
     {
       "severity": "med",
       "kind": "position_break",
-      "text": "RUN lost SMA50 ($12.40) on 2.0x volume"
+      "text": "OKLO lost SMA50 ($51.28) on 2.0x volume"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "SOUN at $8.07 - within buy zone of yesterday's breakout setup ($7.08)"
+      "text": "SOUN at $8.02 - within buy zone of yesterday's breakout setup ($7.08)"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "DASH at $218.77 - within buy zone of yesterday's breakout setup ($213.26)"
+      "text": "DASH at $216.26 - within buy zone of yesterday's breakout setup ($213.26)"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "FSLR at $252.23 - within buy zone of yesterday's breakout setup ($244.14)"
+      "text": "FSLR at $250.05 - within buy zone of yesterday's breakout setup ($244.14)"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "SHOP at $150.79 - within buy zone of yesterday's breakout setup ($147.44)"
+      "text": "SHOP at $151.57 - within buy zone of yesterday's breakout setup ($147.44)"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "KTOS at $60.72 - within buy zone of yesterday's breakout setup ($57.41)"
+      "text": "KTOS at $60.77 - within buy zone of yesterday's breakout setup ($57.41)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "DASH in entry zone $210.78-$217.39 (plan: stop $198.39, target $245.47, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
@@ -103,6 +108,7 @@
     "RTX|246.98": "2026-08-07",
     "FSLR|292.01": "2026-08-07",
     "MRVL|285.55": "2026-08-07",
-    "SMCI|41.17": "2026-08-07"
+    "SMCI|41.17": "2026-08-07",
+    "DASH|245.47": "2026-08-07"
   }
 }

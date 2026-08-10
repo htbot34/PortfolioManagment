@@ -1,25 +1,35 @@
 {
-  "checked_at": "2026-08-10T17:22:42Z",
+  "checked_at": "2026-08-10T18:11:18Z",
   "alerts": [
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "OKLO gapped down -7.4% today"
+      "text": "OKLO gapped down -7.0% today"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "TEAM at $151.69 - within buy zone of yesterday's breakout setup ($149.07)"
+      "text": "TEAM at $153.25 - within buy zone of yesterday's breakout setup ($149.07)"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "ABNB at $183.55 - within buy zone of yesterday's breakout setup ($178.07)"
+      "text": "ABNB at $184.48 - within buy zone of yesterday's breakout setup ($178.07)"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "UBER at $77.23 - within buy zone of yesterday's breakout setup ($75.02)"
+      "text": "UBER at $77.25 - within buy zone of yesterday's breakout setup ($75.02)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "PLTR in entry zone $169.23-$176.64 (plan: stop $155.33, target $208.14, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "SMH in entry zone $548.90-$574.90 (plan: stop $509.89, target $665.92, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
@@ -68,6 +78,8 @@
     "QBTS|25.8": "2026-08-10",
     "ROKU|160.52": "2026-08-10",
     "IONQ|55.84": "2026-08-10",
-    "LYFT|20.27": "2026-08-10"
+    "LYFT|20.27": "2026-08-10",
+    "PLTR|208.14": "2026-08-10",
+    "SMH|665.92": "2026-08-10"
   }
 }

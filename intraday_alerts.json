@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-08-11T15:27:38Z",
+  "checked_at": "2026-08-11T16:23:46Z",
   "alerts": [
     {
       "severity": "low",
@@ -9,67 +9,32 @@
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "RBRK at $98.07 - within buy zone of yesterday's breakout setup ($97.91)"
+      "text": "RBRK at $98.06 - within buy zone of yesterday's breakout setup ($97.91)"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "NET at $310.00 - within buy zone of yesterday's breakout setup ($310.59)"
+      "text": "NET at $311.36 - within buy zone of yesterday's breakout setup ($310.59)"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "VRTX at $531.78 - within buy zone of yesterday's breakout setup ($523.91)"
+      "text": "VRTX at $528.42 - within buy zone of yesterday's breakout setup ($523.91)"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "DXCM at $89.06 - within buy zone of yesterday's breakout setup ($87.65)"
+      "text": "DXCM at $88.60 - within buy zone of yesterday's breakout setup ($87.65)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "ABNB in entry zone $182.75-$187.94 (plan: stop $173.02, target $209.99, hold 2-3 weeks)"
+      "text": "ORCL in entry zone $138.88-$144.82 (plan: stop $127.73, target $170.09, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "XLI in entry zone $183.71-$186.08 (plan: stop $179.27, target $196.15, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "URI in entry zone $1125.59-$1157.41 (plan: stop $1065.92, target $1292.66, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "ROK in entry zone $427.62-$444.40 (plan: stop $402.45, target $503.13, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "ADBE in entry zone $259.78-$269.51 (plan: stop $241.54, target $310.85, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "DASH in entry zone $210.78-$217.39 (plan: stop $198.39, target $245.47, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "MELI in entry zone $1907.18-$1948.22 (plan: stop $1830.24, target $2122.62, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "RDDT in entry zone $148.86-$160.56 (plan: stop $126.92, target $210.29, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "LUNR in entry zone $15.95-$16.85 (plan: stop $14.26, target $20.68, hold 2-3 weeks)"
+      "text": "SMH in entry zone $549.92-$574.28 (plan: stop $513.38, target $659.54, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
@@ -125,6 +90,8 @@
     "DASH|245.47": "2026-08-11",
     "MELI|2122.62": "2026-08-11",
     "RDDT|210.29": "2026-08-11",
-    "LUNR|20.68": "2026-08-11"
+    "LUNR|20.68": "2026-08-11",
+    "ORCL|170.09": "2026-08-11",
+    "SMH|659.54": "2026-08-11"
   }
 }

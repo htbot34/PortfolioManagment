@@ -1,25 +1,25 @@
 {
-  "checked_at": "2026-08-11T19:32:18Z",
+  "checked_at": "2026-08-11T20:35:03Z",
   "alerts": [
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "ACHR at $7.02 - within buy zone of yesterday's breakout setup ($6.26)"
+      "text": "ACHR at $6.79 - within buy zone of yesterday's breakout setup ($6.26)"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "NET at $310.41 - within buy zone of yesterday's breakout setup ($310.59)"
+      "text": "VRTX at $529.65 - within buy zone of yesterday's breakout setup ($523.91)"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "VRTX at $530.24 - within buy zone of yesterday's breakout setup ($523.91)"
+      "text": "DXCM at $89.53 - within buy zone of yesterday's breakout setup ($87.65)"
     },
     {
-      "severity": "low",
+      "severity": "med",
       "kind": "watchlist_entry",
-      "text": "DXCM at $89.00 - within buy zone of yesterday's breakout setup ($87.65)"
+      "text": "MRVL in entry zone $211.54-$225.64 (plan: stop $185.11, target $285.55, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
@@ -79,6 +79,7 @@
     "ORCL|170.09": "2026-08-11",
     "SMH|659.54": "2026-08-11",
     "TOST|40.57": "2026-08-11",
-    "JOBY|10.11": "2026-08-11"
+    "JOBY|10.11": "2026-08-11",
+    "MRVL|285.55": "2026-08-11"
   }
 }

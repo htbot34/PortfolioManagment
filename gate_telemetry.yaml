@@ -1433,38 +1433,30 @@
     outage: 0
     unknown: 3
 - date: '2026-08-11'
-  candidates_evaluated: 8
+  candidates_evaluated: 6
   cleared_primary: 1
   cleared_insider_promotion: 0
   blocked_by:
-    technical: 3
-    sector_momentum: 0
-    news: 3
+    technical: 1
+    sector_momentum: 3
+    news: 1
     trump: 0
     earnings_window: 0
     correlation_block: 0
-    valuation_block: 1
+    valuation_block: 0
     regime: 0
     soft_veto: 0
     trump_block: 0
   near_miss:
-  - ticker: NET
+  - ticker: ACHR
     passed:
     - technical
-    - sector_momentum
-    failed: news
+    - news
+    failed: sector_momentum
     insider_score: 0
     insider_status: zero
     news_status: ok
-  - ticker: RBRK
-    passed:
-    - technical
-    - sector_momentum
-    failed: news
-    insider_score: 0
-    insider_status: zero
-    news_status: ok
-  - ticker: VRTX
+  - ticker: SE
     passed:
     - technical
     - sector_momentum
@@ -1481,11 +1473,11 @@
     firings: []
   insider:
     scored: 0
-    zero: 3
+    zero: 2
     unavailable: 0
-    not_evaluated: 5
+    not_evaluated: 4
   news:
     ok: 5
     empty: 0
     outage: 0
-    unknown: 3
+    unknown: 1

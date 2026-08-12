@@ -1404,12 +1404,12 @@
     outage: 0
     unknown: 1
 - date: '2026-08-12'
-  candidates_evaluated: 6
+  candidates_evaluated: 3
   cleared_primary: 1
   cleared_insider_promotion: 0
   blocked_by:
-    technical: 1
-    sector_momentum: 3
+    technical: 0
+    sector_momentum: 1
     news: 1
     trump: 0
     earnings_window: 0
@@ -1419,23 +1419,7 @@
     soft_veto: 0
     trump_block: 0
   near_miss:
-  - ticker: ACHR
-    passed:
-    - technical
-    - news
-    failed: sector_momentum
-    insider_score: 0
-    insider_status: zero
-    news_status: ok
-  - ticker: S
-    passed:
-    - technical
-    - news
-    failed: sector_momentum
-    insider_score: 0
-    insider_status: zero
-    news_status: ok
-  - ticker: SE
+  - ticker: META
     passed:
     - technical
     - sector_momentum
@@ -1452,11 +1436,11 @@
     firings: []
   insider:
     scored: 0
-    zero: 3
+    zero: 1
     unavailable: 0
-    not_evaluated: 3
+    not_evaluated: 2
   news:
-    ok: 5
+    ok: 3
     empty: 0
     outage: 0
-    unknown: 1
+    unknown: 0

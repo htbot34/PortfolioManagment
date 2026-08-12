@@ -1,51 +1,51 @@
-generated_at: '2026-08-11'
+generated_at: '2026-08-12'
 horizons:
 - 5
 - 10
 - 20
 benchmark: SPY
 direction: long
-total_records: 191
+total_records: 194
 by_failed_signal:
   news:
-    count: 56
+    count: 57
     horizons:
       '5':
         n_realized: 45
-        n_pending: 11
+        n_pending: 12
         hit_rate: 0.1111111111111111
         avg_excess_return: -0.07289788170911835
         avg_forward_return: -0.06997603325866203
       '10':
         n_realized: 35
-        n_pending: 21
+        n_pending: 22
         hit_rate: 0.37142857142857144
         avg_excess_return: -0.05883736606999734
         avg_forward_return: -0.05835922073725304
       '20':
         n_realized: 32
-        n_pending: 24
+        n_pending: 25
         hit_rate: 0.28125
         avg_excess_return: -0.0990108680804507
         avg_forward_return: -0.09754827650061539
   sector_momentum:
-    count: 120
+    count: 122
     horizons:
       '5':
         n_realized: 113
-        n_pending: 7
+        n_pending: 9
         hit_rate: 0.5575221238938053
         avg_excess_return: -0.015583774465118725
         avg_forward_return: -0.0030885574506119015
       '10':
         n_realized: 80
-        n_pending: 40
+        n_pending: 42
         hit_rate: 0.5625
         avg_excess_return: -0.013065361276303459
         avg_forward_return: -0.005056779475406574
       '20':
         n_realized: 65
-        n_pending: 55
+        n_pending: 57
         hit_rate: 0.35384615384615387
         avg_excess_return: -0.09068512616169754
         avg_forward_return: -0.08196005230770359
@@ -92,23 +92,23 @@ by_failed_signal:
         avg_excess_return: -0.10133032036475281
         avg_forward_return: -0.09652299253990985
 overall:
-  count: 191
+  count: 194
   horizons:
     '5':
       n_realized: 172
-      n_pending: 19
+      n_pending: 22
       hit_rate: 0.4127906976744186
       avg_excess_return: -0.03501271738908882
       avg_forward_return: -0.02579831278320982
     '10':
       n_realized: 128
-      n_pending: 63
+      n_pending: 66
       hit_rate: 0.4765625
       avg_excess_return: -0.03376438584427901
       avg_forward_return: -0.026847178450305695
     '20':
       n_realized: 105
-      n_pending: 86
+      n_pending: 89
       hit_rate: 0.3142857142857143
       avg_excess_return: -0.09949079551259346
       avg_forward_return: -0.09337833637333622

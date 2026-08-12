@@ -1,10 +1,20 @@
 {
-  "checked_at": "2026-08-12T17:26:10Z",
+  "checked_at": "2026-08-12T18:14:33Z",
   "alerts": [
+    {
+      "severity": "high",
+      "kind": "position_break",
+      "text": "FBL gapped down -6.2% today"
+    },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "SMR in entry zone $9.61-$10.17 (plan: stop $8.55, target $12.57, hold 2-3 weeks)"
+      "text": "ARM in entry zone $270.95-$290.17 (plan: stop $234.90, target $371.88, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "SE in entry zone $130.06-$133.93 (plan: stop $122.81, target $150.37, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
@@ -59,6 +69,8 @@
     "LUNR|20.92": "2026-08-12",
     "UBER|85.55": "2026-08-12",
     "DIA|565.38": "2026-08-12",
-    "SMR|12.57": "2026-08-12"
+    "SMR|12.57": "2026-08-12",
+    "ARM|371.88": "2026-08-12",
+    "SE|150.37": "2026-08-12"
   }
 }

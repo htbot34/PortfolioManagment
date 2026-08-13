@@ -1409,8 +1409,8 @@
   cleared_insider_promotion: 0
   blocked_by:
     technical: 0
-    sector_momentum: 1
-    news: 1
+    sector_momentum: 2
+    news: 0
     trump: 0
     earnings_window: 0
     correlation_block: 0
@@ -1418,15 +1418,7 @@
     regime: 0
     soft_veto: 0
     trump_block: 0
-  near_miss:
-  - ticker: META
-    passed:
-    - technical
-    - sector_momentum
-    failed: news
-    insider_score: 0
-    insider_status: zero
-    news_status: ok
+  near_miss: []
   trump:
     mentions: 0
     endorsements: 0
@@ -1436,9 +1428,9 @@
     firings: []
   insider:
     scored: 0
-    zero: 1
+    zero: 0
     unavailable: 0
-    not_evaluated: 2
+    not_evaluated: 3
   news:
     ok: 3
     empty: 0

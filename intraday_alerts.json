@@ -1,80 +1,20 @@
 {
-  "checked_at": "2026-08-13T15:29:16Z",
+  "checked_at": "2026-08-13T16:24:48Z",
   "alerts": [
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "SMCI at $41.53 - within buy zone of yesterday's breakout setup ($37.61)"
-    },
-    {
-      "severity": "low",
-      "kind": "watchlist_entry",
-      "text": "NBIS at $263.02 - within buy zone of yesterday's breakout setup ($259.20)"
+      "text": "SMCI at $40.05 - within buy zone of yesterday's breakout setup ($37.61)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "GOOGL in entry zone $333.86-$345.96 (plan: stop $315.71, target $388.31, hold 2-3 weeks)"
+      "text": "ETN in entry zone $454.02-$469.86 (plan: stop $424.33, target $537.16, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "PANW in entry zone $382.68-$394.23 (plan: stop $361.03, target $443.31, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "ASTS in entry zone $67.89-$72.73 (plan: stop $58.80, target $93.33, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "AAPL in entry zone $294.69-$304.14 (plan: stop $280.51, target $337.22, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "SPY in entry zone $769.96-$776.71 (plan: stop $757.29, target $805.43, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "CRM in entry zone $185.86-$192.58 (plan: stop $173.27, target $221.12, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "TEAM in entry zone $148.89-$156.83 (plan: stop $134.01, target $190.56, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "MSFT in entry zone $482.40-$496.39 (plan: stop $456.17, target $555.84, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "XLF in entry zone $57.61-$58.15 (plan: stop $56.60, target $60.44, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "INTU in entry zone $326.97-$339.29 (plan: stop $303.87, target $391.65, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "ORCL in entry zone $150.25-$156.31 (plan: stop $138.87, target $182.10, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "IONQ in entry zone $43.55-$45.89 (plan: stop $39.16, target $55.84, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "ZS in entry zone $174.41-$180.46 (plan: stop $163.06, target $206.19, hold 2-3 weeks)"
+      "text": "TENB in entry zone $36.36-$38.06 (plan: stop $33.17, target $45.29, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
@@ -131,6 +71,8 @@
     "INTU|391.65": "2026-08-13",
     "ORCL|182.1": "2026-08-13",
     "IONQ|55.84": "2026-08-13",
-    "ZS|206.19": "2026-08-13"
+    "ZS|206.19": "2026-08-13",
+    "ETN|537.16": "2026-08-13",
+    "TENB|45.29": "2026-08-13"
   }
 }

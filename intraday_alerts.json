@@ -1,20 +1,25 @@
 {
-  "checked_at": "2026-08-13T16:24:48Z",
+  "checked_at": "2026-08-13T17:26:06Z",
   "alerts": [
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "SMCI at $40.05 - within buy zone of yesterday's breakout setup ($37.61)"
+      "text": "SMCI at $40.10 - within buy zone of yesterday's breakout setup ($37.61)"
+    },
+    {
+      "severity": "low",
+      "kind": "watchlist_entry",
+      "text": "LUNR at $16.90 - within buy zone of yesterday's breakout setup ($16.95)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "ETN in entry zone $454.02-$469.86 (plan: stop $424.33, target $537.16, hold 2-3 weeks)"
+      "text": "ACHR in entry zone $6.66-$7.01 (plan: stop $6.01, target $8.48, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "TENB in entry zone $36.36-$38.06 (plan: stop $33.17, target $45.29, hold 2-3 weeks)"
+      "text": "BTBT in entry zone $1.41-$1.51 (plan: stop $1.24, target $1.90, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
@@ -73,6 +78,8 @@
     "IONQ|55.84": "2026-08-13",
     "ZS|206.19": "2026-08-13",
     "ETN|537.16": "2026-08-13",
-    "TENB|45.29": "2026-08-13"
+    "TENB|45.29": "2026-08-13",
+    "ACHR|8.48": "2026-08-13",
+    "BTBT|1.9": "2026-08-13"
   }
 }

@@ -1,10 +1,20 @@
 {
-  "checked_at": "2026-08-13T18:15:17Z",
+  "checked_at": "2026-08-13T19:32:39Z",
   "alerts": [
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "SMCI at $39.62 - within buy zone of yesterday's breakout setup ($37.61)"
+      "text": "SMCI at $39.53 - within buy zone of yesterday's breakout setup ($37.61)"
+    },
+    {
+      "severity": "low",
+      "kind": "watchlist_entry",
+      "text": "LUNR at $17.52 - within buy zone of yesterday's breakout setup ($16.95)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "MRVL in entry zone $211.54-$225.64 (plan: stop $185.11, target $285.55, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
@@ -65,6 +75,7 @@
     "ETN|537.16": "2026-08-13",
     "TENB|45.29": "2026-08-13",
     "ACHR|8.48": "2026-08-13",
-    "BTBT|1.9": "2026-08-13"
+    "BTBT|1.9": "2026-08-13",
+    "MRVL|285.55": "2026-08-13"
   }
 }

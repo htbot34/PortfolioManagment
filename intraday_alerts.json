@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-08-14T15:13:22Z",
+  "checked_at": "2026-08-14T16:12:35Z",
   "alerts": [
     {
       "severity": "med",
@@ -7,44 +7,34 @@
       "text": "IREN lost SMA50 ($44.90) on 1.8x volume"
     },
     {
-      "severity": "med",
+      "severity": "high",
       "kind": "position_break",
-      "text": "AMAT lost SMA50 ($558.95) on 1.7x volume"
+      "text": "AMAT gapped down -5.2% today"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "LUNR at $19.20 - within buy zone of yesterday's breakout setup ($17.56)"
+      "text": "LUNR at $19.38 - within buy zone of yesterday's breakout setup ($17.56)"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "SMCI at $39.27 - within buy zone of yesterday's breakout setup ($39.16)"
+      "text": "SMCI at $39.19 - within buy zone of yesterday's breakout setup ($39.16)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "LRCX in entry zone $316.51-$335.71 (plan: stop $280.50, target $417.33, hold 2-3 weeks)"
+      "text": "XBI in entry zone $155.66-$158.86 (plan: stop $149.67, target $172.44, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "VRNS in entry zone $44.87-$46.77 (plan: stop $41.30, target $54.86, hold 2-3 weeks)"
+      "text": "ROK in entry zone $432.33-$448.81 (plan: stop $407.61, target $506.49, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "RTX in entry zone $221.21-$226.07 (plan: stop $212.10, target $246.72, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "DASH in entry zone $210.78-$217.39 (plan: stop $198.39, target $245.47, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "SOFI in entry zone $17.65-$18.41 (plan: stop $16.23, target $21.63, hold 2-3 weeks)"
+      "text": "SPY in entry zone $769.96-$776.71 (plan: stop $757.29, target $805.43, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
@@ -85,6 +75,9 @@
     "VRNS|54.86": "2026-08-14",
     "RTX|246.72": "2026-08-14",
     "DASH|245.47": "2026-08-14",
-    "SOFI|21.63": "2026-08-14"
+    "SOFI|21.63": "2026-08-14",
+    "XBI|172.44": "2026-08-14",
+    "ROK|506.49": "2026-08-14",
+    "SPY|805.43": "2026-08-14"
   }
 }

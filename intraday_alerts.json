@@ -1,11 +1,6 @@
 {
-  "checked_at": "2026-08-14T16:12:35Z",
+  "checked_at": "2026-08-14T17:24:35Z",
   "alerts": [
-    {
-      "severity": "med",
-      "kind": "position_break",
-      "text": "IREN lost SMA50 ($44.90) on 1.8x volume"
-    },
     {
       "severity": "high",
       "kind": "position_break",
@@ -14,27 +9,42 @@
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "LUNR at $19.38 - within buy zone of yesterday's breakout setup ($17.56)"
+      "text": "LUNR at $19.48 - within buy zone of yesterday's breakout setup ($17.56)"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "SMCI at $39.19 - within buy zone of yesterday's breakout setup ($39.16)"
+      "text": "IREN at $45.21 - within buy zone of yesterday's breakout setup ($44.76)"
+    },
+    {
+      "severity": "low",
+      "kind": "watchlist_entry",
+      "text": "SMCI at $39.54 - within buy zone of yesterday's breakout setup ($39.16)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "XBI in entry zone $155.66-$158.86 (plan: stop $149.67, target $172.44, hold 2-3 weeks)"
+      "text": "NEE in entry zone $86.50-$88.29 (plan: stop $83.81, target $94.57, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "ROK in entry zone $432.33-$448.81 (plan: stop $407.61, target $506.49, hold 2-3 weeks)"
+      "text": "XLV in entry zone $167.54-$169.93 (plan: stop $163.06, target $180.09, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "SPY in entry zone $769.96-$776.71 (plan: stop $757.29, target $805.43, hold 2-3 weeks)"
+      "text": "CLSK in entry zone $11.66-$12.70 (plan: stop $9.70, target $17.14, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "MSFT in entry zone $482.40-$496.39 (plan: stop $456.17, target $555.84, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "WULF in entry zone $17.08-$18.56 (plan: stop $14.31, target $24.84, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
@@ -78,6 +88,11 @@
     "SOFI|21.63": "2026-08-14",
     "XBI|172.44": "2026-08-14",
     "ROK|506.49": "2026-08-14",
-    "SPY|805.43": "2026-08-14"
+    "SPY|805.43": "2026-08-14",
+    "NEE|94.57": "2026-08-14",
+    "XLV|180.09": "2026-08-14",
+    "CLSK|17.14": "2026-08-14",
+    "MSFT|555.84": "2026-08-14",
+    "WULF|24.84": "2026-08-14"
   }
 }

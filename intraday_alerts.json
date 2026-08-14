@@ -1,50 +1,35 @@
 {
-  "checked_at": "2026-08-14T17:24:35Z",
+  "checked_at": "2026-08-14T18:13:17Z",
   "alerts": [
+    {
+      "severity": "med",
+      "kind": "position_break",
+      "text": "IREN lost SMA50 ($44.90) on 1.8x volume"
+    },
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "AMAT gapped down -5.2% today"
+      "text": "AMAT gapped down -5.4% today"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "LUNR at $19.48 - within buy zone of yesterday's breakout setup ($17.56)"
+      "text": "LUNR at $19.08 - within buy zone of yesterday's breakout setup ($17.56)"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "IREN at $45.21 - within buy zone of yesterday's breakout setup ($44.76)"
-    },
-    {
-      "severity": "low",
-      "kind": "watchlist_entry",
-      "text": "SMCI at $39.54 - within buy zone of yesterday's breakout setup ($39.16)"
+      "text": "SMCI at $40.20 - within buy zone of yesterday's breakout setup ($39.16)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "NEE in entry zone $86.50-$88.29 (plan: stop $83.81, target $94.57, hold 2-3 weeks)"
+      "text": "PLTR in entry zone $169.23-$176.64 (plan: stop $155.33, target $208.14, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "XLV in entry zone $167.54-$169.93 (plan: stop $163.06, target $180.09, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "CLSK in entry zone $11.66-$12.70 (plan: stop $9.70, target $17.14, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "MSFT in entry zone $482.40-$496.39 (plan: stop $456.17, target $555.84, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "WULF in entry zone $17.08-$18.56 (plan: stop $14.31, target $24.84, hold 2-3 weeks)"
+      "text": "HOOD in entry zone $92.85-$96.97 (plan: stop $85.11, target $114.51, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
@@ -93,6 +78,8 @@
     "XLV|180.09": "2026-08-14",
     "CLSK|17.14": "2026-08-14",
     "MSFT|555.84": "2026-08-14",
-    "WULF|24.84": "2026-08-14"
+    "WULF|24.84": "2026-08-14",
+    "PLTR|208.14": "2026-08-14",
+    "HOOD|114.51": "2026-08-14"
   }
 }

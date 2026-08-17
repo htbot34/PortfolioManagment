@@ -1,20 +1,25 @@
 {
-  "checked_at": "2026-08-17T17:18:58Z",
+  "checked_at": "2026-08-17T17:52:11Z",
   "alerts": [
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "FBL gapped down -7.9% today"
+      "text": "FBL gapped down -8.4% today"
     },
     {
       "severity": "med",
       "kind": "position_break",
-      "text": "AMAT lost SMA50 ($559.57) on 1.7x volume"
+      "text": "AMAT lost SMA50 ($559.60) on 1.7x volume"
+    },
+    {
+      "severity": "high",
+      "kind": "position_break",
+      "text": "RUN gapped down -5.1% today"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "LUNR at $20.51 - within buy zone of yesterday's breakout setup ($19.01)"
+      "text": "LUNR at $20.34 - within buy zone of yesterday's breakout setup ($19.01)"
     }
   ],
   "fired_plans": {

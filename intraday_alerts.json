@@ -1,55 +1,35 @@
 {
-  "checked_at": "2026-08-17T14:18:58Z",
+  "checked_at": "2026-08-17T14:52:12Z",
   "alerts": [
+    {
+      "severity": "high",
+      "kind": "position_break",
+      "text": "FBL gapped down -5.4% today"
+    },
     {
       "severity": "med",
       "kind": "position_break",
-      "text": "AMAT lost SMA50 ($559.40) on 1.7x volume"
+      "text": "AMAT lost SMA50 ($559.50) on 1.7x volume"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "LUNR at $20.49 - within buy zone of yesterday's breakout setup ($19.01)"
+      "text": "LUNR at $20.18 - within buy zone of yesterday's breakout setup ($19.01)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "XBI in entry zone $156.21-$159.40 (plan: stop $150.23, target $172.96, hold 2-3 weeks)"
+      "text": "XLV in entry zone $167.54-$169.93 (plan: stop $163.06, target $180.09, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "BKNG in entry zone $204.65-$210.96 (plan: stop $192.82, target $237.78, hold 2-3 weeks)"
+      "text": "NVO in entry zone $45.25-$47.09 (plan: stop $42.50, target $53.51, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "NOW in entry zone $115.81-$121.33 (plan: stop $105.48, target $144.75, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "SNOW in entry zone $325.92-$338.10 (plan: stop $303.09, target $389.85, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "SHOP in entry zone $144.96-$151.57 (plan: stop $132.56, target $179.67, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "AI in entry zone $9.29-$9.65 (plan: stop $8.61, target $11.19, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "ESTC in entry zone $84.49-$87.57 (plan: stop $78.72, target $100.65, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "SOFI in entry zone $17.65-$18.41 (plan: stop $16.23, target $21.63, hold 2-3 weeks)"
+      "text": "RDDT in entry zone $173.19-$182.99 (plan: stop $154.81, target $224.65, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
@@ -101,6 +81,9 @@
     "SHOP|179.67": "2026-08-17",
     "AI|11.19": "2026-08-17",
     "ESTC|100.65": "2026-08-17",
-    "SOFI|21.63": "2026-08-17"
+    "SOFI|21.63": "2026-08-17",
+    "XLV|180.09": "2026-08-17",
+    "NVO|53.51": "2026-08-17",
+    "RDDT|224.65": "2026-08-17"
   }
 }

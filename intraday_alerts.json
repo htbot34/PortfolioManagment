@@ -1,80 +1,55 @@
 {
-  "checked_at": "2026-08-18T14:23:55Z",
+  "checked_at": "2026-08-18T14:59:45Z",
   "alerts": [
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "NBIS gapped down -5.3% today"
+      "text": "NBIS gapped down -8.1% today"
     },
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "OKLO gapped down -6.4% today"
+      "text": "OKLO gapped down -6.9% today"
     },
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "FBL gapped down -14.1% today"
+      "text": "FBL gapped down -13.6% today"
     },
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "META gapped down -7.1% today"
+      "text": "META gapped down -6.8% today"
     },
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "INTC gapped down -5.7% today"
+      "text": "INTC gapped down -6.4% today"
     },
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "FPS gapped down -6.1% today"
+      "text": "FPS gapped down -8.2% today"
     },
     {
       "severity": "med",
       "kind": "position_break",
-      "text": "AMAT lost SMA50 ($558.96) on 1.7x volume"
+      "text": "AMAT lost SMA50 ($558.86) on 1.7x volume"
     },
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "RUN gapped down -6.0% today"
+      "text": "RUN gapped down -6.7% today"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "LUNR at $19.62 - within buy zone of yesterday's breakout setup ($19.01)"
+      "text": "LUNR at $19.49 - within buy zone of yesterday's breakout setup ($19.01)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "ABNB in entry zone $183.06-$188.58 (plan: stop $172.70, target $212.06, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "DXCM in entry zone $90.50-$93.11 (plan: stop $85.62, target $104.18, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "ESTC in entry zone $84.49-$87.57 (plan: stop $78.72, target $100.65, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "SMH in entry zone $549.92-$574.28 (plan: stop $513.38, target $659.54, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "LUNR in entry zone $18.55-$19.77 (plan: stop $16.27, target $24.94, hold 2-3 weeks)"
-    },
-    {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "KLAC in entry zone $187.69-$197.79 (plan: stop $168.76, target $240.70, hold 2-3 weeks)"
+      "text": "XLE in entry zone $62.18-$63.25 (plan: stop $60.17, target $67.81, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
@@ -123,6 +98,7 @@
     "ESTC|100.65": "2026-08-18",
     "SMH|659.54": "2026-08-18",
     "LUNR|24.94": "2026-08-18",
-    "KLAC|240.7": "2026-08-18"
+    "KLAC|240.7": "2026-08-18",
+    "XLE|67.81": "2026-08-18"
   }
 }

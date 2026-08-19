@@ -1,10 +1,10 @@
 {
-  "checked_at": "2026-08-19T16:54:13Z",
+  "checked_at": "2026-08-19T17:19:08Z",
   "alerts": [
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "NBIS gapped down -8.0% today"
+      "text": "NBIS gapped down -9.5% today"
     },
     {
       "severity": "med",
@@ -12,9 +12,9 @@
       "text": "META lost SMA50 ($594.32) on 1.6x volume"
     },
     {
-      "severity": "high",
-      "kind": "position_break",
-      "text": "FPS gapped down -5.1% today"
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "IWM in entry zone $299.16-$302.02 (plan: stop $293.80, target $314.17, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
@@ -55,6 +55,7 @@
     "HOOD|114.51": "2026-08-19",
     "CLSK|17.03": "2026-08-19",
     "MARA|12.98": "2026-08-19",
-    "RIOT|28.88": "2026-08-19"
+    "RIOT|28.88": "2026-08-19",
+    "IWM|314.17": "2026-08-19"
   }
 }

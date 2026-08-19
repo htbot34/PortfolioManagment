@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-08-19T17:19:08Z",
+  "checked_at": "2026-08-19T17:48:01Z",
   "alerts": [
     {
       "severity": "high",
@@ -9,12 +9,12 @@
     {
       "severity": "med",
       "kind": "position_break",
-      "text": "META lost SMA50 ($594.32) on 1.6x volume"
+      "text": "META lost SMA50 ($594.31) on 1.6x volume"
     },
     {
-      "severity": "med",
-      "kind": "watchlist_entry",
-      "text": "IWM in entry zone $299.16-$302.02 (plan: stop $293.80, target $314.17, hold 2-3 weeks)"
+      "severity": "high",
+      "kind": "position_break",
+      "text": "FPS gapped down -5.2% today"
     }
   ],
   "fired_plans": {

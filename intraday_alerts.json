@@ -1,15 +1,20 @@
 {
-  "checked_at": "2026-08-19T16:20:47Z",
+  "checked_at": "2026-08-19T16:54:13Z",
   "alerts": [
     {
       "severity": "high",
       "kind": "position_break",
-      "text": "NBIS gapped down -7.7% today"
+      "text": "NBIS gapped down -8.0% today"
     },
     {
       "severity": "med",
       "kind": "position_break",
-      "text": "META lost SMA50 ($594.33) on 1.6x volume"
+      "text": "META lost SMA50 ($594.32) on 1.6x volume"
+    },
+    {
+      "severity": "high",
+      "kind": "position_break",
+      "text": "FPS gapped down -5.1% today"
     }
   ],
   "fired_plans": {

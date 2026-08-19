@@ -1340,22 +1340,54 @@
     outage: 0
     unknown: 1
 - date: '2026-08-19'
-  candidates_evaluated: 3
+  candidates_evaluated: 15
   cleared_primary: 0
   cleared_insider_promotion: 0
   blocked_by:
-    technical: 1
-    sector_momentum: 1
-    news: 1
+    technical: 0
+    sector_momentum: 10
+    news: 3
     trump: 0
     earnings_window: 0
     correlation_block: 0
-    valuation_block: 0
+    valuation_block: 2
     regime: 0
     soft_veto: 0
     trump_block: 0
   near_miss:
-  - ticker: META
+  - ticker: BEAM
+    passed:
+    - technical
+    - sector_momentum
+    failed: news
+    insider_score: 0
+    insider_status: zero
+    news_status: ok
+  - ticker: BITQ
+    passed:
+    - technical
+    - news
+    failed: sector_momentum
+    insider_score: 0
+    insider_status: zero
+    news_status: ok
+  - ticker: COIN
+    passed:
+    - technical
+    - trump
+    failed: sector_momentum
+    insider_score: 0
+    insider_status: not_evaluated
+    news_status: ok
+  - ticker: CRSP
+    passed:
+    - technical
+    - sector_momentum
+    failed: news
+    insider_score: 0
+    insider_status: zero
+    news_status: ok
+  - ticker: LLY
     passed:
     - technical
     - sector_momentum
@@ -1364,19 +1396,25 @@
     insider_status: zero
     news_status: ok
   trump:
-    mentions: 0
-    endorsements: 0
+    mentions: 1
+    endorsements: 1
     attacks: 0
     promotions: 0
     vetoes: 0
-    firings: []
+    firings:
+    - ticker: COIN
+      valence: endorse
+      as_of: '2026-08-19'
+      source: Trump Touts Clarity Act With Crypto Executives. Why CME Group Stock
+        Is Tanking.
+      qualifies: false
   insider:
     scored: 0
-    zero: 1
+    zero: 8
     unavailable: 0
-    not_evaluated: 2
+    not_evaluated: 7
   news:
-    ok: 2
+    ok: 15
     empty: 0
     outage: 0
-    unknown: 1
+    unknown: 0

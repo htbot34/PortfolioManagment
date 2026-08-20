@@ -1,35 +1,45 @@
 {
-  "checked_at": "2026-08-20T15:03:03Z",
+  "checked_at": "2026-08-20T15:56:36Z",
   "alerts": [
     {
       "severity": "med",
       "kind": "position_break",
-      "text": "NBIS lost SMA50 ($222.94) on 1.8x volume"
+      "text": "NBIS lost SMA50 ($222.83) on 1.8x volume"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "TEM at $68.18 - within buy zone of yesterday's breakout setup ($61.25)"
+      "text": "TEM at $67.89 - within buy zone of yesterday's breakout setup ($61.25)"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "MSTR at $110.42 - within buy zone of yesterday's breakout setup ($104.25)"
+      "text": "MSTR at $113.09 - within buy zone of yesterday's breakout setup ($104.25)"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "MRVL at $246.53 - within buy zone of yesterday's breakout setup ($237.27)"
+      "text": "MRVL at $241.84 - within buy zone of yesterday's breakout setup ($237.27)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "ROK in entry zone $436.48-$452.59 (plan: stop $412.31, target $508.98, hold 2-3 weeks)"
+      "text": "TSM in entry zone $402.45-$414.50 (plan: stop $384.38, target $456.67, hold 2-3 weeks)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "KLAC in entry zone $187.69-$197.79 (plan: stop $168.76, target $240.70, hold 2-3 weeks)"
+      "text": "LLY in entry zone $1266.54-$1303.34 (plan: stop $1197.55, target $1459.72, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "XLV in entry zone $174.78-$177.17 (plan: stop $170.30, target $187.32, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "VRTX in entry zone $546.75-$560.90 (plan: stop $520.22, target $621.04, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
@@ -67,6 +77,10 @@
     "BTBT|2.01": "2026-08-20",
     "CRSP|68.86": "2026-08-20",
     "ROK|508.98": "2026-08-20",
-    "KLAC|240.7": "2026-08-20"
+    "KLAC|240.7": "2026-08-20",
+    "TSM|456.67": "2026-08-20",
+    "LLY|1459.72": "2026-08-20",
+    "XLV|187.32": "2026-08-20",
+    "VRTX|621.04": "2026-08-20"
   }
 }

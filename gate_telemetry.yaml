@@ -1386,12 +1386,12 @@
     outage: 0
     unknown: 0
 - date: '2026-08-20'
-  candidates_evaluated: 5
-  cleared_primary: 1
+  candidates_evaluated: 9
+  cleared_primary: 0
   cleared_insider_promotion: 0
   blocked_by:
-    technical: 0
-    sector_momentum: 4
+    technical: 1
+    sector_momentum: 8
     news: 0
     trump: 0
     earnings_window: 0
@@ -1401,7 +1401,31 @@
     soft_veto: 0
     trump_block: 0
   near_miss:
-  - ticker: MRVL
+  - ticker: DASH
+    passed:
+    - technical
+    - news
+    failed: sector_momentum
+    insider_score: 0
+    insider_status: zero
+    news_status: ok
+  - ticker: MSTR
+    passed:
+    - technical
+    - news
+    failed: sector_momentum
+    insider_score: 0
+    insider_status: zero
+    news_status: ok
+  - ticker: TEM
+    passed:
+    - technical
+    - news
+    failed: sector_momentum
+    insider_score: 0
+    insider_status: zero
+    news_status: ok
+  - ticker: XBI
     passed:
     - technical
     - news
@@ -1410,24 +1434,19 @@
     insider_status: zero
     news_status: ok
   trump:
-    mentions: 1
-    endorsements: 1
+    mentions: 0
+    endorsements: 0
     attacks: 0
-    promotions: 1
+    promotions: 0
     vetoes: 0
-    firings:
-    - ticker: MSTR
-      valence: endorse
-      as_of: '2026-08-19'
-      source: HYPE Jumps 17% After Trump Backs CFTC Path for Hyperliquid in U.S.
-      qualifies: true
+    firings: []
   insider:
     scored: 0
-    zero: 1
+    zero: 4
     unavailable: 0
-    not_evaluated: 4
+    not_evaluated: 5
   news:
-    ok: 5
+    ok: 8
     empty: 0
     outage: 0
-    unknown: 0
+    unknown: 1

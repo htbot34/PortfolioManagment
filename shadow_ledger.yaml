@@ -4886,14 +4886,14 @@
       excess_return: -0.08229167565199189
       hit: false
     '20':
-      status: pending
-      exit_date: null
-      exit_price: null
-      benchmark_exit_price: null
-      forward_return: null
-      benchmark_forward_return: null
-      excess_return: null
-      hit: null
+      status: realized
+      exit_date: '2026-08-20'
+      exit_price: 41.65999984741211
+      benchmark_exit_price: 762.5999755859375
+      forward_return: -0.053181821649724785
+      benchmark_forward_return: 0.033081339446274914
+      excess_return: -0.0862631610959997
+      hit: false
   last_updated: '2026-08-20'
 - ticker: RIOT
   miss_date: '2026-07-23'
@@ -4928,14 +4928,14 @@
       excess_return: -0.15221988508319687
       hit: false
     '20':
-      status: pending
-      exit_date: null
-      exit_price: null
-      benchmark_exit_price: null
-      forward_return: null
-      benchmark_forward_return: null
-      excess_return: null
-      hit: null
+      status: realized
+      exit_date: '2026-08-20'
+      exit_price: 20.979999542236328
+      benchmark_exit_price: 762.5999755859375
+      forward_return: -0.12070414897079917
+      benchmark_forward_return: 0.033081339446274914
+      excess_return: -0.1537854884170741
+      hit: false
   last_updated: '2026-08-20'
 - ticker: SMR
   miss_date: '2026-07-23'
@@ -4970,14 +4970,14 @@
       excess_return: 0.033759567774031524
       hit: true
     '20':
-      status: pending
-      exit_date: null
-      exit_price: null
-      benchmark_exit_price: null
-      forward_return: null
-      benchmark_forward_return: null
-      excess_return: null
-      hit: null
+      status: realized
+      exit_date: '2026-08-20'
+      exit_price: 9.069999694824219
+      benchmark_exit_price: 762.5999755859375
+      forward_return: 0.029511834599757196
+      benchmark_forward_return: 0.033081339446274914
+      excess_return: -0.003569504846517718
+      hit: false
   last_updated: '2026-08-20'
 - ticker: OKLO
   miss_date: '2026-07-24'
@@ -7436,14 +7436,14 @@
       excess_return: 0.23007197673655233
       hit: true
     '10':
-      status: pending
-      exit_date: null
-      exit_price: null
-      benchmark_exit_price: null
-      forward_return: null
-      benchmark_forward_return: null
-      excess_return: null
-      hit: null
+      status: realized
+      exit_date: '2026-08-20'
+      exit_price: 97.5199966430664
+      benchmark_exit_price: 762.5999755859375
+      forward_return: 0.15271865723375283
+      benchmark_forward_return: -0.007754790766613985
+      excess_return: 0.1604734480003668
+      hit: true
     '20':
       status: pending
       exit_date: null
@@ -8181,14 +8181,14 @@
   benchmark_entry_price: 777.8800048828125
   horizons:
     '5':
-      status: pending
-      exit_date: null
-      exit_price: null
-      benchmark_exit_price: null
-      forward_return: null
-      benchmark_forward_return: null
-      excess_return: null
-      hit: null
+      status: realized
+      exit_date: '2026-08-20'
+      exit_price: 545.8300170898438
+      benchmark_exit_price: 762.5999755859375
+      forward_return: -0.08259232571890733
+      benchmark_forward_return: -0.019643170156015174
+      excess_return: -0.06294915556289216
+      hit: false
     '10':
       status: pending
       exit_date: null
@@ -8626,6 +8626,48 @@
       excess_return: null
       hit: null
   last_updated: '2026-08-20'
+- ticker: DASH
+  miss_date: '2026-08-20'
+  direction: long
+  kind: near_miss
+  valence: null
+  failed_signal: sector_momentum
+  passed_signals:
+  - technical
+  - news
+  insider_score: 0
+  source: null
+  entry_price: 222.36000061035156
+  benchmark_entry_price: 762.5999755859375
+  horizons:
+    '5':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+    '10':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+    '20':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+  last_updated: '2026-08-20'
 - ticker: MRVL
   miss_date: '2026-08-20'
   direction: long
@@ -8637,8 +8679,8 @@
   - news
   insider_score: 0
   source: null
-  entry_price: null
-  benchmark_entry_price: null
+  entry_price: 251.00999450683594
+  benchmark_entry_price: 762.5999755859375
   horizons:
     '5':
       status: pending
@@ -8673,12 +8715,98 @@
   direction: long
   kind: trump
   valence: endorse
-  failed_signal: trump_endorse
-  passed_signals: []
+  failed_signal: sector_momentum
+  passed_signals:
+  - technical
+  - news
   insider_score: 0
   source: HYPE Jumps 17% After Trump Backs CFTC Path for Hyperliquid in U.S.
-  entry_price: null
-  benchmark_entry_price: null
+  entry_price: 112.38999938964844
+  benchmark_entry_price: 762.5999755859375
+  horizons:
+    '5':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+    '10':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+    '20':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+  last_updated: '2026-08-20'
+- ticker: TEM
+  miss_date: '2026-08-20'
+  direction: long
+  kind: near_miss
+  valence: null
+  failed_signal: sector_momentum
+  passed_signals:
+  - technical
+  - news
+  insider_score: 0
+  source: null
+  entry_price: 66.6500015258789
+  benchmark_entry_price: 762.5999755859375
+  horizons:
+    '5':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+    '10':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+    '20':
+      status: pending
+      exit_date: null
+      exit_price: null
+      benchmark_exit_price: null
+      forward_return: null
+      benchmark_forward_return: null
+      excess_return: null
+      hit: null
+  last_updated: '2026-08-20'
+- ticker: XBI
+  miss_date: '2026-08-20'
+  direction: long
+  kind: near_miss
+  valence: null
+  failed_signal: sector_momentum
+  passed_signals:
+  - technical
+  - news
+  insider_score: 0
+  source: null
+  entry_price: 163.3800048828125
+  benchmark_entry_price: 762.5999755859375
   horizons:
     '5':
       status: pending

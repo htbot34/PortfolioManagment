@@ -1,30 +1,35 @@
 {
-  "checked_at": "2026-08-21T15:01:09Z",
+  "checked_at": "2026-08-21T15:56:46Z",
   "alerts": [
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "TEM at $70.17 - within buy zone of yesterday's breakout setup ($66.65)"
+      "text": "TEM at $71.14 - within buy zone of yesterday's breakout setup ($66.65)"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "MSTR at $120.48 - within buy zone of yesterday's breakout setup ($112.39)"
+      "text": "MSTR at $120.09 - within buy zone of yesterday's breakout setup ($112.39)"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "COIN at $190.68 - within buy zone of yesterday's breakout setup ($172.35)"
+      "text": "COIN at $188.82 - within buy zone of yesterday's breakout setup ($172.35)"
     },
     {
       "severity": "low",
       "kind": "watchlist_entry",
-      "text": "DASH at $225.90 - within buy zone of yesterday's breakout setup ($222.36)"
+      "text": "DASH at $224.77 - within buy zone of yesterday's breakout setup ($222.36)"
     },
     {
       "severity": "med",
       "kind": "watchlist_entry",
-      "text": "MARA in entry zone $10.83-$11.47 (plan: stop $9.63, target $14.19, hold 2-3 weeks)"
+      "text": "ROK in entry zone $436.48-$452.59 (plan: stop $412.31, target $508.98, hold 2-3 weeks)"
+    },
+    {
+      "severity": "med",
+      "kind": "watchlist_entry",
+      "text": "SPY in entry zone $767.04-$772.42 (plan: stop $756.96, target $795.27, hold 2-3 weeks)"
     }
   ],
   "fired_plans": {
@@ -77,6 +82,8 @@
     "BTBT|2.08": "2026-08-21",
     "RIOT|28.26": "2026-08-21",
     "RXRX|4.18": "2026-08-21",
-    "MARA|14.19": "2026-08-21"
+    "MARA|14.19": "2026-08-21",
+    "ROK|508.98": "2026-08-21",
+    "SPY|795.27": "2026-08-21"
   }
 }
